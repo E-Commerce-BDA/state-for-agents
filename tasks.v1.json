@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "updatedAt": "2026-09-30T00:00:00Z",
+  "rules": "Claim: set claimedBy + stage to in-progress. Finish: flip stage to done + update SERVICES.md + STATUS.md in the same commit. Never invent paths — resolve via SKILL-EXPLORE.",
+  "services": [
+    {"repo": "storefront-ui", "port": 3000, "spec": "in-progress", "build": "todo", "test": "todo", "verify": "todo", "ownerDoc": "Documentation/design-system/storefront.md", "claimedBy": null, "note": "Base prototype in storefront/ui, migrate to TSX"},
+    {"repo": "admin-app", "port": 3001, "spec": "in-progress", "build": "todo", "test": "todo", "verify": "todo", "ownerDoc": "Documentation/6.Admin-Panel.md", "claimedBy": null, "note": ""},
+    {"repo": "ecom-contracts", "port": null, "spec": "todo", "build": "todo", "test": "todo", "verify": "todo", "ownerDoc": "8.Versioning.md (to create)", "claimedBy": null, "note": "@ecom/contracts semver package"},
+    {"repo": "auth-svc", "port": 4010, "spec": "done", "build": "todo", "test": "todo", "verify": "todo", "ownerDoc": "Documentation/services/auth.md", "claimedBy": null, "note": ""},
+    {"repo": "catalog-svc", "port": 4020, "spec": "todo", "build": "todo", "test": "todo", "verify": "todo", "ownerDoc": null, "claimedBy": null, "note": "Copy auth.md shape"},
+    {"repo": "cart-svc", "port": 4030, "spec": "todo", "build": "todo", "test": "todo", "verify": "todo", "ownerDoc": null, "claimedBy": null, "note": ""},
+    {"repo": "order-svc", "port": 4040, "spec": "todo", "build": "todo", "test": "todo", "verify": "todo", "ownerDoc": null, "claimedBy": null, "note": "Outbox + idempotency first"},
+    {"repo": "cms-svc", "port": 4050, "spec": "todo", "build": "todo", "test": "todo", "verify": "todo", "ownerDoc": null, "claimedBy": null, "note": ""},
+    {"repo": "analytics-svc", "port": 4060, "spec": "todo", "build": "todo", "test": "todo", "verify": "todo", "ownerDoc": null, "claimedBy": null, "note": ""},
+    {"repo": "import-svc", "port": 4070, "spec": "todo", "build": "todo", "test": "todo", "verify": "todo", "ownerDoc": null, "claimedBy": null, "note": ""},
+    {"repo": "notify-svc", "port": 4080, "spec": "todo", "build": "todo", "test": "todo", "verify": "todo", "ownerDoc": null, "claimedBy": null, "note": ""},
+    {"repo": "search-svc", "port": 4090, "spec": "todo", "build": "todo", "test": "todo", "verify": "todo", "ownerDoc": null, "claimedBy": null, "note": ""},
+    {"repo": "ecom-infra", "port": null, "spec": "todo", "build": "todo", "test": "todo", "verify": "todo", "ownerDoc": "7.Deployment.md (to create)", "claimedBy": null, "note": "Compose + Nginx + VERSIONS.env + watcher (later)"}
+  ],
+  "frontend": [
+    {"area": "storefront-base", "items": ["Button", "Input", "Checkbox", "Radio", "Toggle"], "status": "in-progress", "claimedBy": null, "note": "Prototype JSX, migrate to TSX in storefront-ui"},
+    {"area": "storefront-composed", "items": ["ProductCard", "Gallery", "HeroSection", "MiniCartDrawer"], "status": "todo", "claimedBy": null, "note": ""},
+    {"area": "storefront-routes", "items": ["/", "/products", "/products/[slug]", "/cart", "/checkout", "/account", "/blog"], "status": "todo", "claimedBy": null, "note": "Only / spec'd (pages/home.md)"},
+    {"area": "admin-screens", "items": ["dashboard", "products", "cms-sections", "theme", "orders"], "status": "todo", "claimedBy": null, "note": "Routes in 6.Admin-Panel.md §2.2"}
+  ],
+  "infra": [
+    {"area": "contracts-versioning", "status": "todo", "note": "8.Versioning.md + CHANGELOG discipline (events + jobs schemas)"},
+    {"area": "sqs-task-queues", "status": "todo", "note": "ecom-infra/aws/sqs.tf: send-email, process-row, resize-image, reminders + DLQs + IAM"},
+    {"area": "ci-per-repo", "status": "todo", "note": "lint → test → build → push per repo"}
+  ]
+}
