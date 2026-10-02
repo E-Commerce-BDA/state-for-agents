@@ -32,4 +32,6 @@ async function getProduct(id: string) {
 }
 ```
 
+> Note: structural-only until the first cache/session keys land — re-verify against real code then.
+
 Use next: SKILL-NESTJS (guards/interceptors), SKILL-POSTGRES (truth queries).

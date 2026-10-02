@@ -24,4 +24,6 @@
 }
 ```
 
+> Note: structural-only until the first service build (auth-svc skeleton) — re-verify against real code then.
+
 Use next: SKILL-POSTGRES (queries/TX), SKILL-INTERFACES (DTO types), SKILL-FUNCTIONS (small pure helpers).

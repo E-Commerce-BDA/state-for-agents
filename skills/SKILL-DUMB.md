@@ -1,7 +1,7 @@
 # SKILL-DUMB — dumb contract + smart-shell/dumb-leaves
 
 > Scope: every `ui/` + `components/` file. The core readability rule of this project.
-> Status: Active | Date: 2026-09-30 | Parent: `components/button.md §4.4–4.5`
+> Status: Active | Date: 2026-10-02 | Parent: storefront `AGENTS.md` §3 (single home; component docs defer to it)
 
 ## Rules
 

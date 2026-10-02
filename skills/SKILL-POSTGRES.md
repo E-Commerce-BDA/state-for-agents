@@ -31,4 +31,6 @@ export async function getProductBySlug(pool: Pool, slug: string) {
 }
 ```
 
+> Note: structural-only until the first raw-`pg` queries land — re-verify against real code then. Raw SQL via `pg`, no ORM (user ruling 2026-10-02).
+
 Use next: SKILL-NESTJS (transactions/outbox), SKILL-INTERFACES (row types), SKILL-REDIS (cache-aside).

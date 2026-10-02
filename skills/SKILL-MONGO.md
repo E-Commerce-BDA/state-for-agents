@@ -20,4 +20,6 @@ sectionSchema.pre('save', function () { ctasSchema.parse(this.content.ctas ?? []
 doc.content = req.body.content; // may contain ctas[10], nulls leak into P>S>G
 ```
 
+> Note: structural-only until the first cms-svc models land — re-verify against real code then.
+
 Use next: SKILL-NESTJS (module shape), SKILL-INTERFACES (Zod mirrors types).
