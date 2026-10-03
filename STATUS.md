@@ -15,7 +15,8 @@
 ## Now
 
 - Shell slice (navbar system → `lib/shell/*` + `components/shell/*` + `app/hooks/*`, ports-first) per locked plan.
-- ORM docs amendment: flip Prisma→raw SQL in `2.Tech-Stack.md §5`, `3.Database-Schema.md` (schema annotations, migration notes), service skeletons — separate reviewed diff, uncommitted until approved.
+- File 0 done: `lib/shell/navSettings.ts` (agent-written on learner request 2026-10-02; learner resumes typing from File 1 `NavLinks.tsx`).
+- ORM check closed 2026-10-02: full Documentation grep found zero Prisma/ORM/migration references (docs already raw-SQL) — no amendment needed, nothing committed.
 
 ## Next (ordered)
 
