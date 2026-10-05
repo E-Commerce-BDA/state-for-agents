@@ -25,6 +25,13 @@
 3. `ecom-contracts` v0.1, remaining 8 service specs (copy `services/auth.md` shape), missing component docs per `components/README.md`.
 4. auth-svc build (raw pg, argon2id, rotation) against proven consumers.
 
+## Task tracking (11/10/1/0)
+
+Per-task records live in `tasks.json` (`repos.*.tasks`) + `TASKS/` logs
+(id == filename, status == folder). Backfill `sf-001`–`sf-010` done from
+session record; `sf-011` in progress (learner-owned). `index.html` work is
+never logged (temporary concept file).
+
 ## How to claim
 
 Pick a `todo` in `tasks.json` → set `claimedBy` + `in-progress` → load skills via `SKILL-ROUTER.md` → finish by flipping stage + updating here.
