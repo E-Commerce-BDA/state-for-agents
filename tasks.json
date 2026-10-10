@@ -1,7 +1,8 @@
 {
   "version": 2,
   "updatedAt": "2026-10-05T00:00:00Z",
-  "summary": {"total": 13, "done": 12, "in_progress": 1, "backlog": 0},
+  "summary": {"total": 15, "done": 14, "in_progress": 1, "backlog": 0},
+  "unpushed": {"storefront-ui": ["d447f77", "78e8e9b", "1337425", "68ae194", "1ebfae1", "0697335", "6bc7b3e", "d76c4b6", "58d04e2", "c10d1da", "08be590", "8ec80d7", "79c568b", "e27d8ba", "437fa7b"], "state-for-agents": []},
   "workflow": "Claim: create/move log to TASKS/in-progress/, set entry status in-progress + owner + started. Build against chained skills (router order). Close: move log to TASKS/done/ (or backlog/), fill verification + follow_ups, flip entry status + finished, update STATUS.md + summary, same commit. Commits: one commit per file (larger edits split per edit); stage with diff eyes-on; subject + reason body; local-only until the human says push. Validation: id == filename, status == folder, log file must exist, STATUS counts == summary.",
   "rules": "Claim: set claimedBy={agent,since,task} + stages.<stage> to in-progress (24h lease; other instances must not steal without comment). Finish: flip stage to done + update SERVICES.md + STATUS.md in same commit. Stage vocab locked: todo|in-progress|done (maps to todo/in-progress/done cells). Path truth: localRoots below are where agents edit TODAY; future split repos named in 'repo'. Never invent paths — resolve via SKILL-EXPLORE. motive is immutable (ADR change only); inProgress/next are mutable.",
   "repos": {
@@ -12,7 +13,7 @@
       "port": 3000,
       "ownerDocs": ["Documentation/design-system/storefront.md", "Documentation/pages/home.md", "Documentation/pages/routing.md", "Documentation/5.Features.md"],
       "stages": {"spec": "done", "build": "in-progress", "test": "in-progress", "verify": "todo"},
-      "inProgress": "sf-013 SearchButton File 3 (learner-owned). sf-011 closed (bar + resolver + trio, per-file commits); sf-012 home-chrome move shipped (78e8e9b,1337425,68ae194,1ebfae1).",
+      "inProgress": "sf-013 SearchButton File 3 (learner-owned). sf-014/sf-015 closed (10 per-file commits, 134/134).",
       "next": ["Thin client (lib/auth/client.ts + per-action handlers + proxy.ts) replacing TODO(auth-client) stubs", "CMS source wiring replacing TODO(cms-svc) null-sources", "Composed commerce: ProductCard, Gallery, HeroSection, MiniCartDrawer; routes: /products, /products/[slug], /cart, /checkout, /account"],
       "blockedBy": ["ecom-contracts"],
       "skills": ["SKILL-EXPLORE", "SKILL-DUMB", "SKILL-HOOKS", "SKILL-STOREFRONT", "SKILL-CSS", "SKILL-INTERFACES", "SKILL-SEO"],
@@ -32,7 +33,9 @@
         {"id": "sf-010", "title": "NavLinks File 1 (component + CSS + contract tests)", "status": "done", "owner": "learner", "started": "2026-10-04", "finished": "2026-10-05", "log": "TASKS/done/sf-010-navlinks-file-1.md", "design_match": "yes", "key_decisions": ["href keys (stable across renders); aria-current page token; data-highlight hooks; hook-binding guard test"], "verified": true, "follow_ups": ["Style leg folded into File 1 commit; resolver owns filtering (File 8)"]},
         {"id": "sf-011", "title": "AnnouncementBar File 2 + resolveNav (controlled shell, strict-drop)", "status": "done", "owner": "learner+agent", "started": "2026-10-05", "finished": "2026-10-05", "log": "TASKS/done/sf-011-announcement-bar.md", "design_match": "yes", "key_decisions": ["Controlled shell over internal timer; strict-drop schedules; arrows only when 2..n + flag; sole ?? is index safety"], "verified": true, "follow_ups": ["Timer/rotation hook (File 8 era); countdown live strings"]},
         {"id": "sf-012", "title": "Showcase to /components, chrome on home /", "status": "done", "owner": "agent", "started": "2026-10-05", "finished": "2026-10-05", "log": "TASKS/done/sf-012-home-chrome-move.md", "design_match": "yes", "key_decisions": ["Per-page mount (auth stays chromeless); demo-shaped input through real resolver; delete-at-launch header"], "verified": true, "follow_ups": ["Hero slice in home main; /components deleted at launch"]},
-        {"id": "sf-013", "title": "SearchButton File 3 (trigger + IconButton pattern)", "status": "in-progress", "owner": "learner", "started": "2026-10-05", "finished": null, "log": "TASKS/in-progress/sf-013-searchbutton-file-3.md", "design_match": null, "key_decisions": [], "verified": false, "follow_ups": []}
+        {"id": "sf-013", "title": "SearchButton File 3 (trigger + IconButton pattern)", "status": "in-progress", "owner": "learner", "started": "2026-10-05", "finished": null, "log": "TASKS/in-progress/sf-013-searchbutton-file-3.md", "design_match": null, "key_decisions": [], "verified": false, "follow_ups": []},
+        {"id": "sf-014", "title": "NavLinks self-class fix (bind CSS to markup)", "status": "done", "owner": "agent", "started": "2026-10-10", "finished": "2026-10-10", "log": "TASKS/done/sf-014-navlinks-self-class.md", "design_match": "yes", "key_decisions": ["Component carries its block class; test pins the binding"], "verified": true, "follow_ups": []},
+        {"id": "sf-015", "title": "Announce edge arrows + dismiss + collapse animation", "status": "done", "owner": "agent", "started": "2026-10-10", "finished": "2026-10-10", "log": "TASKS/done/sf-015-announce-edges-collapse.md", "design_match": "yes", "key_decisions": ["Absolute-via-inset over transforms (guard owns translate); instant paths over uniform delay; knob default on"], "verified": true, "follow_ups": ["Timer/rotation hook (File 8 era)"]}
       ]
     },
     "admin-app": {
