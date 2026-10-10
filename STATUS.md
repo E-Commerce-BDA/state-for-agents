@@ -25,7 +25,11 @@
 3. `ecom-contracts` v0.1, remaining 8 service specs (copy `services/auth.md` shape), missing component docs per `components/README.md`.
 4. auth-svc build (raw pg, argon2id, rotation) against proven consumers.
 
-## Task tracking (13/12/1/0)
+## Task tracking (15/14/1/0)
+
+- `unpushed` array (new): every local commit not on `main` listed per repo
+  until you push; cleared per-branch on push. Read push-state here, never
+  by asking. Current: 15 storefront-ui commits unpushed (d447f77..437fa7b).
 
 Per-task records live in `tasks.json` (`repos.*.tasks`) + `TASKS/` logs
 (id == filename, status == folder). Backfill `sf-001`–`sf-010` done from
