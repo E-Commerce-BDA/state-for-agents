@@ -25,7 +25,7 @@
 3. `ecom-contracts` v0.1, remaining 8 service specs (copy `services/auth.md` shape), missing component docs per `components/README.md`.
 4. auth-svc build (raw pg, argon2id, rotation) against proven consumers.
 
-## Task tracking (11/10/1/0)
+## Task tracking (13/12/1/0)
 
 Per-task records live in `tasks.json` (`repos.*.tasks`) + `TASKS/` logs
 (id == filename, status == folder). Backfill `sf-001`–`sf-010` done from
