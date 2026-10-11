@@ -1,4 +1,4 @@
-# sf-023 — Editorial search takeover (in-progress, started 2026-10-11)
+# sf-023 — Editorial search takeover (done 2026-10-11)
 
 Photo-exact full-screen scrollable overlay (user Image 1). Palette deferred to sf-024.
 
@@ -18,5 +18,17 @@ Photo-exact full-screen scrollable overlay (user Image 1). Palette deferred to s
 6. Test trio. 7. Registry line. 8. Showcase §17 (own useSearch) + §15 flip.
 9. Gate + close.
 
-## Open
-- None yet.
+## Verification
+
+`tsc` clean at every layer; suite 175/175 (19 new: 8 contract + 4 resolver +
+7 style); `next build --webpack` green with `/components` (§16 live,
+§15 flipped). CSS ships (`sf-editorial` in bundle CSS); palette absent
+repo-wide in `.next` JS. Zero-straggler: tagTone/DEMO_CATALOG/lilac all
+referenced. One test fixed mid-flight (bogus-easing inherits oceanic
+builtin — test wrong, code right). 13 code commits, local, unpushed.
+
+## Follow_ups
+
+- sf-024 palette modal (own motion instance, trending+recent, quick-add).
+- CMS collections replace DEMO_CATALOG; cardType/tabShape unions extend.
+- `alt=""` on card imgs is deliberate (button already announces name+price).
