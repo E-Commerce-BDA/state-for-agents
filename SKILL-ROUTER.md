@@ -25,6 +25,7 @@
 | New hook / hook behavior bug / service swap-in | `hooks/SKILL-HOOKS.md` → `lib/SKILL-INTERFACES.md` → `ui/SKILL-DUMB.md` |
 | Claim/close/status task protocol | `tasks.json` workflow block (no skill file — protocol stays there until it outgrows ~10 lines) |
 | Styling/token bug | `ui/SKILL-CSS.md` → `ui/SKILL-DUMB.md` |
+| Component customization question / new customizable surface | `ui/SKILL-CUSTOMIZE.md` → `lib/SKILL-INTERFACES.md` → `ui/SKILL-DUMB.md` |
 | Animation/motion bug or new animated surface | `ui/SKILL-MOTION.md` → `ui/SKILL-CSS.md` → `ui/SKILL-DUMB.md` |
 | Deploy preview / env issue | `project/SKILL-VERCEL.md` |
 | SEO/canonical/sitemap issue | `project/SKILL-SEO.md` → `routes/SKILL-ROUTES.md` |
