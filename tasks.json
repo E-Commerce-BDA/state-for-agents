@@ -2,7 +2,7 @@
   "version": 2,
   "updatedAt": "2026-10-05T00:00:00Z",
   "summary": {"total": 44, "done": 41, "in_progress": 2, "backlog": 1},
-  "unpushed": {"storefront-ui": [], "state-for-agents": ["e2f83de", "8b240d1", "c792004"], "Documentation": ["faea6f6"]},
+  "unpushed": {"storefront-ui": [], "state-for-agents": ["e2f83de", "8b240d1", "c792004", "c6141d5", "aa35e27"], "Documentation": ["faea6f6", "27db040"]},
   "workflow": "Claim: create/move log to TASKS/in-progress/, set entry status in-progress + owner + started. Build against chained skills (router order). Close: move log to TASKS/done/ (or backlog/), fill verification + follow_ups, flip entry status + finished, update STATUS.md + summary, same commit. Commits: one commit per file (larger edits split per edit); stage with diff eyes-on; subject + reason body; local-only until the human says push. Unpushed array lists every local commit except its own carrier commit (which joins on the next update); cleared per-branch on push. Validation: id == filename, status == folder, log file must exist, STATUS counts == summary.",
   "rules": "Claim: set claimedBy={agent,since,task} + stages.<stage> to in-progress (24h lease; other instances must not steal without comment). Finish: flip stage to done + update SERVICES.md + STATUS.md in same commit. Stage vocab locked: todo|in-progress|done (maps to todo/in-progress/done cells). Path truth: localRoots below are where agents edit TODAY; future split repos named in 'repo'. Never invent paths — resolve via SKILL-EXPLORE. motive is immutable (ADR change only); inProgress/next are mutable.",
   "repos": {
