@@ -16,3 +16,4 @@
 | 9 | Pagination | 2026-08-16 | Cursor (storefront) / offset (admin) | Stable inserts vs table UX | Offset everywhere |
 | 10 | CMS publish | 2026-08-16 | save = publish v1 | Simplicity; drafts per-entity, not per-setting | Draft/live versioning in v1 |
 | 11 | Dumb components | 2026-09-18 | Smart shell / dumb leaves; `??`/defaults only in resolvers | Readable, testable UI; see `skills/SKILL-DUMB.md` | Fetch/store in `ui/` |
+| 12 | Edge transport boundary | 2026-10-14 | Browsers and serverless frontends reach backend only over HTTPS via the gateway (beacon/collect pattern); never direct Kafka or RDS connections | Serverless connection storms, public DB exposure | Direct broker/DB connections from edge |
