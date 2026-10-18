@@ -1,7 +1,7 @@
 # STATUS — Done / Now / Next
 
 > Scope: human-readable mirror of `tasks.json`. Agents update both together.
-> Status: Active | Date: 2026-10-02
+> Status: Active | Date: 2026-10-18
 
 ## Done
 
@@ -17,19 +17,20 @@
 - Shell slice (navbar system → `lib/shell/*` + `components/shell/*` + `app/hooks/*`, ports-first) per locked plan.
 - File 0 done: `lib/shell/navSettings.ts` (agent-written on learner request 2026-10-02; learner resumes typing from File 1 `NavLinks.tsx`).
 - ORM check closed 2026-10-02: full Documentation grep found zero Prisma/ORM/migration references (docs already raw-SQL) — no amendment needed, nothing committed.
+- `auth-svc` bootstrap (7 local commits, first push pending): Nest 12 scaffold (ESM + vitest), compose PG16 (`ecom`), lazy `pg` pool; `/health` SELECT-1 probe next (au-001).
 
 ## Next (ordered)
 
 1. Thin client (`lib/auth/client.ts` + per-action handlers + `proxy.ts`) replacing `TODO(auth-client)` stubs.
 2. CMS source wiring replacing `TODO(cms-svc)` null-sources; `7.Deployment.md` + `8.Versioning.md` stubs.
 3. `ecom-contracts` v0.1, remaining 8 service specs (copy `services/auth.md` shape), missing component docs per `components/README.md`.
-4. auth-svc build (raw pg, argon2id, rotation) against proven consumers.
+4. auth-svc au-001 remainder: `/health` probe → `auth` tables → register/login slices (rotation, argon2id) against proven consumers.
 
 ## Task tracking (47/46/1/0)
 
 - `unpushed` array (new): every local commit not on `main` listed per repo
-  until you push; cleared per-branch on push. Read push-state here, never
-  by asking. Current: 16 storefront-ui commits unpushed (d447f77..63034ae).
+  until you push; cleared per-branch on push. Read push-state in `tasks.json`,
+  never by asking. Latest: auth-svc initial 7 commits (first push pending).
 
 Per-task records live in `tasks.json` (`repos.*.tasks`) + `TASKS/` logs
 (id == filename, status == folder). Backfill `sf-001`–`sf-010` done from
