@@ -1,7 +1,7 @@
 # STATUS — Done / Now / Next
 
 > Scope: human-readable mirror of `tasks.json`. Agents update both together.
-> Status: Active | Date: 2026-10-18
+> Status: Active | Date: 2026-10-23
 
 ## Done
 
@@ -11,27 +11,29 @@
 - Skill system hardened: `LEARNING.md` root (teaching philosophy, step zero), router rewrite (dynamic default from `tasks.json`, task-protocol row, hooks row), skill contract enforced (SKILL-STOREFRONT paths fixed, SKILL-DUMB cites constitution, backend skills flagged structural-only), new `SKILL-HOOKS.md`, `archive/` retirement policy.
 - Skills foldered smart-to-dumb (`explore/routes/hooks/lib/ui/services/project`, `hooks/` separate, `SKILL-` prefix kept, router-only index): EXPLORE split (SEARCHING + READING-DOCS), new `routes/SKILL-ROUTES.md`, all cross-links validated.
 - Decisions locked: polyrepo, **raw SQL via `pg`, no migrations v1** (user ruling 2026-10-02 — overrides any Prisma text in older docs; see amendment task below), dual transport (Kafka local / SNS→SQS AWS), Next 16, ports-and-adapters hooks (sources injected, demo-first), learning mode always-on (`skip learning mode for this` to bypass).
+- Auth service contract pinned 2026-10-23 (5 doc commits): liveness/readiness split with envelope + rate-limit exemptions (`4.API-Design.md §1.9`), `/api/v1` base path everywhere plus the no-trailing-slash forwarding rule, auth schema mechanics (app-generated UUID v7, `set_updated_at()` trigger, CASCADE, named constraints), password policy 8–128 with letter + digit, `services/auth.md` v1.1.
 
 ## Now
 
 - Shell slice (navbar system → `lib/shell/*` + `components/shell/*` + `app/hooks/*`, ports-first) per locked plan.
 - File 0 done: `lib/shell/navSettings.ts` (agent-written on learner request 2026-10-02; learner resumes typing from File 1 `NavLinks.tsx`).
 - ORM check closed 2026-10-02: full Documentation grep found zero Prisma/ORM/migration references (docs already raw-SQL) — no amendment needed, nothing committed.
-- `auth-svc` bootstrap (8 commits pushed, 4 local unpushed): Nest 12 scaffold (ESM + vitest), compose PG16 (`ecom`), lazy `pg` pool; `/health` probe live on **:4010** (200 healthy / 503 on DB failure, trip-the-guard verified 200→503→200); pool made crash-proof (pg-pool `'error'` listener — an unhandled `'error'` event killed the process on a DB restart) + bounded connect/query timeouts; 16 unit + 4 e2e green (au-001).
+- `auth-svc` au-001: docs contract slice closed 2026-10-23 (5 commits in `Documentation`). Code still carries the old single DB-probing `/health`, which now contradicts `4.API-Design.md §1.9` — the liveness/readiness split is the next unit. Bootstrap remains 4 local commits (pool crash fix, health tests, prettier, :4010); 16 unit + 4 e2e green; pool crash-proof.
 
 ## Next (ordered)
 
 1. Thin client (`lib/auth/client.ts` + per-action handlers + `proxy.ts`) replacing `TODO(auth-client)` stubs.
 2. CMS source wiring replacing `TODO(cms-svc)` null-sources; `7.Deployment.md` + `8.Versioning.md` stubs.
 3. `ecom-contracts` v0.1, remaining 8 service specs (copy `services/auth.md` shape), missing component docs per `components/README.md`.
-4. auth-svc au-001 remainder: `auth` schema tables (manual SQL) → register/login slices (argon2id, JWT + refresh rotation) against proven consumers.
+4. auth-svc au-001 remainder: health split (liveness vs readiness per `4.API-Design.md §1.9`) → `auth` schema + role seeds (manual SQL) → register slice (DTO/APP_PIPE, argon2id, 23505→409) → login/refresh/logout.
 
 ## Task tracking (47/46/1/0)
 
 - `unpushed` array (new): every local commit not on `main` listed per repo
   until you push; cleared per-branch on push. Read push-state in `tasks.json`,
   never by asking. Latest: auth-svc 4 local commits (pool crash fix, health
-  tests, prettier, :4010 port) — the earlier 8 are on `origin/master`.
+  tests, prettier, :4010 port); Documentation 7 (2 earlier cart/envelope
+  commits + the 5 contract-slice commits from 2026-10-23).
 
 Per-task records live in `tasks.json` (`repos.*.tasks`) + `TASKS/` logs
 (id == filename, status == folder). Backfill `sf-001`–`sf-010` done from

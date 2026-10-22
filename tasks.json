@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-22T00:00:00Z",
+  "updatedAt": "2026-10-23T00:00:00Z",
   "summary": {"total": 47, "done": 46, "in_progress": 1, "backlog": 0},
-  "unpushed": {"storefront-ui": ["34dbaa8", "ae47178", "00482b0", "c2df441", "256b736", "16b53c8", "c290bf4", "799c11b", "07459a4", "a42246c", "2f0de96", "7931b44", "49b2c3f", "3bb1aff", "7f56740", "7f613cd", "927ce86", "8189f6d", "2f8c85c", "81fbf45", "4f1438d", "c562b19", "e274eb0", "f6d8cac", "09fa097", "63cf5e4", "099c837", "2474905", "18f89e4"], "state-for-agents": ["e2f83de", "8b240d1", "c792004", "c6141d5", "aa35e27", "4e9dc6d", "d9d3158", "4183c11", "70aadda", "02c64ce", "0878e9d", "e814814", "f61d4b3", "d901715", "efbc02b"], "Documentation": ["faea6f6", "27db040", "566e764", "551f1ef", "535b729", "8f2fea2", "cf5a1e5", "0664ab4"], "auth-svc": ["05ce11e", "b2c8022", "ceaf29a", "b8f046d"]},
+  "unpushed": {"storefront-ui": ["34dbaa8", "ae47178", "00482b0", "c2df441", "256b736", "16b53c8", "c290bf4", "799c11b", "07459a4", "a42246c", "2f0de96", "7931b44", "49b2c3f", "3bb1aff", "7f56740", "7f613cd", "927ce86", "8189f6d", "2f8c85c", "81fbf45", "4f1438d", "c562b19", "e274eb0", "f6d8cac", "09fa097", "63cf5e4", "099c837", "2474905", "18f89e4"], "state-for-agents": ["e2f83de", "8b240d1", "c792004", "c6141d5", "aa35e27", "4e9dc6d", "d9d3158", "4183c11", "70aadda", "02c64ce", "0878e9d", "e814814", "f61d4b3", "d901715", "efbc02b", "23c893f"], "Documentation": ["cf5a1e5", "0664ab4", "50041fd", "7207499", "655d892", "753a9ab", "d766bcc"], "auth-svc": ["05ce11e", "b2c8022", "ceaf29a", "b8f046d"]},
   "workflow": "Claim: create/move log to TASKS/in-progress/, set entry status in-progress + owner + started. Build against chained skills (router order). Close: move log to TASKS/done/ (or backlog/), fill verification + follow_ups, flip entry status + finished, update STATUS.md + summary, same commit. Commits: one commit per file (larger edits split per edit); stage with diff eyes-on; subject + reason body; local-only until the human says push. Unpushed array lists every local commit except its own carrier commit (which joins on the next update); cleared per-branch on push. Validation: id == filename, status == folder, log file must exist, STATUS counts == summary.",
   "rules": "Claim: set claimedBy={agent,since,task} + stages.<stage> to in-progress (24h lease; other instances must not steal without comment). Finish: flip stage to done + update SERVICES.md + STATUS.md in same commit. Stage vocab locked: todo|in-progress|done (maps to todo/in-progress/done cells). Path truth: localRoots below are where agents edit TODAY; future split repos named in 'repo'. Never invent paths — resolve via SKILL-EXPLORE. motive is immutable (ADR change only); inProgress/next are mutable.",
   "repos": {
@@ -107,13 +107,13 @@
       "port": 4010,
       "ownerDocs": ["Documentation/services/auth.md"],
       "stages": {"spec": "done", "build": "in-progress", "test": "in-progress", "verify": "todo"},
-      "inProgress": "au-001 shopper core: /health probe done (200 healthy, 503 on DB failure, trip-the-guard verified 200->503->200) + pool crash fix; 16 unit + 4 e2e green. auth schema SQL next.",
-      "next": ["auth schema tables per 3.Database-Schema.md 3.1 (db/001-auth-schema.sql, manual apply)", "Register slice: DTO + global ValidationPipe, argon2id hash, 23505 -> 409, thin controller", "Login: JWT HS256 + opaque refresh rotation (10s grace, family-cancel), logout/me/password"],
+      "inProgress": "au-001 shopper core: docs contract slice closed 2026-10-23 (probe shapes 4.API-Design 1.9, /api/v1 base path, schema mechanics, password policy). The code still has one DB-probing /health, which now contradicts 1.9 - split next. 16 unit + 4 e2e green.",
+      "next": ["Health split: checkLiveness() (no pool import) + checkReadiness() at /health/ready; update unit/e2e; re-run trip-the-guard", "auth schema tables per 3.Database-Schema.md 3.1 (db/001-auth-schema.sql + db/002-seed-roles.sql, manual apply)", "Register slice: DTO + global ValidationPipe, argon2id hash, 23505 -> 409, thin controller", "Login: JWT HS256 + opaque refresh rotation (10s grace, family-cancel), logout/me/password"],
       "blockedBy": ["ecom-contracts"],
       "skills": ["SKILL-EXPLORE", "SKILL-POSTGRES", "SKILL-NESTJS", "SKILL-INTERFACES", "SKILL-FUNCTIONS", "SKILL-REDIS"],
       "producesConsumes": {"produces": ["user.registered"], "consumes": []},
       "claimedBy": null,
-      "note": "Only service with spec done — canonical shape to copy for remaining 8 service specs. Local: /health probe live on :4010, pg pool crash-proof (pool error listener + bounded timeouts), 16 unit + 4 e2e green; au-001 in progress. Dev port 4010 per docs (native PG18 on 5432 forced compose to 5433)."
+      "note": "Only service with spec done - canonical shape to copy for remaining 8 service specs. Local: /health probe live on :4010 (still DB-probing; 4.API-Design 1.9 now requires the liveness/readiness split), pg pool crash-proof (pool error listener + bounded timeouts), 16 unit + 4 e2e green; au-001 in progress. Dev port 4010 per docs (native PG18 on 5432 forced compose to 5433)."
     },
     "catalog-svc": {
       "motive": "Catalog truth: products/categories/brands/variants/inventory/compare data + basic search; stock decrement on order.created.",
