@@ -18,7 +18,7 @@
 - Shell slice (navbar system → `lib/shell/*` + `components/shell/*` + `app/hooks/*`, ports-first) per locked plan.
 - File 0 done: `lib/shell/navSettings.ts` (agent-written on learner request 2026-10-02; learner resumes typing from File 1 `NavLinks.tsx`).
 - ORM check closed 2026-10-02: full Documentation grep found zero Prisma/ORM/migration references (docs already raw-SQL) — no amendment needed, nothing committed.
-- `auth-svc` au-001: docs contract slice closed 2026-10-23 (5 commits in `Documentation`). Code still carries the old single DB-probing `/health`, which now contradicts `4.API-Design.md §1.9` — the liveness/readiness split is the next unit. Bootstrap remains 4 local commits (pool crash fix, health tests, prettier, :4010); 16 unit + 4 e2e green; pool crash-proof.
+- `auth-svc` au-001: health split done 2026-10-23 — `/health` is dependency-free liveness (`{"status":"ok"}`), `/health/ready` probes Postgres and returns the exact `503 {"status":"not_ready","checks":{"db":"down"}}`. Trip-the-guard live: 200/200 → DB stop → **200/503** → DB start → 200/200 with no process restart; 17 unit + 4 e2e green. Next: `auth` schema SQL.
 
 ## Next (ordered)
 
@@ -31,9 +31,10 @@
 
 - `unpushed` array (new): every local commit not on `main` listed per repo
   until you push; cleared per-branch on push. Read push-state in `tasks.json`,
-  never by asking. Latest: auth-svc 4 local commits (pool crash fix, health
-  tests, prettier, :4010 port); Documentation 7 (2 earlier cart/envelope
-  commits + the 5 contract-slice commits from 2026-10-23).
+  never by asking. Latest: auth-svc 7 local commits (pool crash fix, health
+  tests, prettier, :4010 port + the 3 health-split commits); Documentation 7
+  (2 earlier cart/envelope commits + the 5 contract-slice commits from
+  2026-10-23).
 
 Per-task records live in `tasks.json` (`repos.*.tasks`) + `TASKS/` logs
 (id == filename, status == folder). Backfill `sf-001`–`sf-010` done from
