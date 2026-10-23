@@ -18,23 +18,24 @@
 - Shell slice (navbar system → `lib/shell/*` + `components/shell/*` + `app/hooks/*`, ports-first) per locked plan.
 - File 0 done: `lib/shell/navSettings.ts` (agent-written on learner request 2026-10-02; learner resumes typing from File 1 `NavLinks.tsx`).
 - ORM check closed 2026-10-02: full Documentation grep found zero Prisma/ORM/migration references (docs already raw-SQL) — no amendment needed, nothing committed.
-- `auth-svc` au-001: health split done 2026-10-23 — `/health` is dependency-free liveness (`{"status":"ok"}`), `/health/ready` probes Postgres and returns the exact `503 {"status":"not_ready","checks":{"db":"down"}}`. Trip-the-guard live: 200/200 → DB stop → **200/503** → DB start → 200/200 with no process restart; 17 unit + 4 e2e green. Next: `auth` schema SQL.
+- `auth-svc` au-001: health split done 2026-10-23 — `/health` is dependency-free liveness (`{"status":"ok"}`), `/health/ready` probes Postgres and returns the exact `503 {"status":"not_ready","checks":{"db":"down"}}`. Trip-the-guard live: 200/200 → DB stop → **200/503** → DB start → 200/200 with no process restart. Slice 2 auth schema + role seeds done 2026-10-23: `001-auth-schema.sql` (7 tables, 8 explicit indexes, 4 updated_at triggers, CASCADE delete), `002-seed-roles.sql` (`admin`, `customer`), `db/README.md`, `test/schema.e2e-spec.ts` (11/11 tests green); 17 unit + 15 e2e green; applied and proven idempotent on `ecom-pg`. Next: register slice.
 
 ## Next (ordered)
 
 1. Thin client (`lib/auth/client.ts` + per-action handlers + `proxy.ts`) replacing `TODO(auth-client)` stubs.
 2. CMS source wiring replacing `TODO(cms-svc)` null-sources; `7.Deployment.md` + `8.Versioning.md` stubs.
 3. `ecom-contracts` v0.1, remaining 8 service specs (copy `services/auth.md` shape), missing component docs per `components/README.md`.
-4. auth-svc au-001 remainder: health split (liveness vs readiness per `4.API-Design.md §1.9`) → `auth` schema + role seeds (manual SQL) → register slice (DTO/APP_PIPE, argon2id, 23505→409) → login/refresh/logout.
+4. auth-svc au-001 remainder: register slice (DTO/APP_PIPE, argon2id, 23505→409, UUID v7) → login/refresh/logout.
 
 ## Task tracking (47/46/1/0)
 
 - `unpushed` array (new): every local commit not on `main` listed per repo
   until you push; cleared per-branch on push. Read push-state in `tasks.json`,
-  never by asking. Latest: auth-svc 7 local commits (pool crash fix, health
-  tests, prettier, :4010 port + the 3 health-split commits); Documentation 7
-  (2 earlier cart/envelope commits + the 5 contract-slice commits from
-  2026-10-23).
+  never by asking. Latest: auth-svc 11 local commits (pool crash fix, health
+  tests, prettier, :4010 port, 3 health-split commits + 4 schema commits: 001
+  DDL, 002 seed, db README, schema e2e); Documentation 8 (2 earlier
+  cart/envelope commits + 5 contract-slice commits + 1 family_id schema commit
+  from 2026-10-23).
 
 Per-task records live in `tasks.json` (`repos.*.tasks`) + `TASKS/` logs
 (id == filename, status == folder). Backfill `sf-001`–`sf-010` done from
