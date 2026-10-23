@@ -8,7 +8,7 @@
 | storefront-ui | 3000 | `Documentation/design-system/storefront.md`, `pages/` | 🚧 | ⬜ | ⬜ | ⬜ |
 | admin-app | 3001 | `Documentation/6.Admin-Panel.md` | 🚧 | ⬜ | ⬜ | ⬜ |
 | ecom-contracts | npm | `8.Versioning.md` (to create) | ⬜ | ⬜ | ⬜ | ⬜ |
-| auth-svc | 4010 | `Documentation/services/auth.md` | ✅ | ⬜ | ⬜ | ⬜ |
+| auth-svc | 4010 | `Documentation/services/auth.md` | ✅ | 🚧 | 🚧 | ⬜ |
 | catalog-svc | 4020 | (to create, copy auth shape) | ⬜ | ⬜ | ⬜ | ⬜ |
 | cart-svc | 4030 | (to create) | ⬜ | ⬜ | ⬜ | ⬜ |
 | order-svc | 4040 | (to create) | ⬜ | ⬜ | ⬜ | ⬜ |
