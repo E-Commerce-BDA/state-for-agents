@@ -17,24 +17,21 @@
 
 - Shell slice (navbar system → `lib/shell/*` + `components/shell/*` + `app/hooks/*`, ports-first) per locked plan.
 - File 0 done: `lib/shell/navSettings.ts` (agent-written on learner request 2026-10-02; learner resumes typing from File 1 `NavLinks.tsx`).
-- ORM check closed 2026-10-02: full Documentation grep found zero Prisma/ORM/migration references (docs already raw-SQL) — no amendment needed, nothing committed.
-- `auth-svc` au-001: health split done 2026-10-23 — `/health` is dependency-free liveness (`{"status":"ok"}`), `/health/ready` probes Postgres and returns the exact `503 {"status":"not_ready","checks":{"db":"down"}}`. Trip-the-guard live: 200/200 → DB stop → **200/503** → DB start → 200/200 with no process restart. Slice 2 auth schema + role seeds done 2026-10-23: `001-auth-schema.sql` (7 tables, 8 explicit indexes, 4 updated_at triggers, CASCADE delete), `002-seed-roles.sql` (`admin`, `customer`), `db/README.md`, `test/schema.e2e-spec.ts` (11/11 tests green). Slice 3 register slice done: `RegisterDTO` (8-128 chars, lowercase email, validation pipe), `AuthService` with Argon2id, raw SQL transaction (`BEGIN`/`COMMIT`/`ROLLBACK`), `23505` duplicate email mapped to 409 Conflict, `assignUserRole` default 'customer', `POST /api/v1/auth/register` in `AuthController`, and `test/register.e2e-spec.ts` (4 e2e tests covering 201, 409, and 400 cases); 17 unit + 19 e2e green. Next: Slice 4 login slice.
+- `auth-svc` au-001: COMPLETE across all 10 slices (2026-10-25). 17 unit tests + 36 e2e tests across 10 test suites green (`vitest`), `oxlint` 0 errors/0 warnings, `nest build` clean. Full implementation includes: Slice 1 health probes (`/health`, `/health/ready`); Slice 2 auth schema + seed (`001-auth-schema.sql`, `002-seed-roles.sql`); Slice 3 register (`POST /api/v1/auth/register`, Argon2id, 23505->409); Slice 4 login (`POST /api/v1/auth/login`, JWT HS256, SHA-256 refresh token hash); Slice 5 refresh rotation with 10s grace-period theft detection (`POST /api/v1/auth/refresh`); Slice 6 logout (`POST /api/v1/auth/logout`, 204 idempotent); Slice 7 `JwtAuthGuard` & profile (`GET /me`, `PATCH /me`); Slice 8 password change (`PATCH /me/password` with user-wide session revocation); Slice 9 address book CRUD (`/me/addresses` with single default constraint); Slice 10 admin RBAC & user management (`RolesGuard`, `@Roles('admin')`, `GET /users`, `PATCH /users/:id/status`, `GET/POST /roles`, `PATCH /users/:id/roles`). Next: Thin client in storefront-ui.
 
 ## Next (ordered)
 
 1. Thin client (`lib/auth/client.ts` + per-action handlers + `proxy.ts`) replacing `TODO(auth-client)` stubs.
 2. CMS source wiring replacing `TODO(cms-svc)` null-sources; `7.Deployment.md` + `8.Versioning.md` stubs.
 3. `ecom-contracts` v0.1, remaining 8 service specs (copy `services/auth.md` shape), missing component docs per `components/README.md`.
-4. auth-svc au-001 remainder: register slice (DTO/APP_PIPE, argon2id, 23505→409, UUID v7) → login/refresh/logout.
 
 ## Task tracking (47/46/1/0)
 
 - `unpushed` array (new): every local commit not on `main` listed per repo
   until you push; cleared per-branch on push. Read push-state in `tasks.json`,
-  never by asking. Latest: auth-svc 11 local commits (pool crash fix, health
-  tests, prettier, :4010 port, 3 health-split commits + 4 schema commits: 001
-  DDL, 002 seed, db README, schema e2e); Documentation 8 (2 earlier
-  cart/envelope commits + 5 contract-slice commits + 1 family_id schema commit
+  never by asking. Latest: auth-svc 45 local commits across all 10 slices
+  (probes, schema, register, login, refresh, logout, profile, password, addresses, admin RBAC);
+  Documentation 8 (2 earlier cart/envelope commits + 5 contract-slice commits + 1 family_id schema commit
   from 2026-10-23).
 
 Per-task records live in `tasks.json` (`repos.*.tasks`) + `TASKS/` logs
