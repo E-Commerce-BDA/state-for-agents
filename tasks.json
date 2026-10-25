@@ -71,6 +71,50 @@
       "f73a665"
     ],
     "auth-svc": [
+      "198d5ed",
+      "9226b6e",
+      "cf99de6",
+      "a06dae3",
+      "4ff48ea",
+      "1d57ee3",
+      "7845324",
+      "97f3774",
+      "fb2fd20",
+      "368ae7f",
+      "837612c",
+      "b2ca60c",
+      "9b17973",
+      "42d9d73",
+      "c0e4c48",
+      "c89537b",
+      "958eaa8",
+      "a0939a0",
+      "c057adb",
+      "15c40a9",
+      "a87036f",
+      "fa12d96",
+      "c66a889",
+      "b2ed559",
+      "582b9ae",
+      "7ae8166",
+      "222907c",
+      "cc72c03",
+      "56f131b",
+      "a2dbc16",
+      "6ed4179",
+      "d3b8df2",
+      "d4c9ad7",
+      "7a98d8c",
+      "38653b4",
+      "f226184",
+      "85c86fe",
+      "30dd833",
+      "9ec33f6",
+      "181d82b",
+      "fda0625",
+      "0aaa163",
+      "0a2c04a",
+      "e1d0af6",
       "b465ac4"
     ]
   },
@@ -979,18 +1023,13 @@
       ],
       "stages": {
         "spec": "done",
-        "build": "in-progress",
-        "test": "in-progress",
-        "verify": "todo"
+        "build": "done",
+        "test": "done",
+        "verify": "done"
       },
-      "inProgress": "au-001 shopper core: Slice 3 register slice done (RegisterDTO, Argon2id, raw SQL transaction, 23505->409, 17 unit + 19 e2e green). Login slice next.",
-      "next": [
-        "Login slice: POST /api/v1/auth/login, Argon2 verification, JWT HS256 access token + opaque refresh rotation in cookies",
-        "Refresh & Logout: POST /api/v1/auth/refresh, POST /api/v1/auth/logout, GET /api/v1/auth/me"
-      ],
-      "blockedBy": [
-        "ecom-contracts"
-      ],
+      "inProgress": null,
+      "next": [],
+      "blockedBy": [],
       "skills": [
         "SKILL-EXPLORE",
         "SKILL-POSTGRES",
@@ -1006,7 +1045,7 @@
         "consumes": []
       },
       "claimedBy": null,
-      "note": "Only service with spec done - canonical shape to copy for remaining 8 service specs. Local: both probes live on :4010 and contract-verified (liveness stays 200 during a DB outage; readiness 503s and recovers), pg pool crash-proof, 7 auth tables + 2 roles seeded in ecom-pg (5433), register slice complete (201 created, 409 duplicate conflict, 400 validation), 17 unit + 19 e2e green; au-001 in progress. Dev port 4010 per docs."
+      "note": "All 10 slices implemented per Documentation/services/auth.md and verified. 17 unit + 36 e2e green tests (vitest), oxlint 0 errors/0 warnings, nest build clean. Slices: 1 (health probes), 2 (auth schema & seed), 3 (register), 4 (login), 5 (refresh rotation + 10s grace theft detection), 6 (logout), 7 (JwtAuthGuard + profile), 8 (password change), 9 (addresses CRUD), 10 (admin RBAC & user management). Dev port 4010."
     },
     "catalog-svc": {
       "motive": "Catalog truth: products/categories/brands/variants/inventory/compare data + basic search; stock decrement on order.created.",
