@@ -1,8 +1,79 @@
 {
   "version": 2,
   "updatedAt": "2026-10-23T00:00:00Z",
-  "summary": {"total": 47, "done": 46, "in_progress": 1, "backlog": 0},
-  "unpushed": {"storefront-ui": ["34dbaa8", "ae47178", "00482b0", "c2df441", "256b736", "16b53c8", "c290bf4", "799c11b", "07459a4", "a42246c", "2f0de96", "7931b44", "49b2c3f", "3bb1aff", "7f56740", "7f613cd", "927ce86", "8189f6d", "2f8c85c", "81fbf45", "4f1438d", "c562b19", "e274eb0", "f6d8cac", "09fa097", "63cf5e4", "099c837", "2474905", "18f89e4"], "state-for-agents": ["e2f83de", "8b240d1", "c792004", "c6141d5", "aa35e27", "4e9dc6d", "d9d3158", "4183c11", "70aadda", "02c64ce", "0878e9d", "e814814", "f61d4b3", "d901715", "efbc02b", "23c893f", "7302fc1", "489d89e", "6298a00"], "Documentation": ["cf5a1e5", "0664ab4", "50041fd", "7207499", "655d892", "753a9ab", "d766bcc", "f73a665"], "auth-svc": ["b465ac4"]},
+  "summary": {
+    "total": 47,
+    "done": 46,
+    "in_progress": 1,
+    "backlog": 0
+  },
+  "unpushed": {
+    "storefront-ui": [
+      "34dbaa8",
+      "ae47178",
+      "00482b0",
+      "c2df441",
+      "256b736",
+      "16b53c8",
+      "c290bf4",
+      "799c11b",
+      "07459a4",
+      "a42246c",
+      "2f0de96",
+      "7931b44",
+      "49b2c3f",
+      "3bb1aff",
+      "7f56740",
+      "7f613cd",
+      "927ce86",
+      "8189f6d",
+      "2f8c85c",
+      "81fbf45",
+      "4f1438d",
+      "c562b19",
+      "e274eb0",
+      "f6d8cac",
+      "09fa097",
+      "63cf5e4",
+      "099c837",
+      "2474905",
+      "18f89e4"
+    ],
+    "state-for-agents": [
+      "e2f83de",
+      "8b240d1",
+      "c792004",
+      "c6141d5",
+      "aa35e27",
+      "4e9dc6d",
+      "d9d3158",
+      "4183c11",
+      "70aadda",
+      "02c64ce",
+      "0878e9d",
+      "e814814",
+      "f61d4b3",
+      "d901715",
+      "efbc02b",
+      "23c893f",
+      "7302fc1",
+      "489d89e",
+      "6298a00"
+    ],
+    "Documentation": [
+      "cf5a1e5",
+      "0664ab4",
+      "50041fd",
+      "7207499",
+      "655d892",
+      "753a9ab",
+      "d766bcc",
+      "f73a665"
+    ],
+    "auth-svc": [
+      "b465ac4"
+    ]
+  },
   "workflow": "Claim: create/move log to TASKS/in-progress/, set entry status in-progress + owner + started. Build against chained skills (router order). Close: move log to TASKS/done/ (or backlog/), fill verification + follow_ups, flip entry status + finished, update STATUS.md + summary, same commit. Commits: one commit per file (larger edits split per edit); stage with diff eyes-on; subject + reason body; local-only until the human says push. Unpushed array lists every local commit except its own carrier commit (which joins on the next update); cleared per-branch on push. Validation: id == filename, status == folder, log file must exist, STATUS counts == summary.",
   "rules": "Claim: set claimedBy={agent,since,task} + stages.<stage> to in-progress (24h lease; other instances must not steal without comment). Finish: flip stage to done + update SERVICES.md + STATUS.md in same commit. Stage vocab locked: todo|in-progress|done (maps to todo/in-progress/done cells). Path truth: localRoots below are where agents edit TODAY; future split repos named in 'repo'. Never invent paths — resolve via SKILL-EXPLORE. motive is immutable (ADR change only); inProgress/next are mutable.",
   "repos": {
@@ -11,63 +82,818 @@
       "localRoot": "frontend/storefront",
       "repo": "storefront-ui",
       "port": 3000,
-      "ownerDocs": ["Documentation/design-system/storefront.md", "Documentation/pages/home.md", "Documentation/pages/routing.md", "Documentation/5.Features.md"],
-      "stages": {"spec": "done", "build": "in-progress", "test": "in-progress", "verify": "todo"},
+      "ownerDocs": [
+        "Documentation/design-system/storefront.md",
+        "Documentation/pages/home.md",
+        "Documentation/pages/routing.md",
+        "Documentation/5.Features.md"
+      ],
+      "stages": {
+        "spec": "done",
+        "build": "in-progress",
+        "test": "in-progress",
+        "verify": "todo"
+      },
       "inProgress": "sf-013 SearchButton File 3 (learner-owned). sf-024 closed (palette live, 211/211).",
-      "next": ["Thin client (lib/auth/client.ts + per-action handlers + proxy.ts) replacing TODO(auth-client) stubs", "CMS source wiring replacing TODO(cms-svc) null-sources", "Composed commerce: ProductCard, Gallery, HeroSection, MiniCartDrawer; routes: /products, /products/[slug], /cart, /checkout, /account"],
-      "blockedBy": ["ecom-contracts"],
-      "skills": ["SKILL-EXPLORE", "SKILL-DUMB", "SKILL-HOOKS", "SKILL-STOREFRONT", "SKILL-CSS", "SKILL-INTERFACES", "SKILL-SEO"],
-      "producesConsumes": {"produces": ["page.viewed"], "consumes": ["order.status.updated (via API)", "cms.updated (cache invalidation)"]},
+      "next": [
+        "Thin client (lib/auth/client.ts + per-action handlers + proxy.ts) replacing TODO(auth-client) stubs",
+        "CMS source wiring replacing TODO(cms-svc) null-sources",
+        "Composed commerce: ProductCard, Gallery, HeroSection, MiniCartDrawer; routes: /products, /products/[slug], /cart, /checkout, /account"
+      ],
+      "blockedBy": [
+        "ecom-contracts"
+      ],
+      "skills": [
+        "SKILL-EXPLORE",
+        "SKILL-DUMB",
+        "SKILL-HOOKS",
+        "SKILL-STOREFRONT",
+        "SKILL-CSS",
+        "SKILL-INTERFACES",
+        "SKILL-SEO"
+      ],
+      "producesConsumes": {
+        "produces": [
+          "page.viewed"
+        ],
+        "consumes": [
+          "order.status.updated (via API)",
+          "cms.updated (cache invalidation)"
+        ]
+      },
       "claimedBy": null,
       "note": "Shipped: 14 ui primitives + Tooltip system + auth customization slice (lib/auth/*, components/auth/*, app/(auth) routes), 111/111 tests green, commits C0-C9 on main. Static showcase + DS canvas in E:/E-Commerce/index.html (unversioned demo, never logged as tasks).",
       "tasks": [
-        {"id": "sf-001", "title": "Tooltip system (positioning, 3 content modes, style knobs)", "status": "done", "owner": "agent", "started": "2026-09-18", "finished": "2026-09-19", "log": "TASKS/done/sf-001-tooltip-system.md", "design_match": "yes", "key_decisions": ["Zero-JS CSS positioning; bare render when off/empty; flat props win over styleOverrides"], "verified": true, "follow_ups": []},
-        {"id": "sf-002", "title": "Auth settings vocabulary + builtin fallbacks", "status": "done", "owner": "agent", "started": "2026-09-27", "finished": "2026-09-27", "log": "TASKS/done/sf-002-auth-settings-vocabulary.md", "design_match": "yes", "key_decisions": ["Partial admin types vs all-required resolved; hex only in DEFAULT_*; discriminated-union gradient (angle linear-only)"], "verified": true, "follow_ups": []},
-        {"id": "sf-003", "title": "Auth settings resolver + sanitizer (only file allowed ??)", "status": "done", "owner": "agent", "started": "2026-09-27", "finished": "2026-09-28", "log": "TASKS/done/sf-003-auth-resolver-sanitizer.md", "design_match": "yes", "key_decisions": ["Cascade page→shared→global→builtin; corrupt scopes are misses; forgot groups replace shared wholesale (test-caught)"], "verified": true, "follow_ups": []},
-        {"id": "sf-004", "title": "Auth cssVars emitter + error map + CMS fetcher", "status": "done", "owner": "agent", "started": "2026-09-28", "finished": "2026-09-28", "log": "TASKS/done/sf-004-auth-vars-errors-fetcher.md", "design_match": "yes", "key_decisions": ["String assembly only in emitter; total error function with generic fallback; injected source/cache fetcher"], "verified": true, "follow_ups": []},
-        {"id": "sf-005", "title": "Composed auth blocks + paint (AuthPage/Split/Panel/Form, PasswordMeter)", "status": "done", "owner": "agent", "started": "2026-09-29", "finished": "2026-09-29", "log": "TASKS/done/sf-005-composed-auth-blocks.md", "design_match": "yes", "key_decisions": ["Composed-dumb layer; sanitized HTML slots (danger resolved upstream); pattern dots via color-mix"], "verified": true, "follow_ups": []},
-        {"id": "sf-006", "title": "Primitive seams (Input radius/focus vars, eye-off icon)", "status": "done", "owner": "agent", "started": "2026-09-29", "finished": "2026-09-29", "log": "TASKS/done/sf-006-primitive-seams.md", "design_match": "yes", "key_decisions": ["Backward-compatible widening with current-value fallbacks; rightIconInteractive keeps eye operable; 27th icon with reason"], "verified": true, "follow_ups": []},
-        {"id": "sf-007", "title": "(auth) routes + stateful islands (signin/signup/forgot)", "status": "done", "owner": "agent", "started": "2026-09-29", "finished": "2026-09-30", "log": "TASKS/done/sf-007-auth-routes.md", "design_match": "yes", "key_decisions": ["Server pages fetch→resolve→vars→props; chromeless conversion routes; TODO(auth-client)/TODO(cms-svc) stubs marked"], "verified": true, "follow_ups": ["Thin client replacing stubs", "CMS source replacing null-sources"]},
-        {"id": "sf-008", "title": "AGENTS.md constitution + Learning Mode", "status": "done", "owner": "agent", "started": "2026-09-30", "finished": "2026-10-02", "log": "TASKS/done/sf-008-agents-constitution.md", "design_match": null, "key_decisions": ["Per-repo constitution; reason-required vs hard-banned constructs; learning rules always-on with explicit skip phrase"], "verified": true, "follow_ups": []},
-        {"id": "sf-009", "title": "Agent memory system (STATUS rewrite, SKILL-HOOKS, router, folders, git)", "status": "done", "owner": "agent", "started": "2026-10-02", "finished": "2026-10-02", "log": "TASKS/done/sf-009-agent-memory-system.md", "design_match": null, "key_decisions": ["Skills foldered smart-to-dumb with hooks/ separate; dynamic router default; archive/ retirement; local git, origin pending"], "verified": true, "follow_ups": []},
-        {"id": "sf-010", "title": "NavLinks File 1 (component + CSS + contract tests)", "status": "done", "owner": "learner", "started": "2026-10-04", "finished": "2026-10-05", "log": "TASKS/done/sf-010-navlinks-file-1.md", "design_match": "yes", "key_decisions": ["href keys (stable across renders); aria-current page token; data-highlight hooks; hook-binding guard test"], "verified": true, "follow_ups": ["Style leg folded into File 1 commit; resolver owns filtering (File 8)"]},
-        {"id": "sf-011", "title": "AnnouncementBar File 2 + resolveNav (controlled shell, strict-drop)", "status": "done", "owner": "learner+agent", "started": "2026-10-05", "finished": "2026-10-05", "log": "TASKS/done/sf-011-announcement-bar.md", "design_match": "yes", "key_decisions": ["Controlled shell over internal timer; strict-drop schedules; arrows only when 2..n + flag; sole ?? is index safety"], "verified": true, "follow_ups": ["Timer/rotation hook (File 8 era); countdown live strings"]},
-        {"id": "sf-012", "title": "Showcase to /components, chrome on home /", "status": "done", "owner": "agent", "started": "2026-10-05", "finished": "2026-10-05", "log": "TASKS/done/sf-012-home-chrome-move.md", "design_match": "yes", "key_decisions": ["Per-page mount (auth stays chromeless); demo-shaped input through real resolver; delete-at-launch header"], "verified": true, "follow_ups": ["Hero slice in home main; /components deleted at launch"]},
-        {"id": "sf-013", "title": "SearchButton File 3 (trigger + IconButton pattern)", "status": "done", "owner": "learner", "started": "2026-10-05", "finished": "2026-10-13", "log": "TASKS/in-progress/sf-013-searchbutton-file-3.md", "design_match": "yes", "key_decisions": ["Superseded by NavSearchTrigger (production trigger shipped in sf-046); learner work preserved in log"], "verified": true, "follow_ups": []},
-        {"id": "sf-024", "title": "Palette search modal (filters, trending + recent, quick-add)", "status": "done", "owner": "agent", "started": "2026-10-11", "finished": "2026-10-11", "log": "TASKS/done/sf-024-palette-modal.md", "design_match": "yes", "key_decisions": ["Pill primitive + same-pass retrofit (native button pass-through); useQuickAdd hook over showcase state; ratingCount additive; data-pill rename for wave-park guard; demo names kept"], "verified": true, "follow_ups": ["sf-026 assembler; PDP reuses useQuickAdd; svc ports swap demos; card unions extend"]},
-        {"id": "sf-027", "title": "Palette fit (720px, tighten stack, backstop, sticky footer)", "status": "done", "owner": "agent", "started": "2026-10-11", "finished": "2026-10-11", "log": "TASKS/done/sf-027-palette-fit.md", "design_match": "yes", "key_decisions": ["720 over reference 640 (rows need width); backstop + sticky footer over shrink-only; values from reference, paint on tokens"], "verified": true, "follow_ups": ["Human side-by-side at §17; stray lab HTML left untracked"]},
-        {"id": "sf-025", "title": "Docs pass: overlay system (search-overlays, shell-cart, launch, arch §16, skills)", "status": "done", "owner": "agent", "started": "2026-10-11", "finished": "2026-10-11", "log": "TASKS/done/sf-025-docs-pass-overlays.md", "design_match": "yes", "key_decisions": ["shell-cart.md keeps promised name (cart stubs §4); stale refs untouched as follow-ups; no Documentation key existed — added"], "verified": true, "follow_ups": ["Stale refs (src/app path, middleware name, shop group, missing 7/8 + auth.md); remaining grouped component docs; sf-024 palette; sf-026 assembler"]},
-        {"id": "sf-026", "title": "SearchMount assembler (registry caller, lazy selected chunk, CI guarantees)", "status": "done", "owner": "agent", "started": "2026-10-13", "finished": "2026-10-13", "log": "TASKS/done/sf-046-navbar-chrome.md", "design_match": "yes", "key_decisions": ["Absorbed by sf-046 SearchMount + registry guard; no separate build"], "verified": true, "follow_ups": []},
-        {"id": "sf-028", "title": "Palette admin expansion (footer harden, knobs, toast, matrix)", "status": "done", "owner": "agent", "started": "2026-10-11", "finished": "2026-10-11", "log": "TASKS/done/sf-028-palette-admin.md", "design_match": "yes", "key_decisions": ["Footer double-pinned (flex auto + sticky); 5 geometry + 7 visibility + rowAction + pillRadius + notify knobs; Toast owner-timed primitive; matrix progressive rule; onView reserved not stubbed"], "verified": true, "follow_ups": ["Assembler consumes notifyOnQuickAdd; view task (onView + branches); card-type work extends unions"]},
-        {"id": "sf-029", "title": "Footer zero-gap (card padding-bottom 0, footer flush)", "status": "done", "owner": "agent", "started": "2026-10-11", "finished": "2026-10-11", "log": "TASKS/done/sf-029-footer-zero.md", "design_match": "yes", "key_decisions": ["Flush by geometry (bottom 0 both sides), not cancellation"], "verified": true, "follow_ups": []},
-        {"id": "sf-030", "title": "Customization skill + Button matrix fill", "status": "done", "owner": "agent", "started": "2026-10-11", "finished": "2026-10-11", "log": "TASKS/done/sf-030-customize-skill.md", "design_match": "yes", "key_decisions": ["Markdown-only single source (no JSON mirror); one component per turn; Button first (highest reuse)"], "verified": true, "follow_ups": ["Input, IconButton, Dialog, Card fills; state-for-agents push is human call"]},
-        {"id": "sf-031", "title": "Theme form-controls (button/input/checkbox/toggle house defaults)", "status": "done", "owner": "agent", "started": "2026-10-11", "finished": "2026-10-11", "log": "TASKS/done/sf-031-theme-form-controls.md", "design_match": "yes", "key_decisions": ["Zero component changes (theme = new defaults only); empty-string tri-state colors; animation forwarded as global layer; house variant/size included"], "verified": true, "follow_ups": ["Production mount passes theme; remaining matrix fills (IconButton/Dialog/Card)"]},
-        {"id": "sf-033", "title": "Select custom dropdown (native extension + listbox + theme)", "status": "done", "owner": "agent", "started": "2026-10-11", "finished": "2026-10-11", "log": "TASKS/done/sf-033-select-custom.md", "design_match": "yes", "key_decisions": ["AGENTS allowlist: popup open-state (disclosure only); empty face vars never inline; OS-chrome law splits knob applicability; repaired orphaned palette guard + stray brace"], "verified": true, "follow_ups": ["Theme wiring at assembler/showcase; per-option disabled states"]},
-        {"id": "sf-037", "title": "Tooltip + Dialog theme build", "status": "done", "owner": "agent", "started": "2026-10-11", "finished": "2026-10-11", "log": "TASKS/done/sf-037-tooltip-dialog-build.md", "design_match": "yes", "key_decisions": ["Tooltip zero component change (styleOverrides feed); Dialog additive props, default-identical; matrix limits corrected to source"], "verified": true, "follow_ups": ["Assembler wiring; IconButton/Card fills"]},
-        {"id": "sf-039", "title": "Product card (doc + component + theme + showcase)", "status": "in-progress", "owner": "agent", "started": "2026-10-11", "finished": null, "log": "TASKS/in-progress/sf-039-product-card.md", "design_match": null, "key_decisions": [], "verified": false, "follow_ups": []},
-        {"id": "sf-038", "title": "Button theme wiring (object prop + AuthForm + demo)", "status": "done", "owner": "agent", "started": "2026-10-11", "finished": "2026-10-11", "log": "TASKS/done/sf-038-button-wiring.md", "design_match": "yes", "key_decisions": ["Theme object prop (trio-lowest); animation global fills pre-built slot; demos stay explicit; AuthForm first production site"], "verified": true, "follow_ups": ["Remaining primitives one per turn; assembler pipeline"]},
-        {"id": "sf-040", "title": "product.md amend (tablet cap + card caps, docs-only)", "status": "done", "owner": "agent", "started": "2026-10-11", "finished": "2026-10-11", "log": "TASKS/done/sf-040-product-doc-amend.md", "design_match": "yes", "key_decisions": ["Amend-not-rewrite (one-line delta); revert-repair of accidental overwrite; diff-stat proof before close"], "verified": true, "follow_ups": ["P2 ProductCard.tsx + trio; P3 theme group; P4 showcase grid"]},
-        {"id": "sf-041", "title": "product.md hover deltas (none + swap set + hover paint)", "status": "done", "owner": "agent", "started": "2026-10-11", "finished": "2026-10-11", "log": "TASKS/done/sf-041-product-hover-deltas.md", "design_match": "yes", "key_decisions": ["Swap animation = (a) hover-swap style; (b) deferred to listing slice; hover paint via :hover on vars; trio twins for every knob"], "verified": true, "follow_ups": ["P2 build consumes these knobs; (b) listing transitions"]},
-        {"id": "sf-042", "title": "Matrix per-variable tables batch 1 (Pill/Toast/Badge)", "status": "done", "owner": "agent", "started": "2026-10-13", "finished": "2026-10-13", "log": "TASKS/done/sf-042-matrix-per-variable.md", "design_match": "yes", "key_decisions": ["Five-column schema; step-0 grep before writing; grouped rows migrate per batch"], "verified": true, "follow_ups": ["Batch 2: Icon/Textarea/Button; overlays; navbar; product card"]},
-        {"id": "sf-043", "title": "Matrix batch 2 (Icon/Textarea/Button) + unpushed clear", "status": "done", "owner": "agent", "started": "2026-10-13", "finished": "2026-10-13", "log": "TASKS/done/sf-043-matrix-batch2.md", "design_match": "yes", "key_decisions": ["Arrays cleared after verified-empty rev-lists; step-0 grep before writing; behavior/identity props omitted by rule"], "verified": true, "follow_ups": ["Batch 3 overlays; batch 4 navbar; batch 5 product card"]},
-        {"id": "sf-044", "title": "Matrix batch 3 (overlays per-variable)", "status": "done", "owner": "agent", "started": "2026-10-13", "finished": "2026-10-13", "log": "TASKS/done/sf-044-matrix-batch3.md", "design_match": "yes", "key_decisions": ["Rationale blocks untouched; pill faces cross-referenced not repeated; dept flat prop documented"], "verified": true, "follow_ups": ["Batch 4 navbar; batch 5 product card"]},
-        {"id": "sf-045", "title": "Matrix batch 4 (navbar per-variable)", "status": "done", "owner": "agent", "started": "2026-10-13", "finished": "2026-10-13", "log": "TASKS/done/sf-045-matrix-batch4.md", "design_match": "yes", "key_decisions": ["Group-level state tags; array [].paths; unwired groups marked wiring-pending"], "verified": true, "follow_ups": ["Batch 5 product card"]},
-        {"id": "sf-046", "title": "Navbar/chrome completion (triggers, drawer, mount, assembler)", "status": "done", "owner": "agent", "started": "2026-10-13", "finished": "2026-10-13", "log": "TASKS/done/sf-046-navbar-chrome.md", "design_match": "yes", "key_decisions": ["Assemblers-only new files; cart parked unwired; HomeChrome forward-deleted; demo seam shared; classic falls back to sheet"], "verified": true, "follow_ups": ["Assemblers feed theme.button global; cms-svc swaps; revalidateTag; countdown tick; logo.position order; sf-033 per-option disabled"]},
-        {"id": "sf-047", "title": "Navbar cleanup (links gap + preview icons)", "status": "done", "owner": "agent", "started": "2026-10-13", "finished": "2026-10-13", "log": "TASKS/done/sf-047-navbar-cleanup.md", "design_match": "yes", "key_decisions": ["Disabled + labeled over dead clicks; behavior/identity props omitted; preview distinct from live"], "verified": true, "follow_ups": ["Functional wiring per slice; ProductCard question open"]},
-        {"id": "sf-036", "title": "Matrix: Tooltip + Dialog + overlay rationale (docs-only)", "status": "done", "owner": "agent", "started": "2026-10-11", "finished": "2026-10-11", "log": "TASKS/done/sf-036-matrix-tooltip-dialog.md", "design_match": "yes", "key_decisions": ["Docs-only per order (PLANNED-marked rows); rationale lives in matrix, not second file"], "verified": true, "follow_ups": ["Build task: theme groups + Dialog paint props (needs below)"]},
-        {"id": "sf-035", "title": "Select data pattern (port + hook + §9 demos)", "status": "done", "owner": "agent", "started": "2026-10-11", "finished": "2026-10-11", "log": "TASKS/done/sf-035-select-data.md", "design_match": "yes", "key_decisions": ["New lib/select micro-domain (not search); third useSearch instance minus debounce; §9 own-instance rule"], "verified": true, "follow_ups": ["CMS/service swap; per-option disabled states"]},
-        {"id": "sf-034", "title": "Dev CSS parse failure (stale cache + structure guard)", "status": "done", "owner": "agent", "started": "2026-10-11", "finished": "2026-10-11", "log": "TASKS/done/sf-034-dev-css-parse.md", "design_match": "yes", "key_decisions": ["No code change (disk valid); guard proven against pre-repair revision (FAILs old, OKs new)"], "verified": true, "follow_ups": []},
-        {"id": "sf-032", "title": "Badge customs + Icon color + Textarea paint (admin theme)", "status": "done", "owner": "agent", "started": "2026-10-11", "finished": "2026-10-11", "log": "TASKS/done/sf-032-badge-icon-textarea.md", "design_match": "yes", "key_decisions": ["Custom-first lookup (admin may retint builtins); Icon color via CSS passthrough; Textarea themed focus via data attr; incomplete customs dropped"], "verified": true, "follow_ups": ["Assembler wiring (theme + tone map); IconButton/Dialog/Card fills"]},
-        {"id": "sf-023", "title": "Editorial search takeover (photo-exact, scrollable full-screen)", "status": "done", "owner": "agent", "started": "2026-10-11", "finished": "2026-10-11", "log": "TASKS/done/sf-023-editorial-takeover.md", "design_match": "yes", "key_decisions": ["Nested per-key editorial merge; theme object (not 15 flat props) with stated reason; curated-before-typing via curated prop; alt-empty imgs inside labeled buttons; section-bg default over new token"], "verified": true, "follow_ups": ["sf-024 palette modal; CMS collections replace DEMO_CATALOG; cardType/tabShape unions extend"]},
-        {"id": "sf-014", "title": "NavLinks self-class fix (bind CSS to markup)", "status": "done", "owner": "agent", "started": "2026-10-10", "finished": "2026-10-10", "log": "TASKS/done/sf-014-navlinks-self-class.md", "design_match": "yes", "key_decisions": ["Component carries its block class; test pins the binding"], "verified": true, "follow_ups": []},
-        {"id": "sf-015", "title": "Announce edge arrows + dismiss + collapse animation", "status": "done", "owner": "agent", "started": "2026-10-10", "finished": "2026-10-10", "log": "TASKS/done/sf-015-announce-edges-collapse.md", "design_match": "yes", "key_decisions": ["Absolute-via-inset over transforms (guard owns translate); instant paths over uniform delay; knob default on"], "verified": true, "follow_ups": ["Timer/rotation hook (File 8 era)"]},
-        {"id": "sf-016", "title": "Search overlay demo (trap vs light variants, props-only)", "status": "done", "owner": "agent", "started": "2026-10-10", "finished": "2026-10-10", "log": "TASKS/done/sf-016-search-overlay-demo.md", "design_match": null, "key_decisions": ["Demo in showcase file, never in components/; query state in parent (props-only); aria-modal honest per mode"], "verified": true, "follow_ups": ["Winner pick after feel-test; production SearchOverlay.tsx; loser deleted"]},
-        {"id": "sf-017", "title": "Search sheet V2 (settings, source, hook, component, paint, registry)", "status": "done", "owner": "agent", "started": "2026-10-10", "finished": "2026-10-10", "log": "TASKS/done/sf-017-search-sheet-v2.md", "design_match": "yes", "key_decisions": ["Trap in production (feel-test); honest registry (null over wrong); query state in parent"], "verified": true, "follow_ups": ["V1 palette modal next; navbar assembler mount"]},
-        {"id": "sf-018", "title": "Sheet slide animation (per-variant motion, presets+custom)", "status": "done", "owner": "agent", "started": "2026-10-10", "finished": "2026-10-10", "log": "TASKS/done/sf-018-sheet-slide-animation.md", "design_match": "yes", "key_decisions": ["Per-variant instances over shared motion; guard conformance over guard edits; 240 ease-out matches collapse rhythm"], "verified": true, "follow_ups": ["V1 palette modal (own motion instance); navbar assembler mount"]},
-        {"id": "sf-019", "title": "Inspect modal shell + motion families (oceanic/fast/flat)", "status": "done", "owner": "agent", "started": "2026-10-10", "finished": "2026-10-10", "log": "TASKS/done/sf-019-inspect-shell-motion.md", "design_match": "yes", "key_decisions": ["Oceanic scale+rise for centered modals (travel belongs to sheets); additive presets keep stored values working; travel as resolved value, never preset names in CSS"], "verified": true, "follow_ups": ["List/preview/actions regions; V1 palette next; navbar assembler mount"]},
-        {"id": "sf-020", "title": "Inspect query input row (shell chrome, controlled)", "status": "done", "owner": "agent", "started": "2026-10-10", "finished": "2026-10-10", "log": "TASKS/done/sf-020-inspect-query-input.md", "design_match": "yes", "key_decisions": ["Input row is shell chrome (like close); half bindings render nothing; autofocus on mount; decorative glyph keeps spotlight external"], "verified": true, "follow_ups": ["List region with results grid; preview region with lazy PDP"]},
-        {"id": "sf-021", "title": "Inspect list+preview+actions regions (lazy PDP, demo sizes/stock)", "status": "done", "owner": "agent", "started": "2026-10-10", "finished": "2026-10-10", "log": "TASKS/done/sf-021-inspect-regions.md", "design_match": "yes", "key_decisions": ["Lazy PDP keeps suggest tiny + stock fresh; regions as slots (shell stays ignorant); demo map separate from catalog; no placeholders anywhere"], "verified": true, "follow_ups": ["V1 palette modal (own motion instance); navbar assembler mount; real product imagery"]},
-        {"id": "sf-022", "title": "Remove inspect stack, restore V2-only", "status": "done", "owner": "agent", "started": "2026-10-10", "finished": "2026-10-10", "log": "TASKS/done/sf-022-remove-inspect-stack.md", "design_match": "yes", "key_decisions": ["Forward deletion over revert (interleaved commits would conflict); consumers-first providers-last; compiler-as-finder for stragglers; history preserved"], "verified": true, "follow_ups": ["V1 palette modal (own motion instance); navbar assembler mount"]}
+        {
+          "id": "sf-001",
+          "title": "Tooltip system (positioning, 3 content modes, style knobs)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-09-18",
+          "finished": "2026-09-19",
+          "log": "TASKS/done/sf-001-tooltip-system.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Zero-JS CSS positioning; bare render when off/empty; flat props win over styleOverrides"
+          ],
+          "verified": true,
+          "follow_ups": []
+        },
+        {
+          "id": "sf-002",
+          "title": "Auth settings vocabulary + builtin fallbacks",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-09-27",
+          "finished": "2026-09-27",
+          "log": "TASKS/done/sf-002-auth-settings-vocabulary.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Partial admin types vs all-required resolved; hex only in DEFAULT_*; discriminated-union gradient (angle linear-only)"
+          ],
+          "verified": true,
+          "follow_ups": []
+        },
+        {
+          "id": "sf-003",
+          "title": "Auth settings resolver + sanitizer (only file allowed ??)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-09-27",
+          "finished": "2026-09-28",
+          "log": "TASKS/done/sf-003-auth-resolver-sanitizer.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Cascade page→shared→global→builtin; corrupt scopes are misses; forgot groups replace shared wholesale (test-caught)"
+          ],
+          "verified": true,
+          "follow_ups": []
+        },
+        {
+          "id": "sf-004",
+          "title": "Auth cssVars emitter + error map + CMS fetcher",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-09-28",
+          "finished": "2026-09-28",
+          "log": "TASKS/done/sf-004-auth-vars-errors-fetcher.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "String assembly only in emitter; total error function with generic fallback; injected source/cache fetcher"
+          ],
+          "verified": true,
+          "follow_ups": []
+        },
+        {
+          "id": "sf-005",
+          "title": "Composed auth blocks + paint (AuthPage/Split/Panel/Form, PasswordMeter)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-09-29",
+          "finished": "2026-09-29",
+          "log": "TASKS/done/sf-005-composed-auth-blocks.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Composed-dumb layer; sanitized HTML slots (danger resolved upstream); pattern dots via color-mix"
+          ],
+          "verified": true,
+          "follow_ups": []
+        },
+        {
+          "id": "sf-006",
+          "title": "Primitive seams (Input radius/focus vars, eye-off icon)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-09-29",
+          "finished": "2026-09-29",
+          "log": "TASKS/done/sf-006-primitive-seams.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Backward-compatible widening with current-value fallbacks; rightIconInteractive keeps eye operable; 27th icon with reason"
+          ],
+          "verified": true,
+          "follow_ups": []
+        },
+        {
+          "id": "sf-007",
+          "title": "(auth) routes + stateful islands (signin/signup/forgot)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-09-29",
+          "finished": "2026-09-30",
+          "log": "TASKS/done/sf-007-auth-routes.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Server pages fetch→resolve→vars→props; chromeless conversion routes; TODO(auth-client)/TODO(cms-svc) stubs marked"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "Thin client replacing stubs",
+            "CMS source replacing null-sources"
+          ]
+        },
+        {
+          "id": "sf-008",
+          "title": "AGENTS.md constitution + Learning Mode",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-09-30",
+          "finished": "2026-10-02",
+          "log": "TASKS/done/sf-008-agents-constitution.md",
+          "design_match": null,
+          "key_decisions": [
+            "Per-repo constitution; reason-required vs hard-banned constructs; learning rules always-on with explicit skip phrase"
+          ],
+          "verified": true,
+          "follow_ups": []
+        },
+        {
+          "id": "sf-009",
+          "title": "Agent memory system (STATUS rewrite, SKILL-HOOKS, router, folders, git)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-02",
+          "finished": "2026-10-02",
+          "log": "TASKS/done/sf-009-agent-memory-system.md",
+          "design_match": null,
+          "key_decisions": [
+            "Skills foldered smart-to-dumb with hooks/ separate; dynamic router default; archive/ retirement; local git, origin pending"
+          ],
+          "verified": true,
+          "follow_ups": []
+        },
+        {
+          "id": "sf-010",
+          "title": "NavLinks File 1 (component + CSS + contract tests)",
+          "status": "done",
+          "owner": "learner",
+          "started": "2026-10-04",
+          "finished": "2026-10-05",
+          "log": "TASKS/done/sf-010-navlinks-file-1.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "href keys (stable across renders); aria-current page token; data-highlight hooks; hook-binding guard test"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "Style leg folded into File 1 commit; resolver owns filtering (File 8)"
+          ]
+        },
+        {
+          "id": "sf-011",
+          "title": "AnnouncementBar File 2 + resolveNav (controlled shell, strict-drop)",
+          "status": "done",
+          "owner": "learner+agent",
+          "started": "2026-10-05",
+          "finished": "2026-10-05",
+          "log": "TASKS/done/sf-011-announcement-bar.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Controlled shell over internal timer; strict-drop schedules; arrows only when 2..n + flag; sole ?? is index safety"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "Timer/rotation hook (File 8 era); countdown live strings"
+          ]
+        },
+        {
+          "id": "sf-012",
+          "title": "Showcase to /components, chrome on home /",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-05",
+          "finished": "2026-10-05",
+          "log": "TASKS/done/sf-012-home-chrome-move.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Per-page mount (auth stays chromeless); demo-shaped input through real resolver; delete-at-launch header"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "Hero slice in home main; /components deleted at launch"
+          ]
+        },
+        {
+          "id": "sf-013",
+          "title": "SearchButton File 3 (trigger + IconButton pattern)",
+          "status": "done",
+          "owner": "learner",
+          "started": "2026-10-05",
+          "finished": "2026-10-13",
+          "log": "TASKS/in-progress/sf-013-searchbutton-file-3.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Superseded by NavSearchTrigger (production trigger shipped in sf-046); learner work preserved in log"
+          ],
+          "verified": true,
+          "follow_ups": []
+        },
+        {
+          "id": "sf-024",
+          "title": "Palette search modal (filters, trending + recent, quick-add)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-11",
+          "finished": "2026-10-11",
+          "log": "TASKS/done/sf-024-palette-modal.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Pill primitive + same-pass retrofit (native button pass-through); useQuickAdd hook over showcase state; ratingCount additive; data-pill rename for wave-park guard; demo names kept"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "sf-026 assembler; PDP reuses useQuickAdd; svc ports swap demos; card unions extend"
+          ]
+        },
+        {
+          "id": "sf-027",
+          "title": "Palette fit (720px, tighten stack, backstop, sticky footer)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-11",
+          "finished": "2026-10-11",
+          "log": "TASKS/done/sf-027-palette-fit.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "720 over reference 640 (rows need width); backstop + sticky footer over shrink-only; values from reference, paint on tokens"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "Human side-by-side at §17; stray lab HTML left untracked"
+          ]
+        },
+        {
+          "id": "sf-025",
+          "title": "Docs pass: overlay system (search-overlays, shell-cart, launch, arch §16, skills)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-11",
+          "finished": "2026-10-11",
+          "log": "TASKS/done/sf-025-docs-pass-overlays.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "shell-cart.md keeps promised name (cart stubs §4); stale refs untouched as follow-ups; no Documentation key existed — added"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "Stale refs (src/app path, middleware name, shop group, missing 7/8 + auth.md); remaining grouped component docs; sf-024 palette; sf-026 assembler"
+          ]
+        },
+        {
+          "id": "sf-026",
+          "title": "SearchMount assembler (registry caller, lazy selected chunk, CI guarantees)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-13",
+          "finished": "2026-10-13",
+          "log": "TASKS/done/sf-046-navbar-chrome.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Absorbed by sf-046 SearchMount + registry guard; no separate build"
+          ],
+          "verified": true,
+          "follow_ups": []
+        },
+        {
+          "id": "sf-028",
+          "title": "Palette admin expansion (footer harden, knobs, toast, matrix)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-11",
+          "finished": "2026-10-11",
+          "log": "TASKS/done/sf-028-palette-admin.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Footer double-pinned (flex auto + sticky); 5 geometry + 7 visibility + rowAction + pillRadius + notify knobs; Toast owner-timed primitive; matrix progressive rule; onView reserved not stubbed"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "Assembler consumes notifyOnQuickAdd; view task (onView + branches); card-type work extends unions"
+          ]
+        },
+        {
+          "id": "sf-029",
+          "title": "Footer zero-gap (card padding-bottom 0, footer flush)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-11",
+          "finished": "2026-10-11",
+          "log": "TASKS/done/sf-029-footer-zero.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Flush by geometry (bottom 0 both sides), not cancellation"
+          ],
+          "verified": true,
+          "follow_ups": []
+        },
+        {
+          "id": "sf-030",
+          "title": "Customization skill + Button matrix fill",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-11",
+          "finished": "2026-10-11",
+          "log": "TASKS/done/sf-030-customize-skill.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Markdown-only single source (no JSON mirror); one component per turn; Button first (highest reuse)"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "Input, IconButton, Dialog, Card fills; state-for-agents push is human call"
+          ]
+        },
+        {
+          "id": "sf-031",
+          "title": "Theme form-controls (button/input/checkbox/toggle house defaults)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-11",
+          "finished": "2026-10-11",
+          "log": "TASKS/done/sf-031-theme-form-controls.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Zero component changes (theme = new defaults only); empty-string tri-state colors; animation forwarded as global layer; house variant/size included"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "Production mount passes theme; remaining matrix fills (IconButton/Dialog/Card)"
+          ]
+        },
+        {
+          "id": "sf-033",
+          "title": "Select custom dropdown (native extension + listbox + theme)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-11",
+          "finished": "2026-10-11",
+          "log": "TASKS/done/sf-033-select-custom.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "AGENTS allowlist: popup open-state (disclosure only); empty face vars never inline; OS-chrome law splits knob applicability; repaired orphaned palette guard + stray brace"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "Theme wiring at assembler/showcase; per-option disabled states"
+          ]
+        },
+        {
+          "id": "sf-037",
+          "title": "Tooltip + Dialog theme build",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-11",
+          "finished": "2026-10-11",
+          "log": "TASKS/done/sf-037-tooltip-dialog-build.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Tooltip zero component change (styleOverrides feed); Dialog additive props, default-identical; matrix limits corrected to source"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "Assembler wiring; IconButton/Card fills"
+          ]
+        },
+        {
+          "id": "sf-039",
+          "title": "Product card (doc + component + theme + showcase)",
+          "status": "in-progress",
+          "owner": "agent",
+          "started": "2026-10-11",
+          "finished": null,
+          "log": "TASKS/in-progress/sf-039-product-card.md",
+          "design_match": null,
+          "key_decisions": [],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "sf-038",
+          "title": "Button theme wiring (object prop + AuthForm + demo)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-11",
+          "finished": "2026-10-11",
+          "log": "TASKS/done/sf-038-button-wiring.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Theme object prop (trio-lowest); animation global fills pre-built slot; demos stay explicit; AuthForm first production site"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "Remaining primitives one per turn; assembler pipeline"
+          ]
+        },
+        {
+          "id": "sf-040",
+          "title": "product.md amend (tablet cap + card caps, docs-only)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-11",
+          "finished": "2026-10-11",
+          "log": "TASKS/done/sf-040-product-doc-amend.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Amend-not-rewrite (one-line delta); revert-repair of accidental overwrite; diff-stat proof before close"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "P2 ProductCard.tsx + trio; P3 theme group; P4 showcase grid"
+          ]
+        },
+        {
+          "id": "sf-041",
+          "title": "product.md hover deltas (none + swap set + hover paint)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-11",
+          "finished": "2026-10-11",
+          "log": "TASKS/done/sf-041-product-hover-deltas.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Swap animation = (a) hover-swap style; (b) deferred to listing slice; hover paint via :hover on vars; trio twins for every knob"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "P2 build consumes these knobs; (b) listing transitions"
+          ]
+        },
+        {
+          "id": "sf-042",
+          "title": "Matrix per-variable tables batch 1 (Pill/Toast/Badge)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-13",
+          "finished": "2026-10-13",
+          "log": "TASKS/done/sf-042-matrix-per-variable.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Five-column schema; step-0 grep before writing; grouped rows migrate per batch"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "Batch 2: Icon/Textarea/Button; overlays; navbar; product card"
+          ]
+        },
+        {
+          "id": "sf-043",
+          "title": "Matrix batch 2 (Icon/Textarea/Button) + unpushed clear",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-13",
+          "finished": "2026-10-13",
+          "log": "TASKS/done/sf-043-matrix-batch2.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Arrays cleared after verified-empty rev-lists; step-0 grep before writing; behavior/identity props omitted by rule"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "Batch 3 overlays; batch 4 navbar; batch 5 product card"
+          ]
+        },
+        {
+          "id": "sf-044",
+          "title": "Matrix batch 3 (overlays per-variable)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-13",
+          "finished": "2026-10-13",
+          "log": "TASKS/done/sf-044-matrix-batch3.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Rationale blocks untouched; pill faces cross-referenced not repeated; dept flat prop documented"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "Batch 4 navbar; batch 5 product card"
+          ]
+        },
+        {
+          "id": "sf-045",
+          "title": "Matrix batch 4 (navbar per-variable)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-13",
+          "finished": "2026-10-13",
+          "log": "TASKS/done/sf-045-matrix-batch4.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Group-level state tags; array [].paths; unwired groups marked wiring-pending"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "Batch 5 product card"
+          ]
+        },
+        {
+          "id": "sf-046",
+          "title": "Navbar/chrome completion (triggers, drawer, mount, assembler)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-13",
+          "finished": "2026-10-13",
+          "log": "TASKS/done/sf-046-navbar-chrome.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Assemblers-only new files; cart parked unwired; HomeChrome forward-deleted; demo seam shared; classic falls back to sheet"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "Assemblers feed theme.button global; cms-svc swaps; revalidateTag; countdown tick; logo.position order; sf-033 per-option disabled"
+          ]
+        },
+        {
+          "id": "sf-047",
+          "title": "Navbar cleanup (links gap + preview icons)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-13",
+          "finished": "2026-10-13",
+          "log": "TASKS/done/sf-047-navbar-cleanup.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Disabled + labeled over dead clicks; behavior/identity props omitted; preview distinct from live"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "Functional wiring per slice; ProductCard question open"
+          ]
+        },
+        {
+          "id": "sf-036",
+          "title": "Matrix: Tooltip + Dialog + overlay rationale (docs-only)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-11",
+          "finished": "2026-10-11",
+          "log": "TASKS/done/sf-036-matrix-tooltip-dialog.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Docs-only per order (PLANNED-marked rows); rationale lives in matrix, not second file"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "Build task: theme groups + Dialog paint props (needs below)"
+          ]
+        },
+        {
+          "id": "sf-035",
+          "title": "Select data pattern (port + hook + §9 demos)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-11",
+          "finished": "2026-10-11",
+          "log": "TASKS/done/sf-035-select-data.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "New lib/select micro-domain (not search); third useSearch instance minus debounce; §9 own-instance rule"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "CMS/service swap; per-option disabled states"
+          ]
+        },
+        {
+          "id": "sf-034",
+          "title": "Dev CSS parse failure (stale cache + structure guard)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-11",
+          "finished": "2026-10-11",
+          "log": "TASKS/done/sf-034-dev-css-parse.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "No code change (disk valid); guard proven against pre-repair revision (FAILs old, OKs new)"
+          ],
+          "verified": true,
+          "follow_ups": []
+        },
+        {
+          "id": "sf-032",
+          "title": "Badge customs + Icon color + Textarea paint (admin theme)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-11",
+          "finished": "2026-10-11",
+          "log": "TASKS/done/sf-032-badge-icon-textarea.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Custom-first lookup (admin may retint builtins); Icon color via CSS passthrough; Textarea themed focus via data attr; incomplete customs dropped"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "Assembler wiring (theme + tone map); IconButton/Dialog/Card fills"
+          ]
+        },
+        {
+          "id": "sf-023",
+          "title": "Editorial search takeover (photo-exact, scrollable full-screen)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-11",
+          "finished": "2026-10-11",
+          "log": "TASKS/done/sf-023-editorial-takeover.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Nested per-key editorial merge; theme object (not 15 flat props) with stated reason; curated-before-typing via curated prop; alt-empty imgs inside labeled buttons; section-bg default over new token"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "sf-024 palette modal; CMS collections replace DEMO_CATALOG; cardType/tabShape unions extend"
+          ]
+        },
+        {
+          "id": "sf-014",
+          "title": "NavLinks self-class fix (bind CSS to markup)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-10",
+          "finished": "2026-10-10",
+          "log": "TASKS/done/sf-014-navlinks-self-class.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Component carries its block class; test pins the binding"
+          ],
+          "verified": true,
+          "follow_ups": []
+        },
+        {
+          "id": "sf-015",
+          "title": "Announce edge arrows + dismiss + collapse animation",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-10",
+          "finished": "2026-10-10",
+          "log": "TASKS/done/sf-015-announce-edges-collapse.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Absolute-via-inset over transforms (guard owns translate); instant paths over uniform delay; knob default on"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "Timer/rotation hook (File 8 era)"
+          ]
+        },
+        {
+          "id": "sf-016",
+          "title": "Search overlay demo (trap vs light variants, props-only)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-10",
+          "finished": "2026-10-10",
+          "log": "TASKS/done/sf-016-search-overlay-demo.md",
+          "design_match": null,
+          "key_decisions": [
+            "Demo in showcase file, never in components/; query state in parent (props-only); aria-modal honest per mode"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "Winner pick after feel-test; production SearchOverlay.tsx; loser deleted"
+          ]
+        },
+        {
+          "id": "sf-017",
+          "title": "Search sheet V2 (settings, source, hook, component, paint, registry)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-10",
+          "finished": "2026-10-10",
+          "log": "TASKS/done/sf-017-search-sheet-v2.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Trap in production (feel-test); honest registry (null over wrong); query state in parent"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "V1 palette modal next; navbar assembler mount"
+          ]
+        },
+        {
+          "id": "sf-018",
+          "title": "Sheet slide animation (per-variant motion, presets+custom)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-10",
+          "finished": "2026-10-10",
+          "log": "TASKS/done/sf-018-sheet-slide-animation.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Per-variant instances over shared motion; guard conformance over guard edits; 240 ease-out matches collapse rhythm"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "V1 palette modal (own motion instance); navbar assembler mount"
+          ]
+        },
+        {
+          "id": "sf-019",
+          "title": "Inspect modal shell + motion families (oceanic/fast/flat)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-10",
+          "finished": "2026-10-10",
+          "log": "TASKS/done/sf-019-inspect-shell-motion.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Oceanic scale+rise for centered modals (travel belongs to sheets); additive presets keep stored values working; travel as resolved value, never preset names in CSS"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "List/preview/actions regions; V1 palette next; navbar assembler mount"
+          ]
+        },
+        {
+          "id": "sf-020",
+          "title": "Inspect query input row (shell chrome, controlled)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-10",
+          "finished": "2026-10-10",
+          "log": "TASKS/done/sf-020-inspect-query-input.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Input row is shell chrome (like close); half bindings render nothing; autofocus on mount; decorative glyph keeps spotlight external"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "List region with results grid; preview region with lazy PDP"
+          ]
+        },
+        {
+          "id": "sf-021",
+          "title": "Inspect list+preview+actions regions (lazy PDP, demo sizes/stock)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-10",
+          "finished": "2026-10-10",
+          "log": "TASKS/done/sf-021-inspect-regions.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Lazy PDP keeps suggest tiny + stock fresh; regions as slots (shell stays ignorant); demo map separate from catalog; no placeholders anywhere"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "V1 palette modal (own motion instance); navbar assembler mount; real product imagery"
+          ]
+        },
+        {
+          "id": "sf-022",
+          "title": "Remove inspect stack, restore V2-only",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-10",
+          "finished": "2026-10-10",
+          "log": "TASKS/done/sf-022-remove-inspect-stack.md",
+          "design_match": "yes",
+          "key_decisions": [
+            "Forward deletion over revert (interleaved commits would conflict); consumers-first providers-last; compiler-as-finder for stragglers; history preserved"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "V1 palette modal (own motion instance); navbar assembler mount"
+          ]
+        }
       ]
     },
     "admin-app": {
@@ -75,13 +901,36 @@
       "localRoot": "frontend/admin",
       "repo": "admin-app",
       "port": 3001,
-      "ownerDocs": ["Documentation/6.Admin-Panel.md", "Documentation/design-system/admin.md"],
-      "stages": {"spec": "in-progress", "build": "todo", "test": "todo", "verify": "todo"},
+      "ownerDocs": [
+        "Documentation/6.Admin-Panel.md",
+        "Documentation/design-system/admin.md"
+      ],
+      "stages": {
+        "spec": "in-progress",
+        "build": "todo",
+        "test": "todo",
+        "verify": "todo"
+      },
       "inProgress": null,
-      "next": ["Products list/editor/importer (offset Table, 409 blocking banners)", "CMS-sections editor with live preview (?preview=1, ThreeState Inherit/Override, Reset deletes keys)", "Theme settings + Navigation/Megamenu config"],
-      "blockedBy": ["ecom-contracts"],
-      "skills": ["SKILL-EXPLORE", "SKILL-DUMB", "SKILL-ADMIN", "SKILL-CSS", "SKILL-INTERFACES"],
-      "producesConsumes": {"produces": [], "consumes": []},
+      "next": [
+        "Products list/editor/importer (offset Table, 409 blocking banners)",
+        "CMS-sections editor with live preview (?preview=1, ThreeState Inherit/Override, Reset deletes keys)",
+        "Theme settings + Navigation/Megamenu config"
+      ],
+      "blockedBy": [
+        "ecom-contracts"
+      ],
+      "skills": [
+        "SKILL-EXPLORE",
+        "SKILL-DUMB",
+        "SKILL-ADMIN",
+        "SKILL-CSS",
+        "SKILL-INTERFACES"
+      ],
+      "producesConsumes": {
+        "produces": [],
+        "consumes": []
+      },
       "claimedBy": null,
       "note": "v1 frontend[admin-screens]=todo folded here. Routes in 6.Admin-Panel.md §2.2. Currently empty locally."
     },
@@ -90,13 +939,33 @@
       "localRoot": "(to create, packages/contracts)",
       "repo": "ecom-contracts",
       "port": null,
-      "ownerDocs": ["Documentation/8.Versioning.md (to create)", "Documentation/1.Architecture.md", "Documentation/4.API-Design.md"],
-      "stages": {"spec": "todo", "build": "todo", "test": "todo", "verify": "todo"},
+      "ownerDocs": [
+        "Documentation/8.Versioning.md (to create)",
+        "Documentation/1.Architecture.md",
+        "Documentation/4.API-Design.md"
+      ],
+      "stages": {
+        "spec": "todo",
+        "build": "todo",
+        "test": "todo",
+        "verify": "todo"
+      },
       "inProgress": null,
-      "next": ["8.Versioning.md stub + CHANGELOG discipline (PATCH/MINOR/MAJOR, dual-publish window)", "src/events/ envelope x10 domain events (identical Kafka envelope)", "src/jobs/ x4 SQS schemas + Zod mirrors (ctas.max(3) pattern) + codes.ts"],
+      "next": [
+        "8.Versioning.md stub + CHANGELOG discipline (PATCH/MINOR/MAJOR, dual-publish window)",
+        "src/events/ envelope x10 domain events (identical Kafka envelope)",
+        "src/jobs/ x4 SQS schemas + Zod mirrors (ctas.max(3) pattern) + codes.ts"
+      ],
       "blockedBy": [],
-      "skills": ["SKILL-INTERFACES", "SKILL-FUNCTIONS", "SKILL-NESTJS"],
-      "producesConsumes": {"produces": [], "consumes": []},
+      "skills": [
+        "SKILL-INTERFACES",
+        "SKILL-FUNCTIONS",
+        "SKILL-NESTJS"
+      ],
+      "producesConsumes": {
+        "produces": [],
+        "consumes": []
+      },
       "claimedBy": null,
       "note": "@ecom/contracts semver package, pinned version (no ^). v1 infra[contracts-versioning]=todo folded here. Blocks catalog/cart/order/cms/analytics/import/notify/search specs."
     },
@@ -105,13 +974,37 @@
       "localRoot": "auth-svc",
       "repo": "auth-svc",
       "port": 4010,
-      "ownerDocs": ["Documentation/services/auth.md"],
-      "stages": {"spec": "done", "build": "in-progress", "test": "in-progress", "verify": "todo"},
+      "ownerDocs": [
+        "Documentation/services/auth.md"
+      ],
+      "stages": {
+        "spec": "done",
+        "build": "in-progress",
+        "test": "in-progress",
+        "verify": "todo"
+      },
       "inProgress": "au-001 shopper core: Slice 3 register slice done (RegisterDTO, Argon2id, raw SQL transaction, 23505->409, 17 unit + 19 e2e green). Login slice next.",
-      "next": ["Login slice: POST /api/v1/auth/login, Argon2 verification, JWT HS256 access token + opaque refresh rotation in cookies", "Refresh & Logout: POST /api/v1/auth/refresh, POST /api/v1/auth/logout, GET /api/v1/auth/me"],
-      "blockedBy": ["ecom-contracts"],
-      "skills": ["SKILL-EXPLORE", "SKILL-POSTGRES", "SKILL-NESTJS", "SKILL-INTERFACES", "SKILL-FUNCTIONS", "SKILL-REDIS"],
-      "producesConsumes": {"produces": ["user.registered"], "consumes": []},
+      "next": [
+        "Login slice: POST /api/v1/auth/login, Argon2 verification, JWT HS256 access token + opaque refresh rotation in cookies",
+        "Refresh & Logout: POST /api/v1/auth/refresh, POST /api/v1/auth/logout, GET /api/v1/auth/me"
+      ],
+      "blockedBy": [
+        "ecom-contracts"
+      ],
+      "skills": [
+        "SKILL-EXPLORE",
+        "SKILL-POSTGRES",
+        "SKILL-NESTJS",
+        "SKILL-INTERFACES",
+        "SKILL-FUNCTIONS",
+        "SKILL-REDIS"
+      ],
+      "producesConsumes": {
+        "produces": [
+          "user.registered"
+        ],
+        "consumes": []
+      },
       "claimedBy": null,
       "note": "Only service with spec done - canonical shape to copy for remaining 8 service specs. Local: both probes live on :4010 and contract-verified (liveness stays 200 during a DB outage; readiness 503s and recovers), pg pool crash-proof, 7 auth tables + 2 roles seeded in ecom-pg (5433), register slice complete (201 created, 409 duplicate conflict, 400 validation), 17 unit + 19 e2e green; au-001 in progress. Dev port 4010 per docs."
     },
@@ -120,13 +1013,44 @@
       "localRoot": "(to create, catalog-svc/)",
       "repo": "catalog-svc",
       "port": 4020,
-      "ownerDocs": ["Documentation/services/catalog.md (to create, copy auth.md shape)"],
-      "stages": {"spec": "todo", "build": "todo", "test": "todo", "verify": "todo"},
+      "ownerDocs": [
+        "Documentation/services/catalog.md (to create, copy auth.md shape)"
+      ],
+      "stages": {
+        "spec": "todo",
+        "build": "todo",
+        "test": "todo",
+        "verify": "todo"
+      },
       "inProgress": null,
-      "next": ["Spec doc copying services/auth.md shape", "Raw pg schema + single-JOIN PDP/list queries (no N+1, EXPLAIN p99)", "Cache-aside cat:product:/cat:list: (5m) + invalidate on product.imported"],
-      "blockedBy": ["ecom-contracts", "auth-svc (shape reference)"],
-      "skills": ["SKILL-EXPLORE", "SKILL-POSTGRES", "SKILL-NESTJS", "SKILL-INTERFACES", "SKILL-FUNCTIONS", "SKILL-REDIS"],
-      "producesConsumes": {"produces": ["product.updated", "category.updated", "media.resize-image (task)"], "consumes": ["product.imported", "order.created"]},
+      "next": [
+        "Spec doc copying services/auth.md shape",
+        "Raw pg schema + single-JOIN PDP/list queries (no N+1, EXPLAIN p99)",
+        "Cache-aside cat:product:/cat:list: (5m) + invalidate on product.imported"
+      ],
+      "blockedBy": [
+        "ecom-contracts",
+        "auth-svc (shape reference)"
+      ],
+      "skills": [
+        "SKILL-EXPLORE",
+        "SKILL-POSTGRES",
+        "SKILL-NESTJS",
+        "SKILL-INTERFACES",
+        "SKILL-FUNCTIONS",
+        "SKILL-REDIS"
+      ],
+      "producesConsumes": {
+        "produces": [
+          "product.updated",
+          "category.updated",
+          "media.resize-image (task)"
+        ],
+        "consumes": [
+          "product.imported",
+          "order.created"
+        ]
+      },
       "claimedBy": null,
       "note": "Copy auth.md shape."
     },
@@ -135,13 +1059,38 @@
       "localRoot": "(to create, cart-svc/)",
       "repo": "cart-svc",
       "port": 4030,
-      "ownerDocs": ["Documentation/services/cart.md (to create, copy auth.md shape)"],
-      "stages": {"spec": "todo", "build": "todo", "test": "todo", "verify": "todo"},
+      "ownerDocs": [
+        "Documentation/services/cart.md (to create, copy auth.md shape)"
+      ],
+      "stages": {
+        "spec": "todo",
+        "build": "todo",
+        "test": "todo",
+        "verify": "todo"
+      },
       "inProgress": null,
-      "next": ["Spec doc copying services/auth.md shape", "Cart CRUD + guest merge + updated_at for idle detection", "Redis compare:{sessionId} + idem: keys (24h)"],
-      "blockedBy": ["ecom-contracts"],
-      "skills": ["SKILL-EXPLORE", "SKILL-POSTGRES", "SKILL-NESTJS", "SKILL-INTERFACES", "SKILL-FUNCTIONS", "SKILL-REDIS"],
-      "producesConsumes": {"produces": ["cart.updated"], "consumes": []},
+      "next": [
+        "Spec doc copying services/auth.md shape",
+        "Cart CRUD + guest merge + updated_at for idle detection",
+        "Redis compare:{sessionId} + idem: keys (24h)"
+      ],
+      "blockedBy": [
+        "ecom-contracts"
+      ],
+      "skills": [
+        "SKILL-EXPLORE",
+        "SKILL-POSTGRES",
+        "SKILL-NESTJS",
+        "SKILL-INTERFACES",
+        "SKILL-FUNCTIONS",
+        "SKILL-REDIS"
+      ],
+      "producesConsumes": {
+        "produces": [
+          "cart.updated"
+        ],
+        "consumes": []
+      },
       "claimedBy": null,
       "note": ""
     },
@@ -150,13 +1099,41 @@
       "localRoot": "(to create, order-svc/)",
       "repo": "order-svc",
       "port": 4040,
-      "ownerDocs": ["Documentation/services/order.md (to create, copy auth.md shape)"],
-      "stages": {"spec": "todo", "build": "todo", "test": "todo", "verify": "todo"},
+      "ownerDocs": [
+        "Documentation/services/order.md (to create, copy auth.md shape)"
+      ],
+      "stages": {
+        "spec": "todo",
+        "build": "todo",
+        "test": "todo",
+        "verify": "todo"
+      },
       "inProgress": null,
-      "next": ["Spec doc with outbox + idempotency keys first", "BEGIN order+outbox same TX → COMMIT → bus.publish(order.created)", "Saga-lite compensation on stock fail"],
-      "blockedBy": ["ecom-contracts", "catalog-svc", "cart-svc"],
-      "skills": ["SKILL-EXPLORE", "SKILL-POSTGRES", "SKILL-NESTJS", "SKILL-INTERFACES", "SKILL-FUNCTIONS", "SKILL-REDIS"],
-      "producesConsumes": {"produces": ["order.created", "order.status.updated"], "consumes": []},
+      "next": [
+        "Spec doc with outbox + idempotency keys first",
+        "BEGIN order+outbox same TX → COMMIT → bus.publish(order.created)",
+        "Saga-lite compensation on stock fail"
+      ],
+      "blockedBy": [
+        "ecom-contracts",
+        "catalog-svc",
+        "cart-svc"
+      ],
+      "skills": [
+        "SKILL-EXPLORE",
+        "SKILL-POSTGRES",
+        "SKILL-NESTJS",
+        "SKILL-INTERFACES",
+        "SKILL-FUNCTIONS",
+        "SKILL-REDIS"
+      ],
+      "producesConsumes": {
+        "produces": [
+          "order.created",
+          "order.status.updated"
+        ],
+        "consumes": []
+      },
       "claimedBy": null,
       "note": "Outbox + idempotency first."
     },
@@ -165,13 +1142,43 @@
       "localRoot": "(to create, cms-svc/)",
       "repo": "cms-svc",
       "port": 4050,
-      "ownerDocs": ["Documentation/services/cms.md (to create, copy auth.md shape)", "Documentation/3.Database-Schema.md §4"],
-      "stages": {"spec": "todo", "build": "todo", "test": "todo", "verify": "todo"},
+      "ownerDocs": [
+        "Documentation/services/cms.md (to create, copy auth.md shape)",
+        "Documentation/3.Database-Schema.md §4"
+      ],
+      "stages": {
+        "spec": "todo",
+        "build": "todo",
+        "test": "todo",
+        "verify": "todo"
+      },
       "inProgress": null,
-      "next": ["Spec doc copying services/auth.md shape", "Mongoose cms_* models + Zod validation (ctas.max(3)), version bump cache-buster", "Redis cms:section:/cms:settings:global/cms:nav (5m/1m) + invalidate on cms.updated"],
-      "blockedBy": ["ecom-contracts"],
-      "skills": ["SKILL-EXPLORE", "SKILL-MONGO", "SKILL-NESTJS", "SKILL-INTERFACES", "SKILL-FUNCTIONS", "SKILL-REDIS"],
-      "producesConsumes": {"produces": ["blog.updated", "media.resize-image (task)"], "consumes": ["product.imported", "category.updated"]},
+      "next": [
+        "Spec doc copying services/auth.md shape",
+        "Mongoose cms_* models + Zod validation (ctas.max(3)), version bump cache-buster",
+        "Redis cms:section:/cms:settings:global/cms:nav (5m/1m) + invalidate on cms.updated"
+      ],
+      "blockedBy": [
+        "ecom-contracts"
+      ],
+      "skills": [
+        "SKILL-EXPLORE",
+        "SKILL-MONGO",
+        "SKILL-NESTJS",
+        "SKILL-INTERFACES",
+        "SKILL-FUNCTIONS",
+        "SKILL-REDIS"
+      ],
+      "producesConsumes": {
+        "produces": [
+          "blog.updated",
+          "media.resize-image (task)"
+        ],
+        "consumes": [
+          "product.imported",
+          "category.updated"
+        ]
+      },
       "claimedBy": null,
       "note": ""
     },
@@ -180,13 +1187,44 @@
       "localRoot": "(to create, analytics-svc/)",
       "repo": "analytics-svc",
       "port": 4060,
-      "ownerDocs": ["Documentation/services/analytics.md (to create, copy auth.md shape)", "Documentation/5.Features.md B15"],
-      "stages": {"spec": "todo", "build": "todo", "test": "todo", "verify": "todo"},
+      "ownerDocs": [
+        "Documentation/services/analytics.md (to create, copy auth.md shape)",
+        "Documentation/5.Features.md B15"
+      ],
+      "stages": {
+        "spec": "todo",
+        "build": "todo",
+        "test": "todo",
+        "verify": "todo"
+      },
       "inProgress": null,
-      "next": ["Spec doc copying services/auth.md shape", "Scheduled idle-cart consumer (>Xh → cart.abandoned) + reminder.dispatch task", "daily_stats aggregates + page_views TTL 30d / cart_events 60d (M0 safety)"],
-      "blockedBy": ["ecom-contracts"],
-      "skills": ["SKILL-EXPLORE", "SKILL-MONGO", "SKILL-NESTJS", "SKILL-INTERFACES", "SKILL-FUNCTIONS"],
-      "producesConsumes": {"produces": ["cart.abandoned", "reminder.dispatch (task)"], "consumes": ["cart.updated", "order.created", "page.viewed", "user.registered"]},
+      "next": [
+        "Spec doc copying services/auth.md shape",
+        "Scheduled idle-cart consumer (>Xh → cart.abandoned) + reminder.dispatch task",
+        "daily_stats aggregates + page_views TTL 30d / cart_events 60d (M0 safety)"
+      ],
+      "blockedBy": [
+        "ecom-contracts"
+      ],
+      "skills": [
+        "SKILL-EXPLORE",
+        "SKILL-MONGO",
+        "SKILL-NESTJS",
+        "SKILL-INTERFACES",
+        "SKILL-FUNCTIONS"
+      ],
+      "producesConsumes": {
+        "produces": [
+          "cart.abandoned",
+          "reminder.dispatch (task)"
+        ],
+        "consumes": [
+          "cart.updated",
+          "order.created",
+          "page.viewed",
+          "user.registered"
+        ]
+      },
       "claimedBy": null,
       "note": ""
     },
@@ -195,13 +1233,38 @@
       "localRoot": "(to create, import-svc/)",
       "repo": "import-svc",
       "port": 4070,
-      "ownerDocs": ["Documentation/services/import.md (to create, copy auth.md shape)"],
-      "stages": {"spec": "todo", "build": "todo", "test": "todo", "verify": "todo"},
+      "ownerDocs": [
+        "Documentation/services/import.md (to create, copy auth.md shape)"
+      ],
+      "stages": {
+        "spec": "todo",
+        "build": "todo",
+        "test": "todo",
+        "verify": "todo"
+      },
       "inProgress": null,
-      "next": ["Spec doc copying services/auth.md shape", "SQS import.process-row worker (long-poll 20s, batch 10, DLQ after 5 receives)", "Row validation → product.imported event publish"],
-      "blockedBy": ["ecom-contracts", "catalog-svc"],
-      "skills": ["SKILL-EXPLORE", "SKILL-NESTJS", "SKILL-POSTGRES", "SKILL-INTERFACES", "SKILL-FUNCTIONS"],
-      "producesConsumes": {"produces": ["product.imported"], "consumes": []},
+      "next": [
+        "Spec doc copying services/auth.md shape",
+        "SQS import.process-row worker (long-poll 20s, batch 10, DLQ after 5 receives)",
+        "Row validation → product.imported event publish"
+      ],
+      "blockedBy": [
+        "ecom-contracts",
+        "catalog-svc"
+      ],
+      "skills": [
+        "SKILL-EXPLORE",
+        "SKILL-NESTJS",
+        "SKILL-POSTGRES",
+        "SKILL-INTERFACES",
+        "SKILL-FUNCTIONS"
+      ],
+      "producesConsumes": {
+        "produces": [
+          "product.imported"
+        ],
+        "consumes": []
+      },
       "claimedBy": null,
       "note": ""
     },
@@ -210,13 +1273,42 @@
       "localRoot": "(to create, notify-svc/)",
       "repo": "notify-svc",
       "port": 4080,
-      "ownerDocs": ["Documentation/services/notify.md (to create, copy auth.md shape)"],
-      "stages": {"spec": "todo", "build": "todo", "test": "todo", "verify": "todo"},
+      "ownerDocs": [
+        "Documentation/services/notify.md (to create, copy auth.md shape)"
+      ],
+      "stages": {
+        "spec": "todo",
+        "build": "todo",
+        "test": "todo",
+        "verify": "todo"
+      },
       "inProgress": null,
-      "next": ["Spec doc copying services/auth.md shape", "SQS notify.send-email worker (retry + DLQ, idempotency keys on jobs)", "Event→email mapping: order.created, cart.abandoned, user.registered, order.status.updated"],
-      "blockedBy": ["ecom-contracts"],
-      "skills": ["SKILL-EXPLORE", "SKILL-NESTJS", "SKILL-INTERFACES", "SKILL-FUNCTIONS"],
-      "producesConsumes": {"produces": ["notify.send-email (task, self-consumed)"], "consumes": ["cart.updated", "cart.abandoned", "order.created", "order.status.updated", "user.registered"]},
+      "next": [
+        "Spec doc copying services/auth.md shape",
+        "SQS notify.send-email worker (retry + DLQ, idempotency keys on jobs)",
+        "Event→email mapping: order.created, cart.abandoned, user.registered, order.status.updated"
+      ],
+      "blockedBy": [
+        "ecom-contracts"
+      ],
+      "skills": [
+        "SKILL-EXPLORE",
+        "SKILL-NESTJS",
+        "SKILL-INTERFACES",
+        "SKILL-FUNCTIONS"
+      ],
+      "producesConsumes": {
+        "produces": [
+          "notify.send-email (task, self-consumed)"
+        ],
+        "consumes": [
+          "cart.updated",
+          "cart.abandoned",
+          "order.created",
+          "order.status.updated",
+          "user.registered"
+        ]
+      },
       "claimedBy": null,
       "note": ""
     },
@@ -225,13 +1317,43 @@
       "localRoot": "(to create, search-svc/)",
       "repo": "search-svc",
       "port": 4090,
-      "ownerDocs": ["Documentation/services/search.md (to create, copy auth.md shape)"],
-      "stages": {"spec": "todo", "build": "todo", "test": "todo", "verify": "todo"},
+      "ownerDocs": [
+        "Documentation/services/search.md (to create, copy auth.md shape)"
+      ],
+      "stages": {
+        "spec": "todo",
+        "build": "todo",
+        "test": "todo",
+        "verify": "todo"
+      },
       "inProgress": null,
-      "next": ["Spec doc copying services/auth.md shape", "Index sync consumers (product.imported/updated, category.updated, blog.updated)", "suggest (search:suggest: 10m) + ranked full search endpoints"],
-      "blockedBy": ["ecom-contracts", "catalog-svc", "cms-svc"],
-      "skills": ["SKILL-EXPLORE", "SKILL-NESTJS", "SKILL-POSTGRES", "SKILL-INTERFACES", "SKILL-FUNCTIONS", "SKILL-REDIS"],
-      "producesConsumes": {"produces": [], "consumes": ["product.imported", "product.updated", "category.updated", "blog.updated"]},
+      "next": [
+        "Spec doc copying services/auth.md shape",
+        "Index sync consumers (product.imported/updated, category.updated, blog.updated)",
+        "suggest (search:suggest: 10m) + ranked full search endpoints"
+      ],
+      "blockedBy": [
+        "ecom-contracts",
+        "catalog-svc",
+        "cms-svc"
+      ],
+      "skills": [
+        "SKILL-EXPLORE",
+        "SKILL-NESTJS",
+        "SKILL-POSTGRES",
+        "SKILL-INTERFACES",
+        "SKILL-FUNCTIONS",
+        "SKILL-REDIS"
+      ],
+      "producesConsumes": {
+        "produces": [],
+        "consumes": [
+          "product.imported",
+          "product.updated",
+          "category.updated",
+          "blog.updated"
+        ]
+      },
       "claimedBy": null,
       "note": ""
     },
@@ -240,13 +1362,30 @@
       "localRoot": "(to create, ecom-infra/)",
       "repo": "ecom-infra",
       "port": null,
-      "ownerDocs": ["Documentation/7.Deployment.md (to create)"],
-      "stages": {"spec": "todo", "build": "todo", "test": "todo", "verify": "todo"},
+      "ownerDocs": [
+        "Documentation/7.Deployment.md (to create)"
+      ],
+      "stages": {
+        "spec": "todo",
+        "build": "todo",
+        "test": "todo",
+        "verify": "todo"
+      },
       "inProgress": null,
-      "next": ["7.Deployment.md stub + VERSIONS.env pinning + ci-per-repo (lint→test→build→push)", "ecom-infra/aws/sqs.tf: send-email, process-row, resize-image, reminders + DLQs + IAM", "Compose + Nginx (storefront./admin./api. domains, /api/<route> prefix) + /health + /health/ready"],
+      "next": [
+        "7.Deployment.md stub + VERSIONS.env pinning + ci-per-repo (lint→test→build→push)",
+        "ecom-infra/aws/sqs.tf: send-email, process-row, resize-image, reminders + DLQs + IAM",
+        "Compose + Nginx (storefront./admin./api. domains, /api/<route> prefix) + /health + /health/ready"
+      ],
       "blockedBy": [],
-      "skills": ["SKILL-VERCEL", "SKILL-NESTJS"],
-      "producesConsumes": {"produces": [], "consumes": []},
+      "skills": [
+        "SKILL-VERCEL",
+        "SKILL-NESTJS"
+      ],
+      "producesConsumes": {
+        "produces": [],
+        "consumes": []
+      },
       "claimedBy": null,
       "note": "Compose + Nginx + VERSIONS.env + watcher (later). v1 infra[sqs-task-queues,ci-per-repo]=todo folded here."
     }
