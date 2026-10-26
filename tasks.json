@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-26T00:00:00Z",
+  "updatedAt": "2026-10-27T00:00:00Z",
   "summary": {
     "total": 55,
-    "done": 48,
-    "in_progress": 2,
+    "done": 49,
+    "in_progress": 1,
     "backlog": 5
   },
   "unpushed": {
@@ -48,7 +48,21 @@
       "171a48b",
       "839fced",
       "f93c9e9",
-      "bb96c4e"
+      "bb96c4e",
+      "c5b0b6f",
+      "c32e964",
+      "65bafdd",
+      "52dafed",
+      "46f8fab",
+      "22c363d",
+      "1798329",
+      "8b28117",
+      "1778086",
+      "6becc13",
+      "278ca12",
+      "a8cef68",
+      "9975626",
+      "5f8d6ce"
     ],
     "Documentation": [
       "f8ebbf9",
@@ -65,9 +79,26 @@
       "aa82e8d",
       "71a24c7",
       "32a6ecf",
-      "4377a13"
+      "4377a13",
+      "a077481",
+      "3e53c9d"
     ],
-    "auth-svc": [],
+    "auth-svc": [
+      "791d094",
+      "c7fe3d0",
+      "3fad688",
+      "28f7df7",
+      "4b75f78",
+      "f31c0ed",
+      "14ca934",
+      "cd63edd",
+      "f4d4912",
+      "c34497b",
+      "bfe9388",
+      "c36eb90",
+      "a45501e",
+      "9d29d20"
+    ],
     "cart-svc": [
       "618a9a0",
       "5e31111",
@@ -999,15 +1030,12 @@
       ],
       "stages": {
         "spec": "done",
-        "build": "in-progress",
-        "test": "in-progress",
-        "verify": "todo"
+        "build": "done",
+        "test": "done",
+        "verify": "done"
       },
-      "inProgress": "au-003 in progress: shared error envelope.",
-      "next": [
-        "au-002 JWT issuer/audience + pinned verification",
-        "au-003 shared error envelope"
-      ],
+      "inProgress": null,
+      "next": [],
       "blockedBy": [],
       "skills": [
         "SKILL-EXPLORE",
@@ -1023,12 +1051,8 @@
         ],
         "consumes": []
       },
-      "claimedBy": {
-        "agent": "agent",
-        "since": "2026-10-27",
-        "task": "au-003"
-      },
-      "note": "All 10 slices implemented per Documentation/services/auth.md and verified. 17 unit + 36 e2e green tests (vitest), oxlint 0 errors/0 warnings, nest build clean. Slices: 1 (health probes), 2 (auth schema & seed), 3 (register), 4 (login), 5 (refresh rotation + 10s grace theft detection), 6 (logout), 7 (JwtAuthGuard + profile), 8 (password change), 9 (addresses CRUD), 10 (admin RBAC & user management). Dev port 4010. Hardening queued: au-002 JWT issuer/audience, au-003 shared error envelope.",
+      "claimedBy": null,
+      "note": "All 10 slices implemented per Documentation/services/auth.md and verified. 17 unit + 36 e2e green tests (vitest), oxlint 0 errors/0 warnings, nest build clean. Slices: 1 (health probes), 2 (auth schema & seed), 3 (register), 4 (login), 5 (refresh rotation + 10s grace theft detection), 6 (logout), 7 (JwtAuthGuard + profile), 8 (password change), 9 (addresses CRUD), 10 (admin RBAC & user management). Dev port 4010. Hardening complete: au-002 JWT issuer/audience (24 unit + 37 e2e), au-003 shared error envelope (29 unit + 37 e2e).",
       "tasks": [
         {
           "id": "au-002",
@@ -1051,17 +1075,17 @@
         {
           "id": "au-003",
           "title": "Shared error envelope for auth-svc",
-          "status": "in-progress",
+          "status": "done",
           "owner": "agent",
           "started": "2026-10-27",
-          "finished": null,
-          "log": "TASKS/in-progress/au-003-shared-error-envelope.md",
+          "finished": "2026-10-27",
+          "log": "TASKS/done/au-003-shared-error-envelope.md",
           "key_decisions": [
             "APP_FILTER so e2e and alternate bootstraps share behavior",
             "Status-derived codes with explicit code/details passthrough",
             "Health probes exempt; x-request-id echo with UUID fallback"
           ],
-          "verified": false,
+          "verified": true,
           "follow_ups": [
             "Add auth-specific codes when ecom-contracts defines them"
           ]
