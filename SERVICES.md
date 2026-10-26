@@ -10,7 +10,7 @@
 | ecom-contracts | npm | `8.Versioning.md` (to create) | ⬜ | ⬜ | ⬜ | ⬜ |
 | auth-svc | 4010 | `Documentation/services/auth.md` | ✅ | ✅ | ✅ | ✅ |
 | catalog-svc | 4020 | (to create, copy auth shape) | ⬜ | ⬜ | ⬜ | ⬜ |
-| cart-svc | 4030 | (to create) | ⬜ | ⬜ | ⬜ | ⬜ |
+| cart-svc | 4030 | `Documentation/3.Database-Schema.md §3.3` | ✅ | 🚧 | 🚧 | ⬜ |
 | order-svc | 4040 | (to create) | ⬜ | ⬜ | ⬜ | ⬜ |
 | cms-svc | 4050 | (to create) | ⬜ | ⬜ | ⬜ | ⬜ |
 | analytics-svc | 4060 | (to create) | ⬜ | ⬜ | ⬜ | ⬜ |
