@@ -1,4 +1,4 @@
-# au-002 — JWT issuer/audience (todo)
+# au-002 — JWT issuer/audience (done, 2026-10-27)
 
 ## What
 
@@ -41,6 +41,11 @@ contract.
 
 ## Verification
 
-Pending. Gate: auth unit + e2e green, `tsc --noEmit`, `oxlint`, `nest
-build`; login token carries `iss=ecom-auth`/`aud=ecom-api`; wrong issuer,
-wrong audience, or missing claims return `401`.
+- `pnpm test`: 24 unit tests green (17 before + 7 guard tests).
+- `pnpm test:e2e`: 37 e2e tests green (36 before + 1 issuer/audience test).
+- `pnpm exec tsc --noEmit`, `pnpm lint`, `pnpm build`: clean.
+- Login token asserts `iss=ecom-auth`, `aud=ecom-api`; wrong issuer,
+  wrong audience, and missing claims return `401`.
+- auth-svc commits: `791d094`, `c7fe3d0`, `3fad688`, `28f7df7`, `4b75f78`,
+  `f31c0ed`; docs `a077481`, `3e53c9d`.
+
