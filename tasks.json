@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-27T00:45:00Z",
+  "updatedAt": "2026-10-27T00:54:00Z",
   "summary": {
     "total": 55,
-    "done": 50,
-    "in_progress": 2,
+    "done": 51,
+    "in_progress": 1,
     "backlog": 4
   },
   "unpushed": {
@@ -69,7 +69,10 @@
       "41dca54",
       "6c25bed",
       "595944a",
-      "56a20fe"
+      "56a20fe",
+      "e6c1685",
+      "1132730",
+      "9949fb2"
     ],
     "Documentation": [
       "f8ebbf9",
@@ -107,6 +110,31 @@
       "9d29d20"
     ],
     "cart-svc": [
+      "404835e",
+      "a46bdd1",
+      "abe9ff1",
+      "6e46b06",
+      "eb7d0e6",
+      "b95f495",
+      "32092f7",
+      "2b73f74",
+      "1438885",
+      "d3ebe59",
+      "440c28b",
+      "67dc3da",
+      "dd4f752",
+      "d685238",
+      "a443dcb",
+      "5348d25",
+      "37307c9",
+      "e55af1a",
+      "a426ecb",
+      "edeebdc",
+      "0d836bc",
+      "b017509",
+      "a6adc0a",
+      "ee24e9a",
+      "9eaaafe",
       "e908a57",
       "2199338",
       "92e4733",
@@ -1190,9 +1218,8 @@
         "test": "in-progress",
         "verify": "todo"
       },
-      "inProgress": "ca-003 active cart ensure + item CRUD + totals + Redis idempotency + cart.updated.",
+      "inProgress": "ca-004 guest merge policies (merge, guest_wins, user_wins).",
       "next": [
-        "ca-003 active cart ensure + item CRUD + totals + idempotency",
         "ca-004 guest merge policies (merge, guest_wins, user_wins)",
         "ca-005 wishlist endpoints",
         "ca-006 security, rate limits, audit read, and observability"
@@ -1212,11 +1239,7 @@
         ],
         "consumes": []
       },
-      "claimedBy": {
-        "agent": "agent",
-        "since": "2026-10-27",
-        "task": "ca-003"
-      },
+      "claimedBy": null,
       "tasks": [
         {
           "id": "ca-001",
@@ -1263,19 +1286,28 @@
         {
           "id": "ca-003",
           "title": "Cart entity and item CRUD (snapshots, totals, idempotency)",
-          "status": "in-progress",
+          "status": "done",
           "owner": "agent",
           "started": "2026-10-27",
-          "finished": null,
-          "log": "TASKS/in-progress/ca-003-cart-entity-and-item-crud.md",
+          "finished": "2026-10-27",
+          "log": "TASKS/done/ca-003-cart-entity-and-item-crud.md",
           "key_decisions": [
             "Store catalog snapshots at add time",
             "Fail closed with 503 when Redis idempotency is unavailable",
+            "Idempotency keys scoped by identity, method, path, and client key",
+            "Replay matching bodies; 409 on body conflict; tolerate post-commit write failure",
             "One cart.updated per mutation, after commit",
-            "qty=0 is removal, not an update"
+            "qty=0 is removal, not an update",
+            "JWT wins; malformed token never falls back to guest"
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "Commit the existing uncommitted cart-svc/src/app.module.ts CartModule/JWT_SECRET wiring",
+            "Add HttpCatalogClient and wire catalog-svc",
+            "Replace NoopEventBus with Kafka/outbox",
+            "Consider atomic idempotency reservation for Redis death between preflight and post-commit write",
+            "Add Redis readiness/observability and rate limits in ca-006"
+          ]
         },
         {
           "id": "ca-004",
