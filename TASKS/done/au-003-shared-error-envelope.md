@@ -1,4 +1,4 @@
-# au-003 — Shared error envelope (todo)
+# au-003 — Shared error envelope (done, 2026-10-27)
 
 ## What
 
@@ -49,6 +49,11 @@ instead of parsing Nest's `statusCode/message/error` shape.
 
 ## Verification
 
-Pending. Gate: auth unit + e2e green, `tsc --noEmit`, `oxlint`, `nest
-build`; 400/401/403/409/404/500 responses carry the envelope; readiness
-`503` keeps its raw probe body.
+- `pnpm test`: 29 unit tests green (24 after au-002 + 5 filter tests).
+- `pnpm test:e2e`: 37 e2e tests green.
+- `pnpm exec tsc --noEmit`, `pnpm lint`, `pnpm build`: clean.
+- 400/401/403/409/500 paths assert `{error:{code,message,details?},
+  requestId, timestamp}`; readiness `503` keeps its raw probe body.
+- auth-svc commits: `14ca934`, `cd63edd`, `f4d4912`, `c34497b`, `bfe9388`,
+  `c36eb90`, `a45501e`, `9d29d20`.
+
