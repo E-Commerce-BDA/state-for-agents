@@ -20,11 +20,11 @@
 - File 0 done: `lib/shell/navSettings.ts` (agent-written on learner request 2026-10-02; learner resumes typing from File 1 `NavLinks.tsx`).
 - `auth-svc` au-001: COMPLETE across all 10 slices (2026-10-25). `au-002` COMPLETE (2026-10-27): JWT issuer/audience. `au-003` COMPLETE (2026-10-27): shared error envelope. Final auth baseline: 29 unit + 37 e2e green, `oxlint` 0 errors/0 warnings, `nest build` clean.
 - `cart-svc` ca-001: Phase 1 COMPLETE (2026-10-26). Foundation initialized, crash-proof connection pool to PostgreSQL `ecom-pg` (:5433), `/health` (liveness) & `/health/ready` (readiness) probes, `001-cart-schema.sql` applied (4 tables: `carts`, `cart_items`, `wishlists`, `wishlist_items`; 7 indexes including `one_active_cart_per_user` and `cart_items_cart_product_unique` with `NULLS NOT DISTINCT`; 2 triggers for `updated_at`). 12 unit tests + 12 e2e tests passing, `oxlint` 0 errors/0 warnings, `nest build` clean.
-- Cart docs-first COMPLETE (2026-10-26): `services/cart.md` + schema/API/admin/features/auth/testing docs aligned; `ca-002` complete; `ca-003` complete; `ca-004`-`ca-006` todo.
+- Cart docs-first COMPLETE (2026-10-26): `services/cart.md` + schema/API/admin/features/auth/testing docs aligned; `ca-002` complete; `ca-003` complete; `ca-004` complete; `ca-005`-`ca-006` todo.
 - `ca-002` COMPLETE (2026-10-27): settings registry + versioned admin GET/PATCH + append-only audit + JWT/`admin` guards + shared error envelope; `002-cart-settings.sql` applied to local `ecom-pg` with `cart.settings`, `cart.settings_audit`, audit indexes, `trg_cart_settings_updated_at`, `global` seed, and `one_active_cart_per_session`. Final cart baseline: 48 unit + 26 e2e green, `oxlint` 0 warnings, `tsc --noEmit`/`nest build` clean. Local DB restored to `global` / `{}` / version `0`; no test audit rows.
 - `ca-003` COMPLETE (2026-10-27): active-cart ensure + item CRUD + snapshots/totals + Redis idempotency + one post-commit `cart.updated`. Identity resolves a verified JWT or the `x-session-id` cookie/header; malformed tokens never fall back to guest. `ecom-redis` is running on `:6379`; `ioredis` is committed. Final cart baseline: 74 unit + 46 e2e green, `oxlint` 0 warnings, `tsc --noEmit`/`nest build` clean. Local cleanup verified: 0 carts, 0 cart items, 0 `idem:*` Redis keys; settings still `global` / `{}` / version `0`.
-- `ca-004` IN PROGRESS (2026-10-27, claimed): `POST /cart/merge` for `merge` (default), `guest_wins`, and `user_wins`, with deterministic row locks, never-lose-the-only-cart, guest `converted` history, idempotency, and one post-commit `cart.updated`.
-- Known gap: `cart-svc/src/app.module.ts` remains uncommitted (existing `CartModule` import + `JWT_SECRET` validation); the ca-003 code is committed. The working tree is fully wired, but the cart-svc commit chain alone does not import `CartModule` until that file is committed.
+- `ca-004` COMPLETE (2026-10-27): `POST /cart/merge` for `merge` (default), `guest_wins`, and `user_wins`, with deterministic row locks, never-lose-the-only-cart, guest `converted` history, idempotency, and one post-commit `cart.updated`. The identity guard carries `guestSessionId` alongside a verified user; merge reads `guestMergeStrategy` at request time and returns `{cart}` only. Final cart baseline: 79 unit + 58 e2e green (merge matrix 12), `oxlint` 0 warnings, `tsc --noEmit`/`nest build` clean. Local cleanup verified: 0 carts, 0 cart items, 0 audit rows; settings `global` / `{}` / version `0`; 0 `idem:*` Redis keys.
+- Known gap: `cart-svc/src/app.module.ts` remains uncommitted (existing `CartModule` import + `JWT_SECRET` validation); ca-003/ca-004 code is committed. The working tree is fully wired, but the cart-svc commit chain alone does not import `CartModule` until that file is committed. Concurrent item mutations still do not lock/verify the active cart status, so an add racing a merge can land in a converted cart; logged as a ca-004 follow-up.
 
 ## Next (ordered)
 
@@ -34,22 +34,22 @@
 4. CMS source wiring replacing `TODO(cms-svc)` null-sources; `7.Deployment.md` + `8.Versioning.md` stubs.
 5. `ecom-contracts` v0.1, remaining 8 service specs (copy `services/auth.md` shape), missing component docs per `components/README.md`.
 
-## Task tracking (55/51/2/3)
+## Task tracking (55/52/1/3)
 
 - `unpushed` array: every local commit not on `main` listed per repo
   until you push; cleared per-branch on push. Read push-state in `tasks.json`,
-  never by asking. Latest: cart-svc 74 local commits (Phase 1 + schema 002 +
-  ca-002/ca-003 code/tests); Documentation 17 docs commits;
-  state-for-agents 36 recorded tracker commits; auth-svc 14 hardening
-  commits. The `tasks.json` carrier `5b9d2a9` and this STATUS commit join on
+  never by asking. Latest: cart-svc 88 local commits (Phase 1 + schema 002 +
+  ca-002/ca-003/ca-004 code/tests); Documentation 17 docs commits;
+  state-for-agents 39 recorded tracker commits; auth-svc 14 hardening
+  commits. The `tasks.json` carrier `15de2fa` and this STATUS commit join on
   the next update.
 
 Per-task records live in `tasks.json` (`repos.*.tasks`) + `TASKS/` logs
 (id == filename, status == folder). Auth: `au-001` done; `au-002` done; `au-003` done. Cart: `ca-001` done; `ca-002` done; `ca-003` done;
-`ca-004` in progress; `ca-005`-`ca-006` todo. Backfill `sf-001`-`sf-010` done from session record; `sf-011` in
+`ca-004` done; `ca-005`-`ca-006` todo. Backfill `sf-001`-`sf-010` done from session record; `sf-011` in
 progress (learner-owned). `index.html` work is never logged (temporary
 concept file).
 
 ## How to claim
 
-Pick a `todo` in `tasks.json` (continue claimed `ca-004`; next todo `ca-005`) → set `claimedBy` + `in-progress` → load skills via `SKILL-ROUTER.md` → finish by flipping stage + updating here.
+Pick a `todo` in `tasks.json` (next todo `ca-005`) → set `claimedBy` + `in-progress` → load skills via `SKILL-ROUTER.md` → finish by flipping stage + updating here.
