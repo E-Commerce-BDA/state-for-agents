@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-27T00:36:00Z",
+  "updatedAt": "2026-10-27T00:45:00Z",
   "summary": {
     "total": 55,
     "done": 50,
-    "in_progress": 1,
+    "in_progress": 2,
     "backlog": 4
   },
   "unpushed": {
@@ -66,7 +66,10 @@
       "fa353aa",
       "cd32c44",
       "0f290d2",
-      "41dca54"
+      "41dca54",
+      "6c25bed",
+      "595944a",
+      "56a20fe"
     ],
     "Documentation": [
       "f8ebbf9",
@@ -1187,7 +1190,7 @@
         "test": "in-progress",
         "verify": "todo"
       },
-      "inProgress": "ca-002 complete; ca-003 active cart ensure + item CRUD + totals + idempotency is next.",
+      "inProgress": "ca-003 active cart ensure + item CRUD + totals + Redis idempotency + cart.updated.",
       "next": [
         "ca-003 active cart ensure + item CRUD + totals + idempotency",
         "ca-004 guest merge policies (merge, guest_wins, user_wins)",
@@ -1209,7 +1212,11 @@
         ],
         "consumes": []
       },
-      "claimedBy": null,
+      "claimedBy": {
+        "agent": "agent",
+        "since": "2026-10-27",
+        "task": "ca-003"
+      },
       "tasks": [
         {
           "id": "ca-001",
@@ -1256,11 +1263,11 @@
         {
           "id": "ca-003",
           "title": "Cart entity and item CRUD (snapshots, totals, idempotency)",
-          "status": "todo",
-          "owner": null,
-          "started": null,
+          "status": "in-progress",
+          "owner": "agent",
+          "started": "2026-10-27",
           "finished": null,
-          "log": "TASKS/todo/ca-003-cart-entity-and-item-crud.md",
+          "log": "TASKS/in-progress/ca-003-cart-entity-and-item-crud.md",
           "key_decisions": [
             "Store catalog snapshots at add time",
             "Fail closed with 503 when Redis idempotency is unavailable",
