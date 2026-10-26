@@ -17,22 +17,22 @@
 
 - Shell slice (navbar system → `lib/shell/*` + `components/shell/*` + `app/hooks/*`, ports-first) per locked plan.
 - File 0 done: `lib/shell/navSettings.ts` (agent-written on learner request 2026-10-02; learner resumes typing from File 1 `NavLinks.tsx`).
-- `auth-svc` au-001: COMPLETE across all 10 slices (2026-10-25). 17 unit tests + 36 e2e tests across 10 test suites green (`vitest`), `oxlint` 0 errors/0 warnings, `nest build` clean. Full implementation includes: Slice 1 health probes (`/health`, `/health/ready`); Slice 2 auth schema + seed (`001-auth-schema.sql`, `002-seed-roles.sql`); Slice 3 register (`POST /api/v1/auth/register`, Argon2id, 23505->409); Slice 4 login (`POST /api/v1/auth/login`, JWT HS256, SHA-256 refresh token hash); Slice 5 refresh rotation with 10s grace-period theft detection (`POST /api/v1/auth/refresh`); Slice 6 logout (`POST /api/v1/auth/logout`, 204 idempotent); Slice 7 `JwtAuthGuard` & profile (`GET /me`, `PATCH /me`); Slice 8 password change (`PATCH /me/password` with user-wide session revocation); Slice 9 address book CRUD (`/me/addresses` with single default constraint); Slice 10 admin RBAC & user management (`RolesGuard`, `@Roles('admin')`, `GET /users`, `PATCH /users/:id/status`, `GET/POST /roles`, `PATCH /users/:id/roles`). Next: Thin client in storefront-ui.
+- `auth-svc` au-001: COMPLETE across all 10 slices (2026-10-25). 17 unit tests + 36 e2e tests across 10 test suites green (`vitest`), `oxlint` 0 errors/0 warnings, `nest build` clean.
+- `cart-svc` ca-001: Phase 1 COMPLETE (2026-10-26). Foundation initialized, crash-proof connection pool to PostgreSQL `ecom-pg` (:5433), `/health` (liveness) & `/health/ready` (readiness) probes, `001-cart-schema.sql` applied (4 tables: `carts`, `cart_items`, `wishlists`, `wishlist_items`; 7 indexes including `one_active_cart_per_user` and `cart_items_cart_product_unique` with `NULLS NOT DISTINCT`; 2 triggers for `updated_at`). 12 unit tests + 12 e2e tests passing, `oxlint` 0 errors/0 warnings, `nest build` clean. Next: Cart retrieval & item CRUD.
 
 ## Next (ordered)
 
-1. Thin client (`lib/auth/client.ts` + per-action handlers + `proxy.ts`) replacing `TODO(auth-client)` stubs.
-2. CMS source wiring replacing `TODO(cms-svc)` null-sources; `7.Deployment.md` + `8.Versioning.md` stubs.
-3. `ecom-contracts` v0.1, remaining 8 service specs (copy `services/auth.md` shape), missing component docs per `components/README.md`.
+1. Cart item operations (`POST /cart/items`, `PATCH /cart/items/:id`, `DELETE /cart/items/:id`, `POST /cart/merge`).
+2. Thin client (`lib/auth/client.ts` + per-action handlers + `proxy.ts`) in storefront-ui.
+3. CMS source wiring replacing `TODO(cms-svc)` null-sources; `7.Deployment.md` + `8.Versioning.md` stubs.
+4. `ecom-contracts` v0.1, remaining 8 service specs (copy `services/auth.md` shape), missing component docs per `components/README.md`.
 
 ## Task tracking (47/46/1/0)
 
 - `unpushed` array (new): every local commit not on `main` listed per repo
   until you push; cleared per-branch on push. Read push-state in `tasks.json`,
-  never by asking. Latest: auth-svc 45 local commits across all 10 slices
-  (probes, schema, register, login, refresh, logout, profile, password, addresses, admin RBAC);
-  Documentation 8 (2 earlier cart/envelope commits + 5 contract-slice commits + 1 family_id schema commit
-  from 2026-10-23).
+  never by asking. Latest: cart-svc 23 local commits (scaffold, pool, health, schema DDL, schema tests, oxlint);
+  auth-svc 45 local commits across all 10 slices; Documentation 8 commits.
 
 Per-task records live in `tasks.json` (`repos.*.tasks`) + `TASKS/` logs
 (id == filename, status == folder). Backfill `sf-001`–`sf-010` done from
