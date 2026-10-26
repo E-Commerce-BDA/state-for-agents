@@ -5,8 +5,8 @@
 
 ## Rules
 
-1. **CLI-first for structure:** Use `pnpm nest g <schematic> <name> [options]` to scaffold modules, controllers, services, and guards. Never hand-roll boilerplate class definitions that the CLI can generate accurately in seconds.
-2. **Module-first generation:** Always generate the module first (`pnpm nest g mo <name>`), then generate components into it (`pnpm nest g co <name>`, `pnpm nest g s <name>`). The CLI automatically registers controllers and providers into the target domain module instead of polluting `app.module.ts`.
+1. **CLI-first for structure:** Use `nest g <schematic> <name> [options]` to scaffold modules, controllers, services, and guards. Never hand-roll boilerplate class definitions that the CLI can generate accurately in seconds.
+2. **Module-first generation:** Always generate the module first (`nest g mo <name>`), then generate components into it (`nest g co <name>`, `nest g s <name>`). The CLI automatically registers controllers and providers into the target domain module instead of polluting `app.module.ts`.
 3. **ESM / NodeNext import discipline:** Nest CLI generates bare relative imports (e.g., `'./cart.service'`). Because our services use `"moduleResolution": "nodenext"`, check and append `.js` extension to relative imports (e.g., `'./cart.service.js'`) so `tsc` and `vitest` resolve cleanly without runtime errors.
 4. **Test file control:** Use `--no-spec` when writing dedicated Vitest suites, or immediately convert the generated `.spec.ts` from Jest conventions to `vitest` globals (`describe`, `it`, `expect`, `vi`).
 5. **No flat clutter:** Never use `--flat` unless creating a root-level utility. Keep domain artifacts co-located in their domain directory (e.g. `src/cart/`).
