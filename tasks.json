@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-27T00:57:00Z",
+  "updatedAt": "2026-10-27T01:07:00Z",
   "summary": {
     "total": 55,
-    "done": 51,
-    "in_progress": 2,
+    "done": 52,
+    "in_progress": 1,
     "backlog": 3
   },
   "unpushed": {
@@ -75,7 +75,10 @@
       "9949fb2",
       "10651df",
       "e075252",
-      "2ae81a9"
+      "2ae81a9",
+      "5b9d2a9",
+      "5a1a83f",
+      "51dcc73"
     ],
     "Documentation": [
       "f8ebbf9",
@@ -186,7 +189,21 @@
       "1620831",
       "40c6abe",
       "a22ad89",
-      "994e88f"
+      "994e88f",
+      "f876b1d",
+      "e9e6d0f",
+      "e1df339",
+      "2a4ace4",
+      "eeadff7",
+      "89aa192",
+      "bc6f19f",
+      "5b3aa0f",
+      "66f6427",
+      "d5dd2a7",
+      "257e2c5",
+      "99e24db",
+      "873008b",
+      "7d3eda4"
     ]
   },
   "workflow": "Claim: create/move log to TASKS/in-progress/, set entry status in-progress + owner + started. Build against chained skills (router order). Close: move log to TASKS/done/ (or backlog/), fill verification + follow_ups, flip entry status + finished, update STATUS.md + summary, same commit. Commits: one commit per file (larger edits split per edit); stage with diff eyes-on; subject + reason body; local-only until the human says push. Unpushed array lists every local commit except its own carrier commit (which joins on the next update); cleared per-branch on push. Validation: id == filename, status == folder, log file must exist, STATUS counts == summary.",
@@ -1221,9 +1238,8 @@
         "test": "in-progress",
         "verify": "todo"
       },
-      "inProgress": "ca-004 guest merge policies (merge, guest_wins, user_wins).",
+      "inProgress": null,
       "next": [
-        "ca-004 guest merge policies (merge, guest_wins, user_wins)",
         "ca-005 wishlist endpoints",
         "ca-006 security, rate limits, audit read, and observability"
       ],
@@ -1242,11 +1258,7 @@
         ],
         "consumes": []
       },
-      "claimedBy": {
-        "agent": "agent",
-        "since": "2026-10-27",
-        "task": "ca-004"
-      },
+      "claimedBy": null,
       "tasks": [
         {
           "id": "ca-001",
@@ -1319,19 +1331,28 @@
         {
           "id": "ca-004",
           "title": "Guest merge policies (merge, guest_wins, user_wins)",
-          "status": "in-progress",
+          "status": "done",
           "owner": "agent",
           "started": "2026-10-27",
-          "finished": null,
-          "log": "TASKS/in-progress/ca-004-guest-merge-policies.md",
+          "finished": "2026-10-27",
+          "log": "TASKS/done/ca-004-guest-merge-policies.md",
           "key_decisions": [
             "Default merge sums matching lines and appends the rest",
             "Never lose the only non-empty cart",
             "guest_wins converts the old user cart before reassigning",
+            "Adopt a guest cart only when it has items",
+            "Carry guestSessionId alongside a verified user identity",
+            "Lock both active carts in id order and retry one unique-conflict race",
+            "Return {cart} only; require x-session-id and the idempotency key",
             "Defer ask_customer until preview + choice UI exist"
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "Commit the existing uncommitted cart-svc/src/app.module.ts CartModule/JWT_SECRET wiring",
+            "Lock/verify active cart status in item mutations to close the concurrent add/merge race",
+            "Consider returning merged items from the transaction so post-commit findItems failure cannot 500 a committed merge",
+            "Replace NoopEventBus with Kafka/outbox; add HttpCatalogClient, Redis readiness, rate limits, and the append-only least-privilege settings-audit role"
+          ]
         },
         {
           "id": "ca-005",
