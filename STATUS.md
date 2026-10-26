@@ -23,33 +23,33 @@
 - Cart docs-first COMPLETE (2026-10-26): `services/cart.md` + schema/API/admin/features/auth/testing docs aligned; `ca-002` complete; `ca-003` complete; `ca-004`-`ca-006` todo.
 - `ca-002` COMPLETE (2026-10-27): settings registry + versioned admin GET/PATCH + append-only audit + JWT/`admin` guards + shared error envelope; `002-cart-settings.sql` applied to local `ecom-pg` with `cart.settings`, `cart.settings_audit`, audit indexes, `trg_cart_settings_updated_at`, `global` seed, and `one_active_cart_per_session`. Final cart baseline: 48 unit + 26 e2e green, `oxlint` 0 warnings, `tsc --noEmit`/`nest build` clean. Local DB restored to `global` / `{}` / version `0`; no test audit rows.
 - `ca-003` COMPLETE (2026-10-27): active-cart ensure + item CRUD + snapshots/totals + Redis idempotency + one post-commit `cart.updated`. Identity resolves a verified JWT or the `x-session-id` cookie/header; malformed tokens never fall back to guest. `ecom-redis` is running on `:6379`; `ioredis` is committed. Final cart baseline: 74 unit + 46 e2e green, `oxlint` 0 warnings, `tsc --noEmit`/`nest build` clean. Local cleanup verified: 0 carts, 0 cart items, 0 `idem:*` Redis keys; settings still `global` / `{}` / version `0`.
+- `ca-004` IN PROGRESS (2026-10-27, claimed): `POST /cart/merge` for `merge` (default), `guest_wins`, and `user_wins`, with deterministic row locks, never-lose-the-only-cart, guest `converted` history, idempotency, and one post-commit `cart.updated`.
 - Known gap: `cart-svc/src/app.module.ts` remains uncommitted (existing `CartModule` import + `JWT_SECRET` validation); the ca-003 code is committed. The working tree is fully wired, but the cart-svc commit chain alone does not import `CartModule` until that file is committed.
 
 ## Next (ordered)
 
-1. `ca-004` guest merge policies (`merge`, `guest_wins`, `user_wins`).
-2. `ca-005` wishlist endpoints.
-3. `ca-006` security/rate limits/audit read/observability hardening.
-4. Thin client (`lib/auth/client.ts` + per-action handlers + `proxy.ts`) in storefront-ui.
-5. CMS source wiring replacing `TODO(cms-svc)` null-sources; `7.Deployment.md` + `8.Versioning.md` stubs.
-6. `ecom-contracts` v0.1, remaining 8 service specs (copy `services/auth.md` shape), missing component docs per `components/README.md`.
+1. `ca-005` wishlist endpoints.
+2. `ca-006` security/rate limits/audit read/observability hardening.
+3. Thin client (`lib/auth/client.ts` + per-action handlers + `proxy.ts`) in storefront-ui.
+4. CMS source wiring replacing `TODO(cms-svc)` null-sources; `7.Deployment.md` + `8.Versioning.md` stubs.
+5. `ecom-contracts` v0.1, remaining 8 service specs (copy `services/auth.md` shape), missing component docs per `components/README.md`.
 
-## Task tracking (55/51/1/4)
+## Task tracking (55/51/2/3)
 
 - `unpushed` array: every local commit not on `main` listed per repo
   until you push; cleared per-branch on push. Read push-state in `tasks.json`,
   never by asking. Latest: cart-svc 74 local commits (Phase 1 + schema 002 +
   ca-002/ca-003 code/tests); Documentation 17 docs commits;
-  state-for-agents 33 recorded tracker commits; auth-svc 14 hardening
-  commits. The `tasks.json` carrier `10651df` and this STATUS commit join on
+  state-for-agents 36 recorded tracker commits; auth-svc 14 hardening
+  commits. The `tasks.json` carrier `5b9d2a9` and this STATUS commit join on
   the next update.
 
 Per-task records live in `tasks.json` (`repos.*.tasks`) + `TASKS/` logs
 (id == filename, status == folder). Auth: `au-001` done; `au-002` done; `au-003` done. Cart: `ca-001` done; `ca-002` done; `ca-003` done;
-`ca-004`-`ca-006` todo. Backfill `sf-001`-`sf-010` done from session record; `sf-011` in
+`ca-004` in progress; `ca-005`-`ca-006` todo. Backfill `sf-001`-`sf-010` done from session record; `sf-011` in
 progress (learner-owned). `index.html` work is never logged (temporary
 concept file).
 
 ## How to claim
 
-Pick a `todo` in `tasks.json` (next todo `ca-004`) → set `claimedBy` + `in-progress` → load skills via `SKILL-ROUTER.md` → finish by flipping stage + updating here.
+Pick a `todo` in `tasks.json` (continue claimed `ca-004`; next todo `ca-005`) → set `claimedBy` + `in-progress` → load skills via `SKILL-ROUTER.md` → finish by flipping stage + updating here.
