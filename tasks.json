@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-23T00:00:00Z",
+  "updatedAt": "2026-10-26T00:00:00Z",
   "summary": {
-    "total": 47,
-    "done": 46,
+    "total": 53,
+    "done": 47,
     "in_progress": 1,
-    "backlog": 0
+    "backlog": 5
   },
   "unpushed": {
     "storefront-ui": [
@@ -1124,6 +1124,10 @@
       "repo": "cart-svc",
       "port": 4030,
       "ownerDocs": [
+        "Documentation/services/cart.md",
+        "Documentation/4.API-Design.md §4.12",
+        "Documentation/6.Admin-Panel.md §3.21",
+        "Documentation/9.Testing.md §3.3",
         "Documentation/3.Database-Schema.md §3.3",
         "Documentation/4.API-Design.md §3.3"
       ],
@@ -1133,12 +1137,13 @@
         "test": "in-progress",
         "verify": "todo"
       },
-      "inProgress": "Phase 1 complete: foundation scaffolded, connection pool, /health & /health/ready probes, cart schema DDL applied, 12 unit + 12 e2e green tests.",
+      "inProgress": "Docs-first complete (2026-10-26): services/cart.md + schema/API/admin/features/auth/testing docs aligned. ca-001 foundation done; ca-002 settings subsystem next.",
       "next": [
-        "Cart entity retrieval and active cart ensure (session/user)",
-        "POST /api/v1/cart/items (add item, snapshot price/name/slug/image/variant)",
-        "PATCH /api/v1/cart/items/:id (qty update) & DELETE /api/v1/cart/items/:id (removal)",
-        "POST /api/v1/cart/merge (guest cart into user cart on login)"
+        "ca-002 settings schema, registry, admin API, audit, and route guards",
+        "ca-003 active cart ensure + item CRUD + totals + idempotency",
+        "ca-004 guest merge policies (merge, guest_wins, user_wins)",
+        "ca-005 wishlist endpoints",
+        "ca-006 security, rate limits, audit read, and observability"
       ],
       "blockedBy": [],
       "skills": [
@@ -1156,7 +1161,111 @@
         "consumes": []
       },
       "claimedBy": null,
-      "note": "Phase 1 verified: crash-proof PG connection pool (:5433), liveness /health (200), readiness /health/ready (probes DB, 503 on drop), 001-cart-schema.sql applied (4 tables, 7 indexes, 2 triggers, single active cart unique index, NULLS NOT DISTINCT unique line items). 12 unit + 12 e2e green tests."
+      "tasks": [
+        {
+          "id": "ca-001",
+          "title": "Cart foundation: scaffold, pool, health, schema",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-25",
+          "finished": "2026-10-26",
+          "log": "TASKS/done/ca-001-cart-foundation.md",
+          "key_decisions": [
+            "Raw pg SQL, no ORM",
+            "Readiness probes Postgres only; Redis/Kafka not wired yet",
+            "Product display fields are snapshots; no catalog joins",
+            "Manual numbered SQL, no migration runner"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "Settings/audit tables and guest-session unique index land in ca-002"
+          ]
+        },
+        {
+          "id": "ca-002",
+          "title": "Cart settings subsystem (registry, admin API, audit, guards)",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "log": "TASKS/todo/ca-002-cart-settings-subsystem.md",
+          "key_decisions": [
+            "JSONB overrides + code registry; no DDL per setting",
+            "Defaults in code; reset deletes the override",
+            "Required version; stale version returns 409",
+            "Enforce admin role now; cart.write when permissions are seeded"
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "ca-003",
+          "title": "Cart entity and item CRUD (snapshots, totals, idempotency)",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "log": "TASKS/todo/ca-003-cart-entity-and-item-crud.md",
+          "key_decisions": [
+            "Store catalog snapshots at add time",
+            "Fail closed with 503 when Redis idempotency is unavailable",
+            "One cart.updated per mutation, after commit",
+            "qty=0 is removal, not an update"
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "ca-004",
+          "title": "Guest merge policies (merge, guest_wins, user_wins)",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "log": "TASKS/todo/ca-004-guest-merge-policies.md",
+          "key_decisions": [
+            "Default merge sums matching lines and appends the rest",
+            "Never lose the only non-empty cart",
+            "guest_wins converts the old user cart before reassigning",
+            "Defer ask_customer until preview + choice UI exist"
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "ca-005",
+          "title": "Wishlist endpoints (user-only)",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "log": "TASKS/todo/ca-005-wishlist.md",
+          "key_decisions": [
+            "User-only in v1; no guest wishlist",
+            "Unique (wishlist_id, product_id)",
+            "No cart.updated event for wishlist changes"
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "ca-006",
+          "title": "Cart security, rate limits, audit read, observability",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "log": "TASKS/todo/ca-006-cart-hardening-and-observability.md",
+          "key_decisions": [
+            "No settings cache in v1; versioned key if added later",
+            "Audit read is admin-only and separate from public cart data",
+            "Secrets stay in the secret manager, never cart.settings"
+          ],
+          "verified": false,
+          "follow_ups": []
+        }
+      ],
+      "note": "Phase 1 verified: crash-proof PG connection pool (:5433), liveness /health (200), readiness /health/ready (probes DB, 503 on drop), 001-cart-schema.sql applied (4 tables, 7 indexes, 2 triggers, single active cart unique index, NULLS NOT DISTINCT unique line items). 12 unit + 12 e2e green tests. Docs-first complete 2026-10-26: services/cart.md + schema/API/admin/features/auth/testing aligned; ca-002..ca-006 are todo. Catalog fixture, no-op event bus, and local DTOs unblock; Redis is needed for idempotency."
     },
     "order-svc": {
       "motive": "Checkout + POS-style order creation (mock pay v1), lifecycle/status, stock reservation; outbox+idempotency+saga-lite compensation.",
