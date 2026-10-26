@@ -17,10 +17,10 @@
 |---|---|
 | Storefront section/card/auth (dynamic default while `storefront-ui` is in-progress) | `explore/SKILL-EXPLORE.md` → `explore/SKILL-SEARCHING.md` → `ui/SKILL-DUMB.md` → `hooks/SKILL-HOOKS.md` (if stateful) → `routes/SKILL-ROUTES.md` → `routes/SKILL-STOREFRONT.md` → `ui/SKILL-CSS.md` → `lib/SKILL-INTERFACES.md` → `project/SKILL-SEO.md` |
 | Add/fix admin screen | `explore/SKILL-EXPLORE.md` → `ui/SKILL-DUMB.md` → `routes/SKILL-ADMIN.md` → `ui/SKILL-CSS.md` → `lib/SKILL-INTERFACES.md` |
-| New/changed query or endpoint | `explore/SKILL-EXPLORE.md` → `services/SKILL-POSTGRES.md` → `services/SKILL-NESTJS.md` → `lib/SKILL-INTERFACES.md` → `lib/SKILL-FUNCTIONS.md` |
+| New/changed query or endpoint | `explore/SKILL-EXPLORE.md` → `services/SKILL-POSTGRES.md` → `services/SKILL-NESTJS.md` → `services/SKILL-NEST-CLI.md` → `lib/SKILL-INTERFACES.md` → `lib/SKILL-FUNCTIONS.md` |
 | Cache/session/rate-limit bug | `services/SKILL-REDIS.md` → `services/SKILL-NESTJS.md` |
 | CMS/blog content shape change | `services/SKILL-MONGO.md` → `services/SKILL-NESTJS.md` → `lib/SKILL-INTERFACES.md` |
-| New event or DTO change | `services/SKILL-NESTJS.md` → `lib/SKILL-INTERFACES.md` → `lib/SKILL-FUNCTIONS.md` (+ contracts semver note in DESIGN_DECISIONS #7) |
+| New event or DTO change | `services/SKILL-NESTJS.md` → `services/SKILL-NEST-CLI.md` → `lib/SKILL-INTERFACES.md` → `lib/SKILL-FUNCTIONS.md` (+ contracts semver note in DESIGN_DECISIONS #7) |
 | Task backlog / email not sent / import stuck | `services/SKILL-NESTJS.md` (src/tasks/) → check task DLQ + job report → `services/SKILL-REDIS.md` only if idempotency-related |
 | New hook / hook behavior bug / service swap-in | `hooks/SKILL-HOOKS.md` → `lib/SKILL-INTERFACES.md` → `ui/SKILL-DUMB.md` |
 | Claim/close/status task protocol | `tasks.json` workflow block (no skill file — protocol stays there until it outgrows ~10 lines) |
