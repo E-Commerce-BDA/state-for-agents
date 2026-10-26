@@ -4,8 +4,8 @@
   "summary": {
     "total": 55,
     "done": 48,
-    "in_progress": 1,
-    "backlog": 6
+    "in_progress": 2,
+    "backlog": 5
   },
   "unpushed": {
     "storefront-ui": [
@@ -1003,7 +1003,7 @@
         "test": "in-progress",
         "verify": "todo"
       },
-      "inProgress": "au-002 done: JWT issuer/audience; au-003 shared error envelope queued.",
+      "inProgress": "au-003 in progress: shared error envelope.",
       "next": [
         "au-002 JWT issuer/audience + pinned verification",
         "au-003 shared error envelope"
@@ -1023,7 +1023,11 @@
         ],
         "consumes": []
       },
-      "claimedBy": null,
+      "claimedBy": {
+        "agent": "agent",
+        "since": "2026-10-27",
+        "task": "au-003"
+      },
       "note": "All 10 slices implemented per Documentation/services/auth.md and verified. 17 unit + 36 e2e green tests (vitest), oxlint 0 errors/0 warnings, nest build clean. Slices: 1 (health probes), 2 (auth schema & seed), 3 (register), 4 (login), 5 (refresh rotation + 10s grace theft detection), 6 (logout), 7 (JwtAuthGuard + profile), 8 (password change), 9 (addresses CRUD), 10 (admin RBAC & user management). Dev port 4010. Hardening queued: au-002 JWT issuer/audience, au-003 shared error envelope.",
       "tasks": [
         {
@@ -1047,11 +1051,11 @@
         {
           "id": "au-003",
           "title": "Shared error envelope for auth-svc",
-          "status": "todo",
-          "owner": null,
-          "started": null,
+          "status": "in-progress",
+          "owner": "agent",
+          "started": "2026-10-27",
           "finished": null,
-          "log": "TASKS/todo/au-003-shared-error-envelope.md",
+          "log": "TASKS/in-progress/au-003-shared-error-envelope.md",
           "key_decisions": [
             "APP_FILTER so e2e and alternate bootstraps share behavior",
             "Status-derived codes with explicit code/details passthrough",
