@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-27T00:54:00Z",
+  "updatedAt": "2026-10-27T00:57:00Z",
   "summary": {
     "total": 55,
     "done": 51,
-    "in_progress": 1,
-    "backlog": 4
+    "in_progress": 2,
+    "backlog": 3
   },
   "unpushed": {
     "storefront-ui": [
@@ -72,7 +72,10 @@
       "56a20fe",
       "e6c1685",
       "1132730",
-      "9949fb2"
+      "9949fb2",
+      "10651df",
+      "e075252",
+      "2ae81a9"
     ],
     "Documentation": [
       "f8ebbf9",
@@ -1239,7 +1242,11 @@
         ],
         "consumes": []
       },
-      "claimedBy": null,
+      "claimedBy": {
+        "agent": "agent",
+        "since": "2026-10-27",
+        "task": "ca-004"
+      },
       "tasks": [
         {
           "id": "ca-001",
@@ -1312,11 +1319,11 @@
         {
           "id": "ca-004",
           "title": "Guest merge policies (merge, guest_wins, user_wins)",
-          "status": "todo",
-          "owner": null,
-          "started": null,
+          "status": "in-progress",
+          "owner": "agent",
+          "started": "2026-10-27",
           "finished": null,
-          "log": "TASKS/todo/ca-004-guest-merge-policies.md",
+          "log": "TASKS/in-progress/ca-004-guest-merge-policies.md",
           "key_decisions": [
             "Default merge sums matching lines and appends the rest",
             "Never lose the only non-empty cart",
