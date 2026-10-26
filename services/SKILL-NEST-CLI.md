@@ -16,18 +16,18 @@
 
 ```bash
 # GOOD — module-first, co-located service & controller, automatic module wiring
-pnpm nest g mo cart
-pnpm nest g co cart --no-spec
-pnpm nest g s cart --no-spec
+nest g mo cart
+nest g co cart --no-spec
+nest g s cart --no-spec
 # Result: src/cart/cart.module.ts (registered in app.module.ts),
 #         src/cart/cart.controller.ts (registered in cart.module.ts),
 #         src/cart/cart.service.ts (registered in cart.module.ts)
 
 # BAD — hand-rolling files, missing module imports, or dumping flat files in src/
-pnpm nest g co cart --flat       # pollutes src/ with loose files outside domain folder
+nest g co cart --flat       # pollutes src/ with loose files outside domain folder
 # Hand-writing cart.module.ts and forgetting to register it in app.module.ts
 ```
 
-> Note: Nest CLI is available locally in each service repo (`pnpm nest`). Always run commands from the service root (e.g. `e:/E-Commerce/cart-svc`).
+> Note: Nest CLI is available locally in each service repo. Always run commands from the service root (e.g. `e:/E-Commerce/cart-svc`).
 
 Use next: SKILL-NESTJS (controller/service patterns), SKILL-POSTGRES (raw SQL queries), SKILL-INTERFACES (DTO & types).
