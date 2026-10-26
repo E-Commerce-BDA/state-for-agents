@@ -1,4 +1,4 @@
-# ca-003 — Cart entity and item CRUD (todo)
+# ca-003 — Cart entity and item CRUD (in progress, claimed 2026-10-27)
 
 ## What
 
