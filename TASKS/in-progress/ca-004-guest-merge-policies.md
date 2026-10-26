@@ -1,4 +1,4 @@
-# ca-004 — Guest merge policies (todo)
+# ca-004 — Guest merge policies (in progress, claimed 2026-10-27)
 
 ## What
 
