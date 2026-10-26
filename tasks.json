@@ -2,10 +2,10 @@
   "version": 2,
   "updatedAt": "2026-10-26T00:00:00Z",
   "summary": {
-    "total": 53,
+    "total": 55,
     "done": 47,
     "in_progress": 1,
-    "backlog": 5
+    "backlog": 7
   },
   "unpushed": {
     "storefront-ui": [
@@ -999,12 +999,15 @@
       ],
       "stages": {
         "spec": "done",
-        "build": "done",
-        "test": "done",
-        "verify": "done"
+        "build": "in-progress",
+        "test": "todo",
+        "verify": "todo"
       },
-      "inProgress": null,
-      "next": [],
+      "inProgress": "au-001 complete; au-002/au-003 hardening queued.",
+      "next": [
+        "au-002 JWT issuer/audience + pinned verification",
+        "au-003 shared error envelope"
+      ],
       "blockedBy": [],
       "skills": [
         "SKILL-EXPLORE",
@@ -1021,7 +1024,45 @@
         "consumes": []
       },
       "claimedBy": null,
-      "note": "All 10 slices implemented per Documentation/services/auth.md and verified. 17 unit + 36 e2e green tests (vitest), oxlint 0 errors/0 warnings, nest build clean. Slices: 1 (health probes), 2 (auth schema & seed), 3 (register), 4 (login), 5 (refresh rotation + 10s grace theft detection), 6 (logout), 7 (JwtAuthGuard + profile), 8 (password change), 9 (addresses CRUD), 10 (admin RBAC & user management). Dev port 4010."
+      "note": "All 10 slices implemented per Documentation/services/auth.md and verified. 17 unit + 36 e2e green tests (vitest), oxlint 0 errors/0 warnings, nest build clean. Slices: 1 (health probes), 2 (auth schema & seed), 3 (register), 4 (login), 5 (refresh rotation + 10s grace theft detection), 6 (logout), 7 (JwtAuthGuard + profile), 8 (password change), 9 (addresses CRUD), 10 (admin RBAC & user management). Dev port 4010. Hardening queued: au-002 JWT issuer/audience, au-003 shared error envelope.",
+      "tasks": [
+        {
+          "id": "au-002",
+          "title": "JWT issuer/audience + pinned verification",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "log": "TASKS/todo/au-002-jwt-issuer-audience.md",
+          "key_decisions": [
+            "iss=ecom-auth, aud=ecom-api, HS256, 30s tolerance",
+            "Protocol constants, not env; cart copies them until ecom-contracts",
+            "Guard verifies issuer/audience plus algorithm; signature-only rejected"
+          ],
+          "verified": false,
+          "follow_ups": [
+            "ca-002 cart admin guard verifies the same iss/aud/algorithm values"
+          ]
+        },
+        {
+          "id": "au-003",
+          "title": "Shared error envelope for auth-svc",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "log": "TASKS/todo/au-003-shared-error-envelope.md",
+          "key_decisions": [
+            "APP_FILTER so e2e and alternate bootstraps share behavior",
+            "Status-derived codes with explicit code/details passthrough",
+            "Health probes exempt; x-request-id echo with UUID fallback"
+          ],
+          "verified": false,
+          "follow_ups": [
+            "Add auth-specific codes when ecom-contracts defines them"
+          ]
+        }
+      ]
     },
     "catalog-svc": {
       "motive": "Catalog truth: products/categories/brands/variants/inventory/compare data + basic search; stock decrement on order.created.",
