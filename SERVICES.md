@@ -1,7 +1,7 @@
 # SERVICES — status matrix (agents update cells as work lands)
 
 > Scope: live tracker. Stages: spec → build → test → verify (⬜ todo / 🚧 in-progress / ✅ done).
-> Status: Active | Date: 2026-09-30 | Machine mirror: `tasks.json`
+> Status: Active | Date: 2026-10-26 | Machine mirror: `tasks.json`
 
 | Repo | Port | Spec doc | spec | build | test | verify |
 |---|---|---|---|---|---|---|
@@ -10,7 +10,7 @@
 | ecom-contracts | npm | `8.Versioning.md` (to create) | ⬜ | ⬜ | ⬜ | ⬜ |
 | auth-svc | 4010 | `Documentation/services/auth.md` | ✅ | ✅ | ✅ | ✅ |
 | catalog-svc | 4020 | (to create, copy auth shape) | ⬜ | ⬜ | ⬜ | ⬜ |
-| cart-svc | 4030 | `Documentation/3.Database-Schema.md §3.3` | ✅ | 🚧 | 🚧 | ⬜ |
+| cart-svc | 4030 | `Documentation/services/cart.md` | ✅ | 🚧 | 🚧 | ⬜ |
 | order-svc | 4040 | (to create) | ⬜ | ⬜ | ⬜ | ⬜ |
 | cms-svc | 4050 | (to create) | ⬜ | ⬜ | ⬜ | ⬜ |
 | analytics-svc | 4060 | (to create) | ⬜ | ⬜ | ⬜ | ⬜ |
