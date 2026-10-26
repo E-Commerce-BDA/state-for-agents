@@ -1,108 +1,33 @@
-# SKILL-NEST-CLI — NestJS CLI Generation & Scaffolding Guide
+# SKILL-NEST-CLI — code generation via Nest CLI
 
-> Scope: Using `@nestjs/cli` (`nest g`) in pure ESM, Vitest, and raw SQL service repositories.
-> Status: Active | Date: 2026-10-26 | Parent: `services/SKILL-NESTJS.md`, `Documentation/2.Tech-Stack.md §5`
+> Scope: scaffolding modules, controllers, services, guards, and filters using `nest` CLI.
+> Status: Active | Date: 2026-10-26 | Parent: `Documentation/2.Tech-Stack.md §5`, `services/SKILL-NESTJS.md`
 
----
+## Rules
 
-## 1. Why and When to Use `nest g`
+1. **CLI-first for structure:** Use `pnpm nest g <schematic> <name> [options]` to scaffold modules, controllers, services, and guards. Never hand-roll boilerplate class definitions that the CLI can generate accurately in seconds.
+2. **Module-first generation:** Always generate the module first (`pnpm nest g mo <name>`), then generate components into it (`pnpm nest g co <name>`, `pnpm nest g s <name>`). The CLI automatically registers controllers and providers into the target domain module instead of polluting `app.module.ts`.
+3. **ESM / NodeNext import discipline:** Nest CLI generates bare relative imports (e.g., `'./cart.service'`). Because our services use `"moduleResolution": "nodenext"`, check and append `.js` extension to relative imports (e.g., `'./cart.service.js'`) so `tsc` and `vitest` resolve cleanly without runtime errors.
+4. **Test file control:** Use `--no-spec` when writing dedicated Vitest suites, or immediately convert the generated `.spec.ts` from Jest conventions to `vitest` globals (`describe`, `it`, `expect`, `vi`).
+5. **No flat clutter:** Never use `--flat` unless creating a root-level utility. Keep domain artifacts co-located in their domain directory (e.g. `src/cart/`).
+6. **Dry-run validation:** When uncertain about the destination path or module registration, use `--dry-run` to preview file paths and module updates before touching the disk.
 
-`@nestjs/cli` (`nest g ...`) is a high-speed generator for scaffolding NestJS architectural primitives. It guarantees consistent folder structure and automatically registers providers and controllers in their parent `@Module()`.
-
-### When to use `nest g`:
-* **Feature modules**: `nest g module <name>`
-* **Controllers**: `nest g controller <name>`
-* **Services**: `nest g service <name>`
-* **Guards / Interceptors / Pipes**: `nest g guard <path>`, `nest g pipe <path>`
-
-### When NOT to use `nest g` (write manually instead):
-* **Project root init (`nest new`)**: In our workspace, repositories use custom configurations (`"type": "module"`, NodeNext ESM, Vitest, Oxlint, raw `pg` pool). `nest new` forces interactive prompts, Jest defaults, ESLint, and CommonJS templates.
-* **Database Connection Pools**: Raw SQL connection pools (`src/db/pool.ts`) have no Nest generator.
-* **Database Queries & SQL Files**: SQL queries (`src/db/queries/*.sql.ts`) and DDL scripts (`db/*.sql`).
-* **DTOs**: Data transfer objects with `class-validator` / `class-transformer` decorators should be authored cleanly.
-
----
-
-## 2. Essential CLI Flags
-
-Because our codebase enforces **pure ESM** and **Vitest**, default Nest generation requires specific flags:
-
-| Flag | Purpose | Why We Use It |
-|---|---|---|
-| `--no-spec` | Skips generating `.spec.ts` files | Nest generates Jest templates (`jest.fn()`). In Vitest projects, either use `--no-spec` and write unit tests manually with `vi.fn()`, or immediately refactor the spec to Vitest. |
-| `--flat` | Does not create a subdirectory with the item name | Useful when generating a service or controller directly inside an existing domain folder. |
-| `--dry-run` | Previews changes without writing to disk | Great for testing path resolution before modifying code. |
-
----
-
-## 3. Command Recipes
-
-Run these commands from the service root (e.g. `e:\E-Commerce\cart-svc`):
-
-### 3.1 Scaffolding a Feature Domain (e.g., `cart`)
+## Good vs bad
 
 ```bash
-# 1. Generate the domain module
-pnpm exec nest g module cart
+# GOOD — module-first, co-located service & controller, automatic module wiring
+pnpm nest g mo cart
+pnpm nest g co cart --no-spec
+pnpm nest g s cart --no-spec
+# Result: src/cart/cart.module.ts (registered in app.module.ts),
+#         src/cart/cart.controller.ts (registered in cart.module.ts),
+#         src/cart/cart.service.ts (registered in cart.module.ts)
 
-# 2. Generate the service inside cart/ (skip Jest spec)
-pnpm exec nest g service cart --no-spec
-
-# 3. Generate the controller inside cart/ (skip Jest spec)
-pnpm exec nest g controller cart --no-spec
+# BAD — hand-rolling files, missing module imports, or dumping flat files in src/
+pnpm nest g co cart --flat       # pollutes src/ with loose files outside domain folder
+# Hand-writing cart.module.ts and forgetting to register it in app.module.ts
 ```
 
-This creates:
-```
-src/cart/
-├── cart.module.ts
-├── cart.service.ts
-└── cart.controller.ts
-```
-And automatically updates `src/app.module.ts` with `CartModule`!
+> Note: Nest CLI is available locally in each service repo (`pnpm nest`). Always run commands from the service root (e.g. `e:/E-Commerce/cart-svc`).
 
-### 3.2 Scaffolding Common Utilities (Guards, Pipes)
-
-```bash
-# Guard for auth token verification
-pnpm exec nest g guard auth/guards/jwt-auth --no-spec
-
-# Custom pipe
-pnpm exec nest g pipe common/pipes/validation --no-spec
-```
-
----
-
-## 4. Post-Generation ESM Adaptation Checklist
-
-After running `nest g`, verify the following two rules before committing:
-
-1. **Add `.js` Extension to Relative Imports**:
-   Under NodeNext ESM (`"module": "nodenext"` in `tsconfig.json`), TypeScript requires relative imports to specify `.js`:
-   ```ts
-   // BAD (Generated by CLI)
-   import { CartService } from './cart.service';
-
-   // GOOD (ESM NodeNext Compliant)
-   import { CartService } from './cart.service.js';
-   ```
-
-2. **Vitest Test Parity**:
-   If a `.spec.ts` was generated:
-   - Replace any Jest globals with Vitest (`import { describe, it, expect, vi } from 'vitest'`).
-   - Use `vi.fn()` instead of `jest.fn()`.
-
----
-
-## 5. Summary Flow
-
-```
-User Story / Requirement
-        │
-        ├─► Need new Nest structural primitive (Module/Controller/Service)?
-        │     └─► Run: pnpm exec nest g <type> <name> --no-spec
-        │     └─► Fix imports to include `.js` extensions
-        │
-        └─► Need DB pool, SQL queries, DTOs, or E2E tests?
-              └─► Write directly following SKILL-POSTGRES & SKILL-INTERFACES
-```
+Use next: SKILL-NESTJS (controller/service patterns), SKILL-POSTGRES (raw SQL queries), SKILL-INTERFACES (DTO & types).
