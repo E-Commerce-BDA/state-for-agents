@@ -18,10 +18,10 @@
 
 - Shell slice (navbar system → `lib/shell/*` + `components/shell/*` + `app/hooks/*`, ports-first) per locked plan.
 - File 0 done: `lib/shell/navSettings.ts` (agent-written on learner request 2026-10-02; learner resumes typing from File 1 `NavLinks.tsx`).
-- `auth-svc` au-001: COMPLETE across all 10 slices (2026-10-25). 17 unit tests + 36 e2e tests across 10 test suites green (`vitest`), `oxlint` 0 errors/0 warnings, `nest build` clean. Hardening queued: `au-002` JWT issuer/audience, `au-003` shared error envelope.
+- `auth-svc` au-001: COMPLETE across all 10 slices (2026-10-25). 17 unit tests + 36 e2e tests across 10 test suites green (`vitest`), `oxlint` 0 errors/0 warnings, `nest build` clean. `au-002` in progress: JWT issuer/audience; `au-003` shared error envelope queued.
 - `cart-svc` ca-001: Phase 1 COMPLETE (2026-10-26). Foundation initialized, crash-proof connection pool to PostgreSQL `ecom-pg` (:5433), `/health` (liveness) & `/health/ready` (readiness) probes, `001-cart-schema.sql` applied (4 tables: `carts`, `cart_items`, `wishlists`, `wishlist_items`; 7 indexes including `one_active_cart_per_user` and `cart_items_cart_product_unique` with `NULLS NOT DISTINCT`; 2 triggers for `updated_at`). 12 unit tests + 12 e2e tests passing, `oxlint` 0 errors/0 warnings, `nest build` clean.
 - Cart docs-first COMPLETE (2026-10-26): `services/cart.md` + schema/API/admin/features/auth/testing docs aligned; `ca-002`–`ca-006` are todo. Next implementation slice: `ca-002` settings subsystem (schema 002, registry, admin API, audit, JWT + `admin` guard).
-- Known gaps: `auth-svc` hardening queued — `au-002` JWT issuer/audience and `au-003` shared error envelope; `services/auth.md` documents the shared envelope as the target. `cart-svc` has uncommitted `src/app.module.ts` and untracked `src/cart/` stubs - left untouched.
+- Known gaps: `auth-svc` hardening in progress — `au-002` JWT issuer/audience (active) and `au-003` shared error envelope (queued); `services/auth.md` documents the shared envelope as the target. `cart-svc` has uncommitted `src/app.module.ts` and untracked `src/cart/` stubs - left untouched.
 
 ## Next (ordered)
 
@@ -36,7 +36,7 @@
 9. CMS source wiring replacing `TODO(cms-svc)` null-sources; `7.Deployment.md` + `8.Versioning.md` stubs.
 10. `ecom-contracts` v0.1, remaining 8 service specs (copy `services/auth.md` shape), missing component docs per `components/README.md`.
 
-## Task tracking (55/47/1/7)
+## Task tracking (55/47/2/6)
 
 - `unpushed` array: every local commit not on `main` listed per repo
   until you push; cleared per-branch on push. Read push-state in `tasks.json`,
@@ -45,7 +45,7 @@
   The `tasks.json` carrier that records this list joins on the next update.
 
 Per-task records live in `tasks.json` (`repos.*.tasks`) + `TASKS/` logs
-(id == filename, status == folder). Auth: `au-001` done; `au-002`/`au-003` todo. Cart: `ca-001` done; `ca-002`-`ca-006`
+(id == filename, status == folder). Auth: `au-001` done; `au-002` in progress; `au-003` todo. Cart: `ca-001` done; `ca-002`-`ca-006`
 todo. Backfill `sf-001`-`sf-010` done from session record; `sf-011` in
 progress (learner-owned). `index.html` work is never logged (temporary
 concept file).
