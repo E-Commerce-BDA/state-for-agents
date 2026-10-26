@@ -1,4 +1,4 @@
-# ca-002 — Cart settings subsystem (todo)
+# ca-002 — Cart settings subsystem (in progress; schema applied)
 
 ## What
 
@@ -35,5 +35,17 @@ rebuild. This is the dependency for `ca-004` merge policies.
 
 ## Verification
 
-Pending. Gate: unit + e2e green, `tsc --noEmit`, `oxlint`, `nest build`;
-schema re-run preserves an existing settings document.
+Schema slice done 2026-10-27:
+
+- `002-cart-settings.sql` applied to local `ecom-pg` (PG 16.15): two tables,
+  three indexes including `one_active_cart_per_session`, and
+  `trg_cart_settings_updated_at` present.
+- Seed row `global` exists with `{}` / version `0`; audit is empty.
+- Re-running `002` is idempotent (`INSERT 0 0`) and preserves an existing
+  `guestMergeStrategy` override plus version.
+- Transactional checks confirmed the unique guest-session index and JSONB
+  object check; the test rows were rolled back.
+- cart-svc commit: `c3a7f2a`.
+
+Code slice pending. Gate: registry, repository, service, controller, JWT +
+`admin` guards, unit + e2e green, `tsc --noEmit`, `oxlint`, `nest build`.
