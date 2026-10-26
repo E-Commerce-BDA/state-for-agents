@@ -4,8 +4,8 @@
   "summary": {
     "total": 55,
     "done": 49,
-    "in_progress": 1,
-    "backlog": 5
+    "in_progress": 2,
+    "backlog": 4
   },
   "unpushed": {
     "storefront-ui": [
@@ -62,7 +62,8 @@
       "278ca12",
       "a8cef68",
       "9975626",
-      "5f8d6ce"
+      "5f8d6ce",
+      "fa353aa"
     ],
     "Documentation": [
       "f8ebbf9",
@@ -100,6 +101,7 @@
       "9d29d20"
     ],
     "cart-svc": [
+      "c3a7f2a",
       "618a9a0",
       "5e31111",
       "555a1bd",
@@ -1157,9 +1159,9 @@
         "test": "in-progress",
         "verify": "todo"
       },
-      "inProgress": "Docs-first complete (2026-10-26): services/cart.md + schema/API/admin/features/auth/testing docs aligned. ca-001 foundation done; ca-002 settings subsystem next.",
+      "inProgress": "ca-002 schema applied and verified (002-cart-settings.sql); registry, repository, service, controller, and JWT/admin guards next.",
       "next": [
-        "ca-002 settings schema, registry, admin API, audit, and route guards",
+        "ca-002 settings registry, admin API, audit, and route guards (schema slice done)",
         "ca-003 active cart ensure + item CRUD + totals + idempotency",
         "ca-004 guest merge policies (merge, guest_wins, user_wins)",
         "ca-005 wishlist endpoints",
@@ -1180,7 +1182,11 @@
         ],
         "consumes": []
       },
-      "claimedBy": null,
+      "claimedBy": {
+        "agent": "agent",
+        "since": "2026-10-27",
+        "task": "ca-002"
+      },
       "tasks": [
         {
           "id": "ca-001",
@@ -1204,11 +1210,11 @@
         {
           "id": "ca-002",
           "title": "Cart settings subsystem (registry, admin API, audit, guards)",
-          "status": "todo",
-          "owner": null,
-          "started": null,
+          "status": "in-progress",
+          "owner": "agent",
+          "started": "2026-10-27",
           "finished": null,
-          "log": "TASKS/todo/ca-002-cart-settings-subsystem.md",
+          "log": "TASKS/in-progress/ca-002-cart-settings-subsystem.md",
           "key_decisions": [
             "JSONB overrides + code registry; no DDL per setting",
             "Defaults in code; reset deletes the override",
@@ -1285,7 +1291,7 @@
           "follow_ups": []
         }
       ],
-      "note": "Phase 1 verified: crash-proof PG connection pool (:5433), liveness /health (200), readiness /health/ready (probes DB, 503 on drop), 001-cart-schema.sql applied (4 tables, 7 indexes, 2 triggers, single active cart unique index, NULLS NOT DISTINCT unique line items). 12 unit + 12 e2e green tests. Docs-first complete 2026-10-26: services/cart.md + schema/API/admin/features/auth/testing aligned; ca-002..ca-006 are todo. Catalog fixture, no-op event bus, and local DTOs unblock; Redis is needed for idempotency."
+      "note": "Phase 1 verified: crash-proof PG connection pool (:5433), liveness /health (200), readiness /health/ready (probes DB, 503 on drop), 001-cart-schema.sql applied (4 tables, 7 indexes, 2 triggers, single active cart unique index, NULLS NOT DISTINCT unique line items). 12 unit + 12 e2e green tests. Docs-first complete 2026-10-26: services/cart.md + schema/API/admin/features/auth/testing aligned. ca-002 schema slice applied 2026-10-27: cart.settings + cart.settings_audit, audit indexes, trigger, global seed, one_active_cart_per_session; idempotent re-run preserves overrides. Registry/admin API code remains. Catalog fixture, no-op event bus, and local DTOs unblock; Redis is needed for idempotency."
     },
     "order-svc": {
       "motive": "Checkout + POS-style order creation (mock pay v1), lifecycle/status, stock reservation; outbox+idempotency+saga-lite compensation.",
