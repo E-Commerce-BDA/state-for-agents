@@ -116,6 +116,31 @@
       "0a2c04a",
       "e1d0af6",
       "b465ac4"
+    ],
+    "cart-svc": [
+      "618a9a0",
+      "5e31111",
+      "555a1bd",
+      "df2a753",
+      "f7aa9d4",
+      "6169132",
+      "34eedf7",
+      "26a6557",
+      "f32d7f9",
+      "60c3251",
+      "f9a73f9",
+      "353c306",
+      "1338582",
+      "b368058",
+      "5e04a47",
+      "4e2f0dc",
+      "b986ad1",
+      "9a76023",
+      "4e4b3b4",
+      "1620831",
+      "40c6abe",
+      "a22ad89",
+      "994e88f"
     ]
   },
   "workflow": "Claim: create/move log to TASKS/in-progress/, set entry status in-progress + owner + started. Build against chained skills (router order). Close: move log to TASKS/done/ (or backlog/), fill verification + follow_ups, flip entry status + finished, update STATUS.md + summary, same commit. Commits: one commit per file (larger edits split per edit); stage with diff eyes-on; subject + reason body; local-only until the human says push. Unpushed array lists every local commit except its own carrier commit (which joins on the next update); cleared per-branch on push. Validation: id == filename, status == folder, log file must exist, STATUS counts == summary.",
@@ -1095,27 +1120,27 @@
     },
     "cart-svc": {
       "motive": "Guest+user cart + wishlist with TTL; session merge on login; emits cart.updated for analytics/notify.",
-      "localRoot": "(to create, cart-svc/)",
+      "localRoot": "cart-svc",
       "repo": "cart-svc",
       "port": 4030,
       "ownerDocs": [
-        "Documentation/services/cart.md (to create, copy auth.md shape)"
+        "Documentation/3.Database-Schema.md §3.3",
+        "Documentation/4.API-Design.md §3.3"
       ],
       "stages": {
-        "spec": "todo",
-        "build": "todo",
-        "test": "todo",
+        "spec": "done",
+        "build": "in-progress",
+        "test": "in-progress",
         "verify": "todo"
       },
-      "inProgress": null,
+      "inProgress": "Phase 1 complete: foundation scaffolded, connection pool, /health & /health/ready probes, cart schema DDL applied, 12 unit + 12 e2e green tests.",
       "next": [
-        "Spec doc copying services/auth.md shape",
-        "Cart CRUD + guest merge + updated_at for idle detection",
-        "Redis compare:{sessionId} + idem: keys (24h)"
+        "Cart entity retrieval and active cart ensure (session/user)",
+        "POST /api/v1/cart/items (add item, snapshot price/name/slug/image/variant)",
+        "PATCH /api/v1/cart/items/:id (qty update) & DELETE /api/v1/cart/items/:id (removal)",
+        "POST /api/v1/cart/merge (guest cart into user cart on login)"
       ],
-      "blockedBy": [
-        "ecom-contracts"
-      ],
+      "blockedBy": [],
       "skills": [
         "SKILL-EXPLORE",
         "SKILL-POSTGRES",
@@ -1131,7 +1156,7 @@
         "consumes": []
       },
       "claimedBy": null,
-      "note": ""
+      "note": "Phase 1 verified: crash-proof PG connection pool (:5433), liveness /health (200), readiness /health/ready (probes DB, 503 on drop), 001-cart-schema.sql applied (4 tables, 7 indexes, 2 triggers, single active cart unique index, NULLS NOT DISTINCT unique line items). 12 unit + 12 e2e green tests."
     },
     "order-svc": {
       "motive": "Checkout + POS-style order creation (mock pay v1), lifecycle/status, stock reservation; outbox+idempotency+saga-lite compensation.",
