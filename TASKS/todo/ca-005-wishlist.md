@@ -14,8 +14,8 @@ Implement the customer wishlist endpoints on top of the existing
 - `src/wishlist/wishlist.repository.ts` — one wishlist per user; unique
   `(wishlist_id, product_id)`; product-level, no `variant_id`.
 - `src/wishlist/wishlist.service.ts` — list/add/remove; duplicate add
-  returns the existing item; foreign/missing delete → `404
-  WISHLIST_ITEM_NOT_FOUND`; `GET` never creates a wishlist row.
+  returns the existing item; foreign/missing delete →
+  `404 WISHLIST_ITEM_NOT_FOUND`; `GET` never creates a wishlist row.
 - `src/wishlist/wishlist.controller.ts` — `GET /wishlist`,
   `POST /wishlist/items`, `DELETE /wishlist/items/:id`; `JwtAuthGuard` +
   `RolesGuard` + `@Roles('customer')`.
