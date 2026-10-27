@@ -38,14 +38,19 @@
   - Brands subsystem: active index optimization (`idx_brands_active`), slug lookup, and admin CRUD with soft-deletes.
   - Shared auth: `JwtAuthGuard` + `RolesGuard` (`@Roles('admin')`) and standard `HttpExceptionFilter` error envelope.
   - Verification: 10 unit test files (50/50 passed), 4 e2e test files (38/38 passed), `oxlint` 0 warnings/0 errors across 55 files, `nest build` clean.
+- `catalog-svc` Phase 4 (`cat-003`) COMPLETE (2026-10-27):
+  - Products & PDP subsystem: single-join PDP query with PostgreSQL `json_agg` and `json_build_object` aggregating variants, gallery images, option definitions, and active discounts without N+1 round-trips.
+  - Cursor pagination with multi-attribute filtering (category, brand, price range, status) and full-text search.
+  - Admin CRUD endpoints for products, variants, option definitions, images, and scheduled discounts gated by `@Roles('admin')`.
+  - Verification: 12 unit test files (61/61 passed), 5 e2e test files (55/55 passed), `oxlint` 0 warnings/0 errors across 72 files, `nest build` clean exit 0.
 
 ## Next (ordered)
 
-1. `catalog-svc` Phase 4 (`cat-003`): Products & Multi-Variant PDP single-join queries.
+1. `catalog-svc` Phase 5 (`cat-004`): Stock ledger & internal service-to-service endpoints for `cart-svc` and `order-svc`.
 2. Thin client (`lib/auth/client.ts` + per-action handlers + `proxy.ts`) in storefront-ui.
 3. CMS source wiring replacing `TODO(cms-svc)` null-sources; `7.Deployment.md` + `8.Versioning.md` stubs.
 
-## Task tracking (55/54/0/3)
+## Task tracking (55/55/0/3)
 
 - `unpushed` array: every local commit not on `main` listed per repo
   until you push; cleared per-branch on push. Read push-state in `tasks.json`,
