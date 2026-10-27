@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-27T17:20:00Z",
+  "updatedAt": "2026-10-27T17:45:00Z",
   "summary": {
     "total": 55,
-    "done": 53,
-    "in_progress": 1,
+    "done": 54,
+    "in_progress": 0,
     "backlog": 3
   },
   "unpushed": {
@@ -206,6 +206,32 @@
       "7d3eda4"
     ],
     "catalog-svc": [
+      "e322bd9",
+      "bb49e2e",
+      "b5605f7",
+      "758e3b4",
+      "0064e86",
+      "e4ce8ed",
+      "76cf4a3",
+      "1077d22",
+      "8c17a07",
+      "68ad7ce",
+      "eab025f",
+      "88317e7",
+      "3c94f6c",
+      "f26b648",
+      "b9a7f36",
+      "58a0bd9",
+      "9bb13e1",
+      "6e92178",
+      "a4d5dc7",
+      "455e81e",
+      "0bc3731",
+      "d62cc91",
+      "7cd3280",
+      "f0c3728",
+      "0f555ce",
+      "14e6b58",
       "9368297",
       "56b5896",
       "ee9b747",
@@ -1277,17 +1303,18 @@
         {
           "id": "cat-002",
           "title": "Categories and brands subsystem with navbar query optimization",
-          "status": "in-progress",
+          "status": "done",
           "owner": "agent",
           "started": "2026-10-27T17:20:00Z",
-          "finished": null,
-          "log": "TASKS/in-progress/cat-002-categories-and-brands.md",
+          "finished": "2026-10-27T17:45:00Z",
+          "log": "TASKS/done/cat-002-categories-and-brands.md",
           "key_decisions": [
             "Partial index idx_categories_navbar for zero-overhead navbar reads",
             "Self-referencing tree representation with parent_id",
-            "Soft deletes (deleted_at) for catalog entities"
+            "Soft deletes (deleted_at) for catalog entities",
+            "Dual route prefix support ['catalog/categories', 'categories']"
           ],
-          "verified": false,
+          "verified": true,
           "follow_ups": []
         },
         {
