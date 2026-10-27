@@ -33,14 +33,19 @@
   - Complete `catalog` DDL schema in `001-catalog-schema.sql` (13 tables, GIN search vectors, navbar partial index, triggers).
   - Seed fixture catalog in `002-seed-catalog.sql` aligned with `cart-svc` fixtures.
   - Verification: 12 unit tests passed (3 test files), 16 e2e tests passed (2 test files), `oxlint` 0 warnings/0 errors on 29 files, `nest build` clean.
+- `catalog-svc` Phase 3 (`cat-002`) COMPLETE (2026-10-27):
+  - Categories subsystem: navbar query optimization (`idx_categories_navbar`), self-referencing tree builder, slug lookup, and admin CRUD with soft-deletes.
+  - Brands subsystem: active index optimization (`idx_brands_active`), slug lookup, and admin CRUD with soft-deletes.
+  - Shared auth: `JwtAuthGuard` + `RolesGuard` (`@Roles('admin')`) and standard `HttpExceptionFilter` error envelope.
+  - Verification: 10 unit test files (50/50 passed), 4 e2e test files (38/38 passed), `oxlint` 0 warnings/0 errors across 55 files, `nest build` clean.
 
 ## Next (ordered)
 
-1. `catalog-svc` Phase 3 (`cat-002`): Categories & Brands Subsystem with navbar query optimization.
+1. `catalog-svc` Phase 4 (`cat-003`): Products & Multi-Variant PDP single-join queries.
 2. Thin client (`lib/auth/client.ts` + per-action handlers + `proxy.ts`) in storefront-ui.
 3. CMS source wiring replacing `TODO(cms-svc)` null-sources; `7.Deployment.md` + `8.Versioning.md` stubs.
 
-## Task tracking (55/53/0/3)
+## Task tracking (55/54/0/3)
 
 - `unpushed` array: every local commit not on `main` listed per repo
   until you push; cleared per-branch on push. Read push-state in `tasks.json`,
