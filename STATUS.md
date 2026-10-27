@@ -66,6 +66,12 @@
   - Test seed fixtures in `db/002-seed-orders.sql` with percent/fixed/expired/maxed coupons and sample order.
   - Strict TypeScript row types in `src/db/rows.ts` preserving decimal string representations.
   - Verification: 8/8 schema e2e tests passed (10/10 total e2e tests across 2 files), `oxlint` clean on 27 files, `nest build` clean exit 0. 4 atomic commits recorded.
+- `order-svc` Phase 3 (`ord-003`) COMPLETE (2026-10-27):
+  - Strict non-optional TypeScript DTOs for coupon validation, creation, update, and pagination (`ValidateDiscountCodeDto`, `CreateDiscountCodeDto`).
+  - `DiscountsRepository` parameterized raw SQL queries with coupon normalization and atomic usage increments.
+  - `DiscountsService` validation rules (active flag, start/end date windows, usage counts, minimum order thresholds) and percentage/fixed discount calculations clamped to cart totals.
+  - `DiscountsController` exposing `POST /discount-codes/validate` (public/customer) and admin CRUD endpoints gated by `JwtAuthGuard` and `RolesGuard` with `@Roles('admin')`.
+  - Verification: 17 unit tests passed (21 total unit tests), 14 e2e tests passed (24 total e2e tests across 3 files), `oxlint` 0 warnings/0 errors on 39 files, `nest build` clean exit 0. 16 atomic commits recorded.
 
 ## Next (ordered)
 
