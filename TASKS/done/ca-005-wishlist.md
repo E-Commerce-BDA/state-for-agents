@@ -1,4 +1,4 @@
-# ca-005 — Wishlist (todo)
+# ca-005 — Wishlist (done)
 
 ## What
 
@@ -16,11 +16,11 @@ Implement the customer wishlist endpoints on top of the existing
 - `src/wishlist/wishlist.service.ts` — list/add/remove; duplicate add
   returns the existing item; foreign/missing delete →
   `404 WISHLIST_ITEM_NOT_FOUND`; `GET` never creates a wishlist row.
-- `src/wishlist/wishlist.controller.ts` — `GET /wishlist`,
-  `POST /wishlist/items`, `DELETE /wishlist/items/:id`; `JwtAuthGuard` +
-  `RolesGuard` + `@Roles('customer')`.
-- `test/wishlist.*` — 401/403/200, duplicate, product-level uniqueness,
-  foreign delete, no event, GET read-only.
+- `src/wishlist/wishlist.controller.ts` — dual route `['wishlist', 'cart/wishlist']`
+  handling `GET /wishlist`, `POST /wishlist/items`, `DELETE /wishlist/items/:id`;
+  `JwtAuthGuard` + `RolesGuard` + `@Roles('customer')`.
+- `test/wishlist.*` — 401/403/200, duplicate idempotent add, product-level uniqueness,
+  foreign delete 404, no cart event emission, GET read-only without row creation.
 - Storefront guest flow is a separate slice: prompt sign-in, keep pending
   product id via `?next=`/short-lived cookie (never `localStorage`), POST
   after login.
@@ -44,4 +44,8 @@ Implement the customer wishlist endpoints on top of the existing
 
 ## Verification
 
-Pending. Gate: unit + e2e green, `tsc --noEmit`, `oxlint`, `nest build`.
+Passed:
+- `pnpm test` unit tests (13 files, 84/84 green).
+- `pnpm test:e2e` (8 files, 79/79 green).
+- `oxlint --type-aware src/ test/` (0 warnings, 0 errors).
+- `nest build` clean exit 0.
