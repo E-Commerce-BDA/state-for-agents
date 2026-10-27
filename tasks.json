@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-27T18:40:00Z",
+  "updatedAt": "2026-10-27T18:54:00Z",
   "summary": {
-    "total": 56,
-    "done": 56,
-    "in_progress": 1,
+    "total": 57,
+    "done": 57,
+    "in_progress": 0,
     "backlog": 1
   },
   "unpushed": {
@@ -206,6 +206,14 @@
       "7d3eda4"
     ],
     "catalog-svc": [
+      "072709a",
+      "85ea0cb",
+      "1823195",
+      "6d1a2f1",
+      "650e65b",
+      "272f5bd",
+      "ae99aa5",
+      "04baf8e",
       "f4f9c75",
       "af67091",
       "85a09d7",
@@ -1395,21 +1403,21 @@
         {
           "id": "cat-005",
           "title": "Hardening, security, and verification",
-          "status": "in-progress",
+          "status": "done",
           "owner": "agent",
           "started": "2026-10-27T18:40:00Z",
-          "finished": null,
-          "log": "TASKS/in-progress/cat-005-catalog-hardening.md",
+          "finished": "2026-10-27T18:54:00Z",
+          "log": "TASKS/done/cat-005-catalog-hardening.md",
           "key_decisions": [
             "Shared error envelope and request correlation IDs",
             "Public caching policy with Cache-Control headers",
             "Full unit + e2e green verification, oxlint 0 warnings, clean build"
           ],
-          "verified": false,
+          "verified": true,
           "follow_ups": []
         }
       ],
-      "note": "Phase 1 underway: scaffolding base foundation, DB pool, health probes, schema migration."
+      "note": "COMPLETE: all 6 phases cat-001 through cat-005 done, verified with 82 unit + 67 e2e tests green."
     },
     "cart-svc": {
       "motive": "Guest+user cart + wishlist with TTL; session merge on login; emits cart.updated for analytics/notify.",
