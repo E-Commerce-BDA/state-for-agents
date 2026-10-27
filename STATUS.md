@@ -72,6 +72,12 @@
   - `DiscountsService` validation rules (active flag, start/end date windows, usage counts, minimum order thresholds) and percentage/fixed discount calculations clamped to cart totals.
   - `DiscountsController` exposing `POST /discount-codes/validate` (public/customer) and admin CRUD endpoints gated by `JwtAuthGuard` and `RolesGuard` with `@Roles('admin')`.
   - Verification: 17 unit tests passed (21 total unit tests), 14 e2e tests passed (24 total e2e tests across 3 files), `oxlint` 0 warnings/0 errors on 39 files, `nest build` clean exit 0. 16 atomic commits recorded.
+- `order-svc` Phase 4 (`ord-004`) COMPLETE (2026-10-27):
+  - Strict DTOs for checkout items, shipping and billing addresses, and payment provider request.
+  - Cross-service client adapters: `CatalogClient` (`reserveStock`, `releaseStock`, `getProductSnapshots`) and `CartClient`.
+  - `MockPaymentProvider` and `PaymentsService` for payment authorization and capture.
+  - `CheckoutService` with Redis idempotency (`idem:{key}` 24h TTL, conflict detection, in-flight lock), saga-lite stock reservation compensation, and atomic single PostgreSQL transaction (`orders`, `order_items` snapshots, `order_status_history`, `payments`, `discount_codes` usage increment, and `outbox` row `order.created`).
+  - Verification: 7 unit tests passed (28 total unit tests across 3 files), 6 e2e tests passed (30 total e2e tests across 4 files), `oxlint` clean on 49 files, `nest build` clean exit 0. 15 atomic commits recorded.
 
 ## Next (ordered)
 
