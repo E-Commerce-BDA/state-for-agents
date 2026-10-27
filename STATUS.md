@@ -96,10 +96,10 @@
   - **`order-svc` is 100% COMPLETE across all 6 phases (`ord-001` through `ord-006`)**.
 - `cms-svc` Phase 1 (`cms-001`) COMPLETE (2026-10-27):
   - Nest 12/Node 24 ESM foundation with Joi env validation, shared app setup, `/api/v1` prefix, and health-route exclusions.
-  - Fail-fast Mongoose connection, degraded Redis readiness, `/health` and `/health/ready`; Mongo-down returns `503`.
+  - Fail-fast Mongoose connection (`retryAttempts: 0`), degraded Redis readiness, `/health` and `/health/ready`; Mongo-down returns `503`.
   - JWT/Roles guard plumbing, request-id propagation, standard error envelope, and cache-control behavior.
   - Dockerized Mongo 8 on `127.0.0.1:27018`; tests use `ecom_cms_test` and drop it after the run.
-  - Verification: 35 unit tests across 7 files, 5 e2e tests across 2 files, `oxlint` clean, `tsc` clean, `nest build` clean; production smoke `200` healthy / `503` Mongo-down / `404` envelope.
+  - Verification: 35 unit tests across 7 files, 5 e2e tests across 2 files, `oxlint` clean, `tsc` clean, `nest build` clean; production smoke `200` healthy / `503` Mongo-down / `404` envelope; startup with Mongo down exits before serving.
   - Phase 2 domain work blocked on `ecom-contracts` and CMS payload decisions.
 
 ## Next (ordered)

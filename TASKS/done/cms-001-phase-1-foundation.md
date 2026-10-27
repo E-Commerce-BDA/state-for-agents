@@ -35,10 +35,12 @@ Dockerfile were added.
    separate Phase 7 staging smoke. Rejected: using the native Mongo instance,
    because test data and local dev data would share an unmanaged server.
 2. **Fail-fast Mongo, degraded Redis.** Mongo is the content source of truth;
-   starting without it would serve empty content. Redis only accelerates reads,
-   so readiness reports it as `down` while still returning `200` when Mongo is
-   healthy. Rejected: making Redis critical, because a cache outage would take
-   the CMS down for no correctness reason.
+   starting without it would serve empty content. `retryAttempts: 0` is required
+   because `@nestjs/mongoose` retries by default, which delayed startup failure
+   for roughly 27 seconds. Redis only accelerates reads, so readiness reports it
+   as `down` while still returning `200` when Mongo is healthy. Rejected: making
+   Redis critical, because a cache outage would take the CMS down for no
+   correctness reason.
 3. **JWT verification pinned to `HS256`, issuer `ecom-auth`, audience
    `ecom-api`, 30s clock tolerance.** Matches the platform auth contract and
    prevents accepting tokens minted for another service. Rejected: decoding
@@ -64,4 +66,7 @@ Dockerfile were added.
 - Production smoke: `/health` `200`, `/health/ready` `200` with both
   dependencies up, unknown API route `404` with the standard envelope.
 - Mongo-down smoke: `/health/ready` `503` with `mongo: "down"`, `redis: "up"`.
-- Commit: `cms-svc` `ad792c3` (`feat: add phase 1 foundation`).
+- Mongo-down startup: process exits after the 5s selection timeout; no retry
+  loop. The first startup check exposed `@nestjs/mongoose`'s default retries.
+- Commits: `cms-svc` `ad792c3` (`feat: add phase 1 foundation`) and
+  `a435be6` (`fix: fail fast when mongo is unavailable`).
