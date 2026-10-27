@@ -43,14 +43,21 @@
   - Cursor pagination with multi-attribute filtering (category, brand, price range, status) and full-text search.
   - Admin CRUD endpoints for products, variants, option definitions, images, and scheduled discounts gated by `@Roles('admin')`.
   - Verification: 12 unit test files (61/61 passed), 5 e2e test files (55/55 passed), `oxlint` 0 warnings/0 errors across 72 files, `nest build` clean exit 0.
+- `catalog-svc` Phase 5 (`cat-004`) COMPLETE (2026-10-27):
+  - Stock ledger & movements: admin stock adjustments and history audit trail recording `qty_after` snapshots in `catalog.stock_movements`.
+  - Atomic stock reservations: `POST /internal/stock/reserve` with row-level locks (`SELECT ... FOR UPDATE`), sorted deterministically to prevent deadlocks, with strict rollback on insufficient stock (`409 INSUFFICIENT_STOCK`).
+  - Reservation compensation: `POST /internal/stock/release` to restore stock balance on order cancellation.
+  - Cart hydration: `GET /internal/products?ids=` returning complete `CatalogProductSnapshot` array for `cart-svc`.
+  - Internal security: `ServiceKeyGuard` enforcing `x-service-key` on all `/internal/*` routes.
+  - Verification: 16 unit test files (82/82 passed), 7 e2e test files (60/60 passed), `oxlint` 0 warnings/0 errors across 86 files, `nest build` clean exit 0.
 
 ## Next (ordered)
 
-1. `catalog-svc` Phase 5 (`cat-004`): Stock ledger & internal service-to-service endpoints for `cart-svc` and `order-svc`.
+1. `catalog-svc` Phase 6 (`cat-005`): Hardening, security, and verification.
 2. Thin client (`lib/auth/client.ts` + per-action handlers + `proxy.ts`) in storefront-ui.
 3. CMS source wiring replacing `TODO(cms-svc)` null-sources; `7.Deployment.md` + `8.Versioning.md` stubs.
 
-## Task tracking (55/55/0/3)
+## Task tracking (56/56/0/2)
 
 - `unpushed` array: every local commit not on `main` listed per repo
   until you push; cleared per-branch on push. Read push-state in `tasks.json`,
