@@ -85,13 +85,21 @@
   - `OrdersService` with RBAC ownership checks, state machine assertions, and refund limit validation.
   - `OutboxRepository` querying pending events with partial index `idx_outbox_pending` and `OutboxService` relay worker with polling, concurrency lock, and lifecycle hooks.
   - `CustomerOrdersController` and `OrdersController` mounting all customer and admin order endpoints.
-  - Verification: 17 unit tests passed (45 total unit tests across 5 files), 18 e2e tests passed (48 total e2e tests across 5 files), `oxlint` clean on 58 files, `nest build` clean exit 0. 17 atomic commits recorded.
+- `order-svc` Phase 6 (`ord-006`) COMPLETE (2026-10-27):
+  - Global `HttpExceptionFilter` with standard envelope `{ error: { code, message, details }, requestId, timestamp }` and `x-request-id` response header echoing.
+  - `CacheControlInterceptor` enforcing `Cache-Control: no-store` on mutating HTTP methods.
+  - `ServiceKeyGuard` enforcing `x-service-key` on `/internal/*` routes (`InternalController`).
+  - Parameterized queries and UUID format validation preventing SQL injection and syntax errors.
+  - Prototype pollution and forbidden parameter injection defenses via strict `ValidationPipe`.
+  - Comprehensive service specification `Documentation/services/order.md` matching `auth.md` shape.
+  - Verification: 45 unit tests passed across 5 test suites, 60 e2e tests passed across 6 test suites (105 total passing tests), `oxlint` clean on 65 files, `nest build` clean exit 0. 10 atomic commits recorded.
+  - **`order-svc` is 100% COMPLETE across all 6 phases (`ord-001` through `ord-006`)**.
 
 ## Next (ordered)
 
-1. Thin client (`lib/auth/client.ts` + per-action handlers + `proxy.ts`) in storefront-ui.
-2. CMS source wiring replacing `TODO(cms-svc)` null-sources; `7.Deployment.md` + `8.Versioning.md` stubs.
-3. Next service implementation (`order-svc` or `search-svc`).
+1. Next service implementation (`cms-svc :4050` or `search-svc :4060`).
+2. Thin client (`lib/auth/client.ts` + per-action handlers + `proxy.ts`) in storefront-ui.
+3. CMS source wiring replacing `TODO(cms-svc)` null-sources; `7.Deployment.md` + `8.Versioning.md` stubs.
 
 ## Task tracking (57/57/0/1)
 
