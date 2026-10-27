@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-27T21:00:00Z",
+  "updatedAt": "2026-10-27T21:10:00Z",
   "summary": {
     "total": 63,
-    "done": 62,
-    "in_progress": 1,
+    "done": 63,
+    "in_progress": 0,
     "backlog": 0
   },
   "unpushed": {
@@ -397,7 +397,17 @@
       "955099c",
       "82e7eb0",
       "1288a1a",
-      "5569ad7"
+      "5569ad7",
+      "b51c343",
+      "ff8eff0",
+      "d6db700",
+      "467235f",
+      "739810f",
+      "727c85e",
+      "cab3a4d",
+      "d3932a1",
+      "71bd163",
+      "9dbc1d1"
     ]
   },
   "workflow": "Claim: create/move log to TASKS/in-progress/, set entry status in-progress + owner + started. Build against chained skills (router order). Close: move log to TASKS/done/ (or backlog/), fill verification + follow_ups, flip entry status + finished, update STATUS.md + summary, same commit. Commits: one commit per file (larger edits split per edit); stage with diff eyes-on; subject + reason body; local-only until the human says push. Unpushed array lists every local commit except its own carrier commit (which joins on the next update); cleared per-branch on push. Validation: id == filename, status == folder, log file must exist, STATUS counts == summary.",
@@ -1699,18 +1709,12 @@
       ],
       "stages": {
         "spec": "done",
-        "build": "in-progress",
-        "test": "in-progress",
-        "verify": "todo"
+        "build": "done",
+        "test": "done",
+        "verify": "done"
       },
       "inProgress": null,
-      "next": [
-        "ord-002: DDL schema migration 001-order-schema.sql, seed fixtures, and rows.ts",
-        "ord-003: Discount codes and pricing engine subsystem",
-        "ord-004: Checkout and idempotent order placement with saga-lite compensation",
-        "ord-005: Order lifecycle, history, and status state machine with outbox relay worker",
-        "ord-006: Hardening, security, service key, and specification doc"
-      ],
+      "next": [],
       "blockedBy": [],
       "skills": [
         "SKILL-EXPLORE",
@@ -1838,17 +1842,26 @@
         {
           "id": "ord-006",
           "title": "Hardening, security, service key, and specification documentation",
-          "status": "in-progress",
+          "status": "done",
           "owner": "agent",
           "started": "2026-10-27T21:00:00Z",
-          "finished": null,
-          "log": "TASKS/in-progress/ord-006-hardening-security-and-spec.md",
-          "key_decisions": [],
-          "verified": false,
+          "finished": "2026-10-27T21:10:00Z",
+          "log": "TASKS/done/ord-006-hardening-security-and-spec.md",
+          "key_decisions": [
+            "HttpExceptionFilter producing standard { error: { code, message, details }, requestId, timestamp } envelope",
+            "x-request-id extraction from gateway and response header echoing with fallback UUIDv4",
+            "Cache-Control: no-store on all mutating HTTP methods (POST, PATCH, PUT, DELETE)",
+            "ServiceKeyGuard enforcing x-service-key on /internal/* routes with 401 rejection",
+            "InternalController with GET /internal/orders/:id inter-service lookup",
+            "UUID format regex guard preventing PostgreSQL 22P02 syntax errors on malicious ID parameters",
+            "Comprehensive security e2e tests passing with 12 tests (RBAC, SQL injection, prototype pollution, service key)",
+            "Complete service specification Documentation/services/order.md matching auth.md shape"
+          ],
+          "verified": true,
           "follow_ups": []
         }
       ],
-      "note": "Phase 1, 2, 3, 4 & 5 complete: base scaffolding, PostgreSQL pool, Redis service, /health probes, full DDL schema, discount engine, atomic checkout, and full order lifecycle with state machine & outbox relay worker. 45 unit tests + 48 e2e tests passing across 5 files, 0 oxlint warnings/errors, clean build exit 0."
+      "note": "All 6 phases complete (ord-001 through ord-006): base scaffolding, PostgreSQL pool, Redis service, /health probes, full DDL schema, discount engine, atomic checkout, full order lifecycle with state machine, outbox relay worker, service key guard, standard error envelope, and security hardening. 45 unit tests + 60 e2e tests passing across 6 files (105 total passing tests), 0 oxlint warnings/errors, clean build exit 0."
     },
     "cms-svc": {
       "motive": "Content truth (Mongoose): sections/settings/nav/megamenu/blogs/theme; global vs per-section overrides; save=publish v1.",
