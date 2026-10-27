@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-27T17:55:00Z",
+  "updatedAt": "2026-10-27T18:10:00Z",
   "summary": {
     "total": 55,
-    "done": 54,
-    "in_progress": 1,
+    "done": 55,
+    "in_progress": 0,
     "backlog": 3
   },
   "unpushed": {
@@ -206,6 +206,26 @@
       "7d3eda4"
     ],
     "catalog-svc": [
+      "867b01f",
+      "292d888",
+      "9030b07",
+      "d2ec022",
+      "1a0f071",
+      "39300e9",
+      "f06f519",
+      "828c00e",
+      "3e868b4",
+      "ea94493",
+      "b8537b6",
+      "4066f01",
+      "a169dfc",
+      "1146b72",
+      "14a0544",
+      "6eb56dc",
+      "ea77a63",
+      "db7ab4c",
+      "94789ae",
+      "e86a2a1",
       "e322bd9",
       "bb49e2e",
       "b5605f7",
@@ -1320,17 +1340,18 @@
         {
           "id": "cat-003",
           "title": "Products & Multi-Variant PDP single-join queries",
-          "status": "in-progress",
+          "status": "done",
           "owner": "agent",
           "started": "2026-10-27T17:55:00Z",
-          "finished": null,
-          "log": "TASKS/in-progress/cat-003-products-and-variants.md",
+          "finished": "2026-10-27T18:10:00Z",
+          "log": "TASKS/done/cat-003-products-and-variants.md",
           "key_decisions": [
             "Single-join PDP query with json_agg to eliminate N+1 queries",
             "Options and variant option values junction joins",
-            "Effective price resolution with active discounts"
+            "Effective price resolution with active discounts",
+            "Dual route prefix support ['catalog/products', 'products']"
           ],
-          "verified": false,
+          "verified": true,
           "follow_ups": []
         },
         {
