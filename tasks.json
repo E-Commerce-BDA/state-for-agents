@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-27T01:07:00Z",
+  "updatedAt": "2026-10-27T16:34:00Z",
   "summary": {
     "total": 55,
-    "done": 52,
-    "in_progress": 1,
+    "done": 53,
+    "in_progress": 0,
     "backlog": 3
   },
   "unpushed": {
@@ -204,6 +204,38 @@
       "99e24db",
       "873008b",
       "7d3eda4"
+    ],
+    "catalog-svc": [
+      "9368297",
+      "56b5896",
+      "ee9b747",
+      "38cf6dd",
+      "eae5c4d",
+      "334a201",
+      "8687146",
+      "719dda2",
+      "3898ef2",
+      "73353f6",
+      "af306dd",
+      "ba63fcd",
+      "935535f",
+      "b85de86",
+      "e607a3a",
+      "4394502",
+      "50347d1",
+      "ba3b1c2",
+      "78f949c",
+      "82b308e",
+      "3fe2f03",
+      "02dd169",
+      "c59e4a4",
+      "34d4a60",
+      "4903bba",
+      "d46a8f3",
+      "468a3e7",
+      "fafca9c",
+      "5c76731",
+      "1574e3c"
     ]
   },
   "workflow": "Claim: create/move log to TASKS/in-progress/, set entry status in-progress + owner + started. Build against chained skills (router order). Close: move log to TASKS/done/ (or backlog/), fill verification + follow_ups, flip entry status + finished, update STATUS.md + summary, same commit. Commits: one commit per file (larger edits split per edit); stage with diff eyes-on; subject + reason body; local-only until the human says push. Unpushed array lists every local commit except its own carrier commit (which joins on the next update); cleared per-branch on push. Validation: id == filename, status == folder, log file must exist, STATUS counts == summary.",
@@ -1225,20 +1257,21 @@
         {
           "id": "cat-001",
           "title": "Phase 1: catalog-svc scaffold, DB pool, health probes, schema migration",
-          "status": "in-progress",
+          "status": "done",
           "owner": "agent",
           "started": "2026-10-27T11:45:00Z",
-          "finished": null,
-          "log": "TASKS/in-progress/cat-001-phase-1-base-foundation.md",
+          "finished": "2026-10-27T16:34:00Z",
+          "log": "TASKS/done/cat-001-phase-1-base-foundation.md",
           "key_decisions": [
             "Use bounded pool connection timeout (5s) and query timeout (10s)",
             "Do not crash process on pool error; log and let pool reconnect",
             "Readiness probe /health/ready queries DB; returns 503 on drop",
             "Liveness /health stays fast without DB probe",
             "Scaffold domain modules via Nest CLI per SKILL-NEST-CLI.md",
-            "Append .js to relative imports for NodeNext compliance"
+            "Append .js to relative imports for NodeNext compliance",
+            "Partial indexes on categories and products for hot storefront paths"
           ],
-          "verified": false,
+          "verified": true,
           "follow_ups": []
         },
         {
