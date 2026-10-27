@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-27T20:22:00Z",
+  "updatedAt": "2026-10-27T21:00:00Z",
   "summary": {
-    "total": 62,
+    "total": 63,
     "done": 62,
-    "in_progress": 0,
+    "in_progress": 1,
     "backlog": 0
   },
   "unpushed": {
@@ -1834,6 +1834,18 @@
           "follow_ups": [
             "ord-006: Hardening, security, service key, and specification documentation"
           ]
+        },
+        {
+          "id": "ord-006",
+          "title": "Hardening, security, service key, and specification documentation",
+          "status": "in-progress",
+          "owner": "agent",
+          "started": "2026-10-27T21:00:00Z",
+          "finished": null,
+          "log": "TASKS/in-progress/ord-006-hardening-security-and-spec.md",
+          "key_decisions": [],
+          "verified": false,
+          "follow_ups": []
         }
       ],
       "note": "Phase 1, 2, 3, 4 & 5 complete: base scaffolding, PostgreSQL pool, Redis service, /health probes, full DDL schema, discount engine, atomic checkout, and full order lifecycle with state machine & outbox relay worker. 45 unit tests + 48 e2e tests passing across 5 files, 0 oxlint warnings/errors, clean build exit 0."
