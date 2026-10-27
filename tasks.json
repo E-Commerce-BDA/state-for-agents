@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-27T18:35:00Z",
+  "updatedAt": "2026-10-27T18:40:00Z",
   "summary": {
     "total": 56,
     "done": 56,
-    "in_progress": 0,
-    "backlog": 2
+    "in_progress": 1,
+    "backlog": 1
   },
   "unpushed": {
     "storefront-ui": [
@@ -1395,11 +1395,11 @@
         {
           "id": "cat-005",
           "title": "Hardening, security, and verification",
-          "status": "todo",
-          "owner": null,
-          "started": null,
+          "status": "in-progress",
+          "owner": "agent",
+          "started": "2026-10-27T18:40:00Z",
           "finished": null,
-          "log": "TASKS/todo/cat-005-catalog-hardening.md",
+          "log": "TASKS/in-progress/cat-005-catalog-hardening.md",
           "key_decisions": [
             "Shared error envelope and request correlation IDs",
             "Public caching policy with Cache-Control headers",
