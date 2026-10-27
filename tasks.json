@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-27T20:08:00Z",
+  "updatedAt": "2026-10-27T20:22:00Z",
   "summary": {
     "total": 62,
-    "done": 61,
-    "in_progress": 1,
+    "done": 62,
+    "in_progress": 0,
     "backlog": 0
   },
   "unpushed": {
@@ -380,7 +380,24 @@
       "6ee53d2",
       "c964eac",
       "ed234a9",
-      "86f2b8e"
+      "86f2b8e",
+      "11c28b0",
+      "4fee7d7",
+      "a77ec83",
+      "c653768",
+      "3780439",
+      "8f5ca1b",
+      "32d70e6",
+      "37d8daa",
+      "9d6bd19",
+      "6984f3b",
+      "c4720f3",
+      "b699ad7",
+      "a8741fa",
+      "955099c",
+      "82e7eb0",
+      "1288a1a",
+      "5569ad7"
     ]
   },
   "workflow": "Claim: create/move log to TASKS/in-progress/, set entry status in-progress + owner + started. Build against chained skills (router order). Close: move log to TASKS/done/ (or backlog/), fill verification + follow_ups, flip entry status + finished, update STATUS.md + summary, same commit. Commits: one commit per file (larger edits split per edit); stage with diff eyes-on; subject + reason body; local-only until the human says push. Unpushed array lists every local commit except its own carrier commit (which joins on the next update); cleared per-branch on push. Validation: id == filename, status == folder, log file must exist, STATUS counts == summary.",
@@ -1798,17 +1815,28 @@
         {
           "id": "ord-005",
           "title": "Order lifecycle, history, and status state machine with outbox relay worker",
-          "status": "in-progress",
+          "status": "done",
           "owner": "agent",
           "started": "2026-10-27T20:08:00Z",
-          "finished": null,
-          "log": "TASKS/in-progress/ord-005-order-lifecycle-and-state-machine.md",
-          "key_decisions": [],
-          "verified": false,
-          "follow_ups": []
+          "finished": "2026-10-27T20:22:00Z",
+          "log": "TASKS/done/ord-005-order-lifecycle-and-state-machine.md",
+          "key_decisions": [
+            "Strict DTOs for status update, refund, customer cursor, and admin query",
+            "Finite state machine enforcing directional valid transitions (pending -> confirmed -> processing -> shipped -> delivered -> refunded)",
+            "OrdersRepository with customer cursor pagination and relation aggregation",
+            "OrdersService with RBAC ownership checks, state machine assertions, and refund amount limits",
+            "OutboxRepository leveraging partial index idx_outbox_pending",
+            "OutboxService relay worker with polling, concurrency lock, and lifecycle hooks",
+            "CustomerOrdersController and OrdersController covering all customer and admin routes",
+            "17 unit tests + 18 e2e tests passing, clean oxlint and nest build"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "ord-006: Hardening, security, service key, and specification documentation"
+          ]
         }
       ],
-      "note": "Phase 1, 2, 3 & 4 complete: base scaffolding, PostgreSQL pool, Redis service, /health probes, full DDL schema, discount engine, and atomic checkout with transactional outbox & idempotency. 28 unit tests + 30 e2e tests passing across 4 files, 0 oxlint warnings/errors, clean build exit 0."
+      "note": "Phase 1, 2, 3, 4 & 5 complete: base scaffolding, PostgreSQL pool, Redis service, /health probes, full DDL schema, discount engine, atomic checkout, and full order lifecycle with state machine & outbox relay worker. 45 unit tests + 48 e2e tests passing across 5 files, 0 oxlint warnings/errors, clean build exit 0."
     },
     "cms-svc": {
       "motive": "Content truth (Mongoose): sections/settings/nav/megamenu/blogs/theme; global vs per-section overrides; save=publish v1.",
