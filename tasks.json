@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-27T16:34:00Z",
+  "updatedAt": "2026-10-27T17:20:00Z",
   "summary": {
     "total": 55,
     "done": 53,
-    "in_progress": 0,
+    "in_progress": 1,
     "backlog": 3
   },
   "unpushed": {
@@ -1277,11 +1277,11 @@
         {
           "id": "cat-002",
           "title": "Categories and brands subsystem with navbar query optimization",
-          "status": "todo",
-          "owner": null,
-          "started": null,
+          "status": "in-progress",
+          "owner": "agent",
+          "started": "2026-10-27T17:20:00Z",
           "finished": null,
-          "log": "TASKS/todo/cat-002-categories-and-brands.md",
+          "log": "TASKS/in-progress/cat-002-categories-and-brands.md",
           "key_decisions": [
             "Partial index idx_categories_navbar for zero-overhead navbar reads",
             "Self-referencing tree representation with parent_id",
