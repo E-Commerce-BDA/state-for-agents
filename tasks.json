@@ -1,9 +1,9 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-27T19:44:00Z",
+  "updatedAt": "2026-10-27T19:52:00Z",
   "summary": {
-    "total": 59,
-    "done": 59,
+    "total": 60,
+    "done": 60,
     "in_progress": 0,
     "backlog": 1
   },
@@ -349,7 +349,23 @@
       "83fb29c",
       "f8fbe7d",
       "486d918",
-      "fb158de"
+      "fb158de",
+      "e1b0b98",
+      "706627a",
+      "4466de5",
+      "5fdc00c",
+      "13ae23a",
+      "74b4c26",
+      "dc4b2b4",
+      "bcf39d6",
+      "320702d",
+      "aaecbdf",
+      "46f4009",
+      "f4c26c6",
+      "8be2525",
+      "1c8af86",
+      "659ea66",
+      "3c577ea"
     ]
   },
   "workflow": "Claim: create/move log to TASKS/in-progress/, set entry status in-progress + owner + started. Build against chained skills (router order). Close: move log to TASKS/done/ (or backlog/), fill verification + follow_ups, flip entry status + finished, update STATUS.md + summary, same commit. Commits: one commit per file (larger edits split per edit); stage with diff eyes-on; subject + reason body; local-only until the human says push. Unpushed array lists every local commit except its own carrier commit (which joins on the next update); cleared per-branch on push. Validation: id == filename, status == folder, log file must exist, STATUS counts == summary.",
@@ -1718,12 +1734,32 @@
             "Strict TypeScript row types mirroring all table columns in src/db/rows.ts"
           ],
           "verified": true,
+          "follow_ups": []
+        },
+        {
+          "id": "ord-003",
+          "title": "Discount codes and pricing engine subsystem",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-27T19:46:00Z",
+          "finished": "2026-10-27T19:52:00Z",
+          "log": "TASKS/done/ord-003-discount-codes-subsystem.md",
+          "key_decisions": [
+            "Strict non-optional types in ValidateDiscountCodeDto and CreateDiscountCodeDto",
+            "DiscountsRepository raw SQL queries with parameterization and case-insensitive coupon normalization",
+            "Validation logic enforces active status, start/end date windows, usage limits, and min order thresholds",
+            "Accurate pricing calculations: percentage bounded to 100%, fixed discount clamped to cart total",
+            "Dual-mount route ['order/discount-codes', 'discount-codes'] for proxy and direct access",
+            "Admin endpoints protected by JwtAuthGuard and RolesGuard with @Roles('admin')",
+            "17 unit tests + 14 e2e tests passing, clean oxlint and nest build"
+          ],
+          "verified": true,
           "follow_ups": [
-            "ord-003: Discount codes and pricing engine subsystem"
+            "ord-004: Checkout and idempotent order placement with saga-lite compensation"
           ]
         }
       ],
-      "note": "Phase 1 & 2 complete: base scaffolding, PostgreSQL pool, Redis service, /health probes, full DDL schema with 7 tables, triggers, fixtures, and rows.ts. 4 unit tests + 10 e2e tests passing across 2 files, 0 oxlint warnings/errors, clean build exit 0."
+      "note": "Phase 1, 2 & 3 complete: base scaffolding, PostgreSQL pool, Redis service, /health probes, full DDL schema, discount engine with validation & admin CRUD. 21 unit tests + 24 e2e tests passing across 3 files, 0 oxlint warnings/errors, clean build exit 0."
     },
     "cms-svc": {
       "motive": "Content truth (Mongoose): sections/settings/nav/megamenu/blogs/theme; global vs per-section overrides; save=publish v1.",
