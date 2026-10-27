@@ -1,0 +1,37 @@
+# Task: ord-005 — Order Lifecycle, History & Status State Machine for order-svc
+
+## Summary
+- Implemented strict TypeScript DTOs:
+  - `UpdateOrderStatusDto`: non-optional `status` validated against `ORDER_STATUS_VALUES` enum, optional `note` (max 500 chars).
+  - `RefundOrderDto`: optional `amount` (min 0.01, max 2 decimals) and `reason` (max 500 chars).
+  - `AdminOrderQueryDto`: page, perPage, status, orderNumber, userId, from, to date filters.
+  - `CustomerOrderQueryDto`: cursor pagination with limit (max 50).
+- Implemented Finite State Machine (`src/orders/order-state-machine.ts`):
+  - Directed status transition graph:
+    - `pending` -> `confirmed`, `failed`, `cancelled`
+    - `confirmed` -> `processing`, `cancelled`
+    - `processing` -> `shipped`, `cancelled`
+    - `shipped` -> `delivered`
+    - `delivered` -> `refunded`
+  - Strict validation via `assertValidTransition(current, next)`, throwing `400 BadRequestException` on invalid transitions.
+- Implemented `OrdersRepository`:
+  - `findCustomerOrders`: cursor-based customer query with inline JSON subqueries for items, history, and payments.
+  - `findOrderById`: complete order relation aggregate.
+  - `findAdminOrders`: multi-parameter filtering, search, and offset pagination.
+  - `updateStatusWithHistory`: atomic PostgreSQL transaction updating status, recording history entry, and enqueueing outbox event `order.status.updated`.
+  - `refundOrderWithHistory`: atomic PostgreSQL transaction updating order & payment status to `refunded`, appending history, and enqueueing outbox event `order.refunded`.
+- Implemented `OrdersService`:
+  - RBAC checks ensuring customer can only view their own orders while admins can view all.
+  - Transition guard asserting valid state progression.
+  - Financial checks ensuring refund amount does not exceed `grand_total`.
+- Implemented Outbox Subsystem:
+  - `OutboxRepository`: queries pending events using partial index `idx_outbox_pending`, marks `published`, or increments attempts.
+  - `OutboxService`: background relay worker with polling, concurrency lock, and lifecycle hooks (`OnModuleInit`, `OnModuleDestroy`).
+- Implemented Controllers:
+  - `CustomerOrdersController`: `@Controller(['me/orders', 'order/me/orders', 'orders/me'])` with `GET /me/orders`.
+  - `OrdersController`: `@Controller(['order/orders', 'orders'])` with `GET /orders`, `GET /orders/:id`, `GET /orders/:id/status-history`, `PATCH /orders/:id/status`, and `POST /orders/:id/refund`.
+- Verification:
+  - 45 unit tests passed across 5 test suites.
+  - 48 e2e tests passed across 5 test suites.
+  - 0 oxlint warnings/errors on 58 files, clean nest build exit 0.
+  - 17 atomic commits recorded.
