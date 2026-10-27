@@ -1,9 +1,9 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-27T19:52:00Z",
+  "updatedAt": "2026-10-27T20:01:00Z",
   "summary": {
-    "total": 60,
-    "done": 60,
+    "total": 61,
+    "done": 61,
     "in_progress": 0,
     "backlog": 1
   },
@@ -365,7 +365,22 @@
       "8be2525",
       "1c8af86",
       "659ea66",
-      "3c577ea"
+      "3c577ea",
+      "4e0fb65",
+      "09bab3b",
+      "72fa538",
+      "5f0d291",
+      "9b0bdc1",
+      "b04aa6b",
+      "df865e1",
+      "9f06624",
+      "2451e67",
+      "4fd3608",
+      "70ccaa5",
+      "6ee53d2",
+      "c964eac",
+      "ed234a9",
+      "86f2b8e"
     ]
   },
   "workflow": "Claim: create/move log to TASKS/in-progress/, set entry status in-progress + owner + started. Build against chained skills (router order). Close: move log to TASKS/done/ (or backlog/), fill verification + follow_ups, flip entry status + finished, update STATUS.md + summary, same commit. Commits: one commit per file (larger edits split per edit); stage with diff eyes-on; subject + reason body; local-only until the human says push. Unpushed array lists every local commit except its own carrier commit (which joins on the next update); cleared per-branch on push. Validation: id == filename, status == folder, log file must exist, STATUS counts == summary.",
@@ -1754,12 +1769,34 @@
             "17 unit tests + 14 e2e tests passing, clean oxlint and nest build"
           ],
           "verified": true,
+          "follow_ups": []
+        },
+        {
+          "id": "ord-004",
+          "title": "Checkout and idempotent order placement with saga-lite compensation",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-27T19:54:00Z",
+          "finished": "2026-10-27T20:01:00Z",
+          "log": "TASKS/done/ord-004-checkout-subsystem.md",
+          "key_decisions": [
+            "Strict TypeScript DTOs for checkout items, addresses, payment, and main request",
+            "Idempotency cache via idem:{key} with 24h TTL, SHA-256 payload hashing, conflict rejection (409)",
+            "In-flight concurrency lock idem:{key}:lock with 60s TTL prevents duplicate processing race conditions",
+            "Pre-commit stock reservation via CatalogClient; releases stock on compensation",
+            "Atomic single DB transaction inserting order, snapshot items, status history, payment, and outbox row",
+            "Atomic discount_codes usage increment inside same transaction",
+            "Transactional outbox pattern guarantees event order.created emits with order",
+            "Best-effort post-checkout cart cleanup via CartClient",
+            "7 unit tests + 6 e2e tests passing, clean oxlint and nest build"
+          ],
+          "verified": true,
           "follow_ups": [
-            "ord-004: Checkout and idempotent order placement with saga-lite compensation"
+            "ord-005: Order lifecycle, history, and status state machine with outbox relay worker"
           ]
         }
       ],
-      "note": "Phase 1, 2 & 3 complete: base scaffolding, PostgreSQL pool, Redis service, /health probes, full DDL schema, discount engine with validation & admin CRUD. 21 unit tests + 24 e2e tests passing across 3 files, 0 oxlint warnings/errors, clean build exit 0."
+      "note": "Phase 1, 2, 3 & 4 complete: base scaffolding, PostgreSQL pool, Redis service, /health probes, full DDL schema, discount engine, and atomic checkout with transactional outbox & idempotency. 28 unit tests + 30 e2e tests passing across 4 files, 0 oxlint warnings/errors, clean build exit 0."
     },
     "cms-svc": {
       "motive": "Content truth (Mongoose): sections/settings/nav/megamenu/blogs/theme; global vs per-section overrides; save=publish v1.",
