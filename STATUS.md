@@ -27,14 +27,20 @@
   - `ca-005` Customer Wishlist: dual route `['wishlist', 'cart/wishlist']`, `@Roles('customer')`, lazy creation on `POST /wishlist/items`, duplicate idempotency, foreign delete 404, no cart events.
   - `ca-006` Hardening & Security: `GET /api/v1/cart/settings/audit` admin endpoint, `touchCart` enforcing `status = 'active'`, prototype pollution defenses, security e2e suite.
   - Final Verification: 13 unit test files (84/84 passed), 8 e2e test files (79/79 passed), 0 lint errors/warnings across 63 files, `nest build` clean exit 0.
+- `catalog-svc` Phase 1 & 2 (`cat-001`) COMPLETE (2026-10-27):
+  - Base foundation scaffolded per `SKILL-NEST-CLI.md` with bounded PostgreSQL pool (`src/db/pool.ts`).
+  - Liveness (`/health`) and readiness (`/health/ready`) probes with DB liveness query and 503 on drop.
+  - Complete `catalog` DDL schema in `001-catalog-schema.sql` (13 tables, GIN search vectors, navbar partial index, triggers).
+  - Seed fixture catalog in `002-seed-catalog.sql` aligned with `cart-svc` fixtures.
+  - Verification: 12 unit tests passed (3 test files), 16 e2e tests passed (2 test files), `oxlint` 0 warnings/0 errors on 29 files, `nest build` clean.
 
 ## Next (ordered)
 
-1. Thin client (`lib/auth/client.ts` + per-action handlers + `proxy.ts`) in storefront-ui.
-2. CMS source wiring replacing `TODO(cms-svc)` null-sources; `7.Deployment.md` + `8.Versioning.md` stubs.
-3. `ecom-contracts` v0.1, remaining 8 service specs (copy `services/auth.md` shape), missing component docs per `components/README.md`.
+1. `catalog-svc` Phase 3 (`cat-002`): Categories & Brands Subsystem with navbar query optimization.
+2. Thin client (`lib/auth/client.ts` + per-action handlers + `proxy.ts`) in storefront-ui.
+3. CMS source wiring replacing `TODO(cms-svc)` null-sources; `7.Deployment.md` + `8.Versioning.md` stubs.
 
-## Task tracking (55/52/1/3)
+## Task tracking (55/53/0/3)
 
 - `unpushed` array: every local commit not on `main` listed per repo
   until you push; cleared per-branch on push. Read push-state in `tasks.json`,
