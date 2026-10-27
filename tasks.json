@@ -1227,10 +1227,12 @@
       "ownerDocs": [
         "Documentation/services/cart.md",
         "Documentation/4.API-Design.md §4.12",
+        "Documentation/4.API-Design.md §4.13",
         "Documentation/6.Admin-Panel.md §3.21",
         "Documentation/9.Testing.md §3.3",
         "Documentation/3.Database-Schema.md §3.3",
-        "Documentation/4.API-Design.md §3.3"
+        "Documentation/4.API-Design.md §3.3",
+        "Documentation/services/auth.md §1/§3"
       ],
       "stages": {
         "spec": "done",
@@ -1240,7 +1242,7 @@
       },
       "inProgress": null,
       "next": [
-        "ca-005 wishlist endpoints",
+        "ca-005 wishlist endpoints (customer role)",
         "ca-006 security, rate limits, audit read, and observability"
       ],
       "blockedBy": [],
@@ -1356,19 +1358,27 @@
         },
         {
           "id": "ca-005",
-          "title": "Wishlist endpoints (user-only)",
+          "title": "Wishlist endpoints (customer role)",
           "status": "todo",
           "owner": null,
           "started": null,
           "finished": null,
           "log": "TASKS/todo/ca-005-wishlist.md",
           "key_decisions": [
-            "User-only in v1; no guest wishlist",
-            "Unique (wishlist_id, product_id)",
-            "No cart.updated event for wishlist changes"
+            "Verified JWT + customer role; no guest wishlist; guests use sign-in prompt + pending product id",
+            "Product-level, not variant-based; unique (wishlist_id, product_id)",
+            "Duplicate POST returns the existing item; foreign/missing DELETE returns 404 WISHLIST_ITEM_NOT_FOUND",
+            "GET /wishlist is read-only; it does not create a wishlist row",
+            "No cart.updated, no snapshots, no x-idempotency-key",
+            "Add/remove touches wishlists.updated_at explicitly in the same transaction",
+            "Service re-verifies JWT + role; ownership scoped by user_id = JWT.sub"
           ],
           "verified": false,
-          "follow_ups": []
+          "follow_ups": [
+            "Storefront guest wishlist pending flow: ?next=/short-lived cookie, post-login POST, no localStorage",
+            "Wishlist catalog validation when the catalog adapter lands",
+            "Align POST /cart/merge to the customer role in a separate auth task"
+          ]
         },
         {
           "id": "ca-006",
