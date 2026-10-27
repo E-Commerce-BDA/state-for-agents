@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-27T20:01:00Z",
+  "updatedAt": "2026-10-27T20:08:00Z",
   "summary": {
-    "total": 61,
+    "total": 62,
     "done": 61,
-    "in_progress": 0,
-    "backlog": 1
+    "in_progress": 1,
+    "backlog": 0
   },
   "unpushed": {
     "storefront-ui": [
@@ -1794,6 +1794,18 @@
           "follow_ups": [
             "ord-005: Order lifecycle, history, and status state machine with outbox relay worker"
           ]
+        },
+        {
+          "id": "ord-005",
+          "title": "Order lifecycle, history, and status state machine with outbox relay worker",
+          "status": "in-progress",
+          "owner": "agent",
+          "started": "2026-10-27T20:08:00Z",
+          "finished": null,
+          "log": "TASKS/in-progress/ord-005-order-lifecycle-and-state-machine.md",
+          "key_decisions": [],
+          "verified": false,
+          "follow_ups": []
         }
       ],
       "note": "Phase 1, 2, 3 & 4 complete: base scaffolding, PostgreSQL pool, Redis service, /health probes, full DDL schema, discount engine, and atomic checkout with transactional outbox & idempotency. 28 unit tests + 30 e2e tests passing across 4 files, 0 oxlint warnings/errors, clean build exit 0."
