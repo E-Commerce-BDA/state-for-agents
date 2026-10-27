@@ -53,6 +53,12 @@
   - Prototype pollution & SQL injection defenses verified; standard error envelope and request ID correlation headers enforced.
   - Final Verification: 16 unit test files (82/82 passed), 8 e2e test files (67/67 passed), `oxlint` 0 warnings/0 errors across 87 files, `nest build` clean exit 0.
   - **`catalog-svc` IS NOW FULLY IMPLEMENTED AND VERIFIED.**
+- `order-svc` Phase 1 (`ord-001`) COMPLETE (2026-10-27):
+  - Base foundation scaffolded per `SKILL-NEST-CLI.md` with bounded PostgreSQL pool (`src/db/pool.ts`) and Redis client with `enableOfflineQueue: false` fail-closed policy (`src/redis/redis.service.ts`).
+  - Liveness probe (`/health`) and readiness probe (`/health/ready`) verifying both PostgreSQL query (`SELECT 1`) and Redis ping (`PING`), with 503 response if either is down.
+  - Nest CLI schematics generated for `health`, `db`, `redis`, `auth`, `discounts`, `checkout`, `orders`, `payments`, and `outbox`.
+  - Global `ValidationPipe` and `/api/v1` prefix configured with health routes excluded.
+  - Verification: 4 unit tests passed (1 file), 2 e2e tests passed (1 file), `oxlint` 0 warnings/0 errors on 25 files, `nest build` clean exit 0. 33 atomic commits recorded.
 
 ## Next (ordered)
 
