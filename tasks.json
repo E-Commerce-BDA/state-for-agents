@@ -1,9 +1,9 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-27T18:54:00Z",
+  "updatedAt": "2026-10-27T19:38:00Z",
   "summary": {
-    "total": 57,
-    "done": 57,
+    "total": 58,
+    "done": 58,
     "in_progress": 0,
     "backlog": 1
   },
@@ -311,6 +311,41 @@
       "fafca9c",
       "5c76731",
       "1574e3c"
+    ],
+    "order-svc": [
+      "a063c68",
+      "b52ea28",
+      "b942022",
+      "b15f819",
+      "1f908e4",
+      "7460658",
+      "bef519e",
+      "7fc837c",
+      "a4fd0b4",
+      "9518716",
+      "a25baba",
+      "040871e",
+      "b2a3d2b",
+      "d4843ed",
+      "65353ca",
+      "c79db1b",
+      "9ac6dce",
+      "51acedb",
+      "2e787da",
+      "6214129",
+      "54c494a",
+      "a15007b",
+      "cb06fb3",
+      "3a2cdb6",
+      "d077753",
+      "006d278",
+      "cf58246",
+      "5ed90af",
+      "36f726c",
+      "32f37c8",
+      "d53a68f",
+      "a5b7b87",
+      "e8c2e6d"
     ]
   },
   "workflow": "Claim: create/move log to TASKS/in-progress/, set entry status in-progress + owner + started. Build against chained skills (router order). Close: move log to TASKS/done/ (or backlog/), fill verification + follow_ups, flip entry status + finished, update STATUS.md + summary, same commit. Commits: one commit per file (larger edits split per edit); stage with diff eyes-on; subject + reason body; local-only until the human says push. Unpushed array lists every local commit except its own carrier commit (which joins on the next update); cleared per-branch on push. Validation: id == filename, status == folder, log file must exist, STATUS counts == summary.",
@@ -1601,33 +1636,35 @@
     },
     "order-svc": {
       "motive": "Checkout + POS-style order creation (mock pay v1), lifecycle/status, stock reservation; outbox+idempotency+saga-lite compensation.",
-      "localRoot": "(to create, order-svc/)",
+      "localRoot": "order-svc",
       "repo": "order-svc",
       "port": 4040,
       "ownerDocs": [
-        "Documentation/services/order.md (to create, copy auth.md shape)"
+        "Documentation/services/order.md (to create, copy auth.md shape)",
+        "Documentation/3.Database-Schema.md §3.4",
+        "Documentation/4.API-Design.md §3.4, §4.6, §7",
+        "Documentation/1.Architecture.md §10.1-§10.3"
       ],
       "stages": {
-        "spec": "todo",
-        "build": "todo",
-        "test": "todo",
+        "spec": "done",
+        "build": "in-progress",
+        "test": "in-progress",
         "verify": "todo"
       },
       "inProgress": null,
       "next": [
-        "Spec doc with outbox + idempotency keys first",
-        "BEGIN order+outbox same TX → COMMIT → bus.publish(order.created)",
-        "Saga-lite compensation on stock fail"
+        "ord-002: DDL schema migration 001-order-schema.sql, seed fixtures, and rows.ts",
+        "ord-003: Discount codes and pricing engine subsystem",
+        "ord-004: Checkout and idempotent order placement with saga-lite compensation",
+        "ord-005: Order lifecycle, history, and status state machine with outbox relay worker",
+        "ord-006: Hardening, security, service key, and specification doc"
       ],
-      "blockedBy": [
-        "ecom-contracts",
-        "catalog-svc",
-        "cart-svc"
-      ],
+      "blockedBy": [],
       "skills": [
         "SKILL-EXPLORE",
         "SKILL-POSTGRES",
         "SKILL-NESTJS",
+        "SKILL-NEST-CLI",
         "SKILL-INTERFACES",
         "SKILL-FUNCTIONS",
         "SKILL-REDIS"
@@ -1640,7 +1677,30 @@
         "consumes": []
       },
       "claimedBy": null,
-      "note": "Outbox + idempotency first."
+      "tasks": [
+        {
+          "id": "ord-001",
+          "title": "Base foundation, configs, CLI schematics, and health probes",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-27T19:26:00Z",
+          "finished": "2026-10-27T19:37:00Z",
+          "log": "TASKS/done/ord-001-base-foundation-and-scaffolding.md",
+          "key_decisions": [
+            "Nest CLI schematics used for modules, services, and controllers per SKILL-NEST-CLI",
+            "Bounded PostgreSQL pool for order schema with connection and query timeouts",
+            "RedisService with offline fail-closed behavior (enableOfflineQueue: false)",
+            "Readiness probe verifies both PostgreSQL query and Redis ping",
+            "Global ValidationPipe and /api/v1 prefix with health routes excluded",
+            "pnpm-lock and Vitest unit/e2e test suites verified clean"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "ord-002: DDL schema migration 001-order-schema.sql and seed fixtures"
+          ]
+        }
+      ],
+      "note": "Phase 1 complete: base scaffolding, configs, PostgreSQL pool, Redis service, /health liveness and /health/ready readiness probes. 4 unit tests + 2 e2e tests passing, 0 oxlint warnings/errors, clean build exit 0."
     },
     "cms-svc": {
       "motive": "Content truth (Mongoose): sections/settings/nav/megamenu/blogs/theme; global vs per-section overrides; save=publish v1.",
