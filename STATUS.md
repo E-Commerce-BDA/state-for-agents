@@ -78,6 +78,14 @@
   - `MockPaymentProvider` and `PaymentsService` for payment authorization and capture.
   - `CheckoutService` with Redis idempotency (`idem:{key}` 24h TTL, conflict detection, in-flight lock), saga-lite stock reservation compensation, and atomic single PostgreSQL transaction (`orders`, `order_items` snapshots, `order_status_history`, `payments`, `discount_codes` usage increment, and `outbox` row `order.created`).
   - Verification: 7 unit tests passed (28 total unit tests across 3 files), 6 e2e tests passed (30 total e2e tests across 4 files), `oxlint` clean on 49 files, `nest build` clean exit 0. 15 atomic commits recorded.
+- `order-svc` Phase 5 (`ord-005`) COMPLETE (2026-10-27):
+  - Strict DTOs for status updates, refunds, customer cursor pagination, and admin filtering.
+  - Finite state machine (`order-state-machine.ts`) enforcing directional valid transitions (`pending` -> `confirmed` -> `processing` -> `shipped` -> `delivered` -> `refunded`).
+  - `OrdersRepository` with customer cursor pagination, inline subquery relations, and atomic transactions.
+  - `OrdersService` with RBAC ownership checks, state machine assertions, and refund limit validation.
+  - `OutboxRepository` querying pending events with partial index `idx_outbox_pending` and `OutboxService` relay worker with polling, concurrency lock, and lifecycle hooks.
+  - `CustomerOrdersController` and `OrdersController` mounting all customer and admin order endpoints.
+  - Verification: 17 unit tests passed (45 total unit tests across 5 files), 18 e2e tests passed (48 total e2e tests across 5 files), `oxlint` clean on 58 files, `nest build` clean exit 0. 17 atomic commits recorded.
 
 ## Next (ordered)
 
