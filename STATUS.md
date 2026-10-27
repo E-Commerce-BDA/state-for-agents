@@ -59,6 +59,13 @@
   - Nest CLI schematics generated for `health`, `db`, `redis`, `auth`, `discounts`, `checkout`, `orders`, `payments`, and `outbox`.
   - Global `ValidationPipe` and `/api/v1` prefix configured with health routes excluded.
   - Verification: 4 unit tests passed (1 file), 2 e2e tests passed (1 file), `oxlint` 0 warnings/0 errors on 25 files, `nest build` clean exit 0. 33 atomic commits recorded.
+- `order-svc` Phase 2 (`ord-002`) COMPLETE (2026-10-27):
+  - Full PostgreSQL DDL schema in `db/001-order-schema.sql` (7 tables: `orders`, `order_items`, `order_status_history`, `payments`, `outbox`, `discount_codes`, `shipments`).
+  - Partial index `idx_outbox_pending` on `(status, created_at) WHERE status = 'pending'` for outbox relay poller.
+  - Partial index `idx_discount_codes_valid` on `(is_active, ends_at) WHERE is_active` for fast coupon validation.
+  - Test seed fixtures in `db/002-seed-orders.sql` with percent/fixed/expired/maxed coupons and sample order.
+  - Strict TypeScript row types in `src/db/rows.ts` preserving decimal string representations.
+  - Verification: 8/8 schema e2e tests passed (10/10 total e2e tests across 2 files), `oxlint` clean on 27 files, `nest build` clean exit 0. 4 atomic commits recorded.
 
 ## Next (ordered)
 
