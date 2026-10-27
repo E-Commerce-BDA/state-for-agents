@@ -1175,32 +1175,36 @@
     },
     "catalog-svc": {
       "motive": "Catalog truth: products/categories/brands/variants/inventory/compare data + basic search; stock decrement on order.created.",
-      "localRoot": "(to create, catalog-svc/)",
+      "localRoot": "catalog-svc",
       "repo": "catalog-svc",
       "port": 4020,
       "ownerDocs": [
-        "Documentation/services/catalog.md (to create, copy auth.md shape)"
+        "Documentation/services/catalog.md",
+        "Documentation/3.Database-Schema.md §3.2",
+        "Documentation/4.API-Design.md §3.2",
+        "Documentation/4.API-Design.md §4.12",
+        "Documentation/9.Testing.md §3.3"
       ],
       "stages": {
-        "spec": "todo",
-        "build": "todo",
-        "test": "todo",
+        "spec": "in-progress",
+        "build": "in-progress",
+        "test": "in-progress",
         "verify": "todo"
       },
-      "inProgress": null,
+      "inProgress": "cat-001",
       "next": [
-        "Spec doc copying services/auth.md shape",
-        "Raw pg schema + single-JOIN PDP/list queries (no N+1, EXPLAIN p99)",
-        "Cache-aside cat:product:/cat:list: (5m) + invalidate on product.imported"
+        "cat-001 Base foundation: scaffold, DB connection, health probes, schema migration",
+        "cat-002 Categories & Brands subsystem with navbar query optimization",
+        "cat-003 Products & Multi-Variant PDP single-join queries",
+        "cat-004 Stock ledger & internal service-to-service endpoints for cart-svc and order-svc",
+        "cat-005 Hardening, security, and verification"
       ],
-      "blockedBy": [
-        "ecom-contracts",
-        "auth-svc (shape reference)"
-      ],
+      "blockedBy": [],
       "skills": [
         "SKILL-EXPLORE",
         "SKILL-POSTGRES",
         "SKILL-NESTJS",
+        "SKILL-NEST-CLI",
         "SKILL-INTERFACES",
         "SKILL-FUNCTIONS",
         "SKILL-REDIS"
@@ -1216,8 +1220,93 @@
           "order.created"
         ]
       },
-      "claimedBy": null,
-      "note": "Copy auth.md shape."
+      "claimedBy": "agent",
+      "tasks": [
+        {
+          "id": "cat-001",
+          "title": "Phase 1: catalog-svc scaffold, DB pool, health probes, schema migration",
+          "status": "in-progress",
+          "owner": "agent",
+          "started": "2026-10-27T11:45:00Z",
+          "finished": null,
+          "log": "TASKS/in-progress/cat-001-phase-1-base-foundation.md",
+          "key_decisions": [
+            "Use bounded pool connection timeout (5s) and query timeout (10s)",
+            "Do not crash process on pool error; log and let pool reconnect",
+            "Readiness probe /health/ready queries DB; returns 503 on drop",
+            "Liveness /health stays fast without DB probe",
+            "Scaffold domain modules via Nest CLI per SKILL-NEST-CLI.md",
+            "Append .js to relative imports for NodeNext compliance"
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "cat-002",
+          "title": "Categories and brands subsystem with navbar query optimization",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "log": "TASKS/todo/cat-002-categories-and-brands.md",
+          "key_decisions": [
+            "Partial index idx_categories_navbar for zero-overhead navbar reads",
+            "Self-referencing tree representation with parent_id",
+            "Soft deletes (deleted_at) for catalog entities"
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "cat-003",
+          "title": "Products & Multi-Variant PDP single-join queries",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "log": "TASKS/todo/cat-003-products-and-variants.md",
+          "key_decisions": [
+            "Single-join PDP query with json_agg to eliminate N+1 queries",
+            "Options and variant option values junction joins",
+            "Effective price resolution with active discounts"
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "cat-004",
+          "title": "Stock ledger & internal service-to-service endpoints for cart-svc and order-svc",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "log": "TASKS/todo/cat-004-stock-and-internal-apis.md",
+          "key_decisions": [
+            "Atomic stock reservation using row locks (SELECT ... FOR UPDATE)",
+            "Available stock computed column (on_hand - reserved)",
+            "Internal batch lookup endpoint for cart-svc snapshot hydration"
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "cat-005",
+          "title": "Hardening, security, and verification",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "log": "TASKS/todo/cat-005-catalog-hardening.md",
+          "key_decisions": [
+            "Shared error envelope and request correlation IDs",
+            "Public caching policy with Cache-Control headers",
+            "Full unit + e2e green verification, oxlint 0 warnings, clean build"
+          ],
+          "verified": false,
+          "follow_ups": []
+        }
+      ],
+      "note": "Phase 1 underway: scaffolding base foundation, DB pool, health probes, schema migration."
     },
     "cart-svc": {
       "motive": "Guest+user cart + wishlist with TTL; session merge on login; emits cart.updated for analytics/notify.",

@@ -9,7 +9,7 @@
 | admin-app | 3001 | `Documentation/6.Admin-Panel.md` | 🚧 | ⬜ | ⬜ | ⬜ |
 | ecom-contracts | npm | `8.Versioning.md` (to create) | ⬜ | ⬜ | ⬜ | ⬜ |
 | auth-svc | 4010 | `Documentation/services/auth.md` | ✅ | ✅ | ✅ | ✅ |
-| catalog-svc | 4020 | (to create, copy auth shape) | ⬜ | ⬜ | ⬜ | ⬜ |
+| catalog-svc | 4020 | `Documentation/services/catalog.md` | 🚧 | 🚧 | 🚧 | ⬜ |
 | cart-svc | 4030 | `Documentation/services/cart.md` | ✅ | ✅ | ✅ | ✅ |
 | order-svc | 4040 | (to create) | ⬜ | ⬜ | ⬜ | ⬜ |
 | cms-svc | 4050 | (to create) | ⬜ | ⬜ | ⬜ | ⬜ |
