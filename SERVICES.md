@@ -12,7 +12,7 @@
 | catalog-svc | 4020 | `Documentation/services/catalog.md` | 🚧 | 🚧 | 🚧 | ⬜ |
 | cart-svc | 4030 | `Documentation/services/cart.md` | ✅ | ✅ | ✅ | ✅ |
 | order-svc | 4040 | (to create) | ⬜ | ⬜ | ⬜ | ⬜ |
-| cms-svc | 4050 | (to create) | ⬜ | ⬜ | ⬜ | ⬜ |
+| cms-svc | 4050 | `Documentation/services/cms.md` | in-progress | in-progress | in-progress | todo |
 | analytics-svc | 4060 | (to create) | ⬜ | ⬜ | ⬜ | ⬜ |
 | import-svc | 4070 | (to create) | ⬜ | ⬜ | ⬜ | ⬜ |
 | notify-svc | 4080 | (to create) | ⬜ | ⬜ | ⬜ | ⬜ |

@@ -94,14 +94,21 @@
   - Comprehensive service specification `Documentation/services/order.md` matching `auth.md` shape.
   - Verification: 45 unit tests passed across 5 test suites, 60 e2e tests passed across 6 test suites (105 total passing tests), `oxlint` clean on 65 files, `nest build` clean exit 0. 10 atomic commits recorded.
   - **`order-svc` is 100% COMPLETE across all 6 phases (`ord-001` through `ord-006`)**.
+- `cms-svc` Phase 1 (`cms-001`) COMPLETE (2026-10-27):
+  - Nest 12/Node 24 ESM foundation with Joi env validation, shared app setup, `/api/v1` prefix, and health-route exclusions.
+  - Fail-fast Mongoose connection, degraded Redis readiness, `/health` and `/health/ready`; Mongo-down returns `503`.
+  - JWT/Roles guard plumbing, request-id propagation, standard error envelope, and cache-control behavior.
+  - Dockerized Mongo 8 on `127.0.0.1:27018`; tests use `ecom_cms_test` and drop it after the run.
+  - Verification: 35 unit tests across 7 files, 5 e2e tests across 2 files, `oxlint` clean, `tsc` clean, `nest build` clean; production smoke `200` healthy / `503` Mongo-down / `404` envelope.
+  - Phase 2 domain work blocked on `ecom-contracts` and CMS payload decisions.
 
 ## Next (ordered)
 
-1. Next service implementation (`cms-svc :4050` or `search-svc :4060`).
+1. Resolve `ecom-contracts` and start `cms-svc` Phase 2 domain; `search-svc :4060` after that.
 2. Thin client (`lib/auth/client.ts` + per-action handlers + `proxy.ts`) in storefront-ui.
 3. CMS source wiring replacing `TODO(cms-svc)` null-sources; `7.Deployment.md` + `8.Versioning.md` stubs.
 
-## Task tracking (57/57/0/1)
+## Task tracking (64/64/0/0)
 
 - `unpushed` array: every local commit not on `main` listed per repo
   until you push; cleared per-branch on push. Read push-state in `tasks.json`,
@@ -112,11 +119,10 @@
   the next update.
 
 Per-task records live in `tasks.json` (`repos.*.tasks`) + `TASKS/` logs
-(id == filename, status == folder). Auth: `au-001` done; `au-002` done; `au-003` done. Cart: `ca-001` done; `ca-002` done; `ca-003` done;
-`ca-004` done; `ca-005`-`ca-006` todo. Backfill `sf-001`-`sf-010` done from session record; `sf-011` in
+(id == filename, status == folder). Auth: `au-001` done; `au-002` done; `au-003` done. Cart: `ca-001` through `ca-006` done. CMS: `cms-001` done. Backfill `sf-001`-`sf-010` done from session record; `sf-011` in
 progress (learner-owned). `index.html` work is never logged (temporary
 concept file).
 
 ## How to claim
 
-Pick a `todo` in `tasks.json` (next todo `ca-005`) → set `claimedBy` + `in-progress` → load skills via `SKILL-ROUTER.md` → finish by flipping stage + updating here.
+Pick a `todo` in `tasks.json` (next: resolve `ecom-contracts`, then start `cms-svc` Phase 2) → set `claimedBy` + `in-progress` → load skills via `SKILL-ROUTER.md` → finish by flipping stage + updating here.

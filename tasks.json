@@ -1,9 +1,9 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-27T21:10:00Z",
+  "updatedAt": "2026-10-27T17:33:33Z",
   "summary": {
-    "total": 63,
-    "done": 63,
+    "total": 64,
+    "done": 64,
     "in_progress": 0,
     "backlog": 0
   },
@@ -97,7 +97,8 @@
       "32a6ecf",
       "4377a13",
       "a077481",
-      "3e53c9d"
+      "3e53c9d",
+      "37f7028"
     ],
     "auth-svc": [
       "791d094",
@@ -408,6 +409,9 @@
       "d3932a1",
       "71bd163",
       "9dbc1d1"
+    ],
+    "cms-svc": [
+      "ad792c3"
     ]
   },
   "workflow": "Claim: create/move log to TASKS/in-progress/, set entry status in-progress + owner + started. Build against chained skills (router order). Close: move log to TASKS/done/ (or backlog/), fill verification + follow_ups, flip entry status + finished, update STATUS.md + summary, same commit. Commits: one commit per file (larger edits split per edit); stage with diff eyes-on; subject + reason body; local-only until the human says push. Unpushed array lists every local commit except its own carrier commit (which joins on the next update); cleared per-branch on push. Validation: id == filename, status == folder, log file must exist, STATUS counts == summary.",
@@ -1865,24 +1869,25 @@
     },
     "cms-svc": {
       "motive": "Content truth (Mongoose): sections/settings/nav/megamenu/blogs/theme; global vs per-section overrides; save=publish v1.",
-      "localRoot": "(to create, cms-svc/)",
+      "localRoot": "cms-svc/",
       "repo": "cms-svc",
       "port": 4050,
       "ownerDocs": [
-        "Documentation/services/cms.md (to create, copy auth.md shape)",
+        "Documentation/services/cms.md",
         "Documentation/3.Database-Schema.md §4"
       ],
       "stages": {
-        "spec": "todo",
-        "build": "todo",
-        "test": "todo",
+        "spec": "in-progress",
+        "build": "in-progress",
+        "test": "in-progress",
         "verify": "todo"
       },
-      "inProgress": null,
+      "inProgress": "Phase 1 foundation complete; Phase 2 domain blocked on ecom-contracts decisions.",
       "next": [
-        "Spec doc copying services/auth.md shape",
+        "Resolve @ecom/contracts package/version plus sections/settings/nav/theme/media/draft contracts",
         "Mongoose cms_* models + Zod validation (ctas.max(3)), version bump cache-buster",
-        "Redis cms:section:/cms:settings:global/cms:nav (5m/1m) + invalidate on cms.updated"
+        "Redis cms:section:/cms:settings:global/cms:nav (5m/1m) + invalidate on cms.updated",
+        "Public read endpoints with explicit draft filtering"
       ],
       "blockedBy": [
         "ecom-contracts"
@@ -1906,7 +1911,30 @@
         ]
       },
       "claimedBy": null,
-      "note": ""
+      "tasks": [
+        {
+          "id": "cms-001",
+          "title": "Phase 1 foundation: Nest bootstrap, Mongo/Redis health, shared HTTP/auth plumbing",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-27",
+          "finished": "2026-10-27",
+          "log": "TASKS/done/cms-001-phase-1-foundation.md",
+          "key_decisions": [
+            "Dockerized Mongo 8 on 127.0.0.1:27018 with ecom_cms and ecom_cms_test; Atlas reserved for Phase 7 staging smoke",
+            "Fail-fast Mongoose startup; Redis readiness degraded but Mongo critical",
+            "JWT verification pinned to HS256, issuer ecom-auth, audience ecom-api, 30s clock tolerance",
+            "Shared configureApp used by main and e2e tests; health routes excluded from /api/v1",
+            "Type-only Mongoose Connection import required for ESM decorator metadata"
+          ],
+          "verified": true,
+          "follow_ups": [
+            "Resolve ecom-contracts package/version and CMS payload shapes",
+            "Implement CMS domain models, endpoints, cache invalidation, and public draft filtering"
+          ]
+        }
+      ],
+      "note": "Phase 1 foundation complete (cms-svc ad792c3): Nest 12/Node 24 ESM bootstrap, Joi env validation, fail-fast Mongo, degraded Redis, /health + /health/ready, JWT/Roles guard plumbing, request-id/error envelope/cache-control, Dockerized Mongo 27018. 35 unit tests across 7 files, 5 e2e tests across 2 files, oxlint/typecheck/build clean. Production smoke: 200 healthy, 503 Mongo-down, 404 envelope. No CMS domain code yet."
     },
     "analytics-svc": {
       "motive": "Behavioral insight: page-view/exit funnel, cart idle→cart.abandoned detector, conversion + cohorts dashboards (fire-and-forget writes).",
