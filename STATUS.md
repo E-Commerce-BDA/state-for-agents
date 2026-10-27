@@ -47,17 +47,20 @@
   - Stock ledger & movements: admin stock adjustments and history audit trail recording `qty_after` snapshots in `catalog.stock_movements`.
   - Atomic stock reservations: `POST /internal/stock/reserve` with row-level locks (`SELECT ... FOR UPDATE`), sorted deterministically to prevent deadlocks, with strict rollback on insufficient stock (`409 INSUFFICIENT_STOCK`).
   - Reservation compensation: `POST /internal/stock/release` to restore stock balance on order cancellation.
-  - Cart hydration: `GET /internal/products?ids=` returning complete `CatalogProductSnapshot` array for `cart-svc`.
-  - Internal security: `ServiceKeyGuard` enforcing `x-service-key` on all `/internal/*` routes.
   - Verification: 16 unit test files (82/82 passed), 7 e2e test files (60/60 passed), `oxlint` 0 warnings/0 errors across 86 files, `nest build` clean exit 0.
+- `catalog-svc` Phase 6 (`cat-005`) COMPLETE (2026-10-27):
+  - Hardening & Security: Cache-Control policies configured across all endpoints (`public, max-age=60` on public catalog, `s-maxage=300, stale-while-revalidate=600` on navbar categories, `no-store` on internal/stock endpoints).
+  - Prototype pollution & SQL injection defenses verified; standard error envelope and request ID correlation headers enforced.
+  - Final Verification: 16 unit test files (82/82 passed), 8 e2e test files (67/67 passed), `oxlint` 0 warnings/0 errors across 87 files, `nest build` clean exit 0.
+  - **`catalog-svc` IS NOW FULLY IMPLEMENTED AND VERIFIED.**
 
 ## Next (ordered)
 
-1. `catalog-svc` Phase 6 (`cat-005`): Hardening, security, and verification.
-2. Thin client (`lib/auth/client.ts` + per-action handlers + `proxy.ts`) in storefront-ui.
-3. CMS source wiring replacing `TODO(cms-svc)` null-sources; `7.Deployment.md` + `8.Versioning.md` stubs.
+1. Thin client (`lib/auth/client.ts` + per-action handlers + `proxy.ts`) in storefront-ui.
+2. CMS source wiring replacing `TODO(cms-svc)` null-sources; `7.Deployment.md` + `8.Versioning.md` stubs.
+3. Next service implementation (`order-svc` or `search-svc`).
 
-## Task tracking (56/56/0/2)
+## Task tracking (57/57/0/1)
 
 - `unpushed` array: every local commit not on `main` listed per repo
   until you push; cleared per-branch on push. Read push-state in `tasks.json`,
