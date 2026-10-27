@@ -19,21 +19,20 @@
 - Shell slice (navbar system → `lib/shell/*` + `components/shell/*` + `app/hooks/*`, ports-first) per locked plan.
 - File 0 done: `lib/shell/navSettings.ts` (agent-written on learner request 2026-10-02; learner resumes typing from File 1 `NavLinks.tsx`).
 - `auth-svc` au-001: COMPLETE across all 10 slices (2026-10-25). `au-002` COMPLETE (2026-10-27): JWT issuer/audience. `au-003` COMPLETE (2026-10-27): shared error envelope. Final auth baseline: 29 unit + 37 e2e green, `oxlint` 0 errors/0 warnings, `nest build` clean.
-- `cart-svc` ca-001: Phase 1 COMPLETE (2026-10-26). Foundation initialized, crash-proof connection pool to PostgreSQL `ecom-pg` (:5433), `/health` (liveness) & `/health/ready` (readiness) probes, `001-cart-schema.sql` applied (4 tables: `carts`, `cart_items`, `wishlists`, `wishlist_items`; 7 indexes including `one_active_cart_per_user` and `cart_items_cart_product_unique` with `NULLS NOT DISTINCT`; 2 triggers for `updated_at`). 12 unit tests + 12 e2e tests passing, `oxlint` 0 errors/0 warnings, `nest build` clean.
-- Cart docs-first COMPLETE (2026-10-26): `services/cart.md` + schema/API/admin/features/auth/testing docs aligned; `ca-002` complete; `ca-003` complete; `ca-004` complete; `ca-005`-`ca-006` todo.
-- `ca-002` COMPLETE (2026-10-27): settings registry + versioned admin GET/PATCH + append-only audit + JWT/`admin` guards + shared error envelope; `002-cart-settings.sql` applied to local `ecom-pg` with `cart.settings`, `cart.settings_audit`, audit indexes, `trg_cart_settings_updated_at`, `global` seed, and `one_active_cart_per_session`. Final cart baseline: 48 unit + 26 e2e green, `oxlint` 0 warnings, `tsc --noEmit`/`nest build` clean. Local DB restored to `global` / `{}` / version `0`; no test audit rows.
-- `ca-003` COMPLETE (2026-10-27): active-cart ensure + item CRUD + snapshots/totals + Redis idempotency + one post-commit `cart.updated`. Identity resolves a verified JWT or the `x-session-id` cookie/header; malformed tokens never fall back to guest. `ecom-redis` is running on `:6379`; `ioredis` is committed. Final cart baseline: 74 unit + 46 e2e green, `oxlint` 0 warnings, `tsc --noEmit`/`nest build` clean. Local cleanup verified: 0 carts, 0 cart items, 0 `idem:*` Redis keys; settings still `global` / `{}` / version `0`.
-- `ca-004` COMPLETE (2026-10-27): `POST /cart/merge` for `merge` (default), `guest_wins`, and `user_wins`, with deterministic row locks, never-lose-the-only-cart, guest `converted` history, idempotency, and one post-commit `cart.updated`. The identity guard carries `guestSessionId` alongside a verified user; merge reads `guestMergeStrategy` at request time and returns `{cart}` only. Final cart baseline: 79 unit + 58 e2e green (merge matrix 12), `oxlint` 0 warnings, `tsc --noEmit`/`nest build` clean. Local cleanup verified: 0 carts, 0 cart items, 0 audit rows; settings `global` / `{}` / version `0`; 0 `idem:*` Redis keys.
-- `ca-005` docs COMPLETE (2026-10-27): global service-side role verification for role-sensitive routes; customer wishlist contract (verified JWT + `customer`, product-level, guest pending flow via `?next=`/short-lived cookie, no guest wishlist, no event/snapshot/idempotency, GET read-only). Code not started; `ca-005` remains todo.
-- Known gap: `cart-svc/src/app.module.ts` remains uncommitted (existing `CartModule` import + `JWT_SECRET` validation); ca-003/ca-004 code is committed. The working tree is fully wired, but the cart-svc commit chain alone does not import `CartModule` until that file is committed. Concurrent item mutations still do not lock/verify the active cart status, so an add racing a merge can land in a converted cart; logged as a ca-004 follow-up.
+- `cart-svc` COMPLETE across all 6 slices (`ca-001` through `ca-006`):
+  - `ca-001` Phase 1 Base: PostgreSQL pool, `/health` and `/health/ready`, `001-cart-schema.sql`.
+  - `ca-002` Settings Subsystem: `cart.settings`, `cart.settings_audit`, registry, versioned admin `GET/PATCH /api/v1/cart/settings`.
+  - `ca-003` Cart CRUD: `CartIdentityGuard`, active-cart ensure, item mutations, catalog snapshots, Redis idempotency (`x-idempotency-key`), single post-commit `cart.updated`.
+  - `ca-004` Guest Merge: `POST /cart/merge` for `merge`, `guest_wins`, `user_wins` with deterministic row locks.
+  - `ca-005` Customer Wishlist: dual route `['wishlist', 'cart/wishlist']`, `@Roles('customer')`, lazy creation on `POST /wishlist/items`, duplicate idempotency, foreign delete 404, no cart events.
+  - `ca-006` Hardening & Security: `GET /api/v1/cart/settings/audit` admin endpoint, `touchCart` enforcing `status = 'active'`, prototype pollution defenses, security e2e suite.
+  - Final Verification: 13 unit test files (84/84 passed), 8 e2e test files (79/79 passed), 0 lint errors/warnings across 63 files, `nest build` clean exit 0.
 
 ## Next (ordered)
 
-1. `ca-005` wishlist endpoints (code; `customer` role).
-2. `ca-006` security/rate limits/audit read/observability hardening.
-3. Thin client (`lib/auth/client.ts` + per-action handlers + `proxy.ts`) in storefront-ui.
-4. CMS source wiring replacing `TODO(cms-svc)` null-sources; `7.Deployment.md` + `8.Versioning.md` stubs.
-5. `ecom-contracts` v0.1, remaining 8 service specs (copy `services/auth.md` shape), missing component docs per `components/README.md`.
+1. Thin client (`lib/auth/client.ts` + per-action handlers + `proxy.ts`) in storefront-ui.
+2. CMS source wiring replacing `TODO(cms-svc)` null-sources; `7.Deployment.md` + `8.Versioning.md` stubs.
+3. `ecom-contracts` v0.1, remaining 8 service specs (copy `services/auth.md` shape), missing component docs per `components/README.md`.
 
 ## Task tracking (55/52/1/3)
 

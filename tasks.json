@@ -1236,15 +1236,12 @@
       ],
       "stages": {
         "spec": "done",
-        "build": "in-progress",
-        "test": "in-progress",
-        "verify": "todo"
+        "build": "done",
+        "test": "done",
+        "verify": "done"
       },
       "inProgress": null,
-      "next": [
-        "ca-005 wishlist endpoints (customer role)",
-        "ca-006 security, rate limits, audit read, and observability"
-      ],
+      "next": [],
       "blockedBy": [],
       "skills": [
         "SKILL-EXPLORE",
@@ -1359,11 +1356,11 @@
         {
           "id": "ca-005",
           "title": "Wishlist endpoints (customer role)",
-          "status": "todo",
+          "status": "done",
           "owner": null,
-          "started": null,
-          "finished": null,
-          "log": "TASKS/todo/ca-005-wishlist.md",
+          "started": "2026-10-27T10:55:00Z",
+          "finished": "2026-10-27T11:00:00Z",
+          "log": "TASKS/done/ca-005-wishlist.md",
           "key_decisions": [
             "Verified JWT + customer role; no guest wishlist; guests use sign-in prompt + pending product id",
             "Product-level, not variant-based; unique (wishlist_id, product_id)",
@@ -1371,9 +1368,10 @@
             "GET /wishlist is read-only; it does not create a wishlist row",
             "No cart.updated, no snapshots, no x-idempotency-key",
             "Add/remove touches wishlists.updated_at explicitly in the same transaction",
-            "Service re-verifies JWT + role; ownership scoped by user_id = JWT.sub"
+            "Service re-verifies JWT + role; ownership scoped by user_id = JWT.sub",
+            "Dual-mount route ['wishlist', 'cart/wishlist'] ensures direct and proxy path routing"
           ],
-          "verified": false,
+          "verified": true,
           "follow_ups": [
             "Storefront guest wishlist pending flow: ?next=/short-lived cookie, post-login POST, no localStorage",
             "Wishlist catalog validation when the catalog adapter lands",
@@ -1383,21 +1381,23 @@
         {
           "id": "ca-006",
           "title": "Cart security, rate limits, audit read, observability",
-          "status": "todo",
+          "status": "done",
           "owner": null,
-          "started": null,
-          "finished": null,
-          "log": "TASKS/todo/ca-006-cart-hardening-and-observability.md",
+          "started": "2026-10-27T11:01:00Z",
+          "finished": "2026-10-27T11:08:00Z",
+          "log": "TASKS/done/ca-006-cart-hardening-and-observability.md",
           "key_decisions": [
             "No settings cache in v1; versioned key if added later",
-            "Audit read is admin-only and separate from public cart data",
-            "Secrets stay in the secret manager, never cart.settings"
+            "Audit read is admin-only via GET /cart/settings/audit and separate from public cart data",
+            "Secrets stay in the secret manager, never cart.settings",
+            "touchCart enforces status = 'active' to guard against mutating converted/abandoned carts",
+            "Prototype pollution defense rejects __proto__, constructor, prototype in settings"
           ],
-          "verified": false,
+          "verified": true,
           "follow_ups": []
         }
       ],
-      "note": "Phase 1 verified: crash-proof PG connection pool (:5433), liveness /health (200), readiness /health/ready (probes DB, 503 on drop), 001-cart-schema.sql applied (4 tables, 7 indexes, 2 triggers, single active cart unique index, NULLS NOT DISTINCT unique line items). 12 unit + 12 e2e green tests. Docs-first complete 2026-10-26: services/cart.md + schema/API/admin/features/auth/testing aligned. ca-002 complete 2026-10-27: cart.settings + cart.settings_audit, audit indexes, trigger, global seed, one_active_cart_per_session; registry/admin API/audit/JWT+admin guards; 48 unit + 26 e2e green, tsc/lint/build clean; local DB restored to global / {} / version 0. The existing uncommitted src/app.module.ts wiring still needs a commit. Next: ca-003 active-cart ensure + item CRUD. Catalog fixture, no-op event bus, and local DTOs unblock; Redis is needed for idempotency."
+      "note": "cart-svc fully completed and verified: Phase 1 (ca-001 base + probes + schema), ca-002 (settings registry + admin API + audit), ca-003 (cart CRUD + Redis idempotency + catalog snapshot + cart.updated event), ca-004 (deterministic guest-to-account merge policies), ca-005 (customer wishlist dual routes + lazy creation + idempotency + RBAC), and ca-006 (cart hardening + audit read endpoint + active cart guard + security test suite). 13 unit test files (84/84 passed), 8 e2e test files (79/79 passed), 0 lint errors/warnings across 63 files, clean NestJS build exit 0."
     },
     "order-svc": {
       "motive": "Checkout + POS-style order creation (mock pay v1), lifecycle/status, stock reservation; outbox+idempotency+saga-lite compensation.",
