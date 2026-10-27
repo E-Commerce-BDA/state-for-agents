@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-27T18:10:00Z",
+  "updatedAt": "2026-10-27T18:18:00Z",
   "summary": {
     "total": 55,
     "done": 55,
-    "in_progress": 0,
-    "backlog": 3
+    "in_progress": 1,
+    "backlog": 2
   },
   "unpushed": {
     "storefront-ui": [
@@ -1357,15 +1357,16 @@
         {
           "id": "cat-004",
           "title": "Stock ledger & internal service-to-service endpoints for cart-svc and order-svc",
-          "status": "todo",
-          "owner": null,
-          "started": null,
+          "status": "in-progress",
+          "owner": "agent",
+          "started": "2026-10-27T18:18:00Z",
           "finished": null,
-          "log": "TASKS/todo/cat-004-stock-and-internal-apis.md",
+          "log": "TASKS/in-progress/cat-004-stock-and-internal-apis.md",
           "key_decisions": [
             "Atomic stock reservation using row locks (SELECT ... FOR UPDATE)",
             "Available stock computed column (on_hand - reserved)",
-            "Internal batch lookup endpoint for cart-svc snapshot hydration"
+            "Internal batch lookup endpoint for cart-svc snapshot hydration",
+            "ServiceKeyGuard checking x-service-key header"
           ],
           "verified": false,
           "follow_ups": []
