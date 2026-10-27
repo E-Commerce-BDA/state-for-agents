@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-27T18:18:00Z",
+  "updatedAt": "2026-10-27T18:35:00Z",
   "summary": {
-    "total": 55,
-    "done": 55,
-    "in_progress": 1,
+    "total": 56,
+    "done": 56,
+    "in_progress": 0,
     "backlog": 2
   },
   "unpushed": {
@@ -206,6 +206,27 @@
       "7d3eda4"
     ],
     "catalog-svc": [
+      "f4f9c75",
+      "af67091",
+      "85a09d7",
+      "202a570",
+      "acabcce",
+      "c3e7100",
+      "e111589",
+      "5ef8fd9",
+      "b90bc01",
+      "fab9e5e",
+      "32a9311",
+      "ec62550",
+      "b5da9a8",
+      "e2c382e",
+      "969b508",
+      "20f6573",
+      "d324651",
+      "23f6a70",
+      "22318af",
+      "e2ac75d",
+      "4dfb63d",
       "867b01f",
       "292d888",
       "9030b07",
@@ -1357,18 +1378,18 @@
         {
           "id": "cat-004",
           "title": "Stock ledger & internal service-to-service endpoints for cart-svc and order-svc",
-          "status": "in-progress",
+          "status": "done",
           "owner": "agent",
           "started": "2026-10-27T18:18:00Z",
-          "finished": null,
-          "log": "TASKS/in-progress/cat-004-stock-and-internal-apis.md",
+          "finished": "2026-10-27T18:35:00Z",
+          "log": "TASKS/done/cat-004-stock-and-internal-apis.md",
           "key_decisions": [
             "Atomic stock reservation using row locks (SELECT ... FOR UPDATE)",
-            "Available stock computed column (on_hand - reserved)",
+            "Deterministic sorting of reservation items to avoid deadlocks",
             "Internal batch lookup endpoint for cart-svc snapshot hydration",
             "ServiceKeyGuard checking x-service-key header"
           ],
-          "verified": false,
+          "verified": true,
           "follow_ups": []
         },
         {
