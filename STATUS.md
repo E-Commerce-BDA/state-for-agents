@@ -16,6 +16,11 @@
 
 ## Now
 
+- `search-svc` :4090 implementation in progress (Option A: Local Apache Kafka KRaft Primary):
+  - Local Apache Kafka 3.7.x in KRaft mode provisioned on `localhost:9092` via Docker.
+  - Slice 0.1 COMPLETE: `Documentation/services/search.md` created; `3.Database-Schema.md §3.7`, `4.API-Design.md §3.9/§4.11`, `8.Versioning.md`, `9.Testing.md §3.9` aligned.
+  - `@ecom/contracts@1.1.0` released and tagged `v1.1.0` (search DTOs, query schemas, stats schemas, and Kafka event payloads for `product.updated`, `category.updated`, richer `blog.updated`).
+  - Next: Slice 0.2 (Kafka producer wiring in `catalog-svc` and `cms-svc`), followed by Slices 1–6 (build `search-svc` :4090).
 - `cms-svc` Phase 2 (`cms-002`) COMPLETE (2026-10-28): Slices 2.0 through 2.6 complete. `@ecom/contracts@1.0.0` tagged, packed, and wired into `frontend/storefront`. `cms-svc` foundation, sections, global/page settings, navigation, pages, blogs, and media subsystem implemented with revision tracking, Redis cache-aside, draft lifecycle, cursor pagination, StoragePort local disk adapter, in-use deletion guards, and events/jobs. MongoDB Atlas backup runbook finalized. 89 unit tests + 53 e2e tests passing in cms-svc; 294 tests passing in storefront. Commits: `ecom-contracts` `5e70c6a`, `cms-svc` `daa1549`, `storefront-frontend` `91d4728`, `Documentation` `6265f61`.
 - Shell slice (navbar system → `lib/shell/*` + `components/shell/*` + `app/hooks/*`, ports-first) per locked plan.
 - File 0 done: `lib/shell/navSettings.ts` (agent-written on learner request 2026-10-02; learner resumes typing from File 1 `NavLinks.tsx`).

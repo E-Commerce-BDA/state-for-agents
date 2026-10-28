@@ -1913,18 +1913,13 @@
         "Documentation/3.Database-Schema.md §4"
       ],
       "stages": {
-        "spec": "in-progress",
-        "build": "in-progress",
-        "test": "in-progress",
-        "verify": "todo"
+        "spec": "done",
+        "build": "done",
+        "test": "done",
+        "verify": "done"
       },
-      "inProgress": "Phase 2.0 contracts started: ecom-contracts package + CMS section catalog locked; remaining schemas and 1.0.0 release pending.",
-      "next": [
-        "Finish @ecom/contracts 1.0.0: theme/navigation/pages/blogs/media/page-settings/events/jobs + tests",
-        "Cut the GitHub Release tarball and pin the exact URL in cms-svc",
-        "Mongoose cms_* models + Zod pipe + revision service + cache service + event port",
-        "Public/admin section endpoints, reorder, settings, nav/theme/page settings"
-      ],
+      "inProgress": null,
+      "next": [],
       "blockedBy": [],
       "skills": [
         "SKILL-EXPLORE",
@@ -2123,29 +2118,25 @@
     },
     "search-svc": {
       "motive": "Unified index (products+categories+blogs) synced via domain events; typeahead suggest + ranked full search (Typesense/Meilisearch later).",
-      "localRoot": "(to create, search-svc/)",
+      "localRoot": "search-svc/",
       "repo": "search-svc",
       "port": 4090,
       "ownerDocs": [
-        "Documentation/services/search.md (to create, copy auth.md shape)"
+        "Documentation/services/search.md"
       ],
       "stages": {
-        "spec": "todo",
-        "build": "todo",
-        "test": "todo",
+        "spec": "done",
+        "build": "in-progress",
+        "test": "in-progress",
         "verify": "todo"
       },
-      "inProgress": null,
+      "inProgress": "Phase 0-6 implementation (Option A: Kafka KRaft primary): Slice 0.1 Documentation & @ecom/contracts@1.1.0 complete; source event producers and search-svc :4090 under construction.",
       "next": [
-        "Spec doc copying services/auth.md shape",
-        "Index sync consumers (product.imported/updated, category.updated, blog.updated)",
-        "suggest (search:suggest: 10m) + ranked full search endpoints"
+        "Provision Apache Kafka 3.7.x in KRaft mode via Docker Compose",
+        "Slice 0.2: Wire KafkaBus producers in catalog-svc and cms-svc",
+        "Slices 1-6: Scaffold and build search-svc :4090"
       ],
-      "blockedBy": [
-        "ecom-contracts",
-        "catalog-svc",
-        "cms-svc"
-      ],
+      "blockedBy": [],
       "skills": [
         "SKILL-EXPLORE",
         "SKILL-NESTJS",
