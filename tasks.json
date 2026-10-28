@@ -1948,25 +1948,24 @@
       "tasks": [
         {
           "id": "cms-002",
-          "title": "Phase 2.0 contracts + CMS section catalog",
-          "status": "in-progress",
+          "title": "Phase 2 CMS backend, shared contracts, and storefront wiring",
+          "status": "done",
           "owner": "agent",
           "started": "2026-10-28",
-          "log": "TASKS/in-progress/cms-002-phase-2-contracts.md",
+          "finished": "2026-10-28",
+          "log": "TASKS/done/cms-002-phase-2-contracts.md",
           "key_decisions": [
             "@ecom/contracts@1.0.0 standalone repo; exact GitHub Release tarball; ESM + d.ts; Zod 4 peer",
             "Sparse section overrides only; storefront resolver remains the merge authority; global CMS version",
             "Seven locked section types; key/pageKey/type immutable; sortOrder via reorder only; isActive editable",
             "Manual ordered featured productIds in v1; category-driven selection deferred",
             "Save=publish for sections/settings/nav/theme/pages; blogs keep draft/published",
-            "Media shared bucket, cms owns media/ prefix, no SVG; Atlas backup RPO/RTO locked"
+            "Media shared bucket, cms owns media/ prefix, no SVG; Atlas backup RPO/RTO locked",
+            "Referential integrity in-use guards on media deletion across sections, pages, and blogs",
+            "Cursor-based deterministic pagination on published blogs"
           ],
-          "verified": false,
-          "follow_ups": [
-            "Add theme/navigation/pages/blogs/media/page-settings/event/job schemas + tests",
-            "Cut and publish @ecom/contracts@1.0.0 GitHub Release",
-            "Pin release tarball in cms-svc and start models/revision/cache"
-          ]
+          "verified": true,
+          "follow_ups": []
         },
         {
           "id": "cms-001",
