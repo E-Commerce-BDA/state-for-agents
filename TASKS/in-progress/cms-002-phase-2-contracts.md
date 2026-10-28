@@ -84,10 +84,15 @@ or published as a GitHub Release.
   - 89 unit tests passing across 17 test suites; 53 e2e tests passing across 5 test suites.
   - Oxlint 0 warnings/0 errors; tsc clean; nest build clean.
 
+- **Slice 2.5 (Storefront Wiring)**:
+  - Installed `@ecom/contracts@1.0.0` tarball and `zod` in `frontend/storefront`.
+  - Updated `createCmsSource` in `lib/cms/authSettings.ts` to query canonical endpoint `/api/v1/cms/settings/page/${pageKey}` and map `{ settings, version }`.
+  - Updated `test/lib/authSettings.test.ts` to assert canonical URL and response envelope.
+  - 294 storefront unit/component tests passing across 47 test files; `tsc --noEmit` clean.
+
 ## Follow-ups
 
-- Slice 2.5: Storefront wiring (contracts package pin, shared type replacement, auth settings endpoint update).
-- Slice 2.6: Full verification gate, Atlas backup runbook validation, final wrap-up.
+- Slice 2.6: Full verification gate across all repositories, Atlas backup runbook validation, final wrap-up.
 
 ## Commits
 
@@ -101,5 +106,7 @@ or published as a GitHub Release.
 - `cms-svc` `0ac2690` — feat(auth): add CurrentUser param decorator.
 - `cms-svc` `905203c` — feat(media): implement media domain with StoragePort, local disk adapter, in-use guard, and resize job publishing.
 - `cms-svc` `daa1549` — test(media): add e2e integration tests for media upload, public serving, and in-use deletion guards.
+- `frontend/storefront` `91d4728` — feat(contracts): pin @ecom/contracts@1.0.0 and align authSettings endpoint with cms-svc.
+
 
 
