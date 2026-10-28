@@ -101,7 +101,7 @@
       "3e53c9d",
       "37f7028",
       "e5899b0",
-      "625cd97"
+      "d9b3768"
     ],
     "auth-svc": [
       "791d094",
@@ -418,7 +418,7 @@
       "a435be6"
     ],
     "ecom-contracts": [
-      "7a9c9cb"
+      "4d46959"
     ]
   },
   "workflow": "Claim: create/move log to TASKS/in-progress/, set entry status in-progress + owner + started. Build against chained skills (router order). Close: move log to TASKS/done/ (or backlog/), fill verification + follow_ups, flip entry status + finished, update STATUS.md + summary, same commit. Commits: one commit per file (larger edits split per edit); stage with diff eyes-on; subject + reason body; local-only until the human says push. Unpushed array lists every local commit except its own carrier commit (which joins on the next update); cleared per-branch on push. Validation: id == filename, status == folder, log file must exist, STATUS counts == summary.",
@@ -1315,7 +1315,7 @@
         "consumes": []
       },
       "claimedBy": "agent",
-      "note": "@ecom/contracts semver package, pinned exact tarball (no ^). Local repo at E:/E-Commerce/ecom-contracts (commit 7a9c9cb); package version 1.0.0 but private/unreleased until all Phase 2 schemas land. Blocks catalog/cart/order/cms/analytics/import/notify/search specs."
+      "note": "@ecom/contracts semver package, pinned exact tarball (no ^). Local repo at E:/E-Commerce/ecom-contracts (commit 4d46959); package version 1.0.0 but private/unreleased until all Phase 2 schemas land. Blocks catalog/cart/order/cms/analytics/import/notify/search specs."
     },
     "auth-svc": {
       "motive": "Identity: register/login/logout, JWT+refresh rotation, RBAC (customer vs admin), profile/addresses; emits user.registered.",
