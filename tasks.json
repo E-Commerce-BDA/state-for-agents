@@ -424,7 +424,18 @@
       "a435be6"
     ],
     "ecom-contracts": [
-      "4d46959"
+      "4d46959",
+      "47abd53",
+      "02e3a81",
+      "b3e2b34",
+      "41a718d",
+      "0023c44",
+      "c9fb5ad",
+      "0562951",
+      "d5d00e0",
+      "c04616c",
+      "f91f399",
+      "5e70c6a"
     ]
   },
   "workflow": "Claim: create/move log to TASKS/in-progress/, set entry status in-progress + owner + started. Build against chained skills (router order). Close: move log to TASKS/done/ (or backlog/), fill verification + follow_ups, flip entry status + finished, update STATUS.md + summary, same commit. Commits: one commit per file (larger edits split per edit); stage with diff eyes-on; subject + reason body; local-only until the human says push. Unpushed array lists every local commit except its own carrier commit (which joins on the next update); cleared per-branch on push. Validation: id == filename, status == folder, log file must exist, STATUS counts == summary.",
