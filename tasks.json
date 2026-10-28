@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-27T17:38:11Z",
+  "updatedAt": "2026-10-28T00:15:00Z",
   "summary": {
-    "total": 64,
+    "total": 65,
     "done": 64,
-    "in_progress": 0,
+    "in_progress": 1,
     "backlog": 0
   },
   "unpushed": {
@@ -100,7 +100,8 @@
       "a077481",
       "3e53c9d",
       "37f7028",
-      "e5899b0"
+      "e5899b0",
+      "625cd97"
     ],
     "auth-svc": [
       "791d094",
@@ -415,6 +416,9 @@
     "cms-svc": [
       "ad792c3",
       "a435be6"
+    ],
+    "ecom-contracts": [
+      "7a9c9cb"
     ]
   },
   "workflow": "Claim: create/move log to TASKS/in-progress/, set entry status in-progress + owner + started. Build against chained skills (router order). Close: move log to TASKS/done/ (or backlog/), fill verification + follow_ups, flip entry status + finished, update STATUS.md + summary, same commit. Commits: one commit per file (larger edits split per edit); stage with diff eyes-on; subject + reason body; local-only until the human says push. Unpushed array lists every local commit except its own carrier commit (which joins on the next update); cleared per-branch on push. Validation: id == filename, status == folder, log file must exist, STATUS counts == summary.",
@@ -1279,25 +1283,26 @@
     },
     "ecom-contracts": {
       "motive": "Single versioned truth (@ecom/contracts npm, semver+CHANGELOG): event envelopes + SQS job schemas + DTOs/Zod + error codes; polyrepo discipline.",
-      "localRoot": "(to create, packages/contracts)",
+      "localRoot": "ecom-contracts/",
       "repo": "ecom-contracts",
       "port": null,
       "ownerDocs": [
-        "Documentation/8.Versioning.md (to create)",
+        "Documentation/8.Versioning.md",
         "Documentation/1.Architecture.md",
-        "Documentation/4.API-Design.md"
+        "Documentation/4.API-Design.md",
+        "Documentation/services/cms.md"
       ],
       "stages": {
-        "spec": "todo",
-        "build": "todo",
-        "test": "todo",
+        "spec": "in-progress",
+        "build": "in-progress",
+        "test": "in-progress",
         "verify": "todo"
       },
-      "inProgress": null,
+      "inProgress": "Phase 2 bootstrap: standalone repo + @ecom/contracts@1.0.0 package created; CTA/section schemas, per-type settings allowlists, SECTION_CATALOG, 17 tests, typecheck/build/pack green. Theme/nav/pages/blogs/media/page-settings/event/job schemas still pending before the 1.0.0 GitHub Release.",
       "next": [
-        "8.Versioning.md stub + CHANGELOG discipline (PATCH/MINOR/MAJOR, dual-publish window)",
-        "src/events/ envelope x10 domain events (identical Kafka envelope)",
-        "src/jobs/ x4 SQS schemas + Zod mirrors (ctas.max(3) pattern) + codes.ts"
+        "Add theme, navigation, pages, blogs, media, page-settings, event-envelope, and media.resize-image job schemas + tests",
+        "Tag v1.0.0 and create the GitHub Release tarball (remote/push approval required)",
+        "Pin the exact release tarball URL in cms-svc and update the lockfile"
       ],
       "blockedBy": [],
       "skills": [
@@ -1309,8 +1314,8 @@
         "produces": [],
         "consumes": []
       },
-      "claimedBy": null,
-      "note": "@ecom/contracts semver package, pinned version (no ^). v1 infra[contracts-versioning]=todo folded here. Blocks catalog/cart/order/cms/analytics/import/notify/search specs."
+      "claimedBy": "agent",
+      "note": "@ecom/contracts semver package, pinned exact tarball (no ^). Local repo at E:/E-Commerce/ecom-contracts (commit 7a9c9cb); package version 1.0.0 but private/unreleased until all Phase 2 schemas land. Blocks catalog/cart/order/cms/analytics/import/notify/search specs."
     },
     "auth-svc": {
       "motive": "Identity: register/login/logout, JWT+refresh rotation, RBAC (customer vs admin), profile/addresses; emits user.registered.",
@@ -1885,16 +1890,14 @@
         "test": "in-progress",
         "verify": "todo"
       },
-      "inProgress": "Phase 1 foundation complete; Phase 2 domain blocked on ecom-contracts decisions.",
+      "inProgress": "Phase 2.0 contracts started: ecom-contracts package + CMS section catalog locked; remaining schemas and 1.0.0 release pending.",
       "next": [
-        "Resolve @ecom/contracts package/version plus sections/settings/nav/theme/media/draft contracts",
-        "Mongoose cms_* models + Zod validation (ctas.max(3)), version bump cache-buster",
-        "Redis cms:section:/cms:settings:global/cms:nav (5m/1m) + invalidate on cms.updated",
-        "Public read endpoints with explicit draft filtering"
+        "Finish @ecom/contracts 1.0.0: theme/navigation/pages/blogs/media/page-settings/events/jobs + tests",
+        "Cut the GitHub Release tarball and pin the exact URL in cms-svc",
+        "Mongoose cms_* models + Zod pipe + revision service + cache service + event port",
+        "Public/admin section endpoints, reorder, settings, nav/theme/page settings"
       ],
-      "blockedBy": [
-        "ecom-contracts"
-      ],
+      "blockedBy": [],
       "skills": [
         "SKILL-EXPLORE",
         "SKILL-MONGO",
@@ -1913,8 +1916,30 @@
           "category.updated"
         ]
       },
-      "claimedBy": null,
+      "claimedBy": "agent",
       "tasks": [
+        {
+          "id": "cms-002",
+          "title": "Phase 2.0 contracts + CMS section catalog",
+          "status": "in-progress",
+          "owner": "agent",
+          "started": "2026-10-28",
+          "log": "TASKS/in-progress/cms-002-phase-2-contracts.md",
+          "key_decisions": [
+            "@ecom/contracts@1.0.0 standalone repo; exact GitHub Release tarball; ESM + d.ts; Zod 4 peer",
+            "Sparse section overrides only; storefront resolver remains the merge authority; global CMS version",
+            "Seven locked section types; key/pageKey/type immutable; sortOrder via reorder only; isActive editable",
+            "Manual ordered featured productIds in v1; category-driven selection deferred",
+            "Save=publish for sections/settings/nav/theme/pages; blogs keep draft/published",
+            "Media shared bucket, cms owns media/ prefix, no SVG; Atlas backup RPO/RTO locked"
+          ],
+          "verified": false,
+          "follow_ups": [
+            "Add theme/navigation/pages/blogs/media/page-settings/event/job schemas + tests",
+            "Cut and publish @ecom/contracts@1.0.0 GitHub Release",
+            "Pin release tarball in cms-svc and start models/revision/cache"
+          ]
+        },
         {
           "id": "cms-001",
           "title": "Phase 1 foundation: Nest bootstrap, Mongo/Redis health, shared HTTP/auth plumbing",
@@ -1937,7 +1962,7 @@
           ]
         }
       ],
-      "note": "Phase 1 foundation complete (cms-svc ad792c3 + a435be6): Nest 12/Node 24 ESM bootstrap, Joi env validation, fail-fast Mongo (retryAttempts: 0), degraded Redis, /health + /health/ready, JWT/Roles guard plumbing, request-id/error envelope/cache-control, Dockerized Mongo 27018. 35 unit tests across 7 files, 5 e2e tests across 2 files, oxlint/typecheck/build clean. Production smoke: 200 healthy, 503 Mongo-down, 404 envelope; startup with Mongo down exits before serving. No CMS domain code yet."
+      "note": "Phase 1 foundation complete (cms-svc ad792c3 + a435be6): Nest 12/Node 24 ESM bootstrap, Joi env validation, fail-fast Mongo (retryAttempts: 0), degraded Redis, /health + /health/ready, JWT/Roles guard plumbing, request-id/error envelope/cache-control, Dockerized Mongo 27018. 35 unit tests across 7 files, 5 e2e tests across 2 files, oxlint/typecheck/build clean. Production smoke: 200 healthy, 503 Mongo-down, 404 envelope; startup with Mongo down exits before serving. No CMS domain code yet. Phase 2.0 contracts started (cms-002): ecom-contracts package + CMS section catalog built/tested/packed locally; theme/nav/pages/blogs/media/events/jobs and the 1.0.0 release remain."
     },
     "analytics-svc": {
       "motive": "Behavioral insight: page-view/exit funnel, cart idle→cart.abandoned detector, conversion + cohorts dashboards (fire-and-forget writes).",
