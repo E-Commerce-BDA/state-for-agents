@@ -2130,11 +2130,9 @@
         "test": "in-progress",
         "verify": "todo"
       },
-      "inProgress": "Phase 0-6 implementation (Option A: Kafka KRaft primary): Slice 0.1 Docs/Contracts, Slice 0.2 Producers, Slice 1 Foundation, Slice 2 Schema/Seed complete; Slice 3 Core Ingestion up next.",
+      "inProgress": "Phase 0-6 implementation (Option A: Kafka KRaft primary): Slice 0.1 Docs/Contracts, Slice 0.2 Producers, Slice 1 Foundation, Slice 2 Schema/Seed, Slice 3 Core Ingestion & Kafka Consumer complete; Slice 4/5 Search & Suggest Endpoints up next.",
       "next": [
-        "Slice 3: Core Ingestion & Upsert Indexer (DocumentUpsertService, POST /internal/documents)",
-        "Slice 4: Kafka Event Consumer (KafkaEventConsumer, manual offset commit, dead-letter routing)",
-        "Slice 5: Suggest & Search Endpoints (GET /suggest, GET /search, Redis cache-aside)",
+        "Slice 4/5: Suggest & Search Endpoints (GET /suggest, GET /search, ranked FTS, Redis cache-aside)",
         "Slice 6: E2E and Chaos Verification"
       ],
       "blockedBy": [],
