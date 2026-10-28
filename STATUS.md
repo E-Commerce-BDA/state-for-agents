@@ -16,7 +16,7 @@
 
 ## Now
 
-- `cms-svc` Phase 2.0 (`cms-002`) IN PROGRESS (2026-10-28): created the standalone `ecom-contracts` repo and `@ecom/contracts@1.0.0` package with CTA/section schemas, per-type settings allowlists, and `SECTION_CATALOG` admin governance. 17 contract tests, typecheck/build/pack green; local tarball smoke-installed. Theme/nav/pages/blogs/media/page-settings/event/job schemas and the GitHub Release are pending. Commits: `ecom-contracts` `7a9c9cb`, `Documentation` `625cd97`.
+- `cms-svc` Phase 2.0 (`cms-002`) IN PROGRESS (2026-10-28): created the standalone `ecom-contracts` repo and `@ecom/contracts@1.0.0` package with CTA/section schemas, per-type settings allowlists, and `SECTION_CATALOG` admin governance. 17 contract tests, typecheck/build/pack green; local tarball smoke-installed. Theme/nav/pages/blogs/media/page-settings/event/job schemas and the GitHub Release are pending. Commits: `ecom-contracts` `4d46959`, `Documentation` `d9b3768`.
 - Shell slice (navbar system → `lib/shell/*` + `components/shell/*` + `app/hooks/*`, ports-first) per locked plan.
 - File 0 done: `lib/shell/navSettings.ts` (agent-written on learner request 2026-10-02; learner resumes typing from File 1 `NavLinks.tsx`).
 - `auth-svc` au-001: COMPLETE across all 10 slices (2026-10-25). `au-002` COMPLETE (2026-10-27): JWT issuer/audience. `au-003` COMPLETE (2026-10-27): shared error envelope. Final auth baseline: 29 unit + 37 e2e green, `oxlint` 0 errors/0 warnings, `nest build` clean.
