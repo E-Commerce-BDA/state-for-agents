@@ -74,6 +74,6 @@ or published as a GitHub Release.
 
 ## Commits
 
-- `ecom-contracts` `7a9c9cb` — feat(contracts): add v1 CMS section catalog.
-- `Documentation` `625cd97` — docs: settle Phase 2 contracts and CMS section
+- `ecom-contracts` `4d46959` — feat(contracts): add v1 CMS section catalog.
+- `Documentation` `d9b3768` — docs: settle Phase 2 contracts and CMS section
   catalog.
