@@ -1,13 +1,13 @@
 # SERVICES — status matrix (agents update cells as work lands)
 
 > Scope: live tracker. Stages: spec → build → test → verify (⬜ todo / 🚧 in-progress / ✅ done).
-> Status: Active | Date: 2026-10-26 | Machine mirror: `tasks.json`
+> Status: Active | Date: 2026-10-28 | Machine mirror: `tasks.json`
 
 | Repo | Port | Spec doc | spec | build | test | verify |
 |---|---|---|---|---|---|---|
 | storefront-ui | 3000 | `Documentation/design-system/storefront.md`, `pages/` | 🚧 | ⬜ | ⬜ | ⬜ |
 | admin-app | 3001 | `Documentation/6.Admin-Panel.md` | 🚧 | ⬜ | ⬜ | ⬜ |
-| ecom-contracts | npm | `8.Versioning.md` (to create) | ⬜ | ⬜ | ⬜ | ⬜ |
+| ecom-contracts | npm | `8.Versioning.md` | 🚧 | 🚧 | 🚧 | ⬜ |
 | auth-svc | 4010 | `Documentation/services/auth.md` | ✅ | ✅ | ✅ | ✅ |
 | catalog-svc | 4020 | `Documentation/services/catalog.md` | 🚧 | 🚧 | 🚧 | ⬜ |
 | cart-svc | 4030 | `Documentation/services/cart.md` | ✅ | ✅ | ✅ | ✅ |
