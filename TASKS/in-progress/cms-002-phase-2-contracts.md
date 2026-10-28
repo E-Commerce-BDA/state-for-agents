@@ -63,17 +63,32 @@ or published as a GitHub Release.
 - Tarball smoke install in a temp consumer — import + `sectionSchema` parse +
   seven catalog entries passed.
 
+## Progress Across Slices
+
+- **Slice 2.0a, 2.0b, 2.0c**: Contributor identity hygiene complete, docs aligned, `@ecom/contracts@1.0.0` tagged and packed.
+- **Slice 2.1 (cms-svc Foundation)**: Mongoose schemas, RevisionService (`cms_meta`), CacheService (Redis graceful degradation), EventsService (`IEventBus`), ZodValidationPipe.
+- **Slice 2.2 (Sections, Settings, Navigation)**: Section CRUD, atomic reordering via bulkWrite, global theme settings, page auth settings, navbar settings, public cache-aside.
+- **Slice 2.3 (Pages and Blogs Subsystem)**:
+  - `cms_pages` Mongoose collection with `slug` index, `PageBlock` union (`rich_text`, `image`, `cta`, `faq`), revision bumping, and Redis caching.
+  - `cms_blog_categories` and `cms_blogs` collections with compound indexes `{ status: 1, publishedAt: -1 }`.
+  - Base64 cursor-based pagination (`<publishedAt>|<_id>`).
+  - Draft vs published editorial lifecycle; `blog.updated` event dispatching on publish/unpublish.
+  - 79 unit tests passing; 43 e2e tests passing against real MongoDB 8 and Redis.
+  - Oxlint 0 warnings/0 errors; build clean.
+
 ## Follow-ups
 
-- Add theme, navigation, pages, blogs, media, page-settings, event-envelope,
-  and `media.resize-image` schemas + tests.
-- Cut/tag `v1.0.0` and create the GitHub Release after remote/push approval.
-- Pin the exact tarball URL in `cms-svc`.
-- Start `cms-svc` 2.1: Mongoose models, Zod pipe, revision service, cache
-  service, event port, error codes.
+- Slice 2.4: Media subsystem (`StoragePort`, local disk adapter, MIME/size validation, in-use guard against sections/pages/blogs, `media.resize-image` job dispatch).
+- Slice 2.5: Storefront wiring (contracts package pin, shared type replacement, auth settings endpoint update).
+- Slice 2.6: Full verification gate, Atlas backup runbook validation, final wrap-up.
 
 ## Commits
 
-- `ecom-contracts` `4d46959` — feat(contracts): add v1 CMS section catalog.
-- `Documentation` `d9b3768` — docs: settle Phase 2 contracts and CMS section
-  catalog.
+- `ecom-contracts` `4d46959`, `5e70c6a` — v1.0.0 release schemas & contracts.
+- `Documentation` `d9b3768`, `b6b0e30` — documentation alignment.
+- `cms-svc` `9d06920` — feat(cms): initialize cms-svc foundation.
+- `cms-svc` `e1575cd` — feat(cms): implement sections, settings, and navigation.
+- `cms-svc` `1cea2aa` — feat(pages): implement pages domain with blocks, caching, and revision tracking.
+- `cms-svc` `b2a0996` — feat(blogs): implement blogs and categories domain with cursor pagination and event publishing.
+- `cms-svc` `7becd21` — test(pages-blogs): add e2e integration tests for pages, categories, and blogs.
+
