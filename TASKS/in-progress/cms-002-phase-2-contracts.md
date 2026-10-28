@@ -76,9 +76,16 @@ or published as a GitHub Release.
   - 79 unit tests passing; 43 e2e tests passing against real MongoDB 8 and Redis.
   - Oxlint 0 warnings/0 errors; build clean.
 
+- **Slice 2.4 (Media Subsystem)**:
+  - `StoragePort` abstraction with `LocalDiskStorageAdapter` storing files under configurable local directory.
+  - `cms_media` Mongoose collection with `key` format `media/{yyyy}/{mm}/{uuid}.{ext}`, size limit (10 MB), and MIME enforcement (PNG/JPEG/WebP/AVIF; rejects SVG).
+  - Background task dispatch: emits `media.resize-image` job for responsive formats.
+  - In-use guard on deletion: checks references across `cms_sections`, `cms_pages`, and `cms_blogs`; rejects with `409 MEDIA_IN_USE` if referenced.
+  - 89 unit tests passing across 17 test suites; 53 e2e tests passing across 5 test suites.
+  - Oxlint 0 warnings/0 errors; tsc clean; nest build clean.
+
 ## Follow-ups
 
-- Slice 2.4: Media subsystem (`StoragePort`, local disk adapter, MIME/size validation, in-use guard against sections/pages/blogs, `media.resize-image` job dispatch).
 - Slice 2.5: Storefront wiring (contracts package pin, shared type replacement, auth settings endpoint update).
 - Slice 2.6: Full verification gate, Atlas backup runbook validation, final wrap-up.
 
@@ -91,4 +98,8 @@ or published as a GitHub Release.
 - `cms-svc` `1cea2aa` — feat(pages): implement pages domain with blocks, caching, and revision tracking.
 - `cms-svc` `b2a0996` — feat(blogs): implement blogs and categories domain with cursor pagination and event publishing.
 - `cms-svc` `7becd21` — test(pages-blogs): add e2e integration tests for pages, categories, and blogs.
+- `cms-svc` `0ac2690` — feat(auth): add CurrentUser param decorator.
+- `cms-svc` `905203c` — feat(media): implement media domain with StoragePort, local disk adapter, in-use guard, and resize job publishing.
+- `cms-svc` `daa1549` — test(media): add e2e integration tests for media upload, public serving, and in-use deletion guards.
+
 

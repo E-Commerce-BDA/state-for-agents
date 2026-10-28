@@ -16,7 +16,7 @@
 
 ## Now
 
-- `cms-svc` Phase 2 (`cms-002`) IN PROGRESS (2026-10-28): Slices 2.0 through 2.3 complete. `@ecom/contracts@1.0.0` tagged and packed with complete CMS/event/job schemas. `cms-svc` foundation, sections, global/page settings, navigation, pages, and blogs implemented with revision tracking, Redis cache-aside, draft lifecycle, cursor pagination, and events. 79 unit tests + 43 e2e tests passing, oxlint 0 warnings/0 errors, build clean. Commits: `ecom-contracts` `5e70c6a`, `cms-svc` `7becd21`.
+- `cms-svc` Phase 2 (`cms-002`) IN PROGRESS (2026-10-28): Slices 2.0 through 2.4 complete. `@ecom/contracts@1.0.0` tagged and packed. `cms-svc` foundation, sections, global/page settings, navigation, pages, blogs, and media subsystem implemented with revision tracking, Redis cache-aside, draft lifecycle, cursor pagination, StoragePort local disk adapter, in-use deletion guards, and events/jobs. 89 unit tests + 53 e2e tests passing, oxlint 0 warnings/0 errors, build clean. Commits: `ecom-contracts` `5e70c6a`, `cms-svc` `daa1549`.
 - Shell slice (navbar system → `lib/shell/*` + `components/shell/*` + `app/hooks/*`, ports-first) per locked plan.
 - File 0 done: `lib/shell/navSettings.ts` (agent-written on learner request 2026-10-02; learner resumes typing from File 1 `NavLinks.tsx`).
 - `auth-svc` au-001: COMPLETE across all 10 slices (2026-10-25). `au-002` COMPLETE (2026-10-27): JWT issuer/audience. `au-003` COMPLETE (2026-10-27): shared error envelope. Final auth baseline: 29 unit + 37 e2e green, `oxlint` 0 errors/0 warnings, `nest build` clean.
