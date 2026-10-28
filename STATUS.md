@@ -20,7 +20,10 @@
   - Local Apache Kafka 3.7.x in KRaft mode provisioned on `localhost:9092` via Docker.
   - Slice 0.1 COMPLETE: `Documentation/services/search.md` created; `3.Database-Schema.md §3.7`, `4.API-Design.md §3.9/§4.11`, `8.Versioning.md`, `9.Testing.md §3.9` aligned.
   - `@ecom/contracts@1.1.0` released and tagged `v1.1.0` (search DTOs, query schemas, stats schemas, and Kafka event payloads for `product.updated`, `category.updated`, richer `blog.updated`).
-  - Next: Slice 0.2 (Kafka producer wiring in `catalog-svc` and `cms-svc`), followed by Slices 1–6 (build `search-svc` :4090).
+  - Slice 0.2 COMPLETE: Kafka producer wiring in `catalog-svc` (`product.updated`, `category.updated`) and `cms-svc` (enriched `blog.updated`).
+  - Slice 1 COMPLETE: NestJS bootstrap, PostgreSQL pool, Redis service, Kafka TCP probe, `/health` and `/health/ready`, `ServiceKeyGuard`. (34 unit + 6 e2e green).
+  - Slice 2 COMPLETE: PostgreSQL schema `search.search_documents` (`db/001-search-schema.sql`), running-shoe demo dataset (`db/002-seed-search.sql`), strict row types (`src/db/rows.ts`), standalone SQL applier (`scripts/apply-sql.mjs`), e2e schema tests (`test/schema.e2e-spec.ts`). (34 unit + 18 e2e green, oxlint 0 warnings/0 errors, nest build clean).
+  - Next: Slice 3 (Core Ingestion & Upsert Indexer: DocumentUpsertService, source_updated_at stale guard, idempotent upserts, internal batch ingest endpoint `POST /api/v1/search/internal/documents`).
 - `cms-svc` Phase 2 (`cms-002`) COMPLETE (2026-10-28): Slices 2.0 through 2.6 complete. `@ecom/contracts@1.0.0` tagged, packed, and wired into `frontend/storefront`. `cms-svc` foundation, sections, global/page settings, navigation, pages, blogs, and media subsystem implemented with revision tracking, Redis cache-aside, draft lifecycle, cursor pagination, StoragePort local disk adapter, in-use deletion guards, and events/jobs. MongoDB Atlas backup runbook finalized. 89 unit tests + 53 e2e tests passing in cms-svc; 294 tests passing in storefront. Commits: `ecom-contracts` `5e70c6a`, `cms-svc` `daa1549`, `storefront-frontend` `91d4728`, `Documentation` `6265f61`.
 - Shell slice (navbar system → `lib/shell/*` + `components/shell/*` + `app/hooks/*`, ports-first) per locked plan.
 - File 0 done: `lib/shell/navSettings.ts` (agent-written on learner request 2026-10-02; learner resumes typing from File 1 `NavLinks.tsx`).

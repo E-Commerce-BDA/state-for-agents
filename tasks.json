@@ -2130,11 +2130,12 @@
         "test": "in-progress",
         "verify": "todo"
       },
-      "inProgress": "Phase 0-6 implementation (Option A: Kafka KRaft primary): Slice 0.1 Documentation & @ecom/contracts@1.1.0 complete; source event producers and search-svc :4090 under construction.",
+      "inProgress": "Phase 0-6 implementation (Option A: Kafka KRaft primary): Slice 0.1 Docs/Contracts, Slice 0.2 Producers, Slice 1 Foundation, Slice 2 Schema/Seed complete; Slice 3 Core Ingestion up next.",
       "next": [
-        "Provision Apache Kafka 3.7.x in KRaft mode via Docker Compose",
-        "Slice 0.2: Wire KafkaBus producers in catalog-svc and cms-svc",
-        "Slices 1-6: Scaffold and build search-svc :4090"
+        "Slice 3: Core Ingestion & Upsert Indexer (DocumentUpsertService, POST /internal/documents)",
+        "Slice 4: Kafka Event Consumer (KafkaEventConsumer, manual offset commit, dead-letter routing)",
+        "Slice 5: Suggest & Search Endpoints (GET /suggest, GET /search, Redis cache-aside)",
+        "Slice 6: E2E and Chaos Verification"
       ],
       "blockedBy": [],
       "skills": [
