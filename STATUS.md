@@ -2,7 +2,7 @@
 
 > Scope: human-readable mirror of `tasks.json`. `tasks.json` is canonical.
 > Status: Active | Date: 2026-10-29
-> Counts: **128 total = 67 done + 1 in-progress + 60 backlog**
+> Counts: **128 total = 68 done + 1 in-progress + 59 backlog**
 > Truth rule: “core complete” is **not** “feature complete”. Every pending item
 > below has a task ID in `tasks.json`; no service is marked 100% while a task
 > remains.
@@ -13,7 +13,7 @@
 
 | Area | What is actually done | Verification | Still pending |
 |---|---|---|---|
-| `@ecom/contracts` | 1.2.0 package: CMS/blog/media/theme/navigation/search schemas, exact tarball distribution, consumer pins at 1.0.0/1.1.0/1.2.0 | package and tests exist; not re-run this pass | Canonical envelope 1.3.0; missing event/job payloads; 2.0.0 cutover; release tags (`ec-001..ec-005`) |
+| `@ecom/contracts` | 1.3.0 package: canonical event envelope with dual-read/write; CMS/blog/media/theme/navigation/search schemas; exact tarball distribution; consumer pins still at 1.0.0/1.1.0/1.2.0 | 54 tests, typecheck, build, local pack green | Missing event/job payloads; 2.0.0 cutover; release tags (`ec-002..ec-005`) |
 | `auth-svc` | 10 core slices; JWT issuer/audience; shared error envelope; service-key internal routes | 29 unit + 37 e2e green | `user.registered` is not published; no outbox; no internal email lookup for notify (`au-004`, `au-005`) |
 | `cart-svc` | 6 slices; guest/user cart; wishlist; merge-on-login; TTL | 84 unit + 79 e2e green | `NoopEventBus` drops `cart.updated`; fixture catalog; no `order.created` consumer; conversion endpoint missing (`ca-007..ca-010`) |
 | `catalog-svc` | 6 phases; product/category CRUD; inventory; public caching; hardening | 82 unit + 67 e2e green | No Kafka consumer; best-effort producer; stock reserve/release is non-idempotent and contract-incompatible with order-svc (`cat-006..cat-011`) |
@@ -31,7 +31,7 @@
 
 These are the defects that make the current happy path fail or lose money/data.
 
-1. **`ec-001` / `ec-002`** — canonical envelope 1.3.0 with dual-read/write; missing payloads (`user.registered`, `cart.updated`, `cart.abandoned`, `order.created`, `order.status.updated`, `page.viewed`).
+1. **`ec-002`** — missing payloads (`user.registered`, `cart.updated`, `cart.abandoned`, `order.created`, `order.status.updated`, `page.viewed`). `ec-001` is done: canonical envelope 1.3.0, 54 tests green.
 2. **`cat-006`** — persist idempotent stock reservations; fix the `reservationId`/`qty` vs `orderId`/`quantity` contract; make release restock once.
 3. **`ord-007`** — checkout sends the real catalog DTO; persist `stock_reservation_id`; real-contract e2e.
 4. **`ord-008`** — scope Redis idempotency by user + route; atomic lock; fail closed.
@@ -112,7 +112,7 @@ writes `cms_outbox` in a Mongo transaction (replica set required). Relays use
 | Repo | Total | Done | In progress | Backlog | Next up |
 |---|---:|---:|---:|---:|---|
 | `storefront-ui` | 53 | 46 | 1 | 6 | `sf-048`, `sf-049`, `sf-050`, `sf-051`, `sf-052`, `sf-053` |
-| `ecom-contracts` | 5 | 0 | 0 | 5 | `ec-001`, `ec-002`, `ec-003`, `ec-004`, `ec-005` |
+| `ecom-contracts` | 5 | 1 | 0 | 4 | `ec-002`, `ec-003`, `ec-004`, `ec-005` |
 | `auth-svc` | 4 | 2 | 0 | 2 | `au-004`, `au-005` |
 | `cart-svc` | 10 | 6 | 0 | 4 | `ca-007`, `ca-008`, `ca-009`, `ca-010` |
 | `catalog-svc` | 11 | 5 | 0 | 6 | `cat-006`, `cat-007`, `cat-008`, `cat-009`, `cat-010`, `cat-011` |
@@ -134,8 +134,8 @@ writes `cms_outbox` in a Mongo transaction (replica set required). Relays use
 
 ## 7. Now / Next
 
-- **Now:** tracker and status rewritten locally; no code fix has been applied yet.
-- **Next:** `ec-001` → `ec-002` → `doc-001` → `cat-006` → `ord-007` → `ord-008` → `ord-009` → `ord-010` → `ca-007` → `cms-003`.
+- **Now:** `ec-001` is done in `ecom-contracts` (`4383b26`); the tracker is closed for it.
+- **Next:** `ec-002` → `doc-001` → `cat-006` → `ord-007` → `ord-008` → `ord-009` → `ord-010` → `ca-007` → `cms-003`.
 - **Do not** push, tag, release, or publish packages without explicit approval.
 - **Commit style:** one commit per edit/feature, conventional message, author `Dharmil Gajjar <foreafcbeta@gmail.com>`.
 
@@ -147,5 +147,6 @@ writes `cms_outbox` in a Mongo transaction (replica set required). Relays use
 - Every `done`/`in-progress` entry has an existing log under the matching folder.
 - Phase coverage: **P0 14, P1 6, P2 10, P3 9, P4 14, P5 6, P6 1 = 60**.
 - Repo messaging matches `producesConsumes`; the topic catalog matches repo ownership.
-- Repos are level with upstream except `Documentation` (one local commit `d0cefcf`). `storefront-ui` is dirty and must be resolved by `sf-048`.
+- Repos are level with upstream except `Documentation` (`d0cefcf`) and `ecom-contracts` (`4383b26`). `storefront-ui` is dirty and must be resolved by `sf-048`.
+- `@ecom/contracts` 1.3.0: 54 tests, typecheck, build, and local pack green; no tag or publish.
 - No push, tag, release, or package publish was performed.

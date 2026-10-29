@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-29T15:27:04.611Z",
+  "updatedAt": "2026-10-29T15:39:28.198Z",
   "summary": {
     "total": 128,
-    "done": 67,
+    "done": 68,
     "in_progress": 1,
-    "backlog": 60,
+    "backlog": 59,
     "byRepo": {
       "storefront-ui": {
         "total": 53,
@@ -21,9 +21,9 @@
       },
       "ecom-contracts": {
         "total": 5,
-        "done": 0,
+        "done": 1,
         "in_progress": 0,
-        "backlog": 5
+        "backlog": 4
       },
       "auth-svc": {
         "total": 4,
@@ -253,7 +253,6 @@
       }
     ],
     "nextUp": [
-      "ec-001",
       "ec-002",
       "doc-001",
       "cat-006",
@@ -504,10 +503,13 @@
   "unpushed": {
     "Documentation": [
       "d0cefcf"
+    ],
+    "ecom-contracts": [
+      "4383b26"
     ]
   },
   "unpushedVerifiedAt": "2026-10-29",
-  "unpushedNote": "Verified with git status -sb across every repo. Only Documentation has one local commit. The state-for-agents carrier commit is excluded by convention and joins on the next tracker update.",
+  "unpushedNote": "Verified with git status -sb across every repo. Documentation and ecom-contracts each have one local commit. The state-for-agents carrier commit is excluded by convention and joins on the next tracker update.",
   "workflow": "Claim: create TASKS/in-progress/<id>-<slug>.md, set the entry status to in-progress, owner, and started. Build against the chained skills (router order). Close: move the log to TASKS/done/, fill verification and follow_ups, flip status to done and finished, update STATUS.md and summary in the same commit. Todo entries carry log:null until claimed; in-progress and done entries must have an existing log file. Commits: one commit per file (larger edits split per edit); stage with diff eyes-on; subject + reason body; local-only until the human says push. Unpushed lists only verified local commits; the carrier commit joins on the next update. Validation: id == filename, status == folder, log exists for in-progress/done, STATUS counts == summary.",
   "rules": "Claim: set claimedBy={agent,since,task} + stages.<stage> to in-progress (24h lease; other instances must not steal without comment). Finish: flip stage to done + update SERVICES.md + STATUS.md in same commit. Stage vocab locked: todo|in-progress|done (maps to todo/in-progress/done cells). Path truth: localRoots below are where agents edit TODAY; future split repos named in 'repo'. Never invent paths — resolve via SKILL-EXPLORE. motive is immutable (ADR change only); inProgress/next are mutable. Transport truth: Kafka is domain events only, SQS is task jobs only; each repo messaging block and the top-level messaging catalog are authoritative.",
   "repos": {
@@ -1611,13 +1613,12 @@
       ],
       "stages": {
         "spec": "done",
-        "build": "in-progress",
-        "test": "in-progress",
-        "verify": "todo"
+        "build": "done",
+        "test": "done",
+        "verify": "in-progress"
       },
-      "inProgress": "1.2.0 shipped; 1.3.0 canonical envelope is next (ec-001).",
+      "inProgress": null,
       "next": [
-        "ec-001 canonical envelope 1.3.0",
         "ec-002 missing event payloads",
         "ec-003 SQS job schemas",
         "ec-004 2.0.0 cutover",
@@ -1635,32 +1636,32 @@
         "taskQueues": []
       },
       "claimedBy": "agent",
-      "note": "Package 1.2.0 exists. Consumers pin mixed versions: storefront 1.0.0, catalog/CMS 1.1.0, search 1.2.0; auth/cart/order/import do not import contracts. Pending: canonical 1.3.0 envelope, missing event/job payloads, 2.0.0 cutover, and release tags. No runtime Kafka or SQS.",
+      "note": "Package 1.3.0 exists with the canonical envelope and readEventEnvelope. Consumers still pin 1.0.0/1.1.0/1.2.0; auth/cart/order/import do not import contracts. Pending: missing event/job payloads, 2.0.0 cutover, and release tags. No runtime Kafka or SQS.",
       "tasks": [
         {
           "id": "ec-001",
           "title": "Contracts 1.3.0: canonical envelope with dual-read/dual-write",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-29",
+          "finished": "2026-10-29",
           "phase": "P0",
           "priority": "P0",
           "kind": "contract",
           "transport": "contracts",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/ec-001-contracts-1-3-0.md",
           "key_decisions": [
             "Add optional type, version, and idempotencyKey while keeping topic and eventType optional. Reason: producers and consumers migrate without a flag day. Rejected: jump straight to 2.0.0, which breaks every pinned consumer at once.",
             "Make type both the event name and the topic. Reason: removes topic/eventType drift (cms.updated currently publishes on cms.events). Rejected: keep separate fields and a mapping table."
           ],
           "acceptance": [
             "Envelope schema accepts both canonical and legacy shapes.",
-            "A readEnvelope helper normalizes either shape to the canonical object.",
+            "A readEventEnvelope helper normalizes either shape to the canonical object.",
             "Unit tests cover canonical, legacy, mixed, and invalid envelopes.",
             "Local 1.3.0 tarball builds and packs; no tag or push yet."
           ],
-          "verified": false,
+          "verified": true,
           "follow_ups": [],
           "messaging": {
             "publishes": [],
