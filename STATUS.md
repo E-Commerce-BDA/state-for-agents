@@ -1,140 +1,151 @@
 # STATUS — Done / Now / Next
 
-> Scope: human-readable mirror of `tasks.json`. Agents update both together.
-> Status: Active | Date: 2026-10-28
+> Scope: human-readable mirror of `tasks.json`. `tasks.json` is canonical.
+> Status: Active | Date: 2026-10-29
+> Counts: **128 total = 67 done + 1 in-progress + 60 backlog**
+> Truth rule: “core complete” is **not** “feature complete”. Every pending item
+> below has a task ID in `tasks.json`; no service is marked 100% while a task
+> remains.
 
-## Done
+---
 
-- Documentation core `0–6`, `9–10`; component pioneers (Button/Icons/Tooltip + style contracts); `services/auth.md`; `pages/routing.md`; `pages/auth-design.md` (auth UI customization model, §6 demo implemented).
-- `storefront-ui`: 14 `components/ui` primitives (Button→Tooltip + forms/feedback), `components/auth/*` composed blocks (AuthPage/Split/Panel/Form, PasswordMeter), `app/(auth)` routes (signin/signup/forgot + stateful islands, chromeless), `lib/auth/*` (settings vocabulary, resolver + sanitizer, cssVars, error map), `lib/cms/authSettings.ts` (cache-first fetcher), `AGENTS.md` constitution v1.0 (smart→pure→dumb, dumb-component guide, test trio, construct rules).
-- Verification: `pnpm test` 111/111, `tsc` clean, `next build` green; commits C0–C9 pushed to `storefront-ui:main`.
-- Skill system hardened: `LEARNING.md` root (teaching philosophy, step zero), router rewrite (dynamic default from `tasks.json`, task-protocol row, hooks row), skill contract enforced (SKILL-STOREFRONT paths fixed, SKILL-DUMB cites constitution, backend skills flagged structural-only), new `SKILL-HOOKS.md`, `archive/` retirement policy.
-- Skills foldered smart-to-dumb (`explore/routes/hooks/lib/ui/services/project`, `hooks/` separate, `SKILL-` prefix kept, router-only index): EXPLORE split (SEARCHING + READING-DOCS), new `routes/SKILL-ROUTES.md`, all cross-links validated.
-- Decisions locked: polyrepo, **raw SQL via `pg`, no migrations v1** (user ruling 2026-10-02 — overrides any Prisma text in older docs; see amendment task below), dual transport (Kafka local / SNS→SQS AWS), Next 16, ports-and-adapters hooks (sources injected, demo-first), learning mode always-on (`skip learning mode for this` to bypass).
-- Auth service contract pinned 2026-10-23 (5 doc commits): liveness/readiness split with envelope + rate-limit exemptions (`4.API-Design.md §1.9`), `/api/v1` base path everywhere plus the no-trailing-slash forwarding rule, auth schema mechanics (app-generated UUID v7, `set_updated_at()` trigger, CASCADE, named constraints), password policy 8–128 with letter + digit, `services/auth.md` v1.1.
-- Cart service contract pinned 2026-10-26 (15 doc commits): `services/cart.md` (identity, snapshots, CRUD, idempotency, registry-driven settings + audit, three merge policies, security, build/deploy, tests); schema §3.3 adds `cart.settings`/audit + guest-session uniqueness; API §3.3/§4.12 adds admin settings, required idempotency, `{item, cartTotals}`, 503; admin §3.21 + route; features A4.6 policy-driven; auth token/grace/merge aligned; testing §3.3; Nest 12/Node 24/Vitest docs.
+## 1. Done — verified, with the remaining work named
 
-## Now
+| Area | What is actually done | Verification | Still pending |
+|---|---|---|---|
+| `@ecom/contracts` | 1.2.0 package: CMS/blog/media/theme/navigation/search schemas, exact tarball distribution, consumer pins at 1.0.0/1.1.0/1.2.0 | package and tests exist; not re-run this pass | Canonical envelope 1.3.0; missing event/job payloads; 2.0.0 cutover; release tags (`ec-001..ec-005`) |
+| `auth-svc` | 10 core slices; JWT issuer/audience; shared error envelope; service-key internal routes | 29 unit + 37 e2e green | `user.registered` is not published; no outbox; no internal email lookup for notify (`au-004`, `au-005`) |
+| `cart-svc` | 6 slices; guest/user cart; wishlist; merge-on-login; TTL | 84 unit + 79 e2e green | `NoopEventBus` drops `cart.updated`; fixture catalog; no `order.created` consumer; conversion endpoint missing (`ca-007..ca-010`) |
+| `catalog-svc` | 6 phases; product/category CRUD; inventory; public caching; hardening | 82 unit + 67 e2e green | No Kafka consumer; best-effort producer; stock reserve/release is non-idempotent and contract-incompatible with order-svc (`cat-006..cat-011`) |
+| `order-svc` | 6 phases; checkout; order lifecycle; refunds; idempotency; service-key routes | 45 unit + 60 e2e green | Checkout fails on the real catalog DTO; payment captured before persistence; global idempotency key; refunds never call the provider; outbox only logs; cart clear 404 (`ord-007..ord-012`) |
+| `cms-svc` | Phase 1 + 2; pages/sections/blogs/media/theme; admin API; public cache | 89 unit + 53 e2e green | `cms.updated` publishes on `cms.events`; no `cms_outbox`; Kafka `media.tasks`; traversal-prone media route; post-buffer MIME/size checks (`cms-003..cms-007`) |
+| `search-svc` | 7 slices; index/query; Kafka consumer; internal batch endpoint | 97 unit + 85 e2e green | Malformed JSON is committed without DLQ; no `processed_events`; unknown types have no metric; raw kafkajs rather than Nest transport (`srch-001..srch-003`) |
+| `storefront-ui` | 14 UI primitives; auth composed blocks and routes; CMS theme/settings; navbar/search; style contracts | suite must be re-established after the dirty worktree is resolved | Commerce routes/components; thin auth client; CMS source wiring; `/api/track`; `/api/revalidate`; contract pin; dirty worktree (`sf-048..sf-053`, `sf-039` in progress) |
+| `Documentation` | Architecture/API/schema/testing/versioning; `auth/cart/cms/order/search` service specs | docs exist; transport review pending | Transport contradictions; testing matrix; 1.3.0/2.0.0 release train; notify/analytics/import specs (`doc-001..doc-004`) |
 
-- `search-svc` :4090 implementation in progress (Option A: Local Apache Kafka KRaft Primary):
-  - Local Apache Kafka 3.7.x in KRaft mode provisioned on `localhost:9092` via Docker.
-  - Slice 0.1 COMPLETE: `Documentation/services/search.md` created; `3.Database-Schema.md §3.7`, `4.API-Design.md §3.9/§4.11`, `8.Versioning.md`, `9.Testing.md §3.9` aligned.
-  - `@ecom/contracts@1.1.0` released and tagged `v1.1.0` (search DTOs, query schemas, stats schemas, and Kafka event payloads for `product.updated`, `category.updated`, richer `blog.updated`).
-  - Slice 0.2 COMPLETE: Kafka producer wiring in `catalog-svc` (`product.updated`, `category.updated`) and `cms-svc` (enriched `blog.updated`).
-  - Slice 1 COMPLETE: NestJS bootstrap, PostgreSQL pool, Redis service, Kafka TCP probe, `/health` and `/health/ready`, `ServiceKeyGuard`. (34 unit + 6 e2e green).
-  - Slice 2 COMPLETE: PostgreSQL schema `search.search_documents` (`db/001-search-schema.sql`), running-shoe demo dataset (`db/002-seed-search.sql`), strict row types (`src/db/rows.ts`), standalone SQL applier (`scripts/apply-sql.mjs`), e2e schema tests (`test/schema.e2e-spec.ts`). (34 unit + 18 e2e green).
-  - Slice 3 COMPLETE: Prerequisite fixes (@ecom/contracts@1.2.0 with varchar(64) IDs for MongoDB ObjectIds, cms-svc unpublish/delete draft event publisher fix, restored scripts/apply-sql.mjs, SERVICE_KEY_INVALID, 413 payload mapping), core ingestion pipeline (EventMapper, IndexerRepository, IndexerService), protected internal endpoints (POST /internal/documents, GET /internal/stats), and event consumer layer (KafkaEventConsumer with 5x retry and DLQ routing, InMemoryEventConsumer for hermetic tests). (58 unit + 31 e2e green, oxlint 0 warnings/0 errors, nest build clean).
-  - Slice 4 COMPLETE: Typeahead suggest endpoint `GET /api/v1/search/suggest` with query normalization, prefix `to_tsquery` formatting, single-roundtrip partitioned CTE with `ROW_NUMBER() OVER (PARTITION BY d.document_type ORDER BY ts_rank_cd(...) DESC, popularity DESC, id)`, Redis cache-aside (TTL 600s for default `limit=5`, corrupt JSON eviction, PostgreSQL graceful fallback), and `SuggestQueryPipe` mapping errors (`QUERY_TOO_SHORT`, `QUERY_INVALID`, `INVALID_FILTER`). (77 unit + 51 e2e green, oxlint 0 warnings/0 errors, nest build clean exit 0).
-  - Slice 5 COMPLETE: Full search endpoint `GET /api/v1/search` with facet filtering (type, category, minPrice, maxPrice), multi-sort options (`relevance`, `price.asc`, `price.desc`, `newest`, `popular`), query-bound base64url keyset cursor pagination with `d.id DESC` / `d.id ASC` tie-breakers, single-roundtrip CTE with stable `totalHits` preservation even on terminal pages, and strict query pipe. (97 unit + 73 e2e green).
-  - Slice 6 COMPLETE: Hardening, security & chaos suite (`test/security.e2e-spec.ts` testing SQLi, prototype pollution, 413 limit, service keys, headers), database connection failure mapping to `503 SEARCH_UNAVAILABLE`, measured EXPLAIN (ANALYZE, BUFFERS) latency (0.153ms search, 0.219ms suggest), GitHub Actions CI workflow (`.github/workflows/ci.yml`), Nginx rate-limiting docs, manual psql runbooks, and contracts v1.2.0 release resolution. (97 unit + 85 e2e green, 0 lint warnings/errors, clean Docker build).
-- `cms-svc` Phase 2 (`cms-002`) COMPLETE (2026-10-28): Slices 2.0 through 2.6 complete. `@ecom/contracts@1.0.0` tagged, packed, and wired into `frontend/storefront`. `cms-svc` foundation, sections, global/page settings, navigation, pages, blogs, and media subsystem implemented with revision tracking, Redis cache-aside, draft lifecycle, cursor pagination, StoragePort local disk adapter, in-use deletion guards, and events/jobs. MongoDB Atlas backup runbook finalized. 89 unit tests + 53 e2e tests passing in cms-svc; 294 tests passing in storefront. Commits: `ecom-contracts` `5e70c6a`, `cms-svc` `daa1549`, `storefront-frontend` `91d4728`, `Documentation` `6265f61`.
-- Shell slice (navbar system → `lib/shell/*` + `components/shell/*` + `app/hooks/*`, ports-first) per locked plan.
-- File 0 done: `lib/shell/navSettings.ts` (agent-written on learner request 2026-10-02; learner resumes typing from File 1 `NavLinks.tsx`).
-- `auth-svc` au-001: COMPLETE across all 10 slices (2026-10-25). `au-002` COMPLETE (2026-10-27): JWT issuer/audience. `au-003` COMPLETE (2026-10-27): shared error envelope. Final auth baseline: 29 unit + 37 e2e green, `oxlint` 0 errors/0 warnings, `nest build` clean.
-- `cart-svc` COMPLETE across all 6 slices (`ca-001` through `ca-006`):
-  - `ca-001` Phase 1 Base: PostgreSQL pool, `/health` and `/health/ready`, `001-cart-schema.sql`.
-  - `ca-002` Settings Subsystem: `cart.settings`, `cart.settings_audit`, registry, versioned admin `GET/PATCH /api/v1/cart/settings`.
-  - `ca-003` Cart CRUD: `CartIdentityGuard`, active-cart ensure, item mutations, catalog snapshots, Redis idempotency (`x-idempotency-key`), single post-commit `cart.updated`.
-  - `ca-004` Guest Merge: `POST /cart/merge` for `merge`, `guest_wins`, `user_wins` with deterministic row locks.
-  - `ca-005` Customer Wishlist: dual route `['wishlist', 'cart/wishlist']`, `@Roles('customer')`, lazy creation on `POST /wishlist/items`, duplicate idempotency, foreign delete 404, no cart events.
-  - `ca-006` Hardening & Security: `GET /api/v1/cart/settings/audit` admin endpoint, `touchCart` enforcing `status = 'active'`, prototype pollution defenses, security e2e suite.
-  - Final Verification: 13 unit test files (84/84 passed), 8 e2e test files (79/79 passed), 0 lint errors/warnings across 63 files, `nest build` clean exit 0.
-- `catalog-svc` Phase 1 & 2 (`cat-001`) COMPLETE (2026-10-27):
-  - Base foundation scaffolded per `SKILL-NEST-CLI.md` with bounded PostgreSQL pool (`src/db/pool.ts`).
-  - Liveness (`/health`) and readiness (`/health/ready`) probes with DB liveness query and 503 on drop.
-  - Complete `catalog` DDL schema in `001-catalog-schema.sql` (13 tables, GIN search vectors, navbar partial index, triggers).
-  - Seed fixture catalog in `002-seed-catalog.sql` aligned with `cart-svc` fixtures.
-  - Verification: 12 unit tests passed (3 test files), 16 e2e tests passed (2 test files), `oxlint` 0 warnings/0 errors on 29 files, `nest build` clean.
-- `catalog-svc` Phase 3 (`cat-002`) COMPLETE (2026-10-27):
-  - Categories subsystem: navbar query optimization (`idx_categories_navbar`), self-referencing tree builder, slug lookup, and admin CRUD with soft-deletes.
-  - Brands subsystem: active index optimization (`idx_brands_active`), slug lookup, and admin CRUD with soft-deletes.
-  - Shared auth: `JwtAuthGuard` + `RolesGuard` (`@Roles('admin')`) and standard `HttpExceptionFilter` error envelope.
-  - Verification: 10 unit test files (50/50 passed), 4 e2e test files (38/38 passed), `oxlint` 0 warnings/0 errors across 55 files, `nest build` clean.
-- `catalog-svc` Phase 4 (`cat-003`) COMPLETE (2026-10-27):
-  - Products & PDP subsystem: single-join PDP query with PostgreSQL `json_agg` and `json_build_object` aggregating variants, gallery images, option definitions, and active discounts without N+1 round-trips.
-  - Cursor pagination with multi-attribute filtering (category, brand, price range, status) and full-text search.
-  - Admin CRUD endpoints for products, variants, option definitions, images, and scheduled discounts gated by `@Roles('admin')`.
-  - Verification: 12 unit test files (61/61 passed), 5 e2e test files (55/55 passed), `oxlint` 0 warnings/0 errors across 72 files, `nest build` clean exit 0.
-- `catalog-svc` Phase 5 (`cat-004`) COMPLETE (2026-10-27):
-  - Stock ledger & movements: admin stock adjustments and history audit trail recording `qty_after` snapshots in `catalog.stock_movements`.
-  - Atomic stock reservations: `POST /internal/stock/reserve` with row-level locks (`SELECT ... FOR UPDATE`), sorted deterministically to prevent deadlocks, with strict rollback on insufficient stock (`409 INSUFFICIENT_STOCK`).
-  - Reservation compensation: `POST /internal/stock/release` to restore stock balance on order cancellation.
-  - Verification: 16 unit test files (82/82 passed), 7 e2e test files (60/60 passed), `oxlint` 0 warnings/0 errors across 86 files, `nest build` clean exit 0.
-- `catalog-svc` Phase 6 (`cat-005`) COMPLETE (2026-10-27):
-  - Hardening & Security: Cache-Control policies configured across all endpoints (`public, max-age=60` on public catalog, `s-maxage=300, stale-while-revalidate=600` on navbar categories, `no-store` on internal/stock endpoints).
-  - Prototype pollution & SQL injection defenses verified; standard error envelope and request ID correlation headers enforced.
-  - Final Verification: 16 unit test files (82/82 passed), 8 e2e test files (67/67 passed), `oxlint` 0 warnings/0 errors across 87 files, `nest build` clean exit 0.
-  - **`catalog-svc` IS NOW FULLY IMPLEMENTED AND VERIFIED.**
-- `order-svc` Phase 1 (`ord-001`) COMPLETE (2026-10-27):
-  - Base foundation scaffolded per `SKILL-NEST-CLI.md` with bounded PostgreSQL pool (`src/db/pool.ts`) and Redis client with `enableOfflineQueue: false` fail-closed policy (`src/redis/redis.service.ts`).
-  - Liveness probe (`/health`) and readiness probe (`/health/ready`) verifying both PostgreSQL query (`SELECT 1`) and Redis ping (`PING`), with 503 response if either is down.
-  - Nest CLI schematics generated for `health`, `db`, `redis`, `auth`, `discounts`, `checkout`, `orders`, `payments`, and `outbox`.
-  - Global `ValidationPipe` and `/api/v1` prefix configured with health routes excluded.
-  - Verification: 4 unit tests passed (1 file), 2 e2e tests passed (1 file), `oxlint` 0 warnings/0 errors on 25 files, `nest build` clean exit 0. 33 atomic commits recorded.
-- `order-svc` Phase 2 (`ord-002`) COMPLETE (2026-10-27):
-  - Full PostgreSQL DDL schema in `db/001-order-schema.sql` (7 tables: `orders`, `order_items`, `order_status_history`, `payments`, `outbox`, `discount_codes`, `shipments`).
-  - Partial index `idx_outbox_pending` on `(status, created_at) WHERE status = 'pending'` for outbox relay poller.
-  - Partial index `idx_discount_codes_valid` on `(is_active, ends_at) WHERE is_active` for fast coupon validation.
-  - Test seed fixtures in `db/002-seed-orders.sql` with percent/fixed/expired/maxed coupons and sample order.
-  - Strict TypeScript row types in `src/db/rows.ts` preserving decimal string representations.
-  - Verification: 8/8 schema e2e tests passed (10/10 total e2e tests across 2 files), `oxlint` clean on 27 files, `nest build` clean exit 0. 4 atomic commits recorded.
-- `order-svc` Phase 3 (`ord-003`) COMPLETE (2026-10-27):
-  - Strict non-optional TypeScript DTOs for coupon validation, creation, update, and pagination (`ValidateDiscountCodeDto`, `CreateDiscountCodeDto`).
-  - `DiscountsRepository` parameterized raw SQL queries with coupon normalization and atomic usage increments.
-  - `DiscountsService` validation rules (active flag, start/end date windows, usage counts, minimum order thresholds) and percentage/fixed discount calculations clamped to cart totals.
-  - `DiscountsController` exposing `POST /discount-codes/validate` (public/customer) and admin CRUD endpoints gated by `JwtAuthGuard` and `RolesGuard` with `@Roles('admin')`.
-  - Verification: 17 unit tests passed (21 total unit tests), 14 e2e tests passed (24 total e2e tests across 3 files), `oxlint` 0 warnings/0 errors on 39 files, `nest build` clean exit 0. 16 atomic commits recorded.
-- `order-svc` Phase 4 (`ord-004`) COMPLETE (2026-10-27):
-  - Strict DTOs for checkout items, shipping and billing addresses, and payment provider request.
-  - Cross-service client adapters: `CatalogClient` (`reserveStock`, `releaseStock`, `getProductSnapshots`) and `CartClient`.
-  - `MockPaymentProvider` and `PaymentsService` for payment authorization and capture.
-  - `CheckoutService` with Redis idempotency (`idem:{key}` 24h TTL, conflict detection, in-flight lock), saga-lite stock reservation compensation, and atomic single PostgreSQL transaction (`orders`, `order_items` snapshots, `order_status_history`, `payments`, `discount_codes` usage increment, and `outbox` row `order.created`).
-  - Verification: 7 unit tests passed (28 total unit tests across 3 files), 6 e2e tests passed (30 total e2e tests across 4 files), `oxlint` clean on 49 files, `nest build` clean exit 0. 15 atomic commits recorded.
-- `order-svc` Phase 5 (`ord-005`) COMPLETE (2026-10-27):
-  - Strict DTOs for status updates, refunds, customer cursor pagination, and admin filtering.
-  - Finite state machine (`order-state-machine.ts`) enforcing directional valid transitions (`pending` -> `confirmed` -> `processing` -> `shipped` -> `delivered` -> `refunded`).
-  - `OrdersRepository` with customer cursor pagination, inline subquery relations, and atomic transactions.
-  - `OrdersService` with RBAC ownership checks, state machine assertions, and refund limit validation.
-  - `OutboxRepository` querying pending events with partial index `idx_outbox_pending` and `OutboxService` relay worker with polling, concurrency lock, and lifecycle hooks.
-  - `CustomerOrdersController` and `OrdersController` mounting all customer and admin order endpoints.
-- `order-svc` Phase 6 (`ord-006`) COMPLETE (2026-10-27):
-  - Global `HttpExceptionFilter` with standard envelope `{ error: { code, message, details }, requestId, timestamp }` and `x-request-id` response header echoing.
-  - `CacheControlInterceptor` enforcing `Cache-Control: no-store` on mutating HTTP methods.
-  - `ServiceKeyGuard` enforcing `x-service-key` on `/internal/*` routes (`InternalController`).
-  - Parameterized queries and UUID format validation preventing SQL injection and syntax errors.
-  - Prototype pollution and forbidden parameter injection defenses via strict `ValidationPipe`.
-  - Comprehensive service specification `Documentation/services/order.md` matching `auth.md` shape.
-  - Verification: 45 unit tests passed across 5 test suites, 60 e2e tests passed across 6 test suites (105 total passing tests), `oxlint` clean on 65 files, `nest build` clean exit 0. 10 atomic commits recorded.
-  - **`order-svc` is 100% COMPLETE across all 6 phases (`ord-001` through `ord-006`)**.
-- `cms-svc` Phase 1 (`cms-001`) COMPLETE (2026-10-27):
-  - Nest 12/Node 24 ESM foundation with Joi env validation, shared app setup, `/api/v1` prefix, and health-route exclusions.
-  - Fail-fast Mongoose connection (`retryAttempts: 0`), degraded Redis readiness, `/health` and `/health/ready`; Mongo-down returns `503`.
-  - JWT/Roles guard plumbing, request-id propagation, standard error envelope, and cache-control behavior.
-  - Dockerized Mongo 8 on `127.0.0.1:27018`; tests use `ecom_cms_test` and drop it after the run.
-  - Verification: 35 unit tests across 7 files, 5 e2e tests across 2 files, `oxlint` clean, `tsc` clean, `nest build` clean; production smoke `200` healthy / `503` Mongo-down / `404` envelope; startup with Mongo down exits before serving.
-  - Phase 2 domain work blocked on `ecom-contracts` and CMS payload decisions.
+**Not created yet:** `notify-svc`, `analytics-svc`, `import-svc`, `ecom-infra`, `admin-app` (empty). Their work is fully specified as tasks, not claimed as done.
 
-## Next (ordered)
+---
 
-1. Resolve `ecom-contracts` and start `cms-svc` Phase 2 domain; `search-svc :4060` after that.
-2. Thin client (`lib/auth/client.ts` + per-action handlers + `proxy.ts`) in storefront-ui.
-3. CMS source wiring replacing `TODO(cms-svc)` null-sources; `7.Deployment.md` + `8.Versioning.md` stubs.
+## 2. P0 — must finish before “feature complete”
 
-## Task tracking (64/64/0/0)
+These are the defects that make the current happy path fail or lose money/data.
 
-- `unpushed` array: every local commit not on `main` listed per repo
-  until you push; cleared per-branch on push. Read push-state in `tasks.json`,
-  never by asking. Latest: cart-svc 88 local commits (Phase 1 + schema 002 +
-  ca-002/ca-003/ca-004 code/tests); Documentation 17 docs commits;
-  state-for-agents 39 recorded tracker commits; auth-svc 14 hardening
-  commits. The `tasks.json` carrier `15de2fa` and this STATUS commit join on
-  the next update.
+1. **`ec-001` / `ec-002`** — canonical envelope 1.3.0 with dual-read/write; missing payloads (`user.registered`, `cart.updated`, `cart.abandoned`, `order.created`, `order.status.updated`, `page.viewed`).
+2. **`cat-006`** — persist idempotent stock reservations; fix the `reservationId`/`qty` vs `orderId`/`quantity` contract; make release restock once.
+3. **`ord-007`** — checkout sends the real catalog DTO; persist `stock_reservation_id`; real-contract e2e.
+4. **`ord-008`** — scope Redis idempotency by user + route; atomic lock; fail closed.
+5. **`ord-009`** — persist `pending_payment` before capture; compensate on DB/capture failure.
+6. **`ord-010`** — call the payment provider for refunds; publish `order.status.updated {to:"refunded"}`; remove `order.refunded`.
+7. **`ord-012`** — remove the broken cart HTTP clear; rely on `order.created`.
+8. **`ca-007`** — temporary internal cart conversion endpoint (removed when `ca-009` lands).
+9. **`cms-003` / `cms-004`** — close media path traversal, unauthenticated file serving, post-buffer MIME/size checks.
+10. **`srch-001`** — malformed/invalid events go to DLQ; unknown types commit with a metric; `processed_events`.
+11. **`sf-048`** — resolve the dirty storefront worktree before commerce work.
+12. **`doc-001`** — remove SNS→SQS, storefront-Kafka, per-topic-group, CMS-consumer, `media.tasks`, `reminder.dispatch`, and `order.refunded` claims.
 
-Per-task records live in `tasks.json` (`repos.*.tasks`) + `TASKS/` logs
-(id == filename, status == folder). Auth: `au-001` done; `au-002` done; `au-003` done. Cart: `ca-001` through `ca-006` done. CMS: `cms-001` done. Backfill `sf-001`-`sf-010` done from session record; `sf-011` in
-progress (learner-owned). `index.html` work is never logged (temporary
-concept file).
+---
 
-## How to claim
+## 3. Plan after P0
 
-Pick a `todo` in `tasks.json` (next: resolve `ecom-contracts`, then start `cms-svc` Phase 2) → set `claimedBy` + `in-progress` → load skills via `SKILL-ROUTER.md` → finish by flipping stage + updating here.
+| Phase | Name | Tasks | Exit criterion |
+|---|---|---|---|
+| P0 | Correctness gate | 14 | Checkout, stock, refunds, media, search DLQ, and docs are correct |
+| P1 | Contracts + local harness | 6 | 1.3.0 dual-read; Kafka/Redis/Postgres/Mongo RS/LocalStack/Mailpit up; topics + DLQs provisioned |
+| P2 | Producers + storefront seams | 10 | auth/cart/catalog/order/CMS publish only through outboxes; storefront seams live |
+| P3 | Consumers + idempotency | 9 | cart/catalog/search/notify/analytics consumers pass duplicate/malformed/DLQ tests |
+| P4 | Missing services | 14 | notify, analytics, import own their transports and specs |
+| P5 | Integration + deploy | 6 | end-to-end + failure injection green; contracts 2.0.0; CI/observability |
+| P6 | Admin app | 1 | scope decision; scaffold only if merchant UI is required |
+
+---
+
+## 4. Messaging ownership (canonical)
+
+**Kafka = domain events only. SQS = task jobs only. HTTP = synchronous reads/writes.**
+
+| Service | Publishes (Kafka) | Consumes (Kafka) | SQS tasks | Must not |
+|---|---|---|---|---|
+| `auth-svc` | `user.registered` (key `userId`) | — | — | No consumer; no tasks |
+| `cart-svc` | `cart.updated` (key `cartId`) | `order.created` | — | No tasks |
+| `catalog-svc` | `product.updated` (key `productId`), `category.updated` (key `categoryId`) | `product.imported`, `order.created`, `order.status.updated` | — | No tasks |
+| `order-svc` | `order.created`, `order.status.updated` (key `orderId`) | — | — | No consumer; no tasks |
+| `cms-svc` | `cms.updated`, `blog.updated` (key `blogId`) | — | `media.resize-image` | No Kafka consumer; no `media.tasks` |
+| `search-svc` | — | `product.imported`, `product.updated`, `category.updated`, `blog.updated` | — | No producer; no Kafka backfill |
+| `notify-svc` | — | `order.created`, `cart.abandoned`, `user.registered`, `order.status.updated` | `notify.send-email` | No Kafka producer |
+| `analytics-svc` | `page.viewed` (key `sessionId`), `cart.abandoned` (key `userId`) | `cart.updated`, `order.created`, `page.viewed`, `user.registered` | — | No tasks; no `reminder.dispatch` |
+| `import-svc` | `product.imported` (key `productId`) | — | `import.process-row` | No Kafka consumer |
+| `storefront-ui` | — | — | — | No Kafka credentials/client; HTTP only |
+| `admin-app` | — | — | — | No direct Kafka/SQS; HTTP only |
+| `ecom-infra` | — | — | provisions the three queues | No producer/consumer |
+| `@ecom/contracts` | — | — | — | No runtime transport; schemas only |
+
+**Delivery rules:** at-least-once; manual commit after the side effect and
+`processed_events` insert commit together; one consumer group per service
+(`postfixId: ''`); five retries with 1/2/4/8/16s backoff; every source topic has
+a `.dlq` twin; malformed JSON and invalid known payloads go directly to the
+DLQ; unknown event types are ignored and committed with a metric.
+
+**Producer rules:** request handlers never publish directly. auth/cart/catalog/
+order write a Postgres outbox in the same transaction as the domain change; CMS
+writes `cms_outbox` in a Mongo transaction (replica set required). Relays use
+`FOR UPDATE SKIP LOCKED`, mark published only after broker ack, retry with
+`next_attempt_at`, and dead-letter after five attempts.
+
+---
+
+## 5. Non-Kafka boundaries
+
+- **SQS only:** `notify.send-email`, `import.process-row`, `media.resize-image`. Tasks never go to Kafka.
+- **Storefront page views:** `sendBeacon` → Next `/api/track` → `analytics-svc` HTTP → Kafka. The browser/storefront never holds Kafka credentials.
+- **Storefront CMS cache:** CMS calls Next `/api/revalidate` over HTTP with a shared secret. No storefront Kafka consumer.
+- **Admin:** API/HTTP only.
+- **Search backfill/tests:** internal batch HTTP endpoint; Kafka replay is not the backfill mechanism.
+- **Cart conversion:** `order.created` event; `ca-007` is a temporary HTTP bridge only.
+- **Synchronous reads:** internal REST (catalog snapshots, auth email lookup, order lookup).
+- **Dropped:** `reminder.dispatch` (replaced by `cart.abandoned` + `notify.send-email`), `order.refunded` (replaced by `order.status.updated {to:"refunded"}`), `media.tasks` (SQS instead), SNS→SQS event transport.
+
+---
+
+## 6. Pending by repo
+
+| Repo | Total | Done | In progress | Backlog | Next up |
+|---|---:|---:|---:|---:|---|
+| `storefront-ui` | 53 | 46 | 1 | 6 | `sf-048`, `sf-049`, `sf-050`, `sf-051`, `sf-052`, `sf-053` |
+| `ecom-contracts` | 5 | 0 | 0 | 5 | `ec-001`, `ec-002`, `ec-003`, `ec-004`, `ec-005` |
+| `auth-svc` | 4 | 2 | 0 | 2 | `au-004`, `au-005` |
+| `cart-svc` | 10 | 6 | 0 | 4 | `ca-007`, `ca-008`, `ca-009`, `ca-010` |
+| `catalog-svc` | 11 | 5 | 0 | 6 | `cat-006`, `cat-007`, `cat-008`, `cat-009`, `cat-010`, `cat-011` |
+| `order-svc` | 12 | 6 | 0 | 6 | `ord-007`, `ord-008`, `ord-009`, `ord-010`, `ord-011`, `ord-012` |
+| `cms-svc` | 7 | 2 | 0 | 5 | `cms-003`, `cms-004`, `cms-005`, `cms-006`, `cms-007` |
+| `search-svc` | 3 | 0 | 0 | 3 | `srch-001`, `srch-002`, `srch-003` |
+| `notify-svc` | 4 | 0 | 0 | 4 | `ntf-001..ntf-004` |
+| `analytics-svc` | 4 | 0 | 0 | 4 | `anl-001..anl-004` |
+| `import-svc` | 3 | 0 | 0 | 3 | `imp-001..imp-003` |
+| `ecom-infra` | 7 | 0 | 0 | 7 | `inf-001..inf-005`, `tst-001`, `tst-002` |
+| `Documentation` | 4 | 0 | 0 | 4 | `doc-001..doc-004` |
+| `admin-app` | 1 | 0 | 0 | 1 | `adm-001` (deferred) |
+
+> Historical note: counts are tracker entries, not historical slices. `auth-svc`
+> `au-001` and `search-svc` slices 0–6 are recorded in repo notes, not as
+> separate entries. New work is always a task entry.
+
+---
+
+## 7. Now / Next
+
+- **Now:** tracker and status rewritten locally; no code fix has been applied yet.
+- **Next:** `ec-001` → `ec-002` → `doc-001` → `cat-006` → `ord-007` → `ord-008` → `ord-009` → `ord-010` → `ca-007` → `cms-003`.
+- **Do not** push, tag, release, or publish packages without explicit approval.
+- **Commit style:** one commit per edit/feature, conventional message, author `Dharmil Gajjar <foreafcbeta@gmail.com>`.
+
+---
+
+## 8. Truth checks (2026-10-29)
+
+- `tasks.json` parses; **128 unique IDs**; **0 dependency cycles**; no missing dependencies.
+- Every `done`/`in-progress` entry has an existing log under the matching folder.
+- Phase coverage: **P0 14, P1 6, P2 10, P3 9, P4 14, P5 6, P6 1 = 60**.
+- Repo messaging matches `producesConsumes`; the topic catalog matches repo ownership.
+- Repos are level with upstream except `Documentation` (one local commit `d0cefcf`). `storefront-ui` is dirty and must be resolved by `sf-048`.
+- No push, tag, release, or package publish was performed.

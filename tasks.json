@@ -1,456 +1,515 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-28T00:15:00Z",
+  "updatedAt": "2026-10-29T15:27:04.611Z",
   "summary": {
-    "total": 65,
-    "done": 64,
+    "total": 128,
+    "done": 67,
     "in_progress": 1,
-    "backlog": 0
+    "backlog": 60,
+    "byRepo": {
+      "storefront-ui": {
+        "total": 53,
+        "done": 46,
+        "in_progress": 1,
+        "backlog": 6
+      },
+      "admin-app": {
+        "total": 1,
+        "done": 0,
+        "in_progress": 0,
+        "backlog": 1
+      },
+      "ecom-contracts": {
+        "total": 5,
+        "done": 0,
+        "in_progress": 0,
+        "backlog": 5
+      },
+      "auth-svc": {
+        "total": 4,
+        "done": 2,
+        "in_progress": 0,
+        "backlog": 2
+      },
+      "catalog-svc": {
+        "total": 11,
+        "done": 5,
+        "in_progress": 0,
+        "backlog": 6
+      },
+      "cart-svc": {
+        "total": 10,
+        "done": 6,
+        "in_progress": 0,
+        "backlog": 4
+      },
+      "order-svc": {
+        "total": 12,
+        "done": 6,
+        "in_progress": 0,
+        "backlog": 6
+      },
+      "cms-svc": {
+        "total": 7,
+        "done": 2,
+        "in_progress": 0,
+        "backlog": 5
+      },
+      "analytics-svc": {
+        "total": 4,
+        "done": 0,
+        "in_progress": 0,
+        "backlog": 4
+      },
+      "import-svc": {
+        "total": 3,
+        "done": 0,
+        "in_progress": 0,
+        "backlog": 3
+      },
+      "notify-svc": {
+        "total": 4,
+        "done": 0,
+        "in_progress": 0,
+        "backlog": 4
+      },
+      "search-svc": {
+        "total": 3,
+        "done": 0,
+        "in_progress": 0,
+        "backlog": 3
+      },
+      "ecom-infra": {
+        "total": 7,
+        "done": 0,
+        "in_progress": 0,
+        "backlog": 7
+      },
+      "Documentation": {
+        "total": 4,
+        "done": 0,
+        "in_progress": 0,
+        "backlog": 4
+      }
+    },
+    "historyNote": "Counts are tracker entries, not historical slices. auth-svc au-001 and search-svc slices 0-6 are described in repo notes but have no separate task entries; new work always gets an entry."
   },
-  "unpushed": {
-    "storefront-ui": [
-      "34dbaa8",
-      "ae47178",
-      "00482b0",
-      "c2df441",
-      "256b736",
-      "16b53c8",
-      "c290bf4",
-      "799c11b",
-      "07459a4",
-      "a42246c",
-      "2f0de96",
-      "7931b44",
-      "49b2c3f",
-      "3bb1aff",
-      "7f56740",
-      "7f613cd",
-      "927ce86",
-      "8189f6d",
-      "2f8c85c",
-      "81fbf45",
-      "4f1438d",
-      "c562b19",
-      "e274eb0",
-      "f6d8cac",
-      "09fa097",
-      "63cf5e4",
-      "099c837",
-      "2474905",
-      "18f89e4"
+  "plan": {
+    "currentPhase": "P0",
+    "rule": "A service is complete only when its done tasks, its P0/P1 tasks, and the integration gate are green. \"Core complete\" is not \"feature complete\".",
+    "phases": [
+      {
+        "id": "P0",
+        "name": "Correctness gate",
+        "goal": "Fix the defects that make the current happy path fail or lose money/data.",
+        "exitCriteria": [
+          "Checkout succeeds against the real catalog contract.",
+          "Stock release and refunds are idempotent and provider-backed.",
+          "Media traversal and upload validation are closed.",
+          "Search never silently commits a malformed event.",
+          "Docs no longer claim a transport the code does not use."
+        ],
+        "tasks": [
+          "sf-048",
+          "ec-001",
+          "ec-002",
+          "cat-006",
+          "ca-007",
+          "ord-007",
+          "ord-008",
+          "ord-009",
+          "ord-010",
+          "ord-012",
+          "cms-003",
+          "cms-004",
+          "srch-001",
+          "doc-001"
+        ],
+        "count": 14
+      },
+      {
+        "id": "P1",
+        "name": "Contracts and local harness",
+        "goal": "Make the canonical envelope and local infrastructure real before producers and consumers depend on them.",
+        "exitCriteria": [
+          "Contracts 1.3.0 accepts canonical and legacy envelopes.",
+          "Local compose runs Kafka, Redis, Postgres, Mongo replica set, LocalStack SQS, and Mailpit.",
+          "Topics and DLQs are provisioned declaratively."
+        ],
+        "tasks": [
+          "ec-003",
+          "inf-001",
+          "inf-002",
+          "inf-003",
+          "doc-002",
+          "doc-003"
+        ],
+        "count": 6
+      },
+      {
+        "id": "P2",
+        "name": "Producers and storefront seams",
+        "goal": "Every producer writes a transactional outbox; storefront uses HTTP seams only.",
+        "exitCriteria": [
+          "auth/cart/catalog/order/CMS publish only through outboxes.",
+          "No producer swallows a Kafka failure.",
+          "Storefront has auth, CMS, commerce, and tracking seams."
+        ],
+        "tasks": [
+          "sf-049",
+          "sf-050",
+          "sf-051",
+          "au-004",
+          "cat-007",
+          "cat-011",
+          "ca-008",
+          "ca-010",
+          "ord-011",
+          "cms-005"
+        ],
+        "count": 10
+      },
+      {
+        "id": "P3",
+        "name": "Consumers and idempotency",
+        "goal": "Every consumer has one group, processed_events, manual commits, and DLQ behavior.",
+        "exitCriteria": [
+          "cart, catalog, search, notify, and analytics consumers pass duplicate/malformed/DLQ tests.",
+          "Cart conversion is event-driven.",
+          "Search keeps Kafka primary plus internal batch backfill."
+        ],
+        "tasks": [
+          "sf-053",
+          "cat-008",
+          "cat-009",
+          "cat-010",
+          "ca-009",
+          "cms-006",
+          "cms-007",
+          "srch-002",
+          "srch-003"
+        ],
+        "count": 9
+      },
+      {
+        "id": "P4",
+        "name": "Missing services",
+        "goal": "Create notify, analytics, and import with their owned transports.",
+        "exitCriteria": [
+          "notify sends email from SQS only.",
+          "analytics ingests page views over HTTP and publishes page.viewed.",
+          "import publishes product.imported and uses SQS for row work."
+        ],
+        "tasks": [
+          "sf-052",
+          "au-005",
+          "anl-001",
+          "anl-002",
+          "anl-003",
+          "anl-004",
+          "imp-001",
+          "imp-002",
+          "imp-003",
+          "ntf-001",
+          "ntf-002",
+          "ntf-003",
+          "ntf-004",
+          "doc-004"
+        ],
+        "count": 14
+      },
+      {
+        "id": "P5",
+        "name": "Integration and deploy",
+        "goal": "Prove the whole flow and make it operable.",
+        "exitCriteria": [
+          "End-to-end checkout -> events -> consumers is green.",
+          "Failure injection passes.",
+          "Nginx, VERSIONS.env, CI, lag/DLQ/outbox alarms exist.",
+          "Contracts 2.0.0 cutover is complete."
+        ],
+        "tasks": [
+          "ec-004",
+          "ec-005",
+          "inf-004",
+          "inf-005",
+          "tst-001",
+          "tst-002"
+        ],
+        "count": 6
+      },
+      {
+        "id": "P6",
+        "name": "Admin app",
+        "goal": "Merchant UI, deferred until the backend APIs are stable.",
+        "exitCriteria": [
+          "Scope decision recorded.",
+          "Scaffold only if merchant UI is required for acceptance."
+        ],
+        "tasks": [
+          "adm-001"
+        ],
+        "count": 1
+      }
     ],
-    "state-for-agents": [
-      "35fc178",
-      "d940c08",
-      "fb78d7f",
-      "160448d",
-      "f5db6f0",
-      "171a48b",
-      "839fced",
-      "f93c9e9",
-      "bb96c4e",
-      "c5b0b6f",
-      "c32e964",
-      "65bafdd",
-      "52dafed",
-      "46f8fab",
-      "22c363d",
-      "1798329",
-      "8b28117",
-      "1778086",
-      "6becc13",
-      "278ca12",
-      "a8cef68",
-      "9975626",
-      "5f8d6ce",
-      "fa353aa",
-      "cd32c44",
-      "0f290d2",
-      "41dca54",
-      "6c25bed",
-      "595944a",
-      "56a20fe",
-      "e6c1685",
-      "1132730",
-      "9949fb2",
-      "10651df",
-      "e075252",
-      "2ae81a9",
-      "5b9d2a9",
-      "5a1a83f",
-      "51dcc73",
-      "935e5f6"
+    "nextUp": [
+      "ec-001",
+      "ec-002",
+      "doc-001",
+      "cat-006",
+      "ord-007",
+      "ord-008",
+      "ord-009",
+      "ord-010",
+      "ca-007",
+      "cms-003"
     ],
-    "Documentation": [
-      "f8ebbf9",
-      "2b9e1b0",
-      "90a6745",
-      "501e7fb",
-      "dba226c",
-      "917ee2b",
-      "5e1ea33",
-      "3887783",
-      "ab494cb",
-      "5d2740a",
-      "64edaa7",
-      "aa82e8d",
-      "71a24c7",
-      "32a6ecf",
-      "4377a13",
-      "a077481",
-      "3e53c9d",
-      "37f7028",
-      "e5899b0",
-      "d9b3768",
-      "c754dd2",
-      "1063dd1",
-      "30f437e",
-      "a0d3974",
-      "b268c48",
-      "b6b0e30"
-    ],
-    "auth-svc": [
-      "791d094",
-      "c7fe3d0",
-      "3fad688",
-      "28f7df7",
-      "4b75f78",
-      "f31c0ed",
-      "14ca934",
-      "cd63edd",
-      "f4d4912",
-      "c34497b",
-      "bfe9388",
-      "c36eb90",
-      "a45501e",
-      "9d29d20"
-    ],
-    "cart-svc": [
-      "404835e",
-      "a46bdd1",
-      "abe9ff1",
-      "6e46b06",
-      "eb7d0e6",
-      "b95f495",
-      "32092f7",
-      "2b73f74",
-      "1438885",
-      "d3ebe59",
-      "440c28b",
-      "67dc3da",
-      "dd4f752",
-      "d685238",
-      "a443dcb",
-      "5348d25",
-      "37307c9",
-      "e55af1a",
-      "a426ecb",
-      "edeebdc",
-      "0d836bc",
-      "b017509",
-      "a6adc0a",
-      "ee24e9a",
-      "9eaaafe",
-      "e908a57",
-      "2199338",
-      "92e4733",
-      "ead1f35",
-      "fbbcc16",
-      "87f39e7",
-      "bfa87de",
-      "137e872",
-      "c5b7380",
-      "aaad066",
-      "c5f97f1",
-      "6060769",
-      "c3168e0",
-      "b593dfc",
-      "3992165",
-      "fc3a892",
-      "618eaed",
-      "78a355b",
-      "9f3f655",
-      "f2c0f52",
-      "fae612f",
-      "0658050",
-      "69a1d57",
-      "e1f17de",
-      "e83e0ee",
-      "c3a7f2a",
-      "618a9a0",
-      "5e31111",
-      "555a1bd",
-      "df2a753",
-      "f7aa9d4",
-      "6169132",
-      "34eedf7",
-      "26a6557",
-      "f32d7f9",
-      "60c3251",
-      "f9a73f9",
-      "353c306",
-      "1338582",
-      "b368058",
-      "5e04a47",
-      "4e2f0dc",
-      "b986ad1",
-      "9a76023",
-      "4e4b3b4",
-      "1620831",
-      "40c6abe",
-      "a22ad89",
-      "994e88f",
-      "f876b1d",
-      "e9e6d0f",
-      "e1df339",
-      "2a4ace4",
-      "eeadff7",
-      "89aa192",
-      "bc6f19f",
-      "5b3aa0f",
-      "66f6427",
-      "d5dd2a7",
-      "257e2c5",
-      "99e24db",
-      "873008b",
-      "7d3eda4"
-    ],
-    "catalog-svc": [
-      "072709a",
-      "85ea0cb",
-      "1823195",
-      "6d1a2f1",
-      "650e65b",
-      "272f5bd",
-      "ae99aa5",
-      "04baf8e",
-      "f4f9c75",
-      "af67091",
-      "85a09d7",
-      "202a570",
-      "acabcce",
-      "c3e7100",
-      "e111589",
-      "5ef8fd9",
-      "b90bc01",
-      "fab9e5e",
-      "32a9311",
-      "ec62550",
-      "b5da9a8",
-      "e2c382e",
-      "969b508",
-      "20f6573",
-      "d324651",
-      "23f6a70",
-      "22318af",
-      "e2ac75d",
-      "4dfb63d",
-      "867b01f",
-      "292d888",
-      "9030b07",
-      "d2ec022",
-      "1a0f071",
-      "39300e9",
-      "f06f519",
-      "828c00e",
-      "3e868b4",
-      "ea94493",
-      "b8537b6",
-      "4066f01",
-      "a169dfc",
-      "1146b72",
-      "14a0544",
-      "6eb56dc",
-      "ea77a63",
-      "db7ab4c",
-      "94789ae",
-      "e86a2a1",
-      "e322bd9",
-      "bb49e2e",
-      "b5605f7",
-      "758e3b4",
-      "0064e86",
-      "e4ce8ed",
-      "76cf4a3",
-      "1077d22",
-      "8c17a07",
-      "68ad7ce",
-      "eab025f",
-      "88317e7",
-      "3c94f6c",
-      "f26b648",
-      "b9a7f36",
-      "58a0bd9",
-      "9bb13e1",
-      "6e92178",
-      "a4d5dc7",
-      "455e81e",
-      "0bc3731",
-      "d62cc91",
-      "7cd3280",
-      "f0c3728",
-      "0f555ce",
-      "14e6b58",
-      "9368297",
-      "56b5896",
-      "ee9b747",
-      "38cf6dd",
-      "eae5c4d",
-      "334a201",
-      "8687146",
-      "719dda2",
-      "3898ef2",
-      "73353f6",
-      "af306dd",
-      "ba63fcd",
-      "935535f",
-      "b85de86",
-      "e607a3a",
-      "4394502",
-      "50347d1",
-      "ba3b1c2",
-      "78f949c",
-      "82b308e",
-      "3fe2f03",
-      "02dd169",
-      "c59e4a4",
-      "34d4a60",
-      "4903bba",
-      "d46a8f3",
-      "468a3e7",
-      "fafca9c",
-      "5c76731",
-      "1574e3c"
-    ],
-    "order-svc": [
-      "a063c68",
-      "b52ea28",
-      "b942022",
-      "b15f819",
-      "1f908e4",
-      "7460658",
-      "bef519e",
-      "7fc837c",
-      "a4fd0b4",
-      "9518716",
-      "a25baba",
-      "040871e",
-      "b2a3d2b",
-      "d4843ed",
-      "65353ca",
-      "c79db1b",
-      "9ac6dce",
-      "51acedb",
-      "2e787da",
-      "6214129",
-      "54c494a",
-      "a15007b",
-      "cb06fb3",
-      "3a2cdb6",
-      "d077753",
-      "006d278",
-      "cf58246",
-      "5ed90af",
-      "36f726c",
-      "32f37c8",
-      "d53a68f",
-      "a5b7b87",
-      "e8c2e6d",
-      "83fb29c",
-      "f8fbe7d",
-      "486d918",
-      "fb158de",
-      "e1b0b98",
-      "706627a",
-      "4466de5",
-      "5fdc00c",
-      "13ae23a",
-      "74b4c26",
-      "dc4b2b4",
-      "bcf39d6",
-      "320702d",
-      "aaecbdf",
-      "46f4009",
-      "f4c26c6",
-      "8be2525",
-      "1c8af86",
-      "659ea66",
-      "3c577ea",
-      "4e0fb65",
-      "09bab3b",
-      "72fa538",
-      "5f0d291",
-      "9b0bdc1",
-      "b04aa6b",
-      "df865e1",
-      "9f06624",
-      "2451e67",
-      "4fd3608",
-      "70ccaa5",
-      "6ee53d2",
-      "c964eac",
-      "ed234a9",
-      "86f2b8e",
-      "11c28b0",
-      "4fee7d7",
-      "a77ec83",
-      "c653768",
-      "3780439",
-      "8f5ca1b",
-      "32d70e6",
-      "37d8daa",
-      "9d6bd19",
-      "6984f3b",
-      "c4720f3",
-      "b699ad7",
-      "a8741fa",
-      "955099c",
-      "82e7eb0",
-      "1288a1a",
-      "5569ad7",
-      "b51c343",
-      "ff8eff0",
-      "d6db700",
-      "467235f",
-      "739810f",
-      "727c85e",
-      "cab3a4d",
-      "d3932a1",
-      "71bd163",
-      "9dbc1d1"
-    ],
-    "cms-svc": [
-      "ad792c3",
-      "a435be6",
-      "45bff7e",
-      "3baa7eb",
-      "395b882",
-      "f47ff1f",
-      "ac1232f",
-      "9d06920",
-      "304f07e",
-      "b91c75b",
-      "8fdc560",
-      "98bdf3c",
-      "e1575cd"
-    ],
-    "ecom-contracts": [
-      "4d46959",
-      "47abd53",
-      "02e3a81",
-      "b3e2b34",
-      "41a718d",
-      "0023c44",
-      "c9fb5ad",
-      "0562951",
-      "d5d00e0",
-      "c04616c",
-      "f91f399",
-      "5e70c6a"
+    "completionGate": [
+      "Every P0 task is done and verified.",
+      "No request handler publishes to Kafka directly; every producer uses an outbox.",
+      "Every consumer has processed_events, manual commits, and a DLQ test.",
+      "The integration harness and failure-injection suite are green.",
+      "No doc or note claims 100% while a task remains.",
+      "No SQS task is on Kafka and the storefront holds no Kafka credentials."
     ]
   },
-  "workflow": "Claim: create/move log to TASKS/in-progress/, set entry status in-progress + owner + started. Build against chained skills (router order). Close: move log to TASKS/done/ (or backlog/), fill verification + follow_ups, flip entry status + finished, update STATUS.md + summary, same commit. Commits: one commit per file (larger edits split per edit); stage with diff eyes-on; subject + reason body; local-only until the human says push. Unpushed array lists every local commit except its own carrier commit (which joins on the next update); cleared per-branch on push. Validation: id == filename, status == folder, log file must exist, STATUS counts == summary.",
-  "rules": "Claim: set claimedBy={agent,since,task} + stages.<stage> to in-progress (24h lease; other instances must not steal without comment). Finish: flip stage to done + update SERVICES.md + STATUS.md in same commit. Stage vocab locked: todo|in-progress|done (maps to todo/in-progress/done cells). Path truth: localRoots below are where agents edit TODAY; future split repos named in 'repo'. Never invent paths — resolve via SKILL-EXPLORE. motive is immutable (ADR change only); inProgress/next are mutable.",
+  "messaging": {
+    "decisionDate": "2026-10-29",
+    "transportSplit": "Kafka carries domain events only. SQS carries task jobs only. Synchronous request/response stays HTTP. A workload never appears on both transports.",
+    "envelope": {
+      "shape": [
+        "id",
+        "type",
+        "version",
+        "timestamp",
+        "producer",
+        "idempotencyKey",
+        "payload"
+      ],
+      "type": "Event name and Kafka topic in one field. After contracts 2.0.0 there is no separate topic or eventType field.",
+      "version": "Per-event integer, starts at 1. Consumers reject unknown versions or route them to the DLQ.",
+      "idempotencyKey": "Producer-owned stable key. Consumers persist it in processed_events in the same transaction as the side effect.",
+      "keying": "Kafka message key is the aggregate id: orderId, cartId, productId, categoryId, blogId, userId, or sessionId."
+    },
+    "delivery": {
+      "semantics": "at-least-once",
+      "commit": "Manual commit only after the side effect and the processed_events insert commit together.",
+      "retry": "Five attempts with exponential backoff: 1s, 2s, 4s, 8s, 16s.",
+      "dlq": "Every source topic has a <topic>.dlq twin. Malformed JSON and invalid known payloads go directly to the DLQ. Unknown event types are ignored and committed with a metric.",
+      "consumerGroups": "One consumer group per service, not per service+topic. Nest postfixId is set to an empty string so groups do not gain a -server suffix.",
+      "idempotency": "Postgres processed_events table or Mongo processed_events collection with a unique (consumer, event_id) index."
+    },
+    "implementation": {
+      "library": "@nestjs/microservices Kafka transport for consumers plus a kafkajs producer for the outbox relay. Domain code never imports kafkajs directly.",
+      "outbox": "auth, cart, catalog, and order use a Postgres outbox written in the same transaction as the domain change. CMS uses a Mongo transaction plus cms_outbox and requires a replica set. Relays use FOR UPDATE SKIP LOCKED, mark published, retry with next_attempt_at, and dead-letter after five attempts.",
+      "consumer": "@EventPattern handlers with @Payload and @Ctx KafkaContext, manual commits, and @ecom/contracts envelope validation before the handler runs.",
+      "topics": "Auto-create is disabled. ecom-infra creates every topic and its .dlq twin with explicit partitions and retention.",
+      "noDirectPublish": "Request handlers never publish directly. They write an outbox row; the relay publishes it."
+    },
+    "topics": [
+      {
+        "topic": "user.registered",
+        "producer": "auth-svc",
+        "consumers": [
+          "notify-svc",
+          "analytics-svc"
+        ],
+        "partitions": 1,
+        "retention": "7d",
+        "key": "userId",
+        "dlq": "user.registered.dlq"
+      },
+      {
+        "topic": "cart.updated",
+        "producer": "cart-svc",
+        "consumers": [
+          "analytics-svc"
+        ],
+        "partitions": 3,
+        "retention": "7d",
+        "key": "cartId",
+        "dlq": "cart.updated.dlq"
+      },
+      {
+        "topic": "cart.abandoned",
+        "producer": "analytics-svc",
+        "consumers": [
+          "notify-svc"
+        ],
+        "partitions": 3,
+        "retention": "7d",
+        "key": "userId",
+        "dlq": "cart.abandoned.dlq"
+      },
+      {
+        "topic": "order.created",
+        "producer": "order-svc",
+        "consumers": [
+          "cart-svc",
+          "catalog-svc",
+          "notify-svc",
+          "analytics-svc"
+        ],
+        "partitions": 3,
+        "retention": "30d",
+        "key": "orderId",
+        "dlq": "order.created.dlq"
+      },
+      {
+        "topic": "order.status.updated",
+        "producer": "order-svc",
+        "consumers": [
+          "catalog-svc",
+          "notify-svc"
+        ],
+        "partitions": 3,
+        "retention": "30d",
+        "key": "orderId",
+        "dlq": "order.status.updated.dlq"
+      },
+      {
+        "topic": "product.imported",
+        "producer": "import-svc",
+        "consumers": [
+          "catalog-svc",
+          "search-svc"
+        ],
+        "partitions": 1,
+        "retention": "7d",
+        "key": "productId",
+        "dlq": "product.imported.dlq"
+      },
+      {
+        "topic": "product.updated",
+        "producer": "catalog-svc",
+        "consumers": [
+          "search-svc"
+        ],
+        "partitions": 3,
+        "retention": "7d",
+        "key": "productId",
+        "dlq": "product.updated.dlq"
+      },
+      {
+        "topic": "category.updated",
+        "producer": "catalog-svc",
+        "consumers": [
+          "search-svc"
+        ],
+        "partitions": 1,
+        "retention": "7d",
+        "key": "categoryId",
+        "dlq": "category.updated.dlq"
+      },
+      {
+        "topic": "cms.updated",
+        "producer": "cms-svc",
+        "consumers": [],
+        "partitions": 1,
+        "retention": "7d",
+        "key": "sectionKey",
+        "dlq": "cms.updated.dlq",
+        "note": "No Kafka consumer in v1. Storefront cache invalidation uses an HTTP webhook so the storefront never holds Kafka credentials."
+      },
+      {
+        "topic": "blog.updated",
+        "producer": "cms-svc",
+        "consumers": [
+          "search-svc"
+        ],
+        "partitions": 1,
+        "retention": "7d",
+        "key": "blogId",
+        "dlq": "blog.updated.dlq"
+      },
+      {
+        "topic": "page.viewed",
+        "producer": "analytics-svc",
+        "consumers": [
+          "analytics-svc"
+        ],
+        "partitions": 6,
+        "retention": "3d",
+        "key": "sessionId",
+        "dlq": "page.viewed.dlq",
+        "note": "Storefront sends an HTTP beacon to Next /api/track; analytics-svc validates it and publishes the event."
+      }
+    ],
+    "taskQueues": [
+      {
+        "queue": "notify.send-email",
+        "producer": "notify-svc",
+        "consumer": "notify-svc",
+        "dlq": "notify.send-email-dlq",
+        "type": "standard",
+        "maxReceiveCount": 5,
+        "visibilityTimeout": "60s",
+        "retention": "14d",
+        "payload": "sendEmailJobSchema",
+        "note": "Created after a Kafka consumer maps an event to an email. Never a Kafka topic."
+      },
+      {
+        "queue": "import.process-row",
+        "producer": "import-svc",
+        "consumer": "import-svc",
+        "dlq": "import.process-row-dlq",
+        "type": "standard",
+        "maxReceiveCount": 5,
+        "visibilityTimeout": "60s",
+        "retention": "14d",
+        "payload": "processImportRowJobSchema"
+      },
+      {
+        "queue": "media.resize-image",
+        "producer": "cms-svc",
+        "consumer": "cms-svc worker",
+        "dlq": "media.resize-image-dlq",
+        "type": "standard",
+        "maxReceiveCount": 5,
+        "visibilityTimeout": "60s",
+        "retention": "14d",
+        "payload": "resizeImageJobSchema",
+        "note": "Catalog-svc does not upload media in v1. If it does later it enqueues the same queue."
+      }
+    ],
+    "nonKafka": [
+      "SQS tasks: notify.send-email, import.process-row, media.resize-image. Tasks never go to Kafka.",
+      "Storefront page views: sendBeacon -> Next /api/track -> analytics-svc HTTP -> Kafka. The storefront holds no Kafka credentials.",
+      "Storefront CMS cache invalidation: CMS calls Next /api/revalidate over HTTP with a shared secret. No storefront Kafka consumer.",
+      "Admin app: API/HTTP only. No direct Kafka producer or consumer.",
+      "Search backfill and tests: internal batch HTTP endpoint. Kafka replay is not the backfill mechanism.",
+      "Cart conversion: order.created event. Phase 0 may use a temporary internal HTTP endpoint until the consumer lands.",
+      "Synchronous cross-service reads: internal REST (catalog snapshots, auth email lookup, order lookup).",
+      "No SNS, MSK, EventBridge, or per-consumer SQS fan-out in v1."
+    ],
+    "dropped": [
+      {
+        "name": "reminder.dispatch",
+        "reason": "cart.abandoned + notify.send-email covers the reminder flow in v1. A separate scheduler queue would be unused."
+      },
+      {
+        "name": "order.refunded",
+        "reason": "Use order.status.updated with to=\"refunded\". One lifecycle event family, one consumer path."
+      },
+      {
+        "name": "media.tasks",
+        "reason": "Media resize is a task, not a domain event. Use SQS media.resize-image."
+      },
+      {
+        "name": "SNS->SQS event transport",
+        "reason": "Kafka is the only event log in every environment. SQS is tasks only."
+      }
+    ]
+  },
+  "unpushed": {
+    "Documentation": [
+      "d0cefcf"
+    ]
+  },
+  "unpushedVerifiedAt": "2026-10-29",
+  "unpushedNote": "Verified with git status -sb across every repo. Only Documentation has one local commit. The state-for-agents carrier commit is excluded by convention and joins on the next tracker update.",
+  "workflow": "Claim: create TASKS/in-progress/<id>-<slug>.md, set the entry status to in-progress, owner, and started. Build against the chained skills (router order). Close: move the log to TASKS/done/, fill verification and follow_ups, flip status to done and finished, update STATUS.md and summary in the same commit. Todo entries carry log:null until claimed; in-progress and done entries must have an existing log file. Commits: one commit per file (larger edits split per edit); stage with diff eyes-on; subject + reason body; local-only until the human says push. Unpushed lists only verified local commits; the carrier commit joins on the next update. Validation: id == filename, status == folder, log exists for in-progress/done, STATUS counts == summary.",
+  "rules": "Claim: set claimedBy={agent,since,task} + stages.<stage> to in-progress (24h lease; other instances must not steal without comment). Finish: flip stage to done + update SERVICES.md + STATUS.md in same commit. Stage vocab locked: todo|in-progress|done (maps to todo/in-progress/done cells). Path truth: localRoots below are where agents edit TODAY; future split repos named in 'repo'. Never invent paths — resolve via SKILL-EXPLORE. motive is immutable (ADR change only); inProgress/next are mutable. Transport truth: Kafka is domain events only, SQS is task jobs only; each repo messaging block and the top-level messaging catalog are authoritative.",
   "repos": {
     "storefront-ui": {
       "motive": "Customer-facing SSR storefront (Next 16): browseCOMPAREwishlistCARTcheckoutorder + CMS-driven sections + SEO canonical discipline.",
@@ -469,11 +528,13 @@
         "test": "in-progress",
         "verify": "todo"
       },
-      "inProgress": "sf-013 SearchButton File 3 (learner-owned). sf-024 closed (palette live, 211/211).",
+      "inProgress": "sf-039 product card in progress; commerce and seam tasks sf-048..sf-053 are queued.",
       "next": [
-        "Thin client (lib/auth/client.ts + per-action handlers + proxy.ts) replacing TODO(auth-client) stubs",
-        "CMS source wiring replacing TODO(cms-svc) null-sources",
-        "Composed commerce: ProductCard, Gallery, HeroSection, MiniCartDrawer; routes: /products, /products/[slug], /cart, /checkout, /account"
+        "sf-048 resolve dirty worktree",
+        "sf-049 thin auth client",
+        "sf-050 CMS wiring + revalidate webhook",
+        "sf-051 commerce routes",
+        "sf-052 /api/track beacon"
       ],
       "blockedBy": [
         "ecom-contracts"
@@ -488,16 +549,12 @@
         "SKILL-SEO"
       ],
       "producesConsumes": {
-        "produces": [
-          "page.viewed"
-        ],
-        "consumes": [
-          "order.status.updated (via API)",
-          "cms.updated (cache invalidation)"
-        ]
+        "produces": [],
+        "consumes": [],
+        "taskQueues": []
       },
       "claimedBy": null,
-      "note": "Shipped: 14 ui primitives + Tooltip system + auth customization slice (lib/auth/*, components/auth/*, app/(auth) routes), 111/111 tests green, commits C0-C9 on main. Static showcase + DS canvas in E:/E-Commerce/index.html (unversioned demo, never logged as tasks).",
+      "note": "UI/auth/CMS slices delivered; commerce routes and thin clients pending. No Kafka credentials: page views go through /api/track to analytics-svc over HTTP; CMS cache invalidation uses /api/revalidate. Worktree is currently dirty (ProductCard deletion + theme changes) and must be resolved before commerce work.",
       "tasks": [
         {
           "id": "sf-001",
@@ -695,7 +752,7 @@
           "owner": "learner",
           "started": "2026-10-05",
           "finished": "2026-10-13",
-          "log": "TASKS/in-progress/sf-013-searchbutton-file-3.md",
+          "log": "TASKS/done/sf-013-searchbutton-file-3.md",
           "design_match": "yes",
           "key_decisions": [
             "Superseded by NavSearchTrigger (production trigger shipped in sf-046); learner work preserved in log"
@@ -761,7 +818,7 @@
           "owner": "agent",
           "started": "2026-10-13",
           "finished": "2026-10-13",
-          "log": "TASKS/done/sf-046-navbar-chrome.md",
+          "log": "TASKS/done/sf-026-search-mount-absorbed.md",
           "design_match": "yes",
           "key_decisions": [
             "Absorbed by sf-046 SearchMount + registry guard; no separate build"
@@ -1268,8 +1325,196 @@
           "follow_ups": [
             "V1 palette modal (own motion instance); navbar assembler mount"
           ]
+        },
+        {
+          "id": "sf-048",
+          "title": "storefront: resolve the dirty worktree before commerce work",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P0",
+          "kind": "chore",
+          "transport": "none",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Restore or intentionally re-commit the ProductCard deletion and theme changes, and remove lab/tsbuild artifacts before adding commerce routes. Reason: a dirty worktree hides regressions and mixes unrelated changes. Rejected: build on top of it.",
+            "Run the full test/build gate before the first commerce commit. Reason: the baseline must be green. Rejected: fix regressions inside a feature commit."
+          ],
+          "acceptance": [
+            "git status is clean.",
+            "pnpm test and tsc --noEmit are green.",
+            "The ProductCard decision is recorded in the task log.",
+            "No untracked lab files remain."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "sf-049",
+          "title": "storefront: thin auth client and proxy",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P2",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Server actions call auth-svc over HTTP and keep tokens out of JS. Reason: AGENTS.md hard-bans localStorage and token exposure. Rejected: client-side token storage.",
+            "Replace TODO(auth-client) stubs with per-action handlers. Reason: the auth routes currently cannot complete a real login. Rejected: keep demo handlers."
+          ],
+          "acceptance": [
+            "lib/auth/client.ts and per-action handlers exist.",
+            "proxy.ts forwards the auth routes.",
+            "No token is stored in localStorage or client JS.",
+            "Tests cover success, invalid credentials, and network failure."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "sf-050",
+          "title": "storefront: CMS source wiring and revalidate webhook",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P2",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [
+            "cms-005"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Replace TODO(cms-svc) null-sources with CMS HTTP fetchers. Reason: the storefront still renders demo data. Rejected: keep null-sources.",
+            "Invalidate cache through /api/revalidate with a shared secret. Reason: the storefront must not hold Kafka credentials. Rejected: storefront Kafka consumer."
+          ],
+          "acceptance": [
+            "No TODO(cms-svc) null-source remains in production paths.",
+            "CMS content renders from cms-svc.",
+            "/api/revalidate validates the secret and calls revalidateTag.",
+            "Tests cover cache invalidation and unauthorized calls."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "sf-051",
+          "title": "storefront: commerce routes and components",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P2",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [
+            "sf-048",
+            "sf-049",
+            "cat-006",
+            "ca-010",
+            "ord-007"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Compose existing primitives into ProductCard, Gallery, HeroSection, and MiniCartDrawer; routes fetch service APIs server-side. Reason: AGENTS.md smart-to-pure-to-dumb gradient and SEO. Rejected: client-side fetches for catalog pages.",
+            "Build /products, /products/[slug], /cart, /checkout, and /account against real services. Reason: the current app has only auth and showcase routes. Rejected: keep the showcase as the storefront."
+          ],
+          "acceptance": [
+            "All five routes render from real services.",
+            "ProductCard, Gallery, HeroSection, and MiniCartDrawer have contract tests.",
+            "Checkout sends an idempotency key and handles 409/stock errors.",
+            "No TODO stubs remain in the commerce path."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "sf-052",
+          "title": "storefront: /api/track page-view beacon",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P4",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [
+            "anl-002"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Use sendBeacon to Next /api/track, which forwards to analytics-svc over HTTP; the browser never sees Kafka. Reason: broker credentials must stay server-side. Rejected: browser Kafka client.",
+            "Respect consent and send no PII beyond the analytics contract. Reason: privacy and the PII-minimization rule. Rejected: send raw user identifiers."
+          ],
+          "acceptance": [
+            "Page views and exit heartbeats reach analytics-svc.",
+            "No Kafka client or credentials exist in the storefront.",
+            "Tracking failure never blocks navigation.",
+            "Tests cover consent and payload shape."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "sf-053",
+          "title": "storefront: pin contracts 1.3.0 and add checkout integration tests",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P3",
+          "priority": "P1",
+          "kind": "chore",
+          "transport": "http",
+          "dependsOn": [
+            "ec-001",
+            "ec-002",
+            "sf-051"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Pin the exact tarball URL; never use ^. Reason: contract drift caused the current checkout/catalog mismatch. Rejected: floating ranges.",
+            "Test checkout against the real order-svc contract, including idempotency and stock failure. Reason: mocked clients hid the mismatch. Rejected: keep mock-only tests."
+          ],
+          "acceptance": [
+            "package.json and lockfile pin the exact 1.3.0 tarball.",
+            "Checkout integration tests cover success, duplicate key, and stock failure.",
+            "No legacy envelope fields are read.",
+            "The 2.0.0 repin is part of ec-004/ec-005, not this task.",
+            "The build and test gate is green."
+          ],
+          "verified": false,
+          "follow_ups": []
         }
-      ]
+      ],
+      "messaging": {
+        "role": "http-client-only",
+        "publishes": [],
+        "consumes": [],
+        "taskQueues": [],
+        "consumerGroup": null,
+        "doesNotUseKafka": [
+          "No Kafka credentials or client in the storefront.",
+          "Page views: sendBeacon -> /api/track -> analytics-svc HTTP.",
+          "CMS cache invalidation: /api/revalidate webhook."
+        ],
+        "implementation": [
+          "Next route handlers",
+          "HTTP fetchers",
+          "no broker credentials"
+        ]
+      }
     },
     "admin-app": {
       "motive": "Merchant control without code: products/categories/nav/theme/pages/blogs/orders/customers/analytics/settings with RBAC + editor-with-live-preview.",
@@ -1281,16 +1526,14 @@
         "Documentation/design-system/admin.md"
       ],
       "stages": {
-        "spec": "in-progress",
+        "spec": "todo",
         "build": "todo",
         "test": "todo",
         "verify": "todo"
       },
       "inProgress": null,
       "next": [
-        "Products list/editor/importer (offset Table, 409 blocking banners)",
-        "CMS-sections editor with live preview (?preview=1, ThreeState Inherit/Override, Reset deletes keys)",
-        "Theme settings + Navigation/Megamenu config"
+        "adm-001 scope decision and scaffold (deferred)"
       ],
       "blockedBy": [
         "ecom-contracts"
@@ -1304,10 +1547,56 @@
       ],
       "producesConsumes": {
         "produces": [],
-        "consumes": []
+        "consumes": [],
+        "taskQueues": []
       },
       "claimedBy": null,
-      "note": "v1 frontend[admin-screens]=todo folded here. Routes in 6.Admin-Panel.md §2.2. Currently empty locally."
+      "note": "Empty. Separate frontend track; not required for backend API/curl acceptance. Scaffold only when merchant UI is in scope.",
+      "tasks": [
+        {
+          "id": "adm-001",
+          "title": "admin-app: scope decision and scaffold (deferred)",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P6",
+          "priority": "P2",
+          "kind": "feature",
+          "transport": "none",
+          "dependsOn": [
+            "sf-053"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Backend acceptance is API/curl, so scaffold admin only when merchant UI is required. Reason: avoid building a second frontend before the APIs stabilize. Rejected: build admin now and rework it after every backend change.",
+            "If in scope, start with products, orders, CMS sections, and theme settings. Reason: those are the merchant-critical screens. Rejected: build analytics dashboards first."
+          ],
+          "acceptance": [
+            "Scope decision is recorded in the task log.",
+            "If in scope: Next 16 scaffold, auth guard, products/orders/CMS/theme screens.",
+            "No direct Kafka or SQS client in the admin app.",
+            "If deferred: STATUS and tasks.json say so explicitly."
+          ],
+          "verified": false,
+          "follow_ups": []
+        }
+      ],
+      "messaging": {
+        "role": "http-client-only",
+        "publishes": [],
+        "consumes": [],
+        "taskQueues": [],
+        "consumerGroup": null,
+        "doesNotUseKafka": [
+          "No direct Kafka or SQS client. API/HTTP only."
+        ],
+        "implementation": [
+          "Next app",
+          "HTTP fetchers",
+          "no broker credentials"
+        ]
+      }
     },
     "ecom-contracts": {
       "motive": "Single versioned truth (@ecom/contracts npm, semver+CHANGELOG): event envelopes + SQS job schemas + DTOs/Zod + error codes; polyrepo discipline.",
@@ -1321,16 +1610,18 @@
         "Documentation/services/cms.md"
       ],
       "stages": {
-        "spec": "in-progress",
+        "spec": "done",
         "build": "in-progress",
         "test": "in-progress",
         "verify": "todo"
       },
-      "inProgress": "Phase 2 bootstrap: standalone repo + @ecom/contracts@1.0.0 package created; CTA/section schemas, per-type settings allowlists, SECTION_CATALOG, 17 tests, typecheck/build/pack green. Theme/nav/pages/blogs/media/page-settings/event/job schemas still pending before the 1.0.0 GitHub Release.",
+      "inProgress": "1.2.0 shipped; 1.3.0 canonical envelope is next (ec-001).",
       "next": [
-        "Add theme, navigation, pages, blogs, media, page-settings, event-envelope, and media.resize-image job schemas + tests",
-        "Tag v1.0.0 and create the GitHub Release tarball (remote/push approval required)",
-        "Pin the exact release tarball URL in cms-svc and update the lockfile"
+        "ec-001 canonical envelope 1.3.0",
+        "ec-002 missing event payloads",
+        "ec-003 SQS job schemas",
+        "ec-004 2.0.0 cutover",
+        "ec-005 release train"
       ],
       "blockedBy": [],
       "skills": [
@@ -1340,10 +1631,238 @@
       ],
       "producesConsumes": {
         "produces": [],
-        "consumes": []
+        "consumes": [],
+        "taskQueues": []
       },
       "claimedBy": "agent",
-      "note": "@ecom/contracts semver package, pinned exact tarball (no ^). Local repo at E:/E-Commerce/ecom-contracts (commit 4d46959); package version 1.0.0 but private/unreleased until all Phase 2 schemas land. Blocks catalog/cart/order/cms/analytics/import/notify/search specs."
+      "note": "Package 1.2.0 exists. Consumers pin mixed versions: storefront 1.0.0, catalog/CMS 1.1.0, search 1.2.0; auth/cart/order/import do not import contracts. Pending: canonical 1.3.0 envelope, missing event/job payloads, 2.0.0 cutover, and release tags. No runtime Kafka or SQS.",
+      "tasks": [
+        {
+          "id": "ec-001",
+          "title": "Contracts 1.3.0: canonical envelope with dual-read/dual-write",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P0",
+          "kind": "contract",
+          "transport": "contracts",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Add optional type, version, and idempotencyKey while keeping topic and eventType optional. Reason: producers and consumers migrate without a flag day. Rejected: jump straight to 2.0.0, which breaks every pinned consumer at once.",
+            "Make type both the event name and the topic. Reason: removes topic/eventType drift (cms.updated currently publishes on cms.events). Rejected: keep separate fields and a mapping table."
+          ],
+          "acceptance": [
+            "Envelope schema accepts both canonical and legacy shapes.",
+            "A readEnvelope helper normalizes either shape to the canonical object.",
+            "Unit tests cover canonical, legacy, mixed, and invalid envelopes.",
+            "Local 1.3.0 tarball builds and packs; no tag or push yet."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "Schema-only package. No Kafka or SQS client at runtime."
+          }
+        },
+        {
+          "id": "ec-002",
+          "title": "Contracts: missing event payloads and topic/type registry",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P0",
+          "kind": "contract",
+          "transport": "contracts",
+          "dependsOn": [
+            "ec-001"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Add payload schemas for user.registered, cart.updated, cart.abandoned, order.created, order.status.updated, and page.viewed. Reason: consumers need validated payloads, not z.record(z.unknown()). Rejected: keep free-form payloads, which hide drift until production.",
+            "Model order.status.updated with a required to field, including to=\"refunded\". Reason: one lifecycle event replaces order.refunded. Rejected: keep order.refunded as a second event family."
+          ],
+          "acceptance": [
+            "Every topic in the messaging catalog has a schema and exported TypeScript type.",
+            "order.status.updated covers confirmed, processing, shipped, delivered, cancelled, and refunded.",
+            "Payloads are PII-minimized; email is not embedded in cart or order events.",
+            "Tests reject missing required fields and unknown fields."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "Schema-only package. The registry describes topics; it does not connect to them."
+          }
+        },
+        {
+          "id": "ec-003",
+          "title": "Contracts: SQS job schemas and queue/DLQ constants",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P1",
+          "priority": "P0",
+          "kind": "contract",
+          "transport": "contracts",
+          "dependsOn": [
+            "ec-001"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Add sendEmailJobSchema and processImportRowJobSchema, keep resizeImageJobSchema, and drop reminder.dispatch. Reason: tasks are SQS-only and reminder is covered by cart.abandoned + notify.send-email. Rejected: keep an unused reminder queue and its docs.",
+            "Export queue names, DLQ names, and maxReceiveCount=5 constants. Reason: services must not invent queue strings. Rejected: per-service string literals, which drift."
+          ],
+          "acceptance": [
+            "Queue constants exist for notify.send-email, import.process-row, and media.resize-image.",
+            "Each schema has a unique idempotencyKey and a bounded payload.",
+            "reminder.dispatch is absent from schemas and docs.",
+            "Tests cover valid, invalid, and oversized job payloads."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [
+              {
+                "queue": "notify.send-email",
+                "role": "schema",
+                "dlq": "notify.send-email-dlq",
+                "maxReceiveCount": 5,
+                "implementation": "Schema only; notify-svc owns the producer/consumer runtime."
+              },
+              {
+                "queue": "import.process-row",
+                "role": "schema",
+                "dlq": "import.process-row-dlq",
+                "maxReceiveCount": 5,
+                "implementation": "Schema only; import-svc owns the producer/consumer runtime."
+              },
+              {
+                "queue": "media.resize-image",
+                "role": "schema",
+                "dlq": "media.resize-image-dlq",
+                "maxReceiveCount": 5,
+                "implementation": "Schema only; cms-svc owns the producer/worker runtime."
+              }
+            ],
+            "doesNotUseKafka": "Schema-only package. No SQS client."
+          }
+        },
+        {
+          "id": "ec-004",
+          "title": "Contracts 2.0.0: require canonical fields and remove the legacy envelope",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P5",
+          "priority": "P1",
+          "kind": "contract",
+          "transport": "contracts",
+          "dependsOn": [
+            "ec-001",
+            "ec-002",
+            "au-004",
+            "ca-008",
+            "ca-009",
+            "cat-007",
+            "cat-008",
+            "cat-009",
+            "cat-010",
+            "cms-005",
+            "ord-011",
+            "srch-001",
+            "ntf-002",
+            "anl-003",
+            "imp-003",
+            "ord-010",
+            "sf-053"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Make type, version, and idempotencyKey required and delete topic and eventType. Reason: one canonical shape, no permanent dual-read ambiguity. Rejected: keep dual-read forever, which lets old producers silently bypass validation.",
+            "Cut over only after every producer and consumer passes against the 2.0.0 tarball. Reason: the contract is the release train boundary. Rejected: publish first and fix consumers after CI breaks."
+          ],
+          "acceptance": [
+            "All producers and consumers compile against 2.0.0.",
+            "No code reads topic or eventType from an envelope.",
+            "Dual-read helpers are deleted.",
+            "Contract tests pass in every consumer repo."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "Schema-only package. No runtime transport."
+          }
+        },
+        {
+          "id": "ec-005",
+          "title": "Contracts release train: tag and publish 1.3.0 and 2.0.0, then repin consumers",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P5",
+          "priority": "P1",
+          "kind": "release",
+          "transport": "contracts",
+          "dependsOn": [
+            "ec-001",
+            "ec-002",
+            "ec-003",
+            "ec-004",
+            "sf-053"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Tag only after local tarballs pass every consumer suite. Reason: exact pins are the polyrepo contract. Rejected: tag then fix consumers, which breaks CI and rollbacks.",
+            "Keep the package private until the human explicitly approves a GitHub Release. Reason: the repo rule forbids push/tag/release without approval. Rejected: publish automatically from CI."
+          ],
+          "acceptance": [
+            "Local 1.3.0 and 2.0.0 tarballs are built, packed, and tested.",
+            "Consumer lockfiles pin exact tarball URLs.",
+            "Tags and GitHub Releases are created only after explicit approval.",
+            "CHANGELOG and VERSIONING describe both releases."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "Release metadata only; no runtime Kafka or SQS."
+          }
+        }
+      ],
+      "messaging": {
+        "role": "schema-only",
+        "publishes": [],
+        "consumes": [],
+        "taskQueues": [],
+        "consumerGroup": null,
+        "doesNotUseKafka": [
+          "No runtime Kafka or SQS client. The package defines envelopes, topics, queues, and payload schemas only."
+        ],
+        "implementation": [
+          "Zod schemas exported from src/schemas",
+          "canonical envelope 1.3.0",
+          "breaking 2.0.0 after migration"
+        ]
+      }
     },
     "auth-svc": {
       "motive": "Identity: register/login/logout, JWT+refresh rotation, RBAC (customer vs admin), profile/addresses; emits user.registered.",
@@ -1357,10 +1876,13 @@
         "spec": "done",
         "build": "done",
         "test": "done",
-        "verify": "done"
+        "verify": "in-progress"
       },
       "inProgress": null,
-      "next": [],
+      "next": [
+        "au-004 user.registered outbox producer",
+        "au-005 internal email lookup for notify"
+      ],
       "blockedBy": [],
       "skills": [
         "SKILL-EXPLORE",
@@ -1374,10 +1896,11 @@
         "produces": [
           "user.registered"
         ],
-        "consumes": []
+        "consumes": [],
+        "taskQueues": []
       },
       "claimedBy": null,
-      "note": "All 10 slices implemented per Documentation/services/auth.md and verified. 17 unit + 36 e2e green tests (vitest), oxlint 0 errors/0 warnings, nest build clean. Slices: 1 (health probes), 2 (auth schema & seed), 3 (register), 4 (login), 5 (refresh rotation + 10s grace theft detection), 6 (logout), 7 (JwtAuthGuard + profile), 8 (password change), 9 (addresses CRUD), 10 (admin RBAC & user management). Dev port 4010. Hardening complete: au-002 JWT issuer/audience (24 unit + 37 e2e), au-003 shared error envelope (29 unit + 37 e2e).",
+      "note": "Core auth complete and verified: 10 slices, JWT issuer/audience, shared error envelope; 29 unit + 37 e2e green. Pending for platform completion: user.registered is declared but not published. Add auth.outbox + relay and the internal email lookup for notify. No Kafka consumer; no SQS tasks.",
       "tasks": [
         {
           "id": "au-002",
@@ -1414,8 +1937,103 @@
           "follow_ups": [
             "Add auth-specific codes when ecom-contracts defines them"
           ]
+        },
+        {
+          "id": "au-004",
+          "title": "auth-svc: publish user.registered through a transactional outbox",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P2",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "kafka-producer",
+          "dependsOn": [
+            "ec-001",
+            "ec-002"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Write auth.outbox in the same Postgres transaction as the user row. Reason: a registered user must never exist without its event. Rejected: publish after commit, which loses the event on a crash.",
+            "Put userId, not email, in the payload. Reason: PII minimization; notify resolves email through an internal lookup. Rejected: embed email in every event, which spreads PII across logs and topics."
+          ],
+          "acceptance": [
+            "auth.outbox table, repository, and relay exist.",
+            "Registration writes exactly one user.registered row in the same transaction.",
+            "The relay publishes a canonical envelope keyed by userId.",
+            "Retry and DLQ behavior is tested; auth has no Kafka consumer."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [
+              {
+                "event": "user.registered",
+                "topic": "user.registered",
+                "key": "userId",
+                "version": 1,
+                "dlq": "user.registered.dlq",
+                "implementation": "Postgres auth.outbox + relay; same transaction as the user insert."
+              }
+            ],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "No Kafka consumer. No SQS tasks."
+          }
+        },
+        {
+          "id": "au-005",
+          "title": "auth-svc: internal email lookup for notify-svc",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P4",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Expose GET /internal/users/:id/email behind x-service-key. Reason: notify needs the address without putting PII on Kafka. Rejected: include email in user.registered or order.created.",
+            "Return only the email and a stable user id; never return password or token fields. Reason: least privilege for an internal endpoint. Rejected: reuse the admin profile endpoint, which exposes more data."
+          ],
+          "acceptance": [
+            "Service-key guard rejects missing or invalid keys.",
+            "Unknown user returns 404 with the shared error envelope.",
+            "Tests cover success, 401, and 404.",
+            "No Kafka involvement."
+          ],
+          "verified": false,
+          "follow_ups": []
         }
-      ]
+      ],
+      "messaging": {
+        "role": "producer-only",
+        "publishes": [
+          {
+            "event": "user.registered",
+            "topic": "user.registered",
+            "key": "userId",
+            "version": 1,
+            "dlq": "user.registered.dlq",
+            "implementation": "Postgres auth.outbox + relay; same transaction as registration."
+          }
+        ],
+        "consumes": [],
+        "taskQueues": [],
+        "consumerGroup": null,
+        "doesNotUseKafka": [
+          "No Kafka consumer; auth is synchronous HTTP.",
+          "No SQS tasks."
+        ],
+        "implementation": [
+          "Postgres outbox + relay",
+          "canonical envelope",
+          "DLQ user.registered.dlq"
+        ]
+      }
     },
     "catalog-svc": {
       "motive": "Catalog truth: products/categories/brands/variants/inventory/compare data + basic search; stock decrement on order.created.",
@@ -1430,18 +2048,18 @@
         "Documentation/9.Testing.md §3.3"
       ],
       "stages": {
-        "spec": "in-progress",
-        "build": "in-progress",
-        "test": "in-progress",
-        "verify": "todo"
+        "spec": "done",
+        "build": "done",
+        "test": "done",
+        "verify": "in-progress"
       },
-      "inProgress": "cat-001",
+      "inProgress": null,
       "next": [
-        "cat-001 Base foundation: scaffold, DB connection, health probes, schema migration",
-        "cat-002 Categories & Brands subsystem with navbar query optimization",
-        "cat-003 Products & Multi-Variant PDP single-join queries",
-        "cat-004 Stock ledger & internal service-to-service endpoints for cart-svc and order-svc",
-        "cat-005 Hardening, security, and verification"
+        "cat-006 idempotent stock reservations",
+        "cat-007 product/category outbox producer",
+        "cat-008 product.imported consumer",
+        "cat-009 order.created consumer",
+        "cat-010 order.status.updated consumer"
       ],
       "blockedBy": [],
       "skills": [
@@ -1456,13 +2074,14 @@
       "producesConsumes": {
         "produces": [
           "product.updated",
-          "category.updated",
-          "media.resize-image (task)"
+          "category.updated"
         ],
         "consumes": [
           "product.imported",
-          "order.created"
-        ]
+          "order.created",
+          "order.status.updated"
+        ],
+        "taskQueues": []
       },
       "claimedBy": "agent",
       "tasks": [
@@ -1552,9 +2171,302 @@
           ],
           "verified": true,
           "follow_ups": []
+        },
+        {
+          "id": "cat-006",
+          "title": "catalog-svc: idempotent stock reservations and the order-svc contract",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P0",
+          "kind": "bug",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Persist stock_reservations with a client-supplied reservationId, status, expires_at, and items. Reason: release and commit must be idempotent and crash-safe. Rejected: the current decrement-without-record, which leaks stock and inflates it on double release.",
+            "Use quantity and optional orderId in the internal DTO. Reason: matches the catalog domain and lets order-svc send both. Rejected: keep the qty/reservationId mismatch, which makes checkout fail validation.",
+            "Reserve decrements stock atomically and records held; order.created commits; cancel/refund releases once. Reason: preserves current checkout semantics without a double decrement. Rejected: reserve without decrement, which requires an availability recheck at commit."
+          ],
+          "acceptance": [
+            "Same reservationId replay returns the same reservation and does not decrement twice.",
+            "Release is idempotent; releasing twice restores stock once.",
+            "Expired held reservations are released by a reconciliation job.",
+            "order-svc can complete checkout against the real endpoint.",
+            "Unit and e2e tests cover reserve, replay, release, double release, and expiry."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "cat-007",
+          "title": "catalog-svc: publish product.updated and category.updated through an outbox",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P2",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "kafka-producer",
+          "dependsOn": [
+            "ec-001",
+            "ec-002"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Write catalog.outbox in the same transaction as product and category writes. Reason: the current producer swallows failures and can assign a producer after a failed connect. Rejected: retry inside the admin request, which couples admin latency to Kafka.",
+            "Keep one producer path for both events. Reason: one relay, one retry policy, one DLQ policy. Rejected: separate ad-hoc producers per service method."
+          ],
+          "acceptance": [
+            "Product and category mutations write outbox rows in the same transaction.",
+            "The best-effort KafkaEventBus is removed from the request path.",
+            "The relay publishes canonical product.updated and category.updated events.",
+            "Tests cover relay retry and no event on rollback."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [
+              {
+                "event": "product.updated",
+                "topic": "product.updated",
+                "key": "productId",
+                "version": 1,
+                "dlq": "product.updated.dlq",
+                "implementation": "Postgres catalog.outbox + relay; same transaction as the product write."
+              },
+              {
+                "event": "category.updated",
+                "topic": "category.updated",
+                "key": "categoryId",
+                "version": 1,
+                "dlq": "category.updated.dlq",
+                "implementation": "Postgres catalog.outbox + relay; same transaction as the category write."
+              }
+            ],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "No SQS tasks."
+          }
+        },
+        {
+          "id": "cat-008",
+          "title": "catalog-svc: consume product.imported and upsert the catalog",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P3",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "kafka-consumer",
+          "dependsOn": [
+            "ec-001",
+            "ec-002"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Upsert by productId/SKU and persist the processed event id. Reason: import is the real data path and must be idempotent. Rejected: import-svc writes catalog tables directly, which violates service ownership.",
+            "Validate the payload before touching the database. Reason: invalid known payloads should go to the DLQ, not partially mutate the catalog. Rejected: best-effort field mapping."
+          ],
+          "acceptance": [
+            "Creates and updates products, variants, images, category, and brand references.",
+            "Duplicate product.imported is a no-op.",
+            "Invalid payload goes to product.imported.dlq; unknown types are ignored with a metric.",
+            "Fixture seed remains dev/test-only."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [
+              {
+                "event": "product.imported",
+                "topic": "product.imported",
+                "group": "catalog-svc",
+                "dlq": "product.imported.dlq",
+                "implementation": "Nest Kafka consumer, manual commit, processed_events in the same transaction as the upsert."
+              }
+            ],
+            "taskQueues": [],
+            "doesNotUseKafka": "No SQS tasks."
+          }
+        },
+        {
+          "id": "cat-009",
+          "title": "catalog-svc: consume order.created and commit the reservation",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P3",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "kafka-consumer",
+          "dependsOn": [
+            "cat-006",
+            "ec-001",
+            "ec-002"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Mark the reservation committed and link the order id; do not decrement stock again. Reason: checkout already reserved the stock. Rejected: decrement on order.created, which double-decrements.",
+            "Retry a missing reservation and then DLQ it. Reason: a missing reservation means the synchronous reserve step did not complete. Rejected: create a reservation from the event, which hides the failure."
+          ],
+          "acceptance": [
+            "Reservation status becomes committed and order_id is stored.",
+            "Duplicate order.created is a no-op.",
+            "Missing reservation retries then goes to order.created.dlq.",
+            "No stock movement is written on commit."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [
+              {
+                "event": "order.created",
+                "topic": "order.created",
+                "group": "catalog-svc",
+                "dlq": "order.created.dlq",
+                "implementation": "Nest Kafka consumer, manual commit, processed_events in the same transaction as the reservation commit."
+              }
+            ],
+            "taskQueues": [],
+            "doesNotUseKafka": "No SQS tasks."
+          }
+        },
+        {
+          "id": "cat-010",
+          "title": "catalog-svc: consume order.status.updated and release stock on cancel/refund",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P3",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "kafka-consumer",
+          "dependsOn": [
+            "cat-006",
+            "cat-009"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Release only when to is cancelled or refunded and the reservation is held or committed. Reason: prevents stock inflation on shipped orders. Rejected: release on every status update.",
+            "Use the reservation id, not the item list, as the idempotency boundary. Reason: one release per reservation regardless of retries. Rejected: restock by product id, which can affect other orders."
+          ],
+          "acceptance": [
+            "Cancelled and refunded orders restock once.",
+            "Other statuses are no-ops.",
+            "Duplicate events are no-ops.",
+            "Invalid payloads go to order.status.updated.dlq."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [
+              {
+                "event": "order.status.updated",
+                "topic": "order.status.updated",
+                "group": "catalog-svc",
+                "dlq": "order.status.updated.dlq",
+                "implementation": "Nest Kafka consumer, manual commit, processed_events in the same transaction as the release."
+              }
+            ],
+            "taskQueues": [],
+            "doesNotUseKafka": "No SQS tasks."
+          }
+        },
+        {
+          "id": "cat-011",
+          "title": "catalog-svc: separate the fixture seed from the production data path",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P2",
+          "priority": "P1",
+          "kind": "chore",
+          "transport": "none",
+          "dependsOn": [
+            "cat-008"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Keep 002-seed-catalog.sql for local and test only and require admin/import for real data. Reason: the fixture catalog is not a production catalog. Rejected: ship the seed as production data.",
+            "Fail startup in production when the fixture flag is on. Reason: a production deploy must not silently load fake products. Rejected: rely on documentation alone."
+          ],
+          "acceptance": [
+            "Seed script is guarded by NODE_ENV or an explicit fixture flag.",
+            "Production compose does not run the fixture seed.",
+            "Docs name admin CRUD and product.imported as the real paths.",
+            "Tests cover the production guard."
+          ],
+          "verified": false,
+          "follow_ups": []
         }
       ],
-      "note": "COMPLETE: all 6 phases cat-001 through cat-005 done, verified with 82 unit + 67 e2e tests green."
+      "note": "Core catalog complete and verified: 6 phases, 82 unit + 67 e2e green. Pending: no Kafka consumer; producers are best-effort and swallow failures (no outbox); stock reserve/release is incompatible with order-svc (reservationId/qty vs orderId/quantity), release is non-idempotent, and reservations are not persisted. Kafka work: publish product.updated/category.updated via outbox; consume product.imported, order.created, order.status.updated; no SQS tasks. Fixture seed is dev/test-only.",
+      "messaging": {
+        "role": "producer+consumer",
+        "publishes": [
+          {
+            "event": "product.updated",
+            "topic": "product.updated",
+            "key": "productId",
+            "version": 1,
+            "dlq": "product.updated.dlq",
+            "implementation": "Postgres catalog.outbox + relay; same transaction as the product write."
+          },
+          {
+            "event": "category.updated",
+            "topic": "category.updated",
+            "key": "categoryId",
+            "version": 1,
+            "dlq": "category.updated.dlq",
+            "implementation": "Postgres catalog.outbox + relay; same transaction as the category write."
+          }
+        ],
+        "consumes": [
+          {
+            "event": "product.imported",
+            "topic": "product.imported",
+            "group": "catalog-svc",
+            "dlq": "product.imported.dlq",
+            "implementation": "Nest Kafka consumer; manual commit; processed_events in the same transaction as the upsert."
+          },
+          {
+            "event": "order.created",
+            "topic": "order.created",
+            "group": "catalog-svc",
+            "dlq": "order.created.dlq",
+            "implementation": "Nest Kafka consumer; manual commit; processed_events in the same transaction as the reservation commit."
+          },
+          {
+            "event": "order.status.updated",
+            "topic": "order.status.updated",
+            "group": "catalog-svc",
+            "dlq": "order.status.updated.dlq",
+            "implementation": "Nest Kafka consumer; manual commit; processed_events in the same transaction as the release."
+          }
+        ],
+        "taskQueues": [],
+        "consumerGroup": "catalog-svc",
+        "doesNotUseKafka": [
+          "No SQS tasks."
+        ],
+        "implementation": [
+          "Postgres outbox + relay",
+          "Nest Kafka consumer with manual commit",
+          "processed_events",
+          "idempotent reservation table"
+        ]
+      }
     },
     "cart-svc": {
       "motive": "Guest+user cart + wishlist with TTL; session merge on login; emits cart.updated for analytics/notify.",
@@ -1575,10 +2487,15 @@
         "spec": "done",
         "build": "done",
         "test": "done",
-        "verify": "done"
+        "verify": "in-progress"
       },
       "inProgress": null,
-      "next": [],
+      "next": [
+        "ca-007 temporary internal conversion endpoint",
+        "ca-008 cart.updated outbox producer",
+        "ca-009 order.created consumer",
+        "ca-010 real HTTP catalog adapter"
+      ],
       "blockedBy": [],
       "skills": [
         "SKILL-EXPLORE",
@@ -1592,7 +2509,10 @@
         "produces": [
           "cart.updated"
         ],
-        "consumes": []
+        "consumes": [
+          "order.created"
+        ],
+        "taskQueues": []
       },
       "claimedBy": null,
       "tasks": [
@@ -1732,9 +2652,187 @@
           ],
           "verified": true,
           "follow_ups": []
+        },
+        {
+          "id": "ca-007",
+          "title": "cart-svc: internal cart conversion endpoint and order-svc call fix (Phase 0 bridge)",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P0",
+          "kind": "bug",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Add POST /internal/carts/:userId/convert behind x-service-key and make it idempotent. Reason: order-svc currently calls DELETE /internal/carts/:userId, which does not exist (404), so carts never clear. Rejected: leave the best-effort call, which hides the failure.",
+            "Convert only the active cart and return 204 when there is nothing to convert. Reason: checkout retries must be safe. Rejected: delete the cart row, which loses history and breaks audit."
+          ],
+          "acceptance": [
+            "Endpoint converts an active cart and is idempotent on replay.",
+            "Service-key guard and 404 behavior are tested.",
+            "order-svc CartClient calls the new endpoint.",
+            "This bridge is removed when ca-009 lands."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "Temporary HTTP bridge. The target is the order.created consumer in ca-009."
+          }
+        },
+        {
+          "id": "ca-008",
+          "title": "cart-svc: publish cart.updated through a transactional outbox",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P2",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "kafka-producer",
+          "dependsOn": [
+            "ec-001",
+            "ec-002"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Add cart.outbox and write it in the same transaction as the cart mutation. Reason: exactly one event per committed mutation, with no lost or phantom events. Rejected: NoopEventBus and fire-and-forget publishing, which currently drops every event.",
+            "Key by cartId. Reason: preserves per-cart order across guest and user identities. Rejected: key only by userId/sessionId, which changes during merge."
+          ],
+          "acceptance": [
+            "NoopEventBus is deleted from production wiring.",
+            "Add, update, remove, clear, and merge each write one outbox row after commit.",
+            "The relay publishes cart.updated with a canonical envelope.",
+            "Tests cover relay retry and one-event-per-mutation."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [
+              {
+                "event": "cart.updated",
+                "topic": "cart.updated",
+                "key": "cartId",
+                "version": 1,
+                "dlq": "cart.updated.dlq",
+                "implementation": "Postgres cart.outbox + relay; same transaction as the cart mutation."
+              }
+            ],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "No Kafka consumer yet (ca-009). No SQS tasks."
+          }
+        },
+        {
+          "id": "ca-009",
+          "title": "cart-svc: consume order.created and convert the cart idempotently",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P3",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "kafka-consumer",
+          "dependsOn": [
+            "ec-001",
+            "ec-002",
+            "ca-007"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Consume order.created with consumer group cart-svc. Reason: conversion is a domain consequence, not a checkout dependency. Rejected: synchronous HTTP from order-svc, which is the current 404 and couples checkout availability to cart.",
+            "Insert the processed event id in the same transaction as conversion. Reason: at-least-once redelivery must not double-convert. Rejected: Redis-only dedupe, which is lost on flush."
+          ],
+          "acceptance": [
+            "Consumer group is cart-svc with postfixId=\"\".",
+            "Duplicate order.created is a no-op.",
+            "Unknown event types are ignored and committed with a metric; malformed payloads go to order.created.dlq.",
+            "The HTTP bridge is removed after the consumer is green."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [
+              {
+                "event": "order.created",
+                "topic": "order.created",
+                "group": "cart-svc",
+                "dlq": "order.created.dlq",
+                "implementation": "Nest Kafka consumer, manual commit, processed_events in the same transaction as conversion."
+              }
+            ],
+            "taskQueues": [],
+            "doesNotUseKafka": "No SQS tasks."
+          }
+        },
+        {
+          "id": "ca-010",
+          "title": "cart-svc: replace FixtureCatalogClient with the HTTP catalog adapter",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P2",
+          "priority": "P0",
+          "kind": "bug",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Inject an HttpCatalogClient in production and keep the fixture only in tests. Reason: the fixture means every cart snapshots fake products and prices. Rejected: keep the fixture and postpone integration.",
+            "Use the catalog internal batch lookup with x-service-key and a bounded timeout. Reason: one round trip for multi-item carts. Rejected: per-item HTTP calls, which add N+1 latency."
+          ],
+          "acceptance": [
+            "Production provider calls GET /internal/products?ids=.",
+            "Timeout and non-2xx responses fail closed with a clear error.",
+            "Fixture provider is test-only and documented.",
+            "Tests cover snapshot mapping and catalog failure."
+          ],
+          "verified": false,
+          "follow_ups": []
         }
       ],
-      "note": "cart-svc fully completed and verified: Phase 1 (ca-001 base + probes + schema), ca-002 (settings registry + admin API + audit), ca-003 (cart CRUD + Redis idempotency + catalog snapshot + cart.updated event), ca-004 (deterministic guest-to-account merge policies), ca-005 (customer wishlist dual routes + lazy creation + idempotency + RBAC), and ca-006 (cart hardening + audit read endpoint + active cart guard + security test suite). 13 unit test files (84/84 passed), 8 e2e test files (79/79 passed), 0 lint errors/warnings across 63 files, clean NestJS build exit 0."
+      "note": "Core cart/wishlist complete and verified: 6 slices, 84 unit + 79 e2e green. Pending: NoopEventBus means cart.updated is not published; FixtureCatalogClient means no real catalog snapshots; no order.created consumer; order-svc cart clear targets a non-existent internal endpoint. Kafka work: publish cart.updated via outbox; consume order.created; no SQS tasks.",
+      "messaging": {
+        "role": "producer+consumer",
+        "publishes": [
+          {
+            "event": "cart.updated",
+            "topic": "cart.updated",
+            "key": "cartId",
+            "version": 1,
+            "dlq": "cart.updated.dlq",
+            "implementation": "Postgres cart.outbox + relay; same transaction as the cart mutation."
+          }
+        ],
+        "consumes": [
+          {
+            "event": "order.created",
+            "topic": "order.created",
+            "group": "cart-svc",
+            "dlq": "order.created.dlq",
+            "implementation": "Nest Kafka consumer; manual commit; processed_events in the same transaction as conversion."
+          }
+        ],
+        "taskQueues": [],
+        "consumerGroup": "cart-svc",
+        "doesNotUseKafka": [
+          "No SQS tasks in v1."
+        ],
+        "implementation": [
+          "Postgres outbox + relay",
+          "Nest Kafka consumer with manual commit",
+          "processed_events"
+        ]
+      }
     },
     "order-svc": {
       "motive": "Checkout + POS-style order creation (mock pay v1), lifecycle/status, stock reservation; outbox+idempotency+saga-lite compensation.",
@@ -1751,10 +2849,16 @@
         "spec": "done",
         "build": "done",
         "test": "done",
-        "verify": "done"
+        "verify": "in-progress"
       },
       "inProgress": null,
-      "next": [],
+      "next": [
+        "ord-007 checkout/catalog contract fix",
+        "ord-008 idempotency scoping",
+        "ord-009 payment/persistence saga",
+        "ord-010 real refunds + order.status.updated",
+        "ord-011 real outbox relay"
+      ],
       "blockedBy": [],
       "skills": [
         "SKILL-EXPLORE",
@@ -1770,7 +2874,8 @@
           "order.created",
           "order.status.updated"
         ],
-        "consumes": []
+        "consumes": [],
+        "taskQueues": []
       },
       "claimedBy": null,
       "tasks": [
@@ -1899,9 +3004,252 @@
           ],
           "verified": true,
           "follow_ups": []
+        },
+        {
+          "id": "ord-007",
+          "title": "order-svc: fix the checkout/catalog stock contract and persist reservationId",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P0",
+          "kind": "bug",
+          "transport": "http",
+          "dependsOn": [
+            "cat-006"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Send reservationId, optional orderId, and items with quantity; persist stock_reservation_id on the order. Reason: links the order to the reservation for commit and release. Rejected: keep the reservationId only in memory, which loses it on a crash.",
+            "Use the real catalog response shape and map 409 to the stock error. Reason: the current client expects success/reservedItems, which the catalog never returns. Rejected: keep the mocked e2e, which hides the mismatch."
+          ],
+          "acceptance": [
+            "Checkout succeeds against a running catalog-svc.",
+            "Order row stores stock_reservation_id.",
+            "order.created payload includes reservationId.",
+            "E2E test uses the real HTTP contract, not only a mock."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "ord-008",
+          "title": "order-svc: scope and harden Redis idempotency",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P0",
+          "kind": "bug",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Key by idem:{userId}:{route}:{key}. Reason: the current global key allows cross-user replay and false conflicts. Rejected: keep the global key.",
+            "Reserve the lock atomically and store the response only after commit. Reason: a crash between preflight and post-commit write must not create a duplicate order. Rejected: check-then-set without atomicity."
+          ],
+          "acceptance": [
+            "Same user and key replays the original response.",
+            "Different users with the same key are isolated.",
+            "Concurrent duplicates produce exactly one order.",
+            "Redis down fails closed with 503 for keyed mutations."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "ord-009",
+          "title": "order-svc: payment/persistence saga with compensation",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P0",
+          "kind": "bug",
+          "transport": "http",
+          "dependsOn": [
+            "ord-007",
+            "ord-008"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Persist the order as pending_payment before capture, then capture and confirm. Reason: the current code captures payment before the DB transaction and leaks money on DB failure. Rejected: capture after commit without a pending state, which can confirm an unpaid order.",
+            "Compensate with void/refund, stock release, and cancellation on any post-capture failure. Reason: no captured payment without a persisted order. Rejected: log-and-continue."
+          ],
+          "acceptance": [
+            "Failure injection proves no captured payment without an order.",
+            "Pending orders reconcile on retry or cancellation.",
+            "Stock is released exactly once on failure.",
+            "Tests cover DB failure, capture failure, and retry."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "ord-010",
+          "title": "order-svc: real refunds and canonical order.status.updated",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P0",
+          "kind": "bug",
+          "transport": "http",
+          "dependsOn": [
+            "ord-009"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Call PaymentsService.processRefund with the stored transactionId and persist refund_pending/final. Reason: the current refund only flips DB rows and never calls the provider. Rejected: keep the DB-only refund.",
+            "Publish order.status.updated with to=\"refunded\" and delete order.refunded. Reason: one lifecycle event family. Rejected: keep order.refunded as a second event."
+          ],
+          "acceptance": [
+            "Provider refund is called once and is idempotent.",
+            "Refund state is persisted with the provider reference.",
+            "order.status.updated carries to=\"refunded\"; order.refunded is gone.",
+            "Tests cover success, provider failure, and replay."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [
+              {
+                "event": "order.status.updated",
+                "topic": "order.status.updated",
+                "key": "orderId",
+                "version": 1,
+                "dlq": "order.status.updated.dlq",
+                "implementation": "Postgres order.outbox + relay; refund writes the outbox row in the same transaction as the status change."
+              }
+            ],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "No Kafka consumer. No SQS tasks."
+          }
+        },
+        {
+          "id": "ord-011",
+          "title": "order-svc: real Kafka outbox relay for order events",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P2",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "kafka-producer",
+          "dependsOn": [
+            "ec-001",
+            "ec-002",
+            "ord-007"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Replace the log-only dispatcher with a Nest Kafka producer and add event_type, version, idempotency_key, and next_attempt_at to outbox. Reason: the current relay marks rows published after only logging. Rejected: publish directly in checkout, which breaks the transaction guarantee.",
+            "Relay with FOR UPDATE SKIP LOCKED and a bounded batch. Reason: multiple instances must not publish the same row. Rejected: a single in-process timer without locking."
+          ],
+          "acceptance": [
+            "order.created and order.status.updated are published to Kafka.",
+            "Outbox rows are marked published only after broker acknowledgement.",
+            "Retries back off and dead-letter after five attempts.",
+            "Tests cover broker failure and replay."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [
+              {
+                "event": "order.created",
+                "topic": "order.created",
+                "key": "orderId",
+                "version": 1,
+                "dlq": "order.created.dlq",
+                "implementation": "Postgres order.outbox + relay; same transaction as the order insert."
+              },
+              {
+                "event": "order.status.updated",
+                "topic": "order.status.updated",
+                "key": "orderId",
+                "version": 1,
+                "dlq": "order.status.updated.dlq",
+                "implementation": "Postgres order.outbox + relay; same transaction as the status change."
+              }
+            ],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "No Kafka consumer. No SQS tasks."
+          }
+        },
+        {
+          "id": "ord-012",
+          "title": "order-svc: remove the broken cart HTTP clear and rely on order.created",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P0",
+          "kind": "bug",
+          "transport": "http",
+          "dependsOn": [
+            "ca-007",
+            "ca-009",
+            "ord-011"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Remove CartClient.clearCart from checkout once cart-svc consumes order.created. Reason: the current call targets a non-existent endpoint and never works. Rejected: keep the best-effort call, which hides the failure.",
+            "Use the ca-007 internal endpoint only as a temporary bridge. Reason: unblocks checkout before the consumer is live. Rejected: block checkout on the consumer migration."
+          ],
+          "acceptance": [
+            "Checkout has no HTTP cart clear.",
+            "Cart conversion happens from order.created.",
+            "The temporary endpoint is removed after rollout.",
+            "Tests cover conversion and checkout independence."
+          ],
+          "verified": false,
+          "follow_ups": []
         }
       ],
-      "note": "All 6 phases complete (ord-001 through ord-006): base scaffolding, PostgreSQL pool, Redis service, /health probes, full DDL schema, discount engine, atomic checkout, full order lifecycle with state machine, outbox relay worker, service key guard, standard error envelope, and security hardening. 45 unit tests + 60 e2e tests passing across 6 files (105 total passing tests), 0 oxlint warnings/errors, clean build exit 0."
+      "note": "Core order/checkout complete and verified: 6 phases, 45 unit + 60 e2e green. Pending P0s: checkout cannot succeed against real catalog due to the stock DTO mismatch; payment is captured before persistence with no compensation; Redis idempotency key is global and not user-scoped; refunds never call the payment provider; order.refunded is non-canonical; outbox only logs instead of publishing; cart clear calls a non-existent endpoint. Kafka work: publish order.created/order.status.updated via a real outbox relay; no Kafka consumer; no SQS tasks.",
+      "messaging": {
+        "role": "producer-only",
+        "publishes": [
+          {
+            "event": "order.created",
+            "topic": "order.created",
+            "key": "orderId",
+            "version": 1,
+            "dlq": "order.created.dlq",
+            "implementation": "Postgres order.outbox + relay; same transaction as the order insert."
+          },
+          {
+            "event": "order.status.updated",
+            "topic": "order.status.updated",
+            "key": "orderId",
+            "version": 1,
+            "dlq": "order.status.updated.dlq",
+            "implementation": "Postgres order.outbox + relay; same transaction as the status change."
+          }
+        ],
+        "consumes": [],
+        "taskQueues": [],
+        "consumerGroup": null,
+        "doesNotUseKafka": [
+          "No Kafka consumer.",
+          "No SQS tasks.",
+          "Cart conversion is triggered by order.created, not an HTTP call."
+        ],
+        "implementation": [
+          "Postgres outbox + relay",
+          "canonical envelope",
+          "DLQ order.created.dlq and order.status.updated.dlq"
+        ]
+      }
     },
     "cms-svc": {
       "motive": "Content truth (Mongoose): sections/settings/nav/megamenu/blogs/theme; global vs per-section overrides; save=publish v1.",
@@ -1916,10 +3264,15 @@
         "spec": "done",
         "build": "done",
         "test": "done",
-        "verify": "done"
+        "verify": "in-progress"
       },
       "inProgress": null,
-      "next": [],
+      "next": [
+        "cms-003 media path traversal",
+        "cms-004 upload hardening",
+        "cms-005 Mongo transaction + cms_outbox",
+        "cms-006 media resize on SQS"
+      ],
       "blockedBy": [],
       "skills": [
         "SKILL-EXPLORE",
@@ -1931,12 +3284,12 @@
       ],
       "producesConsumes": {
         "produces": [
-          "blog.updated",
-          "media.resize-image (task)"
+          "cms.updated",
+          "blog.updated"
         ],
-        "consumes": [
-          "product.imported",
-          "category.updated"
+        "consumes": [],
+        "taskQueues": [
+          "media.resize-image"
         ]
       },
       "claimedBy": "agent",
@@ -1982,9 +3335,231 @@
             "Resolve ecom-contracts package/version and CMS payload shapes",
             "Implement CMS domain models, endpoints, cache invalidation, and public draft filtering"
           ]
+        },
+        {
+          "id": "cms-003",
+          "title": "cms-svc: fix media path traversal and unauthenticated file access",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P0",
+          "kind": "security",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Resolve the storage root and containment-check the requested key; reject .., absolute paths, encoded traversal, and symlink escapes. Reason: the current getFilePath + sendFile can escape storage. Rejected: string sanitization only, which is bypassable.",
+            "Serve private media through an authenticated or signed route. Reason: the current public route leaks every uploaded file. Rejected: rely on unguessable keys as the only control."
+          ],
+          "acceptance": [
+            "Traversal tests cover raw, encoded, absolute, and symlink paths.",
+            "Private media returns 401/403 without a valid session or signature.",
+            "No filesystem path is leaked in errors.",
+            "Public media policy is documented and tested."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "cms-004",
+          "title": "cms-svc: stream upload limits, magic-byte MIME, and storage directory validation",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P0",
+          "kind": "security",
+          "transport": "http",
+          "dependsOn": [
+            "cms-003"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Enforce the size limit before buffering and sniff magic bytes. Reason: the current checks run after the whole file is in memory and trust the client MIME header. Rejected: extension or header checks only.",
+            "Validate STORAGE_LOCAL_DIR at startup and gitignore storage/. Reason: an unset or relative path can write outside the repo. Rejected: create the directory lazily on first upload."
+          ],
+          "acceptance": [
+            "Oversized uploads are rejected before full buffering.",
+            "A fake MIME with a non-image body is rejected.",
+            "STORAGE_LOCAL_DIR must be absolute and writable.",
+            "storage/ is gitignored; tests cover the guards."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "cms-005",
+          "title": "cms-svc: Mongo transaction + cms_outbox for cms.updated and blog.updated",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P2",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "kafka-producer",
+          "dependsOn": [
+            "ec-001",
+            "ec-002",
+            "inf-001"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Write content and cms_outbox in one Mongo session transaction; publish cms.updated on cms.updated, not cms.events. Reason: the current direct publish can diverge from content and uses the wrong topic. Rejected: best-effort publish after save.",
+            "Require a replica set for CMS. Reason: Mongo transactions are unavailable on a standalone node. Rejected: skip transactions and accept lost events."
+          ],
+          "acceptance": [
+            "CMS writes require a replica set and fail clearly without one.",
+            "cms.updated and blog.updated are written to cms_outbox in the same transaction.",
+            "The relay publishes canonical envelopes to the correct topics.",
+            "CMS has no Kafka consumer."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [
+              {
+                "event": "cms.updated",
+                "topic": "cms.updated",
+                "key": "sectionKey or pageKey",
+                "version": 1,
+                "dlq": "cms.updated.dlq",
+                "implementation": "Mongo transaction + cms_outbox + relay; topic is cms.updated."
+              },
+              {
+                "event": "blog.updated",
+                "topic": "blog.updated",
+                "key": "blogId",
+                "version": 1,
+                "dlq": "blog.updated.dlq",
+                "implementation": "Mongo transaction + cms_outbox + relay; same transaction as the blog status change."
+              }
+            ],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "No Kafka consumer. Media resize is SQS only."
+          }
+        },
+        {
+          "id": "cms-006",
+          "title": "cms-svc: move media resize from Kafka media.tasks to SQS media.resize-image",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P3",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "sqs-producer",
+          "dependsOn": [
+            "ec-003",
+            "inf-001",
+            "inf-003"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Enqueue media.resize-image through ITaskQueue after the media record is saved and remove the Kafka media.tasks topic. Reason: resize is a task, not a domain event. Rejected: keep media.tasks on Kafka, which violates the transport split.",
+            "Run the worker in cms-svc for v1. Reason: no separate media service exists. Rejected: create a new service for one queue."
+          ],
+          "acceptance": [
+            "No code publishes media.tasks to Kafka.",
+            "Media upload enqueues a media.resize-image job with an idempotency key.",
+            "The cms-svc worker consumes with long poll, batch 10, and DLQ after five receives.",
+            "Tests cover enqueue, retry, and DLQ."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [
+              {
+                "queue": "media.resize-image",
+                "role": "producer+consumer",
+                "dlq": "media.resize-image-dlq",
+                "maxReceiveCount": 5,
+                "implementation": "SQS via ITaskQueue; cms-svc worker; no Kafka."
+              }
+            ],
+            "doesNotUseKafka": "No Kafka consumer. The media task never goes to Kafka."
+          }
+        },
+        {
+          "id": "cms-007",
+          "title": "cms-svc: document no Kafka consumer and add the storefront revalidate webhook",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P3",
+          "priority": "P1",
+          "kind": "docs",
+          "transport": "http",
+          "dependsOn": [
+            "cms-005",
+            "sf-050"
+          ],
+          "log": null,
+          "key_decisions": [
+            "CMS does not consume product.imported or category.updated for navigation. Reason: CMS owns no product data; the old producesConsumes entry was wrong. Rejected: add a consumer without owned data.",
+            "Storefront cache invalidation uses an HTTP webhook with a shared secret. Reason: the storefront must not hold Kafka credentials. Rejected: storefront Kafka consumer."
+          ],
+          "acceptance": [
+            "cms-svc messaging metadata lists no Kafka consumer.",
+            "CMS calls Next /api/revalidate after a content publish.",
+            "The webhook secret is required and tested.",
+            "Docs no longer claim CMS consumes catalog events."
+          ],
+          "verified": false,
+          "follow_ups": []
         }
       ],
-      "note": "Phase 1 foundation complete (cms-svc ad792c3 + a435be6): Nest 12/Node 24 ESM bootstrap, Joi env validation, fail-fast Mongo (retryAttempts: 0), degraded Redis, /health + /health/ready, JWT/Roles guard plumbing, request-id/error envelope/cache-control, Dockerized Mongo 27018. 35 unit tests across 7 files, 5 e2e tests across 2 files, oxlint/typecheck/build clean. Production smoke: 200 healthy, 503 Mongo-down, 404 envelope; startup with Mongo down exits before serving. No CMS domain code yet. Phase 2.0 contracts started (cms-002): ecom-contracts package + CMS section catalog built/tested/packed locally; theme/nav/pages/blogs/media/events/jobs and the 1.0.0 release remain."
+      "note": "Phase 1 + Phase 2 CMS complete and verified: 89 unit + 53 e2e green. Pending: cms.updated publishes to the wrong cms.events topic with a legacy envelope; no cms_outbox or Mongo transaction; media resize uses Kafka media.tasks instead of SQS media.resize-image; media file route is traversal-prone and unauthenticated; upload MIME/size checks are post-buffer. Kafka work: publish cms.updated/blog.updated via cms_outbox; no Kafka consumer; SQS only for media resize.",
+      "messaging": {
+        "role": "producer-only",
+        "publishes": [
+          {
+            "event": "cms.updated",
+            "topic": "cms.updated",
+            "key": "sectionKey or pageKey",
+            "version": 1,
+            "dlq": "cms.updated.dlq",
+            "implementation": "Mongo transaction + cms_outbox + relay; topic is cms.updated."
+          },
+          {
+            "event": "blog.updated",
+            "topic": "blog.updated",
+            "key": "blogId",
+            "version": 1,
+            "dlq": "blog.updated.dlq",
+            "implementation": "Mongo transaction + cms_outbox + relay; same transaction as the blog status change."
+          }
+        ],
+        "consumes": [],
+        "taskQueues": [
+          {
+            "queue": "media.resize-image",
+            "role": "producer+consumer",
+            "dlq": "media.resize-image-dlq",
+            "maxReceiveCount": 5,
+            "implementation": "SQS via ITaskQueue; cms-svc worker; no Kafka."
+          }
+        ],
+        "consumerGroup": null,
+        "doesNotUseKafka": [
+          "No Kafka consumer.",
+          "Media resize is SQS, not Kafka media.tasks.",
+          "Storefront cache invalidation is an HTTP webhook."
+        ],
+        "implementation": [
+          "Mongo transaction + cms_outbox (requires replica set)",
+          "canonical envelope",
+          "SQS task queue"
+        ]
+      }
     },
     "analytics-svc": {
       "motive": "Behavioral insight: page-view/exit funnel, cart idle→cart.abandoned detector, conversion + cohorts dashboards (fire-and-forget writes).",
@@ -2003,9 +3578,10 @@
       },
       "inProgress": null,
       "next": [
-        "Spec doc copying services/auth.md shape",
-        "Scheduled idle-cart consumer (>Xh → cart.abandoned) + reminder.dispatch task",
-        "daily_stats aggregates + page_views TTL 30d / cart_events 60d (M0 safety)"
+        "anl-001 scaffold + Mongo TTL schema",
+        "anl-002 HTTP page-view ingest + page.viewed producer",
+        "anl-003 four-topic consumer",
+        "anl-004 idle-cart detector"
       ],
       "blockedBy": [
         "ecom-contracts"
@@ -2019,18 +3595,264 @@
       ],
       "producesConsumes": {
         "produces": [
-          "cart.abandoned",
-          "reminder.dispatch (task)"
+          "page.viewed",
+          "cart.abandoned"
         ],
         "consumes": [
           "cart.updated",
           "order.created",
           "page.viewed",
           "user.registered"
-        ]
+        ],
+        "taskQueues": []
       },
       "claimedBy": null,
-      "note": ""
+      "note": "Not created. Planned Kafka ownership: publish page.viewed (from HTTP ingest) and cart.abandoned (idle detector); consume cart.updated, order.created, page.viewed, user.registered; no SQS tasks; reminder.dispatch is dropped.",
+      "tasks": [
+        {
+          "id": "anl-001",
+          "title": "analytics-svc: scaffold, spec, and Mongo TTL schema",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P4",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "none",
+          "dependsOn": [
+            "ec-002"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Use Mongo collections with TTL indexes: page_views 30d, cart_events 60d, processed_events. Reason: high-volume append-only analytics fits TTL collections. Rejected: Postgres, which adds vacuum/write amplification.",
+            "Copy the auth.md service-spec shape. Reason: consistent service contracts. Rejected: ad-hoc README."
+          ],
+          "acceptance": [
+            "Nest 12 scaffold with health and readiness probes.",
+            "Mongo collections and TTL indexes exist.",
+            "Documentation/services/analytics.md exists.",
+            "Unit and e2e suites are green."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "anl-002",
+          "title": "analytics-svc: HTTP page-view ingest and page.viewed producer",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P4",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "kafka-producer",
+          "dependsOn": [
+            "anl-001",
+            "ec-002"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Storefront posts to Next /api/track, which forwards to analytics over HTTP; analytics validates and publishes page.viewed. Reason: the storefront must not hold Kafka credentials. Rejected: browser Kafka client.",
+            "Return 202 after validation and enqueue the event; do not block on the consumer. Reason: tracking must not slow navigation. Rejected: synchronous DB write in the request path."
+          ],
+          "acceptance": [
+            "POST endpoint validates sessionId, page, eventKind, and optional userId.",
+            "Returns 202 and never leaks PII.",
+            "Publishes page.viewed keyed by sessionId.",
+            "Rate limiting and invalid payload behavior are tested."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [
+              {
+                "event": "page.viewed",
+                "topic": "page.viewed",
+                "key": "sessionId",
+                "version": 1,
+                "dlq": "page.viewed.dlq",
+                "implementation": "HTTP ingest validates and writes an outbox row; relay publishes page.viewed."
+              }
+            ],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "No SQS tasks. The storefront uses HTTP only."
+          }
+        },
+        {
+          "id": "anl-003",
+          "title": "analytics-svc: consume cart.updated, order.created, page.viewed, and user.registered",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P4",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "kafka-consumer",
+          "dependsOn": [
+            "anl-001",
+            "anl-002",
+            "ec-002"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Persist facts with processed_events in the same Mongo transaction. Reason: at-least-once redelivery must not double-count. Rejected: best-effort inserts.",
+            "Use one consumer group, analytics-svc. Reason: one service, one group. Rejected: one group per topic."
+          ],
+          "acceptance": [
+            "Funnel and exit aggregates build from the four event types.",
+            "TTL indexes match 30d/60d.",
+            "Duplicate events are no-ops; invalid payloads go to the topic DLQ.",
+            "Consumer group is analytics-svc."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [
+              {
+                "event": "cart.updated",
+                "topic": "cart.updated",
+                "group": "analytics-svc",
+                "dlq": "cart.updated.dlq",
+                "implementation": "Nest Kafka consumer; processed_events; Mongo fact write."
+              },
+              {
+                "event": "order.created",
+                "topic": "order.created",
+                "group": "analytics-svc",
+                "dlq": "order.created.dlq",
+                "implementation": "Nest Kafka consumer; processed_events; Mongo fact write."
+              },
+              {
+                "event": "page.viewed",
+                "topic": "page.viewed",
+                "group": "analytics-svc",
+                "dlq": "page.viewed.dlq",
+                "implementation": "Nest Kafka consumer; processed_events; Mongo fact write."
+              },
+              {
+                "event": "user.registered",
+                "topic": "user.registered",
+                "group": "analytics-svc",
+                "dlq": "user.registered.dlq",
+                "implementation": "Nest Kafka consumer; processed_events; Mongo fact write."
+              }
+            ],
+            "taskQueues": [],
+            "doesNotUseKafka": "No SQS tasks."
+          }
+        },
+        {
+          "id": "anl-004",
+          "title": "analytics-svc: idle-cart detector publishes cart.abandoned",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P4",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "kafka-producer",
+          "dependsOn": [
+            "anl-003",
+            "ec-002"
+          ],
+          "log": null,
+          "key_decisions": [
+            "A scheduled detector publishes cart.abandoned once per cart per idle window. Reason: notify.send-email covers the reminder flow without a separate queue. Rejected: keep reminder.dispatch, which is unused.",
+            "Key by userId and store the detection idempotency key. Reason: one reminder per cart window. Rejected: publish on every scan."
+          ],
+          "acceptance": [
+            "Idle threshold is configurable and documented.",
+            "Exactly one cart.abandoned per cart per idle window.",
+            "Duplicate scans are no-ops.",
+            "reminder.dispatch is absent."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [
+              {
+                "event": "cart.abandoned",
+                "topic": "cart.abandoned",
+                "key": "userId",
+                "version": 1,
+                "dlq": "cart.abandoned.dlq",
+                "implementation": "Scheduled detector + outbox; one event per cart idle window."
+              }
+            ],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "No SQS tasks. reminder.dispatch is dropped."
+          }
+        }
+      ],
+      "messaging": {
+        "role": "producer+consumer",
+        "publishes": [
+          {
+            "event": "page.viewed",
+            "topic": "page.viewed",
+            "key": "sessionId",
+            "version": 1,
+            "dlq": "page.viewed.dlq",
+            "implementation": "HTTP ingest validates and writes an outbox; relay publishes page.viewed."
+          },
+          {
+            "event": "cart.abandoned",
+            "topic": "cart.abandoned",
+            "key": "userId",
+            "version": 1,
+            "dlq": "cart.abandoned.dlq",
+            "implementation": "Scheduled idle detector + outbox; one event per cart idle window."
+          }
+        ],
+        "consumes": [
+          {
+            "event": "cart.updated",
+            "topic": "cart.updated",
+            "group": "analytics-svc",
+            "dlq": "cart.updated.dlq",
+            "implementation": "Nest Kafka consumer; processed_events; Mongo fact write."
+          },
+          {
+            "event": "order.created",
+            "topic": "order.created",
+            "group": "analytics-svc",
+            "dlq": "order.created.dlq",
+            "implementation": "Nest Kafka consumer; processed_events; Mongo fact write."
+          },
+          {
+            "event": "page.viewed",
+            "topic": "page.viewed",
+            "group": "analytics-svc",
+            "dlq": "page.viewed.dlq",
+            "implementation": "Nest Kafka consumer; processed_events; Mongo fact write."
+          },
+          {
+            "event": "user.registered",
+            "topic": "user.registered",
+            "group": "analytics-svc",
+            "dlq": "user.registered.dlq",
+            "implementation": "Nest Kafka consumer; processed_events; Mongo fact write."
+          }
+        ],
+        "taskQueues": [],
+        "consumerGroup": "analytics-svc",
+        "doesNotUseKafka": [
+          "No SQS tasks.",
+          "reminder.dispatch is dropped."
+        ],
+        "implementation": [
+          "Mongo TTL collections",
+          "Nest Kafka consumer with manual commit",
+          "processed_events"
+        ]
+      }
     },
     "import-svc": {
       "motive": "Bulk ingest: CSV/JSON v1 (Shopify/BigCommerce/Odoo later) row validation → product.imported via SQS process-row worker.",
@@ -2048,9 +3870,9 @@
       },
       "inProgress": null,
       "next": [
-        "Spec doc copying services/auth.md shape",
-        "SQS import.process-row worker (long-poll 20s, batch 10, DLQ after 5 receives)",
-        "Row validation → product.imported event publish"
+        "imp-001 scaffold + Postgres schema",
+        "imp-002 upload API + SQS process-row producer",
+        "imp-003 SQS worker + product.imported outbox"
       ],
       "blockedBy": [
         "ecom-contracts",
@@ -2067,10 +3889,172 @@
         "produces": [
           "product.imported"
         ],
-        "consumes": []
+        "consumes": [],
+        "taskQueues": [
+          "import.process-row"
+        ]
       },
       "claimedBy": null,
-      "note": ""
+      "note": "Not created. Planned: publish product.imported via an outbox; consume no Kafka topics; use SQS import.process-row for row work.",
+      "tasks": [
+        {
+          "id": "imp-001",
+          "title": "import-svc: scaffold, spec, and Postgres schema",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P4",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "none",
+          "dependsOn": [
+            "ec-003"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Own Postgres import_jobs and import_rows with status and error JSON. Reason: row-level retries and reports need relational state. Rejected: keep the CSV in memory, which cannot resume.",
+            "Copy the auth.md service-spec shape. Reason: consistent service contracts. Rejected: ad-hoc README."
+          ],
+          "acceptance": [
+            "Nest 12 scaffold with health and readiness probes.",
+            "import schema with import_jobs and import_rows.",
+            "Documentation/services/import.md exists.",
+            "Unit and e2e suites are green."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "imp-002",
+          "title": "import-svc: upload API and SQS import.process-row producer",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P4",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "sqs-producer",
+          "dependsOn": [
+            "imp-001",
+            "inf-003"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Enqueue one SQS message per row with importRowId and idempotencyKey. Reason: isolate bad rows and retry independently. Rejected: one message per file, where one bad row fails the batch.",
+            "Keep the upload API synchronous only for file validation and job creation. Reason: large files must not block the request. Rejected: process the whole file in the request."
+          ],
+          "acceptance": [
+            "CSV/JSON upload creates a job and rows.",
+            "One import.process-row message per row.",
+            "No Kafka involvement in row work.",
+            "Tests cover valid, duplicate, and malformed rows."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [
+              {
+                "queue": "import.process-row",
+                "role": "producer",
+                "dlq": "import.process-row-dlq",
+                "maxReceiveCount": 5,
+                "implementation": "SQS via ITaskQueue; one message per row."
+              }
+            ],
+            "doesNotUseKafka": "No Kafka consumer. Row work is SQS only."
+          }
+        },
+        {
+          "id": "imp-003",
+          "title": "import-svc: SQS worker and product.imported outbox producer",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P4",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "sqs-consumer",
+          "dependsOn": [
+            "imp-002",
+            "ec-002",
+            "ec-003"
+          ],
+          "log": null,
+          "key_decisions": [
+            "The worker validates a row, writes product.imported to an outbox, and the relay publishes it to Kafka; import-svc has no Kafka consumer. Reason: import owns the event; catalog and search consume it. Rejected: catalog reads the import database, which violates ownership.",
+            "Mark the row completed in the same transaction as the outbox write. Reason: row status and event must not diverge. Rejected: update the row after publishing."
+          ],
+          "acceptance": [
+            "Worker consumes import.process-row with long poll and batch 10.",
+            "Successful rows write product.imported to the outbox and publish it.",
+            "Failed rows retry and then go to import.process-row-dlq.",
+            "Duplicate rows are idempotent."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [
+              {
+                "event": "product.imported",
+                "topic": "product.imported",
+                "key": "productId",
+                "version": 1,
+                "dlq": "product.imported.dlq",
+                "implementation": "Postgres import outbox + relay; same transaction as the row completion."
+              }
+            ],
+            "consumes": [],
+            "taskQueues": [
+              {
+                "queue": "import.process-row",
+                "role": "consumer",
+                "dlq": "import.process-row-dlq",
+                "maxReceiveCount": 5,
+                "implementation": "SQS worker; long poll 20s, batch 10, maxReceiveCount 5."
+              }
+            ],
+            "doesNotUseKafka": "No Kafka consumer."
+          }
+        }
+      ],
+      "messaging": {
+        "role": "producer-only",
+        "publishes": [
+          {
+            "event": "product.imported",
+            "topic": "product.imported",
+            "key": "productId",
+            "version": 1,
+            "dlq": "product.imported.dlq",
+            "implementation": "Postgres import outbox + relay; same transaction as the row completion."
+          }
+        ],
+        "consumes": [],
+        "taskQueues": [
+          {
+            "queue": "import.process-row",
+            "role": "producer+consumer",
+            "dlq": "import.process-row-dlq",
+            "maxReceiveCount": 5,
+            "implementation": "SQS via ITaskQueue; one message per row; worker in import-svc."
+          }
+        ],
+        "consumerGroup": null,
+        "doesNotUseKafka": [
+          "No Kafka consumer.",
+          "Row work is SQS import.process-row."
+        ],
+        "implementation": [
+          "Postgres outbox + relay",
+          "SQS task queue",
+          "canonical envelope"
+        ]
+      }
     },
     "notify-svc": {
       "motive": "Comms: order confirmation / abandoned-cart / welcome via SMTP v1 off request path (SQS send-email worker with retry).",
@@ -2088,9 +4072,10 @@
       },
       "inProgress": null,
       "next": [
-        "Spec doc copying services/auth.md shape",
-        "SQS notify.send-email worker (retry + DLQ, idempotency keys on jobs)",
-        "Event→email mapping: order.created, cart.abandoned, user.registered, order.status.updated"
+        "ntf-001 scaffold + Postgres schema",
+        "ntf-002 four-topic Kafka consumer",
+        "ntf-003 SQS send-email worker",
+        "ntf-004 templates + PII lookup"
       ],
       "blockedBy": [
         "ecom-contracts"
@@ -2102,19 +4087,249 @@
         "SKILL-FUNCTIONS"
       ],
       "producesConsumes": {
-        "produces": [
-          "notify.send-email (task, self-consumed)"
-        ],
+        "produces": [],
         "consumes": [
-          "cart.updated",
-          "cart.abandoned",
           "order.created",
-          "order.status.updated",
-          "user.registered"
+          "cart.abandoned",
+          "user.registered",
+          "order.status.updated"
+        ],
+        "taskQueues": [
+          "notify.send-email"
         ]
       },
       "claimedBy": null,
-      "note": ""
+      "note": "Not created. Planned: consume order.created, cart.abandoned, user.registered, order.status.updated; publish no Kafka events; use SQS notify.send-email; resolve email via the auth internal lookup.",
+      "tasks": [
+        {
+          "id": "ntf-001",
+          "title": "notify-svc: scaffold, spec, and Postgres schema",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P4",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "none",
+          "dependsOn": [
+            "ec-002",
+            "ec-003"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Own a Postgres notify schema for email_logs and processed_events. Reason: at-least-once sends need durable dedupe and audit. Rejected: Mongo, which adds no value for this shape.",
+            "Copy the auth.md service-spec shape. Reason: consistent service contracts. Rejected: ad-hoc README."
+          ],
+          "acceptance": [
+            "Nest 12 scaffold with health and readiness probes.",
+            "notify schema with email_logs and processed_events.",
+            "Documentation/services/notify.md exists.",
+            "Unit and e2e suites are green."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "ntf-002",
+          "title": "notify-svc: consume four Kafka events and enqueue email jobs",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P4",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "kafka-consumer",
+          "dependsOn": [
+            "ntf-001",
+            "au-005",
+            "ec-002"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Consume order.created, cart.abandoned, user.registered, and order.status.updated with group notify-svc; map each to an SQS notify.send-email job. Reason: email work is a task with its own retry/DLQ. Rejected: send SMTP inside the Kafka handler, which blocks the consumer.",
+            "Persist processed_events in the same transaction as the job enqueue marker. Reason: at-least-once redelivery must not send duplicate email. Rejected: dedupe only in memory."
+          ],
+          "acceptance": [
+            "One consumer group: notify-svc.",
+            "Each event maps to exactly one idempotent email job.",
+            "Unknown types are ignored; invalid payloads go to the topic DLQ.",
+            "notify-svc publishes no Kafka events."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [
+              {
+                "event": "order.created",
+                "topic": "order.created",
+                "group": "notify-svc",
+                "dlq": "order.created.dlq",
+                "implementation": "Nest Kafka consumer; enqueue notify.send-email; processed_events."
+              },
+              {
+                "event": "cart.abandoned",
+                "topic": "cart.abandoned",
+                "group": "notify-svc",
+                "dlq": "cart.abandoned.dlq",
+                "implementation": "Nest Kafka consumer; enqueue notify.send-email; processed_events."
+              },
+              {
+                "event": "user.registered",
+                "topic": "user.registered",
+                "group": "notify-svc",
+                "dlq": "user.registered.dlq",
+                "implementation": "Nest Kafka consumer; enqueue notify.send-email; processed_events."
+              },
+              {
+                "event": "order.status.updated",
+                "topic": "order.status.updated",
+                "group": "notify-svc",
+                "dlq": "order.status.updated.dlq",
+                "implementation": "Nest Kafka consumer; enqueue notify.send-email; processed_events."
+              }
+            ],
+            "taskQueues": [
+              {
+                "queue": "notify.send-email",
+                "role": "producer+consumer",
+                "dlq": "notify.send-email-dlq",
+                "maxReceiveCount": 5,
+                "implementation": "SQS via ITaskQueue; producer from the Kafka consumer; consumer is the notify worker."
+              }
+            ],
+            "doesNotUseKafka": "No Kafka producer. Email sends are SQS only."
+          }
+        },
+        {
+          "id": "ntf-003",
+          "title": "notify-svc: SQS send-email worker with SMTP and DLQ",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P4",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "sqs-consumer",
+          "dependsOn": [
+            "ntf-001",
+            "inf-003"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Long-poll 20s, batch 10, maxReceiveCount 5, DLQ; SMTP via Mailpit locally. Reason: tasks must not run on Kafka and must not stall. Rejected: Kafka consumer for email.",
+            "Record every attempt in email_logs with a provider message id. Reason: support and retry need an audit trail. Rejected: log-only."
+          ],
+          "acceptance": [
+            "Worker consumes notify.send-email and sends via SMTP.",
+            "Failures retry and then go to notify.send-email-dlq.",
+            "Duplicate jobs do not send twice.",
+            "Tests cover success, retry, and DLQ."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [
+              {
+                "queue": "notify.send-email",
+                "role": "consumer",
+                "dlq": "notify.send-email-dlq",
+                "maxReceiveCount": 5,
+                "implementation": "SQS worker; long poll 20s, batch 10, maxReceiveCount 5."
+              }
+            ],
+            "doesNotUseKafka": "No Kafka involvement in the worker."
+          }
+        },
+        {
+          "id": "ntf-004",
+          "title": "notify-svc: templates, PII resolution, and tests",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P4",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [
+            "au-005",
+            "ntf-002",
+            "ntf-003"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Resolve email through the auth internal lookup; never put email in Kafka payloads. Reason: PII minimization. Rejected: embed email in order.created and cart.abandoned.",
+            "Fail loudly in tests when a template variable is missing; in production, send a generic fallback and log the template id. Reason: a broken template must not leak or silently send blanks. Rejected: silently substitute empty strings."
+          ],
+          "acceptance": [
+            "Four templates: welcome, order confirmation, abandoned cart, status update.",
+            "Missing variables fail tests and are logged in production.",
+            "Email lookup uses x-service-key and handles 404.",
+            "No PII in Kafka payloads or logs."
+          ],
+          "verified": false,
+          "follow_ups": []
+        }
+      ],
+      "messaging": {
+        "role": "consumer-only",
+        "publishes": [],
+        "consumes": [
+          {
+            "event": "order.created",
+            "topic": "order.created",
+            "group": "notify-svc",
+            "dlq": "order.created.dlq",
+            "implementation": "Nest Kafka consumer; enqueue notify.send-email; processed_events."
+          },
+          {
+            "event": "cart.abandoned",
+            "topic": "cart.abandoned",
+            "group": "notify-svc",
+            "dlq": "cart.abandoned.dlq",
+            "implementation": "Nest Kafka consumer; enqueue notify.send-email; processed_events."
+          },
+          {
+            "event": "user.registered",
+            "topic": "user.registered",
+            "group": "notify-svc",
+            "dlq": "user.registered.dlq",
+            "implementation": "Nest Kafka consumer; enqueue notify.send-email; processed_events."
+          },
+          {
+            "event": "order.status.updated",
+            "topic": "order.status.updated",
+            "group": "notify-svc",
+            "dlq": "order.status.updated.dlq",
+            "implementation": "Nest Kafka consumer; enqueue notify.send-email; processed_events."
+          }
+        ],
+        "taskQueues": [
+          {
+            "queue": "notify.send-email",
+            "role": "producer+consumer",
+            "dlq": "notify.send-email-dlq",
+            "maxReceiveCount": 5,
+            "implementation": "SQS via ITaskQueue; producer from the Kafka consumer; consumer is the notify worker."
+          }
+        ],
+        "consumerGroup": "notify-svc",
+        "doesNotUseKafka": [
+          "No Kafka producer.",
+          "Email sends are SQS notify.send-email."
+        ],
+        "implementation": [
+          "Nest Kafka consumer with manual commit",
+          "processed_events",
+          "SQS worker with DLQ"
+        ]
+      }
     },
     "search-svc": {
       "motive": "Unified index (products+categories+blogs) synced via domain events; typeahead suggest + ranked full search (Typesense/Meilisearch later).",
@@ -2128,10 +4343,14 @@
         "spec": "done",
         "build": "done",
         "test": "done",
-        "verify": "done"
+        "verify": "in-progress"
       },
-      "inProgress": "All slices (0 through 6) COMPLETE. Fully verified with 97 unit tests and 85 e2e tests passing, 0 oxlint warnings/errors, clean tsc, and Docker build verified.",
-      "next": [],
+      "inProgress": null,
+      "next": [
+        "srch-001 DLQ + processed_events",
+        "srch-002 Nest Kafka transport",
+        "srch-003 dual ingestion + DLQ replay"
+      ],
       "blockedBy": [],
       "skills": [
         "SKILL-EXPLORE",
@@ -2148,10 +4367,249 @@
           "product.updated",
           "category.updated",
           "blog.updated"
-        ]
+        ],
+        "taskQueues": []
       },
       "claimedBy": null,
-      "note": ""
+      "note": "Core 7 slices delivered and verified: 97 unit + 85 e2e green. Pending hardening: malformed JSON is committed without DLQ; unknown event types are silently ignored without metrics; no processed_events idempotency; consumer uses raw kafkajs rather than Nest transport. Kafka work: consume product.imported, product.updated, category.updated, blog.updated; publishes nothing; internal batch endpoint remains for backfill/tests.",
+      "tasks": [
+        {
+          "id": "srch-001",
+          "title": "search-svc: DLQ malformed/invalid events and persist processed_events",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P0",
+          "kind": "bug",
+          "transport": "kafka-consumer",
+          "dependsOn": [
+            "ec-001",
+            "ec-002"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Send malformed JSON and invalid known payloads directly to <topic>.dlq; ignore unknown event types and commit with a metric. Reason: the current consumer commits malformed JSON silently and has no visibility for unknown types. Rejected: retry malformed payloads, which can never succeed and stalls the group.",
+            "Insert processed_events in the same transaction as the index upsert. Reason: at-least-once redelivery must not duplicate documents. Rejected: Redis-only dedupe."
+          ],
+          "acceptance": [
+            "Malformed JSON is published to the topic DLQ and committed.",
+            "Invalid known payloads are DLQed; unknown types are ignored with a metric.",
+            "Duplicate event ids are no-ops.",
+            "Consumer group is search-svc with manual commits."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [
+              {
+                "event": "product.imported",
+                "topic": "product.imported",
+                "group": "search-svc",
+                "dlq": "product.imported.dlq",
+                "implementation": "Nest Kafka consumer, manual commit, processed_events in the same transaction as the index upsert."
+              },
+              {
+                "event": "product.updated",
+                "topic": "product.updated",
+                "group": "search-svc",
+                "dlq": "product.updated.dlq",
+                "implementation": "Nest Kafka consumer, manual commit, processed_events in the same transaction as the index upsert."
+              },
+              {
+                "event": "category.updated",
+                "topic": "category.updated",
+                "group": "search-svc",
+                "dlq": "category.updated.dlq",
+                "implementation": "Nest Kafka consumer, manual commit, processed_events in the same transaction as the index upsert."
+              },
+              {
+                "event": "blog.updated",
+                "topic": "blog.updated",
+                "group": "search-svc",
+                "dlq": "blog.updated.dlq",
+                "implementation": "Nest Kafka consumer, manual commit, processed_events in the same transaction as the index upsert."
+              }
+            ],
+            "taskQueues": [],
+            "doesNotUseKafka": "No Kafka producer. No SQS tasks."
+          }
+        },
+        {
+          "id": "srch-002",
+          "title": "search-svc: migrate the consumer to the Nest Kafka transport",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P3",
+          "priority": "P1",
+          "kind": "refactor",
+          "transport": "kafka-consumer",
+          "dependsOn": [
+            "srch-001"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Use @nestjs/microservices Kafka transport with @EventPattern, @Payload, @Ctx, and KafkaContext; set postfixId=\"\". Reason: one consumer runtime across services and explicit manual commits. Rejected: keep raw kafkajs alongside Nest consumers.",
+            "Keep the existing indexer service as the handler boundary. Reason: transport swap must not change indexing behavior. Rejected: rewrite indexing in the same task."
+          ],
+          "acceptance": [
+            "Consumer uses @EventPattern and KafkaContext.",
+            "Group id is exactly search-svc, without a -server suffix.",
+            "All srch-001 behavior tests pass unchanged.",
+            "Lag and commit metrics are exposed."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [
+              {
+                "event": "product.imported",
+                "topic": "product.imported",
+                "group": "search-svc",
+                "dlq": "product.imported.dlq",
+                "implementation": "Nest Kafka transport; manual commit after upsert."
+              },
+              {
+                "event": "product.updated",
+                "topic": "product.updated",
+                "group": "search-svc",
+                "dlq": "product.updated.dlq",
+                "implementation": "Nest Kafka transport; manual commit after upsert."
+              },
+              {
+                "event": "category.updated",
+                "topic": "category.updated",
+                "group": "search-svc",
+                "dlq": "category.updated.dlq",
+                "implementation": "Nest Kafka transport; manual commit after upsert."
+              },
+              {
+                "event": "blog.updated",
+                "topic": "blog.updated",
+                "group": "search-svc",
+                "dlq": "blog.updated.dlq",
+                "implementation": "Nest Kafka transport; manual commit after upsert."
+              }
+            ],
+            "taskQueues": [],
+            "doesNotUseKafka": "No Kafka producer."
+          }
+        },
+        {
+          "id": "srch-003",
+          "title": "search-svc: preserve dual ingestion and add DLQ replay",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P3",
+          "priority": "P1",
+          "kind": "feature",
+          "transport": "kafka-consumer",
+          "dependsOn": [
+            "srch-001",
+            "srch-002"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Keep Kafka as the primary path and the internal batch endpoint for backfill/tests; share validation and idempotency. Reason: backfill must not depend on replaying Kafka. Rejected: Kafka-only ingestion.",
+            "Add a documented DLQ replay tool that re-publishes to the source topic. Reason: DLQ messages must be recoverable. Rejected: manual copy/paste from the DLQ."
+          ],
+          "acceptance": [
+            "Internal batch endpoint still requires x-service-key and enforces 500 documents / 1MB.",
+            "Batch and Kafka paths use the same upsert and processed_events logic.",
+            "DLQ replay is documented and tested.",
+            "Contracts pin 1.3.0/2.0.0 as appropriate."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [
+              {
+                "event": "product.imported",
+                "topic": "product.imported",
+                "group": "search-svc",
+                "dlq": "product.imported.dlq",
+                "implementation": "Kafka primary; internal batch endpoint for backfill/tests."
+              },
+              {
+                "event": "product.updated",
+                "topic": "product.updated",
+                "group": "search-svc",
+                "dlq": "product.updated.dlq",
+                "implementation": "Kafka primary; internal batch endpoint for backfill/tests."
+              },
+              {
+                "event": "category.updated",
+                "topic": "category.updated",
+                "group": "search-svc",
+                "dlq": "category.updated.dlq",
+                "implementation": "Kafka primary; internal batch endpoint for backfill/tests."
+              },
+              {
+                "event": "blog.updated",
+                "topic": "blog.updated",
+                "group": "search-svc",
+                "dlq": "blog.updated.dlq",
+                "implementation": "Kafka primary; internal batch endpoint for backfill/tests."
+              }
+            ],
+            "taskQueues": [],
+            "doesNotUseKafka": "No Kafka producer. No SQS tasks."
+          }
+        }
+      ],
+      "messaging": {
+        "role": "consumer-only",
+        "publishes": [],
+        "consumes": [
+          {
+            "event": "product.imported",
+            "topic": "product.imported",
+            "group": "search-svc",
+            "dlq": "product.imported.dlq",
+            "implementation": "Nest Kafka consumer; manual commit; processed_events in the same transaction as the index upsert."
+          },
+          {
+            "event": "product.updated",
+            "topic": "product.updated",
+            "group": "search-svc",
+            "dlq": "product.updated.dlq",
+            "implementation": "Nest Kafka consumer; manual commit; processed_events in the same transaction as the index upsert."
+          },
+          {
+            "event": "category.updated",
+            "topic": "category.updated",
+            "group": "search-svc",
+            "dlq": "category.updated.dlq",
+            "implementation": "Nest Kafka consumer; manual commit; processed_events in the same transaction as the index upsert."
+          },
+          {
+            "event": "blog.updated",
+            "topic": "blog.updated",
+            "group": "search-svc",
+            "dlq": "blog.updated.dlq",
+            "implementation": "Nest Kafka consumer; manual commit; processed_events in the same transaction as the index upsert."
+          }
+        ],
+        "taskQueues": [],
+        "consumerGroup": "search-svc",
+        "doesNotUseKafka": [
+          "No Kafka producer.",
+          "Backfill uses the internal batch HTTP endpoint, not Kafka replay."
+        ],
+        "implementation": [
+          "Nest Kafka consumer with manual commit",
+          "processed_events",
+          "DLQ per topic"
+        ]
+      }
     },
     "ecom-infra": {
       "motive": "Deploy unit: compose/Nginx/VERSIONS.env pinning (one image per repo, rollback=revert one line) + SQS TF + health/x-request-id/alarms.",
@@ -2169,9 +4627,11 @@
       },
       "inProgress": null,
       "next": [
-        "7.Deployment.md stub + VERSIONS.env pinning + ci-per-repo (lint→test→build→push)",
-        "ecom-infra/aws/sqs.tf: send-email, process-row, resize-image, reminders + DLQs + IAM",
-        "Compose + Nginx (storefront./admin./api. domains, /api/<route> prefix) + /health + /health/ready"
+        "inf-001 local compose",
+        "inf-002 topic + DLQ provisioning",
+        "inf-003 SQS queues + IAM",
+        "inf-004 Nginx + CI + smoke",
+        "inf-005 observability"
       ],
       "blockedBy": [],
       "skills": [
@@ -2180,10 +4640,494 @@
       ],
       "producesConsumes": {
         "produces": [],
-        "consumes": []
+        "consumes": [],
+        "taskQueues": [
+          "notify.send-email",
+          "import.process-row",
+          "media.resize-image"
+        ]
       },
       "claimedBy": null,
-      "note": "Compose + Nginx + VERSIONS.env + watcher (later). v1 infra[sqs-task-queues,ci-per-repo]=todo folded here."
+      "note": "Not created. Planned: local compose for Kafka/Redis/Postgres/Mongo replica set/LocalStack SQS/Mailpit; topic + DLQ init; SQS Terraform; Nginx; VERSIONS.env; CI; observability. No Kafka producer/consumer.",
+      "tasks": [
+        {
+          "id": "inf-001",
+          "title": "ecom-infra: local compose for Kafka, Redis, Postgres, Mongo replica set, LocalStack SQS, and Mailpit",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P1",
+          "priority": "P0",
+          "kind": "infra",
+          "transport": "infra",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Run Mongo as a single-node replica set for CMS transactions; use LocalStack for SQS and Mailpit for SMTP. Reason: local parity with production semantics. Rejected: standalone Mongo, which cannot run transactions.",
+            "Add healthchecks and named volumes for every stateful service. Reason: services must wait for readiness, not sleep. Rejected: start-order-only compose."
+          ],
+          "acceptance": [
+            "docker compose up starts every dependency with a healthcheck.",
+            "Mongo accepts transactions.",
+            "LocalStack exposes the three task queues and DLQs.",
+            "Mailpit receives local email.",
+            "README documents ports and reset steps."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [
+              {
+                "queue": "notify.send-email",
+                "role": "local",
+                "dlq": "notify.send-email-dlq",
+                "maxReceiveCount": 5,
+                "implementation": "LocalStack SQS."
+              },
+              {
+                "queue": "import.process-row",
+                "role": "local",
+                "dlq": "import.process-row-dlq",
+                "maxReceiveCount": 5,
+                "implementation": "LocalStack SQS."
+              },
+              {
+                "queue": "media.resize-image",
+                "role": "local",
+                "dlq": "media.resize-image-dlq",
+                "maxReceiveCount": 5,
+                "implementation": "LocalStack SQS."
+              }
+            ],
+            "doesNotUseKafka": "Infrastructure only; it does not produce or consume events."
+          }
+        },
+        {
+          "id": "inf-002",
+          "title": "ecom-infra: declarative Kafka topic and DLQ provisioning",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P1",
+          "priority": "P0",
+          "kind": "infra",
+          "transport": "infra",
+          "dependsOn": [
+            "inf-001"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Create every topic and its .dlq twin with explicit partitions and retention; disable auto-create. Reason: DLQs must exist before consumers start. Rejected: auto-create, which produces wrong partitions and no DLQ.",
+            "Keep the topic list in one script sourced from the contracts catalog. Reason: one source of truth. Rejected: duplicate topic lists per compose file."
+          ],
+          "acceptance": [
+            "Script creates 11 topics and 11 DLQs idempotently.",
+            "Partitions and retention match the messaging catalog.",
+            "Auto-create is disabled.",
+            "A smoke test produces and consumes one message per topic."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "Provisioning only."
+          }
+        },
+        {
+          "id": "inf-003",
+          "title": "ecom-infra: SQS queues, DLQs, and least-privilege IAM",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P1",
+          "priority": "P0",
+          "kind": "infra",
+          "transport": "infra",
+          "dependsOn": [
+            "inf-001"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Provision only notify.send-email, import.process-row, and media.resize-image with maxReceiveCount 5; do not create reminder.dispatch. Reason: tasks are SQS-only and reminder is dropped. Rejected: create an unused queue.",
+            "Give each service IAM access only to the queues it produces or consumes. Reason: least privilege. Rejected: one shared queue-admin role."
+          ],
+          "acceptance": [
+            "Terraform defines three queues and three DLQs.",
+            "Redrive policy is maxReceiveCount 5.",
+            "IAM policies are per service.",
+            "reminder.dispatch is absent."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [
+              {
+                "queue": "notify.send-email",
+                "role": "provision",
+                "dlq": "notify.send-email-dlq",
+                "maxReceiveCount": 5,
+                "implementation": "Terraform SQS + redrive."
+              },
+              {
+                "queue": "import.process-row",
+                "role": "provision",
+                "dlq": "import.process-row-dlq",
+                "maxReceiveCount": 5,
+                "implementation": "Terraform SQS + redrive."
+              },
+              {
+                "queue": "media.resize-image",
+                "role": "provision",
+                "dlq": "media.resize-image-dlq",
+                "maxReceiveCount": 5,
+                "implementation": "Terraform SQS + redrive."
+              }
+            ],
+            "doesNotUseKafka": "Provisioning only."
+          }
+        },
+        {
+          "id": "inf-004",
+          "title": "ecom-infra: Nginx, VERSIONS.env, per-repo CI, and smoke",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P5",
+          "priority": "P1",
+          "kind": "infra",
+          "transport": "infra",
+          "dependsOn": [
+            "inf-001",
+            "inf-002",
+            "inf-003"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Pin one image per repo in VERSIONS.env and route /api/<service> through Nginx. Reason: independent deploys and one-line rollback. Rejected: floating tags or a monolith compose.",
+            "Run lint -> test -> build -> image push per repo. Reason: polyrepo ownership. Rejected: one shared pipeline that rebuilds everything."
+          ],
+          "acceptance": [
+            "Nginx routes storefront, admin, and each service prefix.",
+            "VERSIONS.env pins immutable tags.",
+            "CI exists per repo and blocks on tests.",
+            "Smoke script checks /health and /health/ready."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "inf-005",
+          "title": "ecom-infra: observability for lag, DLQ depth, outbox age, and SQS age",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P5",
+          "priority": "P1",
+          "kind": "infra",
+          "transport": "infra",
+          "dependsOn": [
+            "inf-002",
+            "inf-003",
+            "ord-011",
+            "cms-005"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Alarm on consumer lag, DLQ depth, pending outbox age, and SQS oldest-message age. Reason: silent event loss is the main risk in this architecture. Rejected: logs-only observability.",
+            "Expose one dashboard per transport plus per-service outbox panels. Reason: on-call needs to see where the pipeline is stuck. Rejected: one generic dashboard."
+          ],
+          "acceptance": [
+            "Kafka lag and DLQ depth are exported.",
+            "Outbox pending age is exported per producer.",
+            "SQS queue age and DLQ depth are exported.",
+            "Runbook covers stuck outbox, DLQ replay, and consumer lag."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "tst-001",
+          "title": "tests: end-to-end event flow harness",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P5",
+          "priority": "P0",
+          "kind": "test",
+          "transport": "test",
+          "dependsOn": [
+            "ord-011",
+            "ca-009",
+            "cat-009",
+            "cat-010",
+            "cms-005",
+            "srch-001",
+            "ntf-002",
+            "anl-003",
+            "imp-003"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Run the real compose stack and assert checkout -> order.created -> cart conversion, catalog commit, notify job, analytics fact, and search document. Reason: mocks hid the stock DTO mismatch and the fake outbox. Rejected: per-service mocks only.",
+            "Use one command in CI and locally. Reason: reproducibility. Rejected: manual curl steps."
+          ],
+          "acceptance": [
+            "One command starts dependencies, seeds data, runs the flow, and tears down.",
+            "Each consumer assertion is explicit.",
+            "The harness fails on a missing event, duplicate side effect, or DLQ message.",
+            "CI runs it on the integration job."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "tst-002",
+          "title": "tests: failure injection and P0 regression gate",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P5",
+          "priority": "P0",
+          "kind": "test",
+          "transport": "test",
+          "dependsOn": [
+            "tst-001",
+            "ord-009",
+            "ord-010",
+            "cms-003",
+            "srch-001"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Inject Kafka down, duplicate delivery, malformed payload, DLQ, Redis down, and DB failure. Reason: at-least-once and outbox correctness are the core risks. Rejected: happy-path only.",
+            "Make the P0 regression suite a merge gate. Reason: the current defects were all in cross-service seams. Rejected: rely on manual review."
+          ],
+          "acceptance": [
+            "Kafka-down replay is lossless.",
+            "Duplicate delivery produces one side effect.",
+            "Malformed payload lands in the DLQ and the group advances.",
+            "Redis-down keyed mutations fail closed.",
+            "DB failure after capture leaves no captured payment without an order."
+          ],
+          "verified": false,
+          "follow_ups": []
+        }
+      ],
+      "messaging": {
+        "role": "provisioning-only",
+        "publishes": [],
+        "consumes": [],
+        "taskQueues": [
+          {
+            "queue": "notify.send-email",
+            "role": "provision",
+            "dlq": "notify.send-email-dlq",
+            "maxReceiveCount": 5,
+            "implementation": "Terraform SQS + redrive."
+          },
+          {
+            "queue": "import.process-row",
+            "role": "provision",
+            "dlq": "import.process-row-dlq",
+            "maxReceiveCount": 5,
+            "implementation": "Terraform SQS + redrive."
+          },
+          {
+            "queue": "media.resize-image",
+            "role": "provision",
+            "dlq": "media.resize-image-dlq",
+            "maxReceiveCount": 5,
+            "implementation": "Terraform SQS + redrive."
+          }
+        ],
+        "consumerGroup": null,
+        "doesNotUseKafka": [
+          "Provisions Kafka topics and SQS queues; does not produce or consume."
+        ],
+        "implementation": [
+          "docker compose",
+          "Kafka topic init",
+          "Terraform SQS",
+          "Nginx",
+          "CI"
+        ]
+      }
+    },
+    "Documentation": {
+      "motive": "Cross-repo documentation: architecture, API, schema, testing, versioning, deployment, service specs.",
+      "localRoot": "Documentation/",
+      "repo": "Documentation",
+      "port": null,
+      "ownerDocs": [
+        "Documentation/0.Project-Overview.md",
+        "Documentation/1.Architecture.md"
+      ],
+      "stages": {
+        "spec": "in-progress",
+        "build": "in-progress",
+        "test": "todo",
+        "verify": "todo"
+      },
+      "inProgress": null,
+      "next": [
+        "doc-001 correct transport claims",
+        "doc-002 testing matrix",
+        "doc-003 versioning release train",
+        "doc-004 service specs"
+      ],
+      "blockedBy": [],
+      "skills": [
+        "SKILL-EXPLORE",
+        "SKILL-INTERFACES"
+      ],
+      "producesConsumes": {
+        "produces": [],
+        "consumes": [],
+        "taskQueues": []
+      },
+      "claimedBy": null,
+      "note": "Docs exist for architecture, API, schema, testing, versioning, and five services. They still claim SNS->SQS events, a storefront Kafka producer, one consumer group per service+topic, and a media Kafka topic. Pending: doc-001 through doc-004.",
+      "tasks": [
+        {
+          "id": "doc-001",
+          "title": "docs: correct architecture and tech-stack event transport claims",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P0",
+          "kind": "docs",
+          "transport": "docs",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Kafka is the only event log; SQS is tasks only; no SNS->SQS event path; storefront has no Kafka client; one consumer group per service; CMS has no Kafka consumer; media resize is SQS; reminder.dispatch is dropped; order.refunded is replaced by order.status.updated. Reason: current docs contradict the approved architecture and will cause wrong implementations. Rejected: leave docs and rely on tasks.json.",
+            "Keep one topic catalog in tasks.json and link docs to it. Reason: one source of truth. Rejected: duplicate tables in five docs."
+          ],
+          "acceptance": [
+            "1.Architecture.md, 2.Tech-Stack.md, and state-for-agents/ARCHITECTURE.md agree with tasks.json.",
+            "No doc claims the storefront publishes to Kafka.",
+            "No doc claims SNS->SQS for events.",
+            "No doc lists reminder.dispatch as active.",
+            "No doc lists order.refunded as active."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "doc-002",
+          "title": "docs: testing matrix for Kafka, SQS, outbox, and DLQ",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P1",
+          "priority": "P0",
+          "kind": "docs",
+          "transport": "docs",
+          "dependsOn": [
+            "doc-001"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Add a per-transport test matrix and local harness commands. Reason: current tests mock clients and hid the checkout/catalog mismatch. Rejected: unit-only tests.",
+            "Make the integration harness the acceptance gate. Reason: cross-service contracts are the failure mode. Rejected: per-service green as the only gate."
+          ],
+          "acceptance": [
+            "9.Testing.md documents compose-up, topic creation, queue creation, and each test command.",
+            "Matrix covers producer outbox, consumer dedupe, DLQ, and replay.",
+            "P0 regression cases are listed.",
+            "No stale SNS/SQS event claims remain."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "doc-003",
+          "title": "docs: versioning 1.3.0/2.0.0 release train",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P1",
+          "priority": "P0",
+          "kind": "docs",
+          "transport": "docs",
+          "dependsOn": [
+            "ec-001",
+            "ec-002"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Document the dual-read/write window and the 2.0.0 cutover. Reason: consumers pin mixed versions (1.0.0, 1.1.0, 1.2.0). Rejected: undocumented breaking change.",
+            "Make the exact tarball URL and lockfile update part of the checklist. Reason: polyrepo discipline. Rejected: floating ranges."
+          ],
+          "acceptance": [
+            "8.Versioning.md lists 1.3.0 and 2.0.0 surfaces.",
+            "Release checklist includes local pack, consumer suites, tag approval, and repin.",
+            "No stale 1.0.0-only text remains."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "doc-004",
+          "title": "docs: service specs for notify, analytics, and import plus event ownership",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P4",
+          "priority": "P1",
+          "kind": "docs",
+          "transport": "docs",
+          "dependsOn": [
+            "ntf-001",
+            "anl-001",
+            "imp-001"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Each spec states publishes, consumes, task queues, and non-Kafka boundaries explicitly. Reason: transport ownership is currently implicit and often wrong. Rejected: central-only docs.",
+            "Update auth/cart/catalog/order/cms/search specs in the same pass. Reason: consumers and producers changed. Rejected: only add the three new specs."
+          ],
+          "acceptance": [
+            "Documentation/services/notify.md, analytics.md, and import.md exist.",
+            "Existing service specs match the messaging catalog.",
+            "Every spec has a transport table.",
+            "No spec claims a consumer or producer it does not own."
+          ],
+          "verified": false,
+          "follow_ups": []
+        }
+      ],
+      "messaging": {
+        "role": "docs-only",
+        "publishes": [],
+        "consumes": [],
+        "taskQueues": [],
+        "consumerGroup": null,
+        "doesNotUseKafka": [
+          "Documents the architecture; no runtime transport."
+        ],
+        "implementation": [
+          "Markdown docs"
+        ]
+      }
     }
   }
 }
