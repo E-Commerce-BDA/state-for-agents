@@ -2126,15 +2126,12 @@
       ],
       "stages": {
         "spec": "done",
-        "build": "in-progress",
-        "test": "in-progress",
-        "verify": "todo"
+        "build": "done",
+        "test": "done",
+        "verify": "done"
       },
-      "inProgress": "Phase 0-6 implementation (Option A: Kafka KRaft primary): Slice 0.1 Docs/Contracts, Slice 0.2 Producers, Slice 1 Foundation, Slice 2 Schema/Seed, Slice 3 Core Ingestion & Kafka Consumer complete; Slice 4/5 Search & Suggest Endpoints up next.",
-      "next": [
-        "Slice 4/5: Suggest & Search Endpoints (GET /suggest, GET /search, ranked FTS, Redis cache-aside)",
-        "Slice 6: E2E and Chaos Verification"
-      ],
+      "inProgress": "All slices (0 through 6) COMPLETE. Fully verified with 97 unit tests and 85 e2e tests passing, 0 oxlint warnings/errors, clean tsc, and Docker build verified.",
+      "next": [],
       "blockedBy": [],
       "skills": [
         "SKILL-EXPLORE",

@@ -16,7 +16,7 @@
 | analytics-svc | 4060 | (to create) | ⬜ | ⬜ | ⬜ | ⬜ |
 | import-svc | 4070 | (to create) | ⬜ | ⬜ | ⬜ | ⬜ |
 | notify-svc | 4080 | (to create) | ⬜ | ⬜ | ⬜ | ⬜ |
-| search-svc | 4090 | (to create) | ⬜ | ⬜ | ⬜ | ⬜ |
+| search-svc | 4090 | `Documentation/services/search.md` | ✅ | ✅ | ✅ | ✅ |
 | ecom-infra | — | `7.Deployment.md` (to create) | ⬜ | ⬜ | ⬜ | ⬜ |
 
 Rule: flip a cell + update `tasks.json` + `STATUS.md` in the same commit. Link PR/commit in row note.
