@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-29T18:15:34.663Z",
+  "updatedAt": "2026-10-29T18:32:14.311Z",
   "summary": {
     "total": 128,
-    "done": 70,
-    "in_progress": 2,
+    "done": 71,
+    "in_progress": 1,
     "backlog": 56,
     "byRepo": {
       "storefront-ui": {
@@ -45,8 +45,8 @@
       },
       "order-svc": {
         "total": 12,
-        "done": 7,
-        "in_progress": 1,
+        "done": 8,
+        "in_progress": 0,
         "backlog": 4
       },
       "cms-svc": {
@@ -3042,16 +3042,16 @@
         {
           "id": "ord-008",
           "title": "order-svc: scope and harden Redis idempotency",
-          "status": "in-progress",
+          "status": "done",
           "owner": "agent",
           "started": "2026-10-29",
-          "finished": null,
+          "finished": "2026-10-29",
           "phase": "P0",
           "priority": "P0",
           "kind": "bug",
           "transport": "http",
           "dependsOn": [],
-          "log": "TASKS/in-progress/ord-008-scoped-idempotency.md",
+          "log": "TASKS/done/ord-008-scoped-idempotency.md",
           "key_decisions": [
             "Key by idem:{userId}:{route}:{key}. Reason: the current global key allows cross-user replay and false conflicts. Rejected: keep the global key.",
             "Reserve the lock atomically and store the response only after commit. Reason: a crash between preflight and post-commit write must not create a duplicate order. Rejected: check-then-set without atomicity."
@@ -3062,8 +3062,12 @@
             "Concurrent duplicates produce exactly one order.",
             "Redis down fails closed with 503 for keyed mutations."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "ord-009 replaces the pending branch with saga resumption and adds confirmOrder/failOrder to CheckoutRepository.",
+            "cart-svc still uses a bare idem:{key}; ca-007/ec-002 should adopt the (user, route, key) scope.",
+            "Once every keyed mutation reads the row first, the pre-flight lock can be a best-effort hint."
+          ]
         },
         {
           "id": "ord-009",
