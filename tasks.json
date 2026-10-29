@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-29T15:39:28.198Z",
+  "updatedAt": "2026-10-29T17:50:00.000Z",
   "summary": {
     "total": 128,
-    "done": 68,
+    "done": 70,
     "in_progress": 1,
-    "backlog": 59,
+    "backlog": 57,
     "byRepo": {
       "storefront-ui": {
         "total": 53,
@@ -33,9 +33,9 @@
       },
       "catalog-svc": {
         "total": 11,
-        "done": 5,
+        "done": 6,
         "in_progress": 0,
-        "backlog": 6
+        "backlog": 5
       },
       "cart-svc": {
         "total": 10,
@@ -45,9 +45,9 @@
       },
       "order-svc": {
         "total": 12,
-        "done": 6,
+        "done": 7,
         "in_progress": 0,
-        "backlog": 6
+        "backlog": 5
       },
       "cms-svc": {
         "total": 7,
@@ -2056,7 +2056,6 @@
       },
       "inProgress": null,
       "next": [
-        "cat-006 idempotent stock reservations",
         "cat-007 product/category outbox producer",
         "cat-008 product.imported consumer",
         "cat-009 order.created consumer",
@@ -2176,16 +2175,16 @@
         {
           "id": "cat-006",
           "title": "catalog-svc: idempotent stock reservations and the order-svc contract",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "qoder",
+          "started": "2026-10-29",
+          "finished": "2026-10-29T17:50:00.000Z",
           "phase": "P0",
           "priority": "P0",
           "kind": "bug",
           "transport": "http",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/cat-006-stock-reservations.md",
           "key_decisions": [
             "Persist stock_reservations with a client-supplied reservationId, status, expires_at, and items. Reason: release and commit must be idempotent and crash-safe. Rejected: the current decrement-without-record, which leaks stock and inflates it on double release.",
             "Use quantity and optional orderId in the internal DTO. Reason: matches the catalog domain and lets order-svc send both. Rejected: keep the qty/reservationId mismatch, which makes checkout fail validation.",
@@ -2198,8 +2197,11 @@
             "order-svc can complete checkout against the real endpoint.",
             "Unit and e2e tests cover reserve, replay, release, double release, and expiry."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "ec-002: move the reserve/release/commit shapes into @ecom/contracts",
+            "cat-009: consume order.created and commit the hold (until then a completed order's hold expires after 900s)"
+          ]
         },
         {
           "id": "cat-007",
@@ -2854,7 +2856,6 @@
       },
       "inProgress": null,
       "next": [
-        "ord-007 checkout/catalog contract fix",
         "ord-008 idempotency scoping",
         "ord-009 payment/persistence saga",
         "ord-010 real refunds + order.status.updated",
@@ -3009,10 +3010,10 @@
         {
           "id": "ord-007",
           "title": "order-svc: fix the checkout/catalog stock contract and persist reservationId",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "qoder",
+          "started": "2026-10-29",
+          "finished": "2026-10-29T17:50:00.000Z",
           "phase": "P0",
           "priority": "P0",
           "kind": "bug",
@@ -3020,7 +3021,7 @@
           "dependsOn": [
             "cat-006"
           ],
-          "log": null,
+          "log": "TASKS/done/ord-007-checkout-catalog-contract.md",
           "key_decisions": [
             "Send reservationId, optional orderId, and items with quantity; persist stock_reservation_id on the order. Reason: links the order to the reservation for commit and release. Rejected: keep the reservationId only in memory, which loses it on a crash.",
             "Use the real catalog response shape and map 409 to the stock error. Reason: the current client expects success/reservedItems, which the catalog never returns. Rejected: keep the mocked e2e, which hides the mismatch."
@@ -3031,8 +3032,12 @@
             "order.created payload includes reservationId.",
             "E2E test uses the real HTTP contract, not only a mock."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "cat-009: commit the hold from order.created",
+            "ec-002: order.created now carries reservationId, which is not in the contracts package yet",
+            "ord-009 (still open): $50 snapshot fallback, hardcoded shipping, tax = 0, capture-before-BEGIN, no refund on rollback, #2026-###### collision"
+          ]
         },
         {
           "id": "ord-008",
