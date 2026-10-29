@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-29T18:40:57.095Z",
+  "updatedAt": "2026-10-29T18:50:01.324Z",
   "summary": {
     "total": 128,
-    "done": 72,
+    "done": 73,
     "in_progress": 1,
-    "backlog": 55,
+    "backlog": 54,
     "byRepo": {
       "storefront-ui": {
         "total": 53,
@@ -45,9 +45,9 @@
       },
       "order-svc": {
         "total": 12,
-        "done": 9,
+        "done": 10,
         "in_progress": 0,
-        "backlog": 3
+        "backlog": 2
       },
       "cms-svc": {
         "total": 7,
@@ -3106,10 +3106,10 @@
         {
           "id": "ord-010",
           "title": "order-svc: real refunds and canonical order.status.updated",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-30",
+          "finished": "2026-10-30",
           "phase": "P0",
           "priority": "P0",
           "kind": "bug",
@@ -3117,7 +3117,7 @@
           "dependsOn": [
             "ord-009"
           ],
-          "log": null,
+          "log": "TASKS/done/ord-010-refunds.md",
           "key_decisions": [
             "Call PaymentsService.processRefund with the stored transactionId and persist refund_pending/final. Reason: the current refund only flips DB rows and never calls the provider. Rejected: keep the DB-only refund.",
             "Publish order.status.updated with to=\"refunded\" and delete order.refunded. Reason: one lifecycle event family. Rejected: keep order.refunded as a second event."
@@ -3128,8 +3128,13 @@
             "order.status.updated carries to=\"refunded\"; order.refunded is gone.",
             "Tests cover success, provider failure, and replay."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "UNIQUE(order_id) locks v1 to one refund per order; a second partial refund needs a running refunded total and a refund history table.",
+            "A refund stuck in pending (a crash between startRefund and markSucceeded) has no sweeper: it answers 409 REFUND_IN_PROGRESS until an operator marks it failed.",
+            "Only delivered -> refunded is allowed, so an unshipped order cannot be refunded; reverse-versus-void semantics for a captured-but-unshipped payment are undecided.",
+            "A provider success followed by a failed settlement transaction loses the provider reference; reconciliation from the provider refund list is not implemented."
+          ],
           "messaging": {
             "publishes": [
               {
