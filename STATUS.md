@@ -2,7 +2,7 @@
 
 > Scope: human-readable mirror of `tasks.json`. `tasks.json` is canonical.
 > Status: Active | Date: 2026-10-29
-> Counts: **128 total = 70 done + 1 in-progress + 57 backlog**
+> Counts: **128 total = 70 done + 2 in-progress + 56 backlog**
 > Truth rule: “core complete” is **not** “feature complete”. Every pending item
 > below has a task ID in `tasks.json`; no service is marked 100% while a task
 > remains.
@@ -115,7 +115,7 @@ writes `cms_outbox` in a Mongo transaction (replica set required). Relays use
 | `auth-svc` | 4 | 2 | 0 | 2 | `au-004`, `au-005` |
 | `cart-svc` | 10 | 6 | 0 | 4 | `ca-007`, `ca-008`, `ca-009`, `ca-010` |
 | `catalog-svc` | 11 | 6 | 0 | 5 | `cat-007`, `cat-008`, `cat-009`, `cat-010`, `cat-011` |
-| `order-svc` | 12 | 7 | 0 | 5 | `ord-008`, `ord-009`, `ord-010`, `ord-011`, `ord-012` |
+| `order-svc` | 12 | 7 | 1 | 4 | `ord-009`, `ord-010`, `ord-011`, `ord-012` |
 | `cms-svc` | 7 | 2 | 0 | 5 | `cms-003`, `cms-004`, `cms-005`, `cms-006`, `cms-007` |
 | `search-svc` | 3 | 0 | 0 | 3 | `srch-001`, `srch-002`, `srch-003` |
 | `notify-svc` | 4 | 0 | 0 | 4 | `ntf-001..ntf-004` |
@@ -133,8 +133,8 @@ writes `cms_outbox` in a Mongo transaction (replica set required). Relays use
 
 ## 7. Now / Next
 
-- **Now:** `cat-006` + `ord-007` are closed together — checkout works against the real catalog contract, the hold is persisted, and stock is decremented exactly once (verified live). Tracker and `tasks.json` are in sync.
-- **Next:** `cat-009` (commit the hold from `order.created`) → `ord-008` → `ord-009` → `ord-010` → `ca-007` → `cms-003`. Do not start `sf-048`+ or `adm-001`.
+- **Now:** `ord-008` is claimed — idempotency moves to a user+route-scoped Redis key with the order row as the authority (`db/004` adds `idempotency_key`/`idempotency_body_hash` + a partial unique index) and Redis failures fail closed with a retryable 503.
+- **Next:** `ord-009` (pending-first saga) → `ord-010` (real refunds) → `cat-009` (commit the hold from `order.created`) → `ca-007` → `cms-003`. Do not start `sf-048`+ or `adm-001`.
 - **Do not** push, tag, release, or publish packages without explicit approval.
 - **Commit style:** one commit per edit/feature, conventional message, author `Dharmil Gajjar <foreafcbeta@gmail.com>`.
 

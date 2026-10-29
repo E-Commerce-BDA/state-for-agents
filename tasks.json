@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-29T17:50:00.000Z",
+  "updatedAt": "2026-10-29T18:15:34.663Z",
   "summary": {
     "total": 128,
     "done": 70,
-    "in_progress": 1,
-    "backlog": 57,
+    "in_progress": 2,
+    "backlog": 56,
     "byRepo": {
       "storefront-ui": {
         "total": 53,
@@ -46,8 +46,8 @@
       "order-svc": {
         "total": 12,
         "done": 7,
-        "in_progress": 0,
-        "backlog": 5
+        "in_progress": 1,
+        "backlog": 4
       },
       "cms-svc": {
         "total": 7,
@@ -3042,16 +3042,16 @@
         {
           "id": "ord-008",
           "title": "order-svc: scope and harden Redis idempotency",
-          "status": "todo",
-          "owner": null,
-          "started": null,
+          "status": "in-progress",
+          "owner": "agent",
+          "started": "2026-10-29",
           "finished": null,
           "phase": "P0",
           "priority": "P0",
           "kind": "bug",
           "transport": "http",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/in-progress/ord-008-scoped-idempotency.md",
           "key_decisions": [
             "Key by idem:{userId}:{route}:{key}. Reason: the current global key allows cross-user replay and false conflicts. Rejected: keep the global key.",
             "Reserve the lock atomically and store the response only after commit. Reason: a crash between preflight and post-commit write must not create a duplicate order. Rejected: check-then-set without atomicity."
