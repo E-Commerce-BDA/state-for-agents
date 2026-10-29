@@ -1,8 +1,8 @@
 # STATUS — Done / Now / Next
 
 > Scope: human-readable mirror of `tasks.json`. `tasks.json` is canonical.
-> Status: Active | Date: 2026-10-29
-> Counts: **128 total = 71 done + 1 in-progress + 56 backlog**
+> Status: Active | Date: 2026-10-30
+> Counts: **128 total = 72 done + 1 in-progress + 55 backlog**
 > Truth rule: “core complete” is **not** “feature complete”. Every pending item
 > below has a task ID in `tasks.json`; no service is marked 100% while a task
 > remains.
@@ -17,7 +17,7 @@
 | `auth-svc` | 10 core slices; JWT issuer/audience; shared error envelope; service-key internal routes | 29 unit + 37 e2e green | `user.registered` is not published; no outbox; no internal email lookup for notify (`au-004`, `au-005`) |
 | `cart-svc` | 6 slices; guest/user cart; wishlist; merge-on-login; TTL | 84 unit + 79 e2e green | `NoopEventBus` drops `cart.updated`; fixture catalog; no `order.created` consumer; conversion endpoint missing (`ca-007..ca-010`) |
 | `catalog-svc` | 7 phases; product/category CRUD; inventory; **persisted idempotent stock reservations** (`db/003`, `src/stock`, expiry sweep); public caching; hardening | 89 unit + 75 e2e green, lint 0, build clean; live checkout decremented stock exactly once | No Kafka consumer; best-effort producer; no `sku` backfill for historical order items (`cat-007..cat-011`) |
-| `order-svc` | 7 phases; checkout on the **real catalog contract** (quantity, discriminated result, 409/502/503), `orders.stock_reservation_id`, order lifecycle; refunds; **user-scoped, DB-backed idempotency** (`db/004`); service-key routes | 61 unit + 67 e2e green (1 live case skipped), lint 0, build clean; concurrent duplicates write one order, two customers never share a key | The hold is committed only by `cat-009`, so a completed order's hold is released by the expiry sweep; payment captured before persistence; refunds never call the provider; outbox only logs; cart clear 404 (`ord-009..ord-012`) |
+| `order-svc` | 7 phases; checkout on the **real catalog contract** (quantity, discriminated result, 409/502/503), `orders.stock_reservation_id`, order lifecycle; refunds; **user-scoped, DB-backed idempotency** (`db/004`); **pending-first payment saga** with compensation and resumption; hold released when an order is cancelled or fails; service-key routes | 70 unit + 71 e2e green (1 live case skipped), lint 0, build clean; the capture sees a persisted `pending` order, a decline or a lost `TX2` is compensated, a retry resumes instead of duplicating | The hold is committed only by `cat-009`, so a completed order's hold is released by the expiry sweep; refunds never call the provider; outbox only logs; cart clear 404; no sweeper for stale pending payments (`ord-010..ord-012`) |
 | `cms-svc` | Phase 1 + 2; pages/sections/blogs/media/theme; admin API; public cache | 89 unit + 53 e2e green | `cms.updated` publishes on `cms.events`; no `cms_outbox`; Kafka `media.tasks`; traversal-prone media route; post-buffer MIME/size checks (`cms-003..cms-007`) |
 | `search-svc` | 7 slices; index/query; Kafka consumer; internal batch endpoint | 97 unit + 85 e2e green | Malformed JSON is committed without DLQ; no `processed_events`; unknown types have no metric; raw kafkajs rather than Nest transport (`srch-001..srch-003`) |
 | `storefront-ui` | 14 UI primitives; auth composed blocks and routes; CMS theme/settings; navbar/search; style contracts | suite must be re-established after the dirty worktree is resolved | Commerce routes/components; thin auth client; CMS source wiring; `/api/track`; `/api/revalidate`; contract pin; dirty worktree (`sf-048..sf-053`, `sf-039` in progress) |
@@ -33,14 +33,13 @@ These are the defects that make the current happy path fail or lose money/data.
 
 1. **`ec-002`** — missing payloads (`user.registered`, `cart.updated`, `cart.abandoned`, `order.created`, `order.status.updated`, `page.viewed`). `ec-001` is done: canonical envelope 1.3.0, 54 tests green. `order.created` now carries `reservationId`, which is still undocumented in the package.
 2. **`cat-009`** — commit the hold from `order.created`. Until it lands, a *paid* order's hold expires after 900s and the stock is restored, i.e. the item can be sold twice. This is now the highest-risk open item.
-3. **`ord-009`** — persist `pending_payment` before capture; compensate on DB/capture failure.
-4. **`ord-010`** — call the payment provider for refunds; publish `order.status.updated {to:"refunded"}`; remove `order.refunded`.
-5. **`ord-012`** — remove the broken cart HTTP clear; rely on `order.created`.
-6. **`ca-007`** — temporary internal cart conversion endpoint (removed when `ca-009` lands).
-7. **`cms-003` / `cms-004`** — close media path traversal, unauthenticated file serving, post-buffer MIME/size checks.
-8. **`srch-001`** — malformed/invalid events go to DLQ; unknown types commit with a metric; `processed_events`.
-9. **`sf-048`** — resolve the dirty storefront worktree before commerce work.
-10. **`doc-001`** — remove SNS→SQS, storefront-Kafka, per-topic-group, CMS-consumer, `media.tasks`, `reminder.dispatch`, and `order.refunded` claims.
+3. **`ord-010`** — call the payment provider for refunds; publish `order.status.updated {to:"refunded"}`; remove `order.refunded`.
+4. **`ord-012`** — remove the broken cart HTTP clear; rely on `order.created`.
+5. **`ca-007`** — temporary internal cart conversion endpoint (removed when `ca-009` lands).
+6. **`cms-003` / `cms-004`** — close media path traversal, unauthenticated file serving, post-buffer MIME/size checks.
+7. **`srch-001`** — malformed/invalid events go to DLQ; unknown types commit with a metric; `processed_events`.
+8. **`sf-048`** — resolve the dirty storefront worktree before commerce work.
+9. **`doc-001`** — remove SNS→SQS, storefront-Kafka, per-topic-group, CMS-consumer, `media.tasks`, `reminder.dispatch`, and `order.refunded` claims.
 
 ---
 
@@ -114,7 +113,7 @@ writes `cms_outbox` in a Mongo transaction (replica set required). Relays use
 | `auth-svc` | 4 | 2 | 0 | 2 | `au-004`, `au-005` |
 | `cart-svc` | 10 | 6 | 0 | 4 | `ca-007`, `ca-008`, `ca-009`, `ca-010` |
 | `catalog-svc` | 11 | 6 | 0 | 5 | `cat-007`, `cat-008`, `cat-009`, `cat-010`, `cat-011` |
-| `order-svc` | 12 | 8 | 0 | 4 | `ord-009`, `ord-010`, `ord-011`, `ord-012` |
+| `order-svc` | 12 | 9 | 0 | 3 | `ord-010`, `ord-011`, `ord-012` |
 | `cms-svc` | 7 | 2 | 0 | 5 | `cms-003`, `cms-004`, `cms-005`, `cms-006`, `cms-007` |
 | `search-svc` | 3 | 0 | 0 | 3 | `srch-001`, `srch-002`, `srch-003` |
 | `notify-svc` | 4 | 0 | 0 | 4 | `ntf-001..ntf-004` |
@@ -132,14 +131,14 @@ writes `cms_outbox` in a Mongo transaction (replica set required). Relays use
 
 ## 7. Now / Next
 
-- **Now:** `ord-008` is closed — checkout keys are scoped per user + route, the order row is the authority (partial unique index), Redis only caches the replay, and an unreachable Redis fails closed with a retryable 503.
-- **Next:** `ord-009` (pending-first saga) → `ord-010` (real refunds) → `cat-009` (commit the hold from `order.created`) → `ca-007` → `cms-003`. Do not start `sf-048`+ or `adm-001`.
+- **Now:** `ord-009` is closed — the order is written as `pending` before the card is captured, every failure compensates by phase (release → close as failed → refund-and-close), and a retry on the same key resumes the same order, hold and provider capture.
+- **Next:** `ord-010` (real refunds) → `cat-009` (commit the hold from `order.created`) → `ca-007` → `cms-003`. Do not start `sf-048`+ or `adm-001`.
 - **Do not** push, tag, release, or publish packages without explicit approval.
 - **Commit style:** one commit per edit/feature, conventional message, author `Dharmil Gajjar <foreafcbeta@gmail.com>`.
 
 ---
 
-## 8. Truth checks (2026-10-29)
+## 8. Truth checks (2026-10-30)
 
 - `tasks.json` parses; **128 unique IDs**; **0 dependency cycles**; no missing dependencies.
 - Every `done`/`in-progress` entry has an existing log under the matching folder.
@@ -149,6 +148,7 @@ writes `cms_outbox` in a Mongo transaction (replica set required). Relays use
 - `@ecom/contracts` 1.3.0: 54 tests, typecheck, build, and local pack green; no tag or publish.
 - `catalog-svc` after `cat-006`: 89 unit + 75 e2e green, lint 0, build clean; `catalog` schema has 14 tables.
 - `order-svc` after `ord-008`: 61 unit + 67 e2e green (1 live case skipped), lint 0, build clean; `order.orders` has `idempotency_key`, `idempotency_body_hash` and `idx_orders_idem` (`UNIQUE (user_id, idempotency_key) WHERE idempotency_key IS NOT NULL`).
+- `order-svc` after `ord-009`: 70 unit + 71 e2e green (1 live case skipped), lint 0, build clean; the e2e provider reads the order row at capture time and finds it `pending`/`pending`; a decline leaves `failed`/`failed` with no outbox row; a forced `TX2` failure refunds the capture once and closes the order as `failed`/`refunded`; a transient capture error keeps the hold and the same key resumes to 201 with one order, one reservation and one `order.created`.
 - Two customers sending the same `x-idempotency-key` get two independent orders; concurrent duplicates write exactly one; a second app with a throwing `RedisService` returns 503 `IDEMPOTENCY_UNAVAILABLE` and writes nothing.
 - Live reservation replay (catalog on `:4020`): same `reservationId` twice → 201 both times, stock 10 → 8, exactly one `sale` movement; release twice → stock 10, second call `items: []`; release after commit → 409 `RESERVATION_CLOSED`.
 - No push, tag, release, or package publish was performed.
