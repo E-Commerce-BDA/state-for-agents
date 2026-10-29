@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-29T18:32:14.311Z",
+  "updatedAt": "2026-10-29T18:40:57.095Z",
   "summary": {
     "total": 128,
-    "done": 71,
+    "done": 72,
     "in_progress": 1,
-    "backlog": 56,
+    "backlog": 55,
     "byRepo": {
       "storefront-ui": {
         "total": 53,
@@ -45,9 +45,9 @@
       },
       "order-svc": {
         "total": 12,
-        "done": 8,
+        "done": 9,
         "in_progress": 0,
-        "backlog": 4
+        "backlog": 3
       },
       "cms-svc": {
         "total": 7,
@@ -3072,10 +3072,10 @@
         {
           "id": "ord-009",
           "title": "order-svc: payment/persistence saga with compensation",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-29",
+          "finished": "2026-10-30",
           "phase": "P0",
           "priority": "P0",
           "kind": "bug",
@@ -3084,7 +3084,7 @@
             "ord-007",
             "ord-008"
           ],
-          "log": null,
+          "log": "TASKS/done/ord-009-payment-saga.md",
           "key_decisions": [
             "Persist the order as pending_payment before capture, then capture and confirm. Reason: the current code captures payment before the DB transaction and leaks money on DB failure. Rejected: capture after commit without a pending state, which can confirm an unpaid order.",
             "Compensate with void/refund, stock release, and cancellation on any post-capture failure. Reason: no captured payment without a persisted order. Rejected: log-and-continue."
@@ -3095,8 +3095,13 @@
             "Stock is released exactly once on failure.",
             "Tests cover DB failure, capture failure, and retry."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "A transient capture failure keeps the hold, so a resume after the reservation TTL confirms stock that was already released; a compensating re-reserve or a longer hold is needed.",
+            "A crash between capture and TX2 is only repaired by the customer retry (resume); a sweeper over stale pending payments should reclaim it server-side.",
+            "No order-status transition for abandoned attempts: a pending order lives until someone retries or cancels it.",
+            "ord-010 must not double-close an attempt the saga already closed as refunded."
+          ]
         },
         {
           "id": "ord-010",
