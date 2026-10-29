@@ -1,7 +1,7 @@
 # SERVICES — status matrix (agents update cells as work lands)
 
 > Scope: live tracker. Stages: spec → build → test → verify (⬜ todo / 🚧 in-progress / ✅ done).
-> Status: Active | Date: 2026-10-28 | Machine mirror: `tasks.json`
+> Status: Active | Date: 2026-10-29 | Machine mirror: `tasks.json`
 
 | Repo | Port | Spec doc | spec | build | test | verify |
 |---|---|---|---|---|---|---|
@@ -9,9 +9,9 @@
 | admin-app | 3001 | `Documentation/6.Admin-Panel.md` | 🚧 | ⬜ | ⬜ | ⬜ |
 | ecom-contracts | npm | `8.Versioning.md` | 🚧 | 🚧 | 🚧 | ⬜ |
 | auth-svc | 4010 | `Documentation/services/auth.md` | ✅ | ✅ | ✅ | ✅ |
-| catalog-svc | 4020 | `Documentation/services/catalog.md` | 🚧 | 🚧 | 🚧 | ⬜ |
+| catalog-svc | 4020 | `Documentation/services/catalog.md` | 🚧 | ✅ | ✅ | ✅ |
 | cart-svc | 4030 | `Documentation/services/cart.md` | ✅ | ✅ | ✅ | ✅ |
-| order-svc | 4040 | (to create) | ⬜ | ⬜ | ⬜ | ⬜ |
+| order-svc | 4040 | `Documentation/services/order.md` | ✅ | ✅ | ✅ | ✅ |
 | cms-svc | 4050 | `Documentation/services/cms.md` | in-progress | in-progress | in-progress | todo |
 | analytics-svc | 4060 | (to create) | ⬜ | ⬜ | ⬜ | ⬜ |
 | import-svc | 4070 | (to create) | ⬜ | ⬜ | ⬜ | ⬜ |
