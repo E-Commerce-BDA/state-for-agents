@@ -2,7 +2,7 @@
 
 > Scope: human-readable mirror of `tasks.json`. `tasks.json` is canonical.
 > Status: Active | Date: 2026-10-30
-> Counts: **128 total = 73 done + 1 in-progress + 54 backlog**
+> Counts: **128 total = 74 done + 1 in-progress + 53 backlog**
 > Truth rule: “core complete” is **not** “feature complete”. Every pending item
 > below has a task ID in `tasks.json`; no service is marked 100% while a task
 > remains.
@@ -13,7 +13,7 @@
 
 | Area | What is actually done | Verification | Still pending |
 |---|---|---|---|
-| `@ecom/contracts` | 1.3.0 package: canonical event envelope with dual-read/write; CMS/blog/media/theme/navigation/search schemas; exact tarball distribution; consumer pins still at 1.0.0/1.1.0/1.2.0 | 54 tests, typecheck, build, local pack green | Missing event/job payloads; 2.0.0 cutover; release tags (`ec-002..ec-005`) |
+| `@ecom/contracts` | 1.4.0 package: canonical event envelope with dual-read/write; six event payload schemas + an 11-topic registry with `parseEventEnvelope`; CMS/blog/media/theme/navigation/search schemas; exact tarball distribution; consumer pins still at 1.0.0/1.1.0/1.2.0 | 84 tests, typecheck, build, local pack green | SQS job schemas; 2.0.0 cutover; release tags (`ec-003..ec-005`) |
 | `auth-svc` | 10 core slices; JWT issuer/audience; shared error envelope; service-key internal routes | 29 unit + 37 e2e green | `user.registered` is not published; no outbox; no internal email lookup for notify (`au-004`, `au-005`) |
 | `cart-svc` | 6 slices; guest/user cart; wishlist; merge-on-login; TTL | 84 unit + 79 e2e green | `NoopEventBus` drops `cart.updated`; fixture catalog; no `order.created` consumer; conversion endpoint missing (`ca-007..ca-010`) |
 | `catalog-svc` | 7 phases; product/category CRUD; inventory; **persisted idempotent stock reservations** (`db/003`, `src/stock`, expiry sweep); public caching; hardening | 89 unit + 75 e2e green, lint 0, build clean; live checkout decremented stock exactly once | No Kafka consumer; best-effort producer; no `sku` backfill for historical order items (`cat-007..cat-011`) |

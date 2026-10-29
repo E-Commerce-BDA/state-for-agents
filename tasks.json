@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-29T18:50:01.324Z",
+  "updatedAt": "2026-10-29T20:09:25.807Z",
   "summary": {
     "total": 128,
-    "done": 73,
+    "done": 74,
     "in_progress": 1,
-    "backlog": 54,
+    "backlog": 53,
     "byRepo": {
       "storefront-ui": {
         "total": 53,
@@ -21,9 +21,9 @@
       },
       "ecom-contracts": {
         "total": 5,
-        "done": 1,
+        "done": 2,
         "in_progress": 0,
-        "backlog": 4
+        "backlog": 3
       },
       "auth-svc": {
         "total": 4,
@@ -1619,10 +1619,7 @@
       },
       "inProgress": null,
       "next": [
-        "ec-002 missing event payloads",
-        "ec-003 SQS job schemas",
-        "ec-004 2.0.0 cutover",
-        "ec-005 release train"
+        "ec-003 Contracts: SQS job schemas and queue/DLQ constants"
       ],
       "blockedBy": [],
       "skills": [
@@ -1636,7 +1633,7 @@
         "taskQueues": []
       },
       "claimedBy": "agent",
-      "note": "Package 1.3.0 exists with the canonical envelope and readEventEnvelope. Consumers still pin 1.0.0/1.1.0/1.2.0; auth/cart/order/import do not import contracts. Pending: missing event/job payloads, 2.0.0 cutover, and release tags. No runtime Kafka or SQS.",
+      "note": "Package 1.4.0 adds the six missing payload schemas and the topic registry (11 topics with payload validation and DLQ names). Consumers still pin 1.0.0/1.1.0/1.2.0; auth/cart/order/import do not import contracts. Pending: SQS job schemas (ec-003), 2.0.0 cutover (ec-004), release tags (ec-005). No runtime Kafka or SQS.",
       "tasks": [
         {
           "id": "ec-001",
@@ -1673,10 +1670,10 @@
         {
           "id": "ec-002",
           "title": "Contracts: missing event payloads and topic/type registry",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-30",
+          "finished": "2026-10-30",
           "phase": "P0",
           "priority": "P0",
           "kind": "contract",
@@ -1684,7 +1681,7 @@
           "dependsOn": [
             "ec-001"
           ],
-          "log": null,
+          "log": "TASKS/in-progress/ec-002-event-payloads.md",
           "key_decisions": [
             "Add payload schemas for user.registered, cart.updated, cart.abandoned, order.created, order.status.updated, and page.viewed. Reason: consumers need validated payloads, not z.record(z.unknown()). Rejected: keep free-form payloads, which hide drift until production.",
             "Model order.status.updated with a required to field, including to=\"refunded\". Reason: one lifecycle event replaces order.refunded. Rejected: keep order.refunded as a second event family."
@@ -1695,8 +1692,12 @@
             "Payloads are PII-minimized; email is not embedded in cart or order events.",
             "Tests reject missing required fields and unknown fields."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "ec-005 must ship 1.3.0/1.4.0/1.5.0 in one release train and tag them together.",
+            "No service validates with the new payloads yet: repin cart/order/catalog/cms contracts when each consumer lands.",
+            "Normalize refundAmount to one wire type and drop the empty reservationId fallback at the source."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
