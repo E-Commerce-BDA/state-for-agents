@@ -8,10 +8,11 @@
 1. Key formats + TTLs (fixed — never invent keys):
    `cat:product:{id}` / `cat:list:{queryHash}` (5m), `cms:section:{key}` (5m),
    `cms:settings:global` (1m), `cms:nav` (5m), `search:suggest:{q}` (10m),
-   `sess:{tokenId}` (sliding), `idem:{key}` (24h), `rate:{ip}:{route}` (window),
+   `sess:{tokenId}` (sliding), `idem:{userId}:{route}:{key}` (24h) and
+   `idem:{userId}:{route}:{key}:lock` (short), `rate:{ip}:{route}` (window),
    `compare:{sessionId}` (session).
 2. Pattern is always cache-aside: read cache → miss → read DB → write cache with TTL → return. Invalidate on events (`product.imported`, `cms.updated` via `IEventBus`), never by timer guessing.
-3. Sessions: refresh-token lookup Redis first, Postgres fallback (Redis-down = slower but correct). Idempotency: check `idem:` before work, set after.
+3. Sessions: refresh-token lookup Redis first, Postgres fallback (Redis-down = slower but correct). Idempotency: the **domain row is the authority** — the key is persisted on the record it protects (e.g. `order.orders (user_id, idempotency_key)` unique), Redis only caches the response for replay. Scoping the key by user and route is mandatory: a bare `idem:{key}` lets one user replay another user's stored response.
 4. Rate limits live in Redis counters; bypass-open on Redis-down is accepted v1 (document it, don't silently fail closed).
 5. Client: `ioredis`; one client per service; prefix keys per env (`prod:`) to avoid collisions.
 
