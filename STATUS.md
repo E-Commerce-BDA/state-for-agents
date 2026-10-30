@@ -2,7 +2,7 @@
 
 > Scope: human-readable mirror of `tasks.json`. `tasks.json` is canonical.
 > Status: Active | Date: 2026-10-30
-> Counts: **128 total = 76 done + 1 in-progress + 51 backlog**
+> Counts: **128 total = 77 done + 1 in-progress + 50 backlog**
 > Truth rule: “core complete” is **not** “feature complete”. Every pending item
 > below has a task ID in `tasks.json`; no service is marked 100% while a task
 > remains.
@@ -21,7 +21,7 @@
 | `cms-svc` | Phase 1 + 2; pages/sections/blogs/media/theme; admin API; public cache; **media containment + visibility** (`cms-003`: one checked path builder, realpath re-check, public route 404s private and orphan files, admin ObjectId file route, `public, max-age=60, must-revalidate`) | 115 unit + 70 e2e green, lint 0, build clean | `cms.updated` publishes on `cms.events`; no `cms_outbox`; Kafka `media.tasks`; post-buffer MIME/size checks; upload MIME trusted from the header (`cms-004..cms-007`) |
 | `search-svc` | 7 slices; index/query; Kafka consumer; internal batch endpoint | 97 unit + 85 e2e green | Malformed JSON is committed without DLQ; no `processed_events`; unknown types have no metric; raw kafkajs rather than Nest transport (`srch-001..srch-003`) |
 | `storefront-ui` | 14 UI primitives; auth composed blocks and routes; CMS theme/settings; navbar/search; style contracts | suite must be re-established after the dirty worktree is resolved | Commerce routes/components; thin auth client; CMS source wiring; `/api/track`; `/api/revalidate`; contract pin; dirty worktree (`sf-048..sf-053`, `sf-039` in progress) |
-| `Documentation` | Architecture/API/schema/testing/versioning; `auth/cart/cms/order/search` service specs | docs exist; transport review pending | Transport contradictions; testing matrix; 1.3.0/2.0.0 release train; notify/analytics/import specs (`doc-001..doc-004`) |
+| `Documentation` | Architecture/API/schema/testing/versioning; `auth/cart/cms/order/search` service specs; **transport claims corrected** in `1.Architecture.md`, `2.Tech-Stack.md`, and `state-for-agents/ARCHITECTURE.md` (`doc-001`): 11-topic registry linked to `tasks.json`, browser → `Next /api/track` → `analytics-svc` → Kafka, one consumer group per service, CMS has no Kafka consumer, three SQS queues, `user.registered` carries no `email` | plan regex over the three files → 0 hits; §6.3 has 11 topic rows and `page.viewed` belongs to `analytics-svc`; both repos committed clean | Testing matrix; 1.3.0/2.0.0 release train; notify/analytics/import specs (`doc-002..doc-004`) |
 
 **Not created yet:** `notify-svc`, `analytics-svc`, `import-svc`, `ecom-infra`, `admin-app` (empty). Their work is fully specified as tasks, not claimed as done.
 
@@ -36,7 +36,6 @@ These are the defects that make the current happy path fail or lose money/data.
 3. **`cms-004`** — upload hardening: the size limit is checked after the whole file is buffered, the MIME type is the client's header, and `STORAGE_LOCAL_DIR` is not validated at boot.
 4. **`srch-001`** — malformed/invalid events go to DLQ; unknown types commit with a metric; `processed_events`.
 5. **`sf-048`** — resolve the dirty storefront worktree before commerce work.
-6. **`doc-001`** — remove SNS→SQS, storefront-Kafka, per-topic-group, CMS-consumer, `media.tasks`, `reminder.dispatch`, and `order.refunded` claims.
 
 ---
 
@@ -117,7 +116,7 @@ writes `cms_outbox` in a Mongo transaction (replica set required). Relays use
 | `analytics-svc` | 4 | 0 | 0 | 4 | `anl-001..anl-004` |
 | `import-svc` | 3 | 0 | 0 | 3 | `imp-001..imp-003` |
 | `ecom-infra` | 7 | 0 | 0 | 7 | `inf-001..inf-005`, `tst-001`, `tst-002` |
-| `Documentation` | 4 | 0 | 0 | 4 | `doc-001..doc-004` |
+| `Documentation` | 4 | 1 | 0 | 3 | `doc-002`, `doc-003`, `doc-004` |
 | `admin-app` | 1 | 0 | 0 | 1 | `adm-001` (deferred) |
 
 > Historical note: counts are tracker entries, not historical slices. `auth-svc`
@@ -128,8 +127,8 @@ writes `cms_outbox` in a Mongo transaction (replica set required). Relays use
 
 ## 7. Now / Next
 
-- **Now:** `cms-003` is closed — the media route can no longer reach outside `storage/` (one private key builder plus a realpath re-check), a `public`/`private` asset is served by two different routes, the public route answers 404 for a private or orphan file with no path in the body, and the admin file route takes an `ObjectId` behind the admin role. Contracts 1.5.0 carries the optional `visibility`.
-- **Next:** `doc-001` (transport corrections in three docs) → `cms-004` (upload hardening). `cat-009` stays the highest-risk open item. Do not start `sf-048`+ or `adm-001`.
+- **Now:** `doc-001` is closed — the three chosen docs no longer claim SNS→SQS events, a storefront/admin Kafka producer, per-topic consumer groups, a CMS Kafka consumer, or `reminder.dispatch`. `1.Architecture.md` §6.3 is the derived 11-topic table headed by `tasks.json#messaging.topics`, and `user.registered` no longer carries an address.
+- **Next:** `cms-004` (upload hardening) or `cat-009` (commit the hold) — `cat-009` is the highest-risk open item. Do not start `sf-048`+ or `adm-001`.
 - **Do not** push, tag, release, or publish packages without explicit approval.
 - **Commit style:** one commit per edit/feature, conventional message, author `Dharmil Gajjar <foreafcbeta@gmail.com>`.
 
@@ -138,10 +137,11 @@ writes `cms_outbox` in a Mongo transaction (replica set required). Relays use
 ## 8. Truth checks (2026-10-30)
 
 - `tasks.json` parses; **128 unique IDs**; **0 dependency cycles**; no missing dependencies.
-- Every `done`/`in-progress` entry has an existing log under the matching folder.
+- Every `done`/`in-progress` entry has an existing log under the matching folder; the validator that checks ids, dependency cycles, per-repo counts, and the counts line above returns clean (it found and fixed `ec-002`'s log, which still pointed at `TASKS/in-progress/`).
 - Phase coverage: **P0 14, P1 6, P2 10, P3 9, P4 14, P5 6, P6 1 = 60**.
 - Repo messaging matches `producesConsumes`; the topic catalog matches repo ownership.
-- Repos are level with upstream except `Documentation` (`d0cefcf`) and `ecom-contracts` (`4383b26`). `storefront-ui` is dirty and must be resolved by `sf-048`.
+- Unpushed state is exact in `tasks.json#unpushed` (verified with `git log @{u}..HEAD`, oldest → newest): cart-svc 3, catalog-svc 9, cms-svc 3, Documentation 12, ecom-contracts 8, order-svc 25, state-for-agents 20; auth-svc and search-svc are level. `storefront-ui` is dirty and must be resolved by `sf-048`.
+- `doc-001` after the pass: the plan regex (`SNS\s*(→|->)\s*SQS|SnsSqsBus|SNS fan-out|TRANSPORT=|reminder\.dispatch|per \(service, topic\)|storefront.{0,40}Kafka`) returns 0 hits across the three files; §6.3 has 11 topic rows with `cart.updated` keyed by `cartId`; `cms.updated` has no consumer and `page.viewed` is produced by `analytics-svc`; §7.7 has no `email`; one commit per file (`Documentation` `d02aa48`, `10e38de`; `state-for-agents` `159e8eb`).
 - `@ecom/contracts` 1.5.0: 88 tests, typecheck, build, and local pack green (`ecom-contracts-1.5.0.tgz` committed, `*.tgz` force-added); `mediaVisibilitySchema` is optional on `mediaSchema`, so every 1.4.0 payload still parses, and `mediaSchema` is parsed only in the contracts tests, so the field breaks no pinned consumer. No tag or publish.
 - `cart-svc` after `ca-007`: 91 unit + 87 e2e green, lint 0, build clean; the removed `DELETE /api/v1/cart/internal/carts/:userId` still answers 404, a missing or wrong `x-service-key` answers 401 `SERVICE_KEY_INVALID`, a user without a cart and a replay both answer 204, a conversion leaves `status='converted'` with its lines intact and exactly one `cart.updated`, and `NODE_ENV=production` refuses to boot on the dev key.
 - `order-svc` after `ca-007`: 81 unit + 76 e2e green (1 skipped), lint 0, build clean; `CartClient` posts to the conversion endpoint with `x-service-key`, a 204 is silent, a 404 warns without throwing, and a confirmation never fails on a cart error.

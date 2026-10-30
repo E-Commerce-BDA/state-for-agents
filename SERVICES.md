@@ -1,7 +1,7 @@
 # SERVICES — status matrix (agents update cells as work lands)
 
 > Scope: live tracker. Stages: spec → build → test → verify (⬜ todo / 🚧 in-progress / ✅ done).
-> Status: Active | Date: 2026-10-29 | Machine mirror: `tasks.json`
+> Status: Active | Date: 2026-10-30 | Machine mirror: `tasks.json`
 
 | Repo | Port | Spec doc | spec | build | test | verify |
 |---|---|---|---|---|---|---|
@@ -12,7 +12,7 @@
 | catalog-svc | 4020 | `Documentation/services/catalog.md` | 🚧 | ✅ | ✅ | ✅ |
 | cart-svc | 4030 | `Documentation/services/cart.md` | ✅ | ✅ | ✅ | ✅ |
 | order-svc | 4040 | `Documentation/services/order.md` | ✅ | ✅ | ✅ | ✅ |
-| cms-svc | 4050 | `Documentation/services/cms.md` | in-progress | in-progress | in-progress | todo |
+| cms-svc | 4050 | `Documentation/services/cms.md` | 🚧 | 🚧 | 🚧 | ⬜ |
 | analytics-svc | 4060 | (to create) | ⬜ | ⬜ | ⬜ | ⬜ |
 | import-svc | 4070 | (to create) | ⬜ | ⬜ | ⬜ | ⬜ |
 | notify-svc | 4080 | (to create) | ⬜ | ⬜ | ⬜ | ⬜ |
