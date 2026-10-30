@@ -20,7 +20,7 @@
 | `order-svc` | 7 phases; checkout on the **real catalog contract** (quantity, discriminated result, 409/502/503), `orders.stock_reservation_id`, order lifecycle; **user-scoped, DB-backed idempotency** (`db/004`); **pending-first payment saga** with compensation and resumption; hold released when an order is cancelled or fails; **refunds through the provider with a ledger** (`db/005`) and one canonical `order.status.updated`; service-key routes | 81 unit + 76 e2e green (1 live case skipped), lint 0, build clean; the capture sees a persisted `pending` order, a decline or a lost `TX2` is compensated, a retry resumes instead of duplicating, and a refund is the provider's answer (replay never charges twice) | The hold is committed only by `cat-009`, so a completed order's hold is released by the expiry sweep; outbox only logs; the cart conversion bridge is temporary and best-effort; no sweeper for stale pending payments or stuck refunds; partial refunds unsupported (`ord-011`, `ord-012`) |
 | `cms-svc` | Phase 1 + 2; pages/sections/blogs/media/theme; admin API; public cache; **media containment + visibility** (`cms-003`: one checked path builder, realpath re-check, public route 404s private and orphan files, admin ObjectId file route, `public, max-age=60, must-revalidate`) | 115 unit + 70 e2e green, lint 0, build clean | `cms.updated` publishes on `cms.events`; no `cms_outbox`; Kafka `media.tasks`; post-buffer MIME/size checks; upload MIME trusted from the header (`cms-004..cms-007`) |
 | `search-svc` | 7 slices; index/query; Kafka consumer; internal batch endpoint | 97 unit + 85 e2e green | Malformed JSON is committed without DLQ; no `processed_events`; unknown types have no metric; raw kafkajs rather than Nest transport (`srch-001..srch-003`) |
-| `storefront-ui` | 14 UI primitives; auth composed blocks and routes; CMS theme/settings; navbar/search; style contracts | suite must be re-established after the dirty worktree is resolved | Commerce routes/components; thin auth client; CMS source wiring; `/api/track`; `/api/revalidate`; contract pin; dirty worktree (`sf-048..sf-053`, `sf-039` in progress) |
+| `storefront-ui` | 14 UI primitives; auth composed blocks and routes; CMS theme/settings; navbar/search; style contracts; ProductCard with 5 variants, aspect ratios, blend modes, independent radii, and /components showcase | 50 test files, 319 tests green, tsc clean, build clean | Commerce routes/components; thin auth client; CMS source wiring; `/api/track`; `/api/revalidate`; contract pin (`sf-049..sf-053`) |
 | `Documentation` | Architecture/API/schema/testing/versioning; `auth/cart/cms/order/search` service specs; **transport claims corrected** in `1.Architecture.md`, `2.Tech-Stack.md`, and `state-for-agents/ARCHITECTURE.md` (`doc-001`): 11-topic registry linked to `tasks.json`, browser → `Next /api/track` → `analytics-svc` → Kafka, one consumer group per service, CMS has no Kafka consumer, three SQS queues, `user.registered` carries no `email` | plan regex over the three files → 0 hits; §6.3 has 11 topic rows and `page.viewed` belongs to `analytics-svc`; both repos committed clean | Testing matrix; 1.3.0/2.0.0 release train; notify/analytics/import specs (`doc-002..doc-004`) |
 
 **Not created yet:** `notify-svc`, `analytics-svc`, `import-svc`, `ecom-infra`, `admin-app` (empty). Their work is fully specified as tasks, not claimed as done.
@@ -35,7 +35,7 @@ These are the defects that make the current happy path fail or lose money/data.
 2. **`ord-012`** — retire the Phase-0 bridge `ca-007` put in place; rely on `order.created`.
 3. **`cms-004`** — upload hardening: the size limit is checked after the whole file is buffered, the MIME type is the client's header, and `STORAGE_LOCAL_DIR` is not validated at boot.
 4. **`srch-001`** — malformed/invalid events go to DLQ; unknown types commit with a metric; `processed_events`.
-5. **`sf-048`** — resolve the dirty storefront worktree before commerce work.
+5. ~~**`sf-048`** — resolve the dirty storefront worktree before commerce work.~~ *(resolved 2026-10-30; ProductCard sf-039 completed)*
 
 ---
 
@@ -104,7 +104,7 @@ writes `cms_outbox` in a Mongo transaction (replica set required). Relays use
 
 | Repo | Total | Done | In progress | Backlog | Next up |
 |---|---:|---:|---:|---:|---|
-| `storefront-ui` | 53 | 46 | 1 | 6 | `sf-048`, `sf-049`, `sf-050`, `sf-051`, `sf-052`, `sf-053` |
+| `storefront-ui` | 53 | 48 | 0 | 5 | `sf-049`, `sf-050`, `sf-051`, `sf-052`, `sf-053` |
 | `ecom-contracts` | 5 | 2 | 0 | 3 | `ec-003`, `ec-004`, `ec-005` |
 | `auth-svc` | 4 | 2 | 0 | 2 | `au-004`, `au-005` |
 | `cart-svc` | 10 | 7 | 0 | 3 | `ca-008`, `ca-009`, `ca-010` |

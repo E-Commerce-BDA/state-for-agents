@@ -615,9 +615,8 @@
         "test": "in-progress",
         "verify": "todo"
       },
-      "inProgress": "sf-039 product card in progress; commerce and seam tasks sf-048..sf-053 are queued.",
+      "inProgress": null,
       "next": [
-        "sf-048 resolve dirty worktree",
         "sf-049 thin auth client",
         "sf-050 CMS wiring + revalidate webhook",
         "sf-051 commerce routes",
@@ -1016,14 +1015,16 @@
         {
           "id": "sf-039",
           "title": "Product card (doc + component + theme + showcase)",
-          "status": "in-progress",
+          "status": "done",
           "owner": "agent",
           "started": "2026-10-11",
-          "finished": null,
-          "log": "TASKS/in-progress/sf-039-product-card.md",
+          "finished": "2026-10-30",
+          "log": "TASKS/done/sf-039-product-card.md",
           "design_match": null,
-          "key_decisions": [],
-          "verified": false,
+          "key_decisions": [
+            "Dumb ProductCard with 5 card types, 5 ratios, independent radii, blend modes, and /components showcase playground"
+          ],
+          "verified": true,
           "follow_ups": []
         },
         {
@@ -1416,16 +1417,16 @@
         {
           "id": "sf-048",
           "title": "storefront: resolve the dirty worktree before commerce work",
-          "status": "todo",
+          "status": "done",
           "owner": null,
           "started": null,
-          "finished": null,
+          "finished": "2026-10-30",
           "phase": "P0",
           "priority": "P0",
           "kind": "chore",
           "transport": "none",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/sf-048-clean-storefront-worktree.md",
           "key_decisions": [
             "Restore or intentionally re-commit the ProductCard deletion and theme changes, and remove lab/tsbuild artifacts before adding commerce routes. Reason: a dirty worktree hides regressions and mixes unrelated changes. Rejected: build on top of it.",
             "Run the full test/build gate before the first commerce commit. Reason: the baseline must be green. Rejected: fix regressions inside a feature commit."
@@ -1436,7 +1437,7 @@
             "The ProductCard decision is recorded in the task log.",
             "No untracked lab files remain."
           ],
-          "verified": false,
+          "verified": true,
           "follow_ups": []
         },
         {
