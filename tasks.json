@@ -529,7 +529,8 @@
       "41cf058",
       "2ab494e",
       "d02aa48",
-      "10e38de"
+      "10e38de",
+      "fb7f416"
     ],
     "ecom-contracts": [
       "244c7ee",
@@ -588,11 +589,12 @@
       "6f21c04",
       "6253b12",
       "04ec0b9",
-      "159e8eb"
+      "159e8eb",
+      "85c01a8"
     ]
   },
   "unpushedVerifiedAt": "2026-10-30",
-  "unpushedNote": "Verified with git log @{u}..HEAD across every repo on 2026-10-30: seven repos are ahead of origin (cart-svc 3, catalog-svc 9, cms-svc 3, Documentation 12, ecom-contracts 8, order-svc 25, state-for-agents 20) and auth-svc/search-svc are level. Lists are ordered oldest to newest. Nothing was pushed; push, tag, release, and publish stay with the human. The state-for-agents carrier commit for this update joins on the next tracker update.",
+  "unpushedNote": "Verified with git log @{u}..HEAD across every repo on 2026-10-30: seven repos are ahead of origin (cart-svc 3, catalog-svc 9, cms-svc 3, Documentation 13, ecom-contracts 8, order-svc 25, state-for-agents 21) and auth-svc/search-svc are level. Lists are ordered oldest to newest. Nothing was pushed; push, tag, release, and publish stay with the human. This tracker commit is the carrier and joins on the next update.",
   "workflow": "Claim: create TASKS/in-progress/<id>-<slug>.md, set the entry status to in-progress, owner, and started. Build against the chained skills (router order). Close: move the log to TASKS/done/, fill verification and follow_ups, flip status to done and finished, update STATUS.md and summary in the same commit. Todo entries carry log:null until claimed; in-progress and done entries must have an existing log file. Commits: one commit per file (larger edits split per edit); stage with diff eyes-on; subject + reason body; local-only until the human says push. Unpushed lists only verified local commits; the carrier commit joins on the next update. Validation: id == filename, status == folder, log exists for in-progress/done, STATUS counts == summary.",
   "rules": "Claim: set claimedBy={agent,since,task} + stages.<stage> to in-progress (24h lease; other instances must not steal without comment). Finish: flip stage to done + update SERVICES.md + STATUS.md in same commit. Stage vocab locked: todo|in-progress|done (maps to todo/in-progress/done cells). Path truth: localRoots below are where agents edit TODAY; future split repos named in 'repo'. Never invent paths — resolve via SKILL-EXPLORE. motive is immutable (ADR change only); inProgress/next are mutable. Transport truth: Kafka is domain events only, SQS is task jobs only; each repo messaging block and the top-level messaging catalog are authoritative.",
   "repos": {
