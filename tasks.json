@@ -3,9 +3,9 @@
   "updatedAt": "2026-10-30",
   "summary": {
     "total": 128,
-    "done": 81,
+    "done": 82,
     "in_progress": 0,
-    "backlog": 47,
+    "backlog": 46,
     "byRepo": {
       "storefront-ui": {
         "total": 53,
@@ -33,9 +33,9 @@
       },
       "catalog-svc": {
         "total": 11,
-        "done": 6,
+        "done": 7,
         "in_progress": 0,
-        "backlog": 5
+        "backlog": 4
       },
       "cart-svc": {
         "total": 10,
@@ -118,13 +118,12 @@
           "ord-008",
           "ord-009",
           "ord-010",
-          "ord-012",
           "cms-003",
           "cms-004",
           "srch-001",
           "doc-001"
         ],
-        "count": 14
+        "count": 13
       },
       {
         "id": "P1",
@@ -183,12 +182,13 @@
           "cat-009",
           "cat-010",
           "ca-009",
+          "ord-012",
           "cms-006",
           "cms-007",
           "srch-002",
           "srch-003"
         ],
-        "count": 9
+        "count": 10
       },
       {
         "id": "P4",
@@ -252,9 +252,9 @@
       }
     ],
     "nextUp": [
-      "cat-009",
-      "ord-012",
-      "srch-002"
+      "ord-011",
+      "srch-002",
+      "cat-008"
     ],
     "completionGate": [
       "Every P0 task is done and verified.",
@@ -494,6 +494,22 @@
     ]
   },
   "unpushed": {
+    "catalog-svc": [
+      "f951969",
+      "51ccf7d",
+      "b305961",
+      "57af8db",
+      "3b15935",
+      "536443c",
+      "54f6bda"
+    ],
+    "Documentation": [
+      "055e585",
+      "aef1626",
+      "8a8fbfb",
+      "c69674f",
+      "ccd34c5"
+    ],
     "search-svc": [
       "7cdc505",
       "cdb508e",
@@ -502,11 +518,6 @@
       "170f39b",
       "06137cf",
       "8457867"
-    ],
-    "Documentation": [
-      "055e585",
-      "aef1626",
-      "8a8fbfb"
     ],
     "state-for-agents": [
       "000f28a",
@@ -535,11 +546,12 @@
       "5268229",
       "061d407",
       "10f01ac",
-      "2443c75"
+      "2443c75",
+      "d52b667"
     ]
   },
   "unpushedVerifiedAt": "2026-10-30",
-  "unpushedNote": "Verified with git log @{u}..HEAD across every repo on 2026-10-30: seven repos are ahead of origin (cart-svc 3, catalog-svc 9, cms-svc 3, Documentation 13, ecom-contracts 8, order-svc 25, state-for-agents 21) and auth-svc/search-svc are level. Lists are ordered oldest to newest. Nothing was pushed; push, tag, release, and publish stay with the human. This tracker commit is the carrier and joins on the next update.",
+  "unpushedNote": "Verified with git log @{u}..HEAD across every repo on 2026-10-30: catalog-svc 7, Documentation 5, search-svc 7, state-for-agents 28; auth-svc, cart-svc, cms-svc, ecom-contracts, order-svc are level. Lists are ordered oldest to newest. Nothing was pushed; push, tag, release, and publish stay with the human. This tracker commit is the carrier and joins on the next update.",
   "workflow": "Claim: create TASKS/in-progress/<id>-<slug>.md, set the entry status to in-progress, owner, and started. Build against the chained skills (router order). Close: move the log to TASKS/done/, fill verification and follow_ups, flip status to done and finished, update STATUS.md and summary in the same commit. Todo entries carry log:null until claimed; in-progress and done entries must have an existing log file. Commits: one commit per file (larger edits split per edit); stage with diff eyes-on; subject + reason body; local-only until the human says push. Unpushed lists only verified local commits; the carrier commit joins on the next update. Validation: id == filename, status == folder, log exists for in-progress/done, STATUS counts == summary.",
   "rules": "Claim: set claimedBy={agent,since,task} + stages.<stage> to in-progress (24h lease; other instances must not steal without comment). Finish: flip stage to done + update SERVICES.md + STATUS.md in same commit. Stage vocab locked: todo|in-progress|done (maps to todo/in-progress/done cells). Path truth: localRoots below are where agents edit TODAY; future split repos named in 'repo'. Never invent paths — resolve via SKILL-EXPLORE. motive is immutable (ADR change only); inProgress/next are mutable. Transport truth: Kafka is domain events only, SQS is task jobs only; each repo messaging block and the top-level messaging catalog are authoritative.",
   "repos": {
@@ -2336,10 +2348,10 @@
         {
           "id": "cat-009",
           "title": "catalog-svc: consume order.created and commit the reservation",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "qoder",
+          "started": "2026-10-30",
+          "finished": "2026-10-30",
           "phase": "P3",
           "priority": "P0",
           "kind": "feature",
@@ -2349,10 +2361,12 @@
             "ec-001",
             "ec-002"
           ],
-          "log": null,
+          "log": "TASKS/done/cat-009-commit-reservation.md",
           "key_decisions": [
             "Mark the reservation committed and link the order id; do not decrement stock again. Reason: checkout already reserved the stock. Rejected: decrement on order.created, which double-decrements.",
-            "Retry a missing reservation and then DLQ it. Reason: a missing reservation means the synchronous reserve step did not complete. Rejected: create a reservation from the event, which hides the failure."
+            "Retry a missing reservation and then DLQ it. Reason: a missing reservation means the synchronous reserve step did not complete. Rejected: create a reservation from the event, which hides the failure.",
+            "Raw kafkajs, not @nestjs/microservices. Reason: search-svc already consumes this way, so the catalog consumer is a copy of a pattern the repo has tested rather than a dependency the service does not own; srch-002 stays the migration that unifies both instead of becoming a prerequisite.",
+            "processed_events is a claim of success, never a log of attempts. Reason: the claim is inserted in the same transaction as the commit and the terminal outcomes throw, so a rolled-back claim leaves the DLQ as the only record of a failed event."
           ],
           "acceptance": [
             "Reservation status becomes committed and order_id is stored.",
@@ -2360,8 +2374,12 @@
             "Missing reservation retries then goes to order.created.dlq.",
             "No stock movement is written on commit."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "ord-011 must publish order.created, otherwise cat-009 is inert and the double sell persists",
+            "cat-010: consume order.status.updated and release the hold",
+            "Add a retention sweeper for catalog.processed_events driven by processed_at"
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [
@@ -2370,7 +2388,7 @@
                 "topic": "order.created",
                 "group": "catalog-svc",
                 "dlq": "order.created.dlq",
-                "implementation": "Nest Kafka consumer, manual commit, processed_events in the same transaction as the reservation commit."
+                "implementation": "Raw kafkajs consumer (autoCommit false, group \"catalog-svc\"), manual commit after the commit and the processed_events insert land together; terminal outcomes dead-letter without a retry."
               }
             ],
             "taskQueues": [],
@@ -2793,8 +2811,8 @@
           "acceptance": [
             "Consumer group is cart-svc with postfixId=\"\".",
             "Duplicate order.created is a no-op.",
-            "Unknown event types are ignored and committed with a metric; malformed payloads go to order.created.dlq.",
-            "The HTTP bridge is removed after the consumer is green."
+            "Malformed payloads go to order.created.dlq; unknown event types are ignored and committed with a metric.",
+            "Delete POST /cart/internal/carts/:userId/convert and its spec once the consumer is green; ord-012 then removes the caller."
           ],
           "verified": false,
           "follow_ups": [],
@@ -3243,29 +3261,29 @@
         },
         {
           "id": "ord-012",
-          "title": "order-svc: remove the broken cart HTTP clear and rely on order.created",
+          "title": "order-svc: retire the cart convert bridge and rely on order.created",
           "status": "todo",
           "owner": null,
           "started": null,
           "finished": null,
-          "phase": "P0",
-          "priority": "P0",
+          "phase": "P3",
+          "priority": "P3",
           "kind": "bug",
           "transport": "http",
           "dependsOn": [
-            "ca-007",
             "ca-009",
             "ord-011"
           ],
           "log": null,
           "key_decisions": [
-            "Remove CartClient.clearCart from checkout once cart-svc consumes order.created. Reason: the current call targets a non-existent endpoint and never works. Rejected: keep the best-effort call, which hides the failure.",
-            "Use the ca-007 internal endpoint only as a temporary bridge. Reason: unblocks checkout before the consumer is live. Rejected: block checkout on the consumer migration."
+            "CartClient.convertCart does hit a live endpoint (POST /cart/internal/carts/:userId/convert, built by ca-007). The stored rationale that it targets a non-existent endpoint is stale; what is wrong is the coupling, not the endpoint.",
+            "The call cannot be removed yet: order-svc writes order.created to order.outbox in TX2 but OutboxService.dispatchEvent only logs, and cart-svc has no consumer (ca-009). Removing it now leaves every cart active forever.",
+            "Split with ca-009: ca-009 deletes the cart-svc endpoint once its consumer is green, ord-012 deletes the call site. Neither is safe alone."
           ],
           "acceptance": [
             "Checkout has no HTTP cart clear.",
             "Cart conversion happens from order.created.",
-            "The temporary endpoint is removed after rollout.",
+            "cart-svc's temporary endpoint is removed by ca-009, not by this task.",
             "Tests cover conversion and checkout independence."
           ],
           "verified": false,
