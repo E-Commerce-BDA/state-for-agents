@@ -4,8 +4,8 @@
   "summary": {
     "total": 128,
     "done": 82,
-    "in_progress": 0,
-    "backlog": 46,
+    "in_progress": 6,
+    "backlog": 40,
     "byRepo": {
       "storefront-ui": {
         "total": 53,
@@ -22,8 +22,8 @@
       "ecom-contracts": {
         "total": 5,
         "done": 2,
-        "in_progress": 0,
-        "backlog": 3
+        "in_progress": 1,
+        "backlog": 2
       },
       "auth-svc": {
         "total": 4,
@@ -82,14 +82,14 @@
       "ecom-infra": {
         "total": 7,
         "done": 0,
-        "in_progress": 0,
-        "backlog": 7
+        "in_progress": 3,
+        "backlog": 4
       },
       "Documentation": {
         "total": 4,
         "done": 1,
-        "in_progress": 0,
-        "backlog": 3
+        "in_progress": 2,
+        "backlog": 1
       }
     }
   },
@@ -1752,9 +1752,9 @@
         {
           "id": "ec-003",
           "title": "Contracts: SQS job schemas and queue/DLQ constants",
-          "status": "todo",
-          "owner": null,
-          "started": null,
+          "status": "in_progress",
+          "owner": "qoder",
+          "started": "2026-10-30",
           "finished": null,
           "phase": "P1",
           "priority": "P0",
@@ -4740,9 +4740,9 @@
         {
           "id": "inf-001",
           "title": "ecom-infra: local compose for Kafka, Redis, Postgres, Mongo replica set, LocalStack SQS, and Mailpit",
-          "status": "todo",
-          "owner": null,
-          "started": null,
+          "status": "in_progress",
+          "owner": "qoder",
+          "started": "2026-10-30",
           "finished": null,
           "phase": "P1",
           "priority": "P0",
@@ -4795,9 +4795,9 @@
         {
           "id": "inf-002",
           "title": "ecom-infra: declarative Kafka topic and DLQ provisioning",
-          "status": "todo",
-          "owner": null,
-          "started": null,
+          "status": "in_progress",
+          "owner": "qoder",
+          "started": "2026-10-30",
           "finished": null,
           "phase": "P1",
           "priority": "P0",
@@ -4829,9 +4829,9 @@
         {
           "id": "inf-003",
           "title": "ecom-infra: SQS queues, DLQs, and least-privilege IAM",
-          "status": "todo",
-          "owner": null,
-          "started": null,
+          "status": "in_progress",
+          "owner": "qoder",
+          "started": "2026-10-30",
           "finished": null,
           "phase": "P1",
           "priority": "P0",
@@ -5120,9 +5120,9 @@
         {
           "id": "doc-002",
           "title": "docs: testing matrix for Kafka, SQS, outbox, and DLQ",
-          "status": "todo",
-          "owner": null,
-          "started": null,
+          "status": "in_progress",
+          "owner": "qoder",
+          "started": "2026-10-30",
           "finished": null,
           "phase": "P1",
           "priority": "P0",
@@ -5148,9 +5148,9 @@
         {
           "id": "doc-003",
           "title": "docs: versioning 1.3.0/2.0.0 release train",
-          "status": "todo",
-          "owner": null,
-          "started": null,
+          "status": "in_progress",
+          "owner": "qoder",
+          "started": "2026-10-30",
           "finished": null,
           "phase": "P1",
           "priority": "P0",
