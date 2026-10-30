@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-29T20:09:25.807Z",
+  "updatedAt": "2026-10-30T04:15:57.731Z",
   "summary": {
     "total": 128,
-    "done": 74,
+    "done": 75,
     "in_progress": 1,
-    "backlog": 53,
+    "backlog": 52,
     "byRepo": {
       "storefront-ui": {
         "total": 53,
@@ -39,9 +39,9 @@
       },
       "cart-svc": {
         "total": 10,
-        "done": 6,
+        "done": 7,
         "in_progress": 0,
-        "backlog": 4
+        "backlog": 3
       },
       "order-svc": {
         "total": 12,
@@ -253,15 +253,9 @@
       }
     ],
     "nextUp": [
-      "ec-002",
-      "doc-001",
-      "cat-006",
-      "ord-007",
-      "ord-008",
-      "ord-009",
-      "ord-010",
       "ca-007",
-      "cms-003"
+      "cms-003",
+      "doc-001"
     ],
     "completionGate": [
       "Every P0 task is done and verified.",
@@ -2495,10 +2489,7 @@
       },
       "inProgress": null,
       "next": [
-        "ca-007 temporary internal conversion endpoint",
-        "ca-008 cart.updated outbox producer",
-        "ca-009 order.created consumer",
-        "ca-010 real HTTP catalog adapter"
+        "ca-008 cart-svc: publish cart.updated through a transactional outbox"
       ],
       "blockedBy": [],
       "skills": [
@@ -2660,16 +2651,16 @@
         {
           "id": "ca-007",
           "title": "cart-svc: internal cart conversion endpoint and order-svc call fix (Phase 0 bridge)",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-30",
+          "finished": "2026-10-30",
           "phase": "P0",
           "priority": "P0",
           "kind": "bug",
           "transport": "http",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/ca-007-cart-conversion-bridge.md",
           "key_decisions": [
             "Add POST /internal/carts/:userId/convert behind x-service-key and make it idempotent. Reason: order-svc currently calls DELETE /internal/carts/:userId, which does not exist (404), so carts never clear. Rejected: leave the best-effort call, which hides the failure.",
             "Convert only the active cart and return 204 when there is nothing to convert. Reason: checkout retries must be safe. Rejected: delete the cart row, which loses history and breaks audit."
@@ -2680,8 +2671,13 @@
             "order-svc CartClient calls the new endpoint.",
             "This bridge is removed when ca-009 lands."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "ord-012 and ca-009 delete this bridge: cart-svc consumes order.created and order-svc's CartClient goes with it.",
+            "The order-svc SAVE10 coupon fixture is exhausted after ~100 e2e runs (uses_count reached max_uses); the seed needs ON CONFLICT DO UPDATE to stay repeatable.",
+            "4.API-Design.md §6 still keys cart.updated by userId|sessionId; the 1.4.0 registry says cartId.",
+            "GET /cart creates a new active cart immediately after a conversion by design; the storefront must not read that as a resurrected cart."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
