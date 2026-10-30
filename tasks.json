@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-30T04:15:57.731Z",
+  "updatedAt": "2026-10-30T04:26:35.919Z",
   "summary": {
     "total": 128,
-    "done": 75,
+    "done": 76,
     "in_progress": 1,
-    "backlog": 52,
+    "backlog": 51,
     "byRepo": {
       "storefront-ui": {
         "total": 53,
@@ -51,9 +51,9 @@
       },
       "cms-svc": {
         "total": 7,
-        "done": 2,
+        "done": 3,
         "in_progress": 0,
-        "backlog": 5
+        "backlog": 4
       },
       "analytics-svc": {
         "total": 4,
@@ -253,8 +253,6 @@
       }
     ],
     "nextUp": [
-      "ca-007",
-      "cms-003",
       "doc-001"
     ],
     "completionGate": [
@@ -3285,10 +3283,7 @@
       },
       "inProgress": null,
       "next": [
-        "cms-003 media path traversal",
-        "cms-004 upload hardening",
-        "cms-005 Mongo transaction + cms_outbox",
-        "cms-006 media resize on SQS"
+        "cms-004 cms-svc: stream upload limits, magic-byte MIME, and storage directory validation"
       ],
       "blockedBy": [],
       "skills": [
@@ -3356,16 +3351,16 @@
         {
           "id": "cms-003",
           "title": "cms-svc: fix media path traversal and unauthenticated file access",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-30",
+          "finished": "2026-10-30",
           "phase": "P0",
           "priority": "P0",
           "kind": "security",
           "transport": "http",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/cms-003-media-containment.md",
           "key_decisions": [
             "Resolve the storage root and containment-check the requested key; reject .., absolute paths, encoded traversal, and symlink escapes. Reason: the current getFilePath + sendFile can escape storage. Rejected: string sanitization only, which is bypassable.",
             "Serve private media through an authenticated or signed route. Reason: the current public route leaks every uploaded file. Rejected: rely on unguessable keys as the only control."
@@ -3376,8 +3371,14 @@
             "No filesystem path is leaked in errors.",
             "Public media policy is documented and tested."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "cms-004 still owns upload hardening: the size check runs after buffering, the MIME type is the client's header, and STORAGE_LOCAL_DIR is never validated at boot.",
+            "No signed-URL path exists, so a private asset cannot be shown on a public page without an admin token; decide the mechanism before private media is used in content.",
+            "cms-006 must contract resized variant keys: mediaKeySchema allows strictly media/{yyyy}/{mm}/{hex-or-dash}.{png|jpg|webp|avif}, so a variant key such as ...png_320.webp is rejected by containment today.",
+            "Backfill cms_media.visibility = 'public' for documents written before cms-003 so the indexed filter and the stored field agree.",
+            "3.Database-Schema.md documents the media collection with snake_case fields (mime_type, size_bytes, uploaded_by) while the Mongoose model stores mimeType, sizeBytes, uploadedBy; the collection table needs correcting."
+          ]
         },
         {
           "id": "cms-004",
@@ -3534,7 +3535,7 @@
           "follow_ups": []
         }
       ],
-      "note": "Phase 1 + Phase 2 CMS complete and verified: 89 unit + 53 e2e green. Pending: cms.updated publishes to the wrong cms.events topic with a legacy envelope; no cms_outbox or Mongo transaction; media resize uses Kafka media.tasks instead of SQS media.resize-image; media file route is traversal-prone and unauthenticated; upload MIME/size checks are post-buffer. Kafka work: publish cms.updated/blog.updated via cms_outbox; no Kafka consumer; SQS only for media resize.",
+      "note": "cms-003 closed the media defects: 115 unit + 70 e2e green. Media now has one containment-checked path builder (null byte, single decode, mediaKeySchema, path.relative, then realpath re-check), visibility public/private with the field optional in contracts 1.5.0, a public file route that 404s private and orphan files with no path in the body, an admin-only ObjectId file route, and public max-age=60 must-revalidate caching. Pending: cms.updated publishes to the wrong cms.events topic with a legacy envelope; no cms_outbox or Mongo transaction; media resize still uses Kafka media.tasks instead of the SQS media.resize-image job; upload size/MIME checks run post-buffer (cms-004). No Kafka consumer in CMS.",
       "messaging": {
         "role": "producer-only",
         "publishes": [
