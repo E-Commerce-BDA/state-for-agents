@@ -1,17 +1,17 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-30T05:13:21.954Z",
+  "updatedAt": "2026-10-30",
   "summary": {
     "total": 128,
-    "done": 77,
-    "in_progress": 1,
-    "backlog": 50,
+    "done": 81,
+    "in_progress": 0,
+    "backlog": 47,
     "byRepo": {
       "storefront-ui": {
         "total": 53,
-        "done": 46,
-        "in_progress": 1,
-        "backlog": 6
+        "done": 48,
+        "in_progress": 0,
+        "backlog": 5
       },
       "admin-app": {
         "total": 1,
@@ -51,9 +51,9 @@
       },
       "cms-svc": {
         "total": 7,
-        "done": 3,
+        "done": 4,
         "in_progress": 0,
-        "backlog": 4
+        "backlog": 3
       },
       "analytics-svc": {
         "total": 4,
@@ -75,9 +75,9 @@
       },
       "search-svc": {
         "total": 3,
-        "done": 0,
+        "done": 1,
         "in_progress": 0,
-        "backlog": 3
+        "backlog": 2
       },
       "ecom-infra": {
         "total": 7,
@@ -91,8 +91,7 @@
         "in_progress": 0,
         "backlog": 3
       }
-    },
-    "historyNote": "Counts are tracker entries, not historical slices. auth-svc au-001 and search-svc slices 0-6 are described in repo notes but have no separate task entries; new work always gets an entry."
+    }
   },
   "plan": {
     "currentPhase": "P0",
@@ -253,10 +252,9 @@
       }
     ],
     "nextUp": [
-      "cms-004",
       "cat-009",
-      "srch-001",
-      "ord-012"
+      "ord-012",
+      "srch-002"
     ],
     "completionGate": [
       "Every P0 task is done and verified.",
@@ -496,78 +494,19 @@
     ]
   },
   "unpushed": {
-    "cart-svc": [
-      "f83a42a",
-      "b342594",
-      "75ddf6c"
-    ],
-    "catalog-svc": [
-      "754ed56",
-      "666d5a3",
-      "b755621",
-      "32c5d21",
-      "75726c7",
-      "6bf30d6",
-      "0067bc1",
-      "d057fca",
-      "9420911"
-    ],
-    "cms-svc": [
-      "8ddd171",
-      "2c37a47",
-      "150eba9"
+    "search-svc": [
+      "7cdc505",
+      "cdb508e",
+      "e6d46d3",
+      "d4f1e17",
+      "170f39b",
+      "06137cf",
+      "8457867"
     ],
     "Documentation": [
-      "680a9ee",
-      "f2d176e",
-      "8c5d7e5",
-      "ca295ab",
-      "9324d3b",
-      "acde1da",
-      "7d3c89c",
-      "420a08b",
-      "41cf058",
-      "2ab494e",
-      "d02aa48",
-      "10e38de",
-      "fb7f416"
-    ],
-    "ecom-contracts": [
-      "244c7ee",
-      "2e34e63",
-      "3c555d6",
-      "e8b9be7",
-      "7c33d1d",
-      "214acd2",
-      "e1be139",
-      "24204df"
-    ],
-    "order-svc": [
-      "bdec020",
-      "bcb5182",
-      "6b8a2a4",
-      "a4be2fa",
-      "526954b",
-      "ac7ab45",
-      "7a5b72a",
-      "41708c1",
-      "9e03be2",
-      "8c2fc50",
-      "4c43f8d",
-      "b5b1cc4",
-      "c8fb302",
-      "66852c5",
-      "08e7fd8",
-      "4dfdf31",
-      "38d0523",
-      "8291eb8",
-      "9d52040",
-      "e5878e7",
-      "0b1642e",
-      "9d3cdbd",
-      "059d92f",
-      "d2f0cb1",
-      "101bcde"
+      "055e585",
+      "aef1626",
+      "8a8fbfb"
     ],
     "state-for-agents": [
       "000f28a",
@@ -590,7 +529,9 @@
       "6253b12",
       "04ec0b9",
       "159e8eb",
-      "85c01a8"
+      "85c01a8",
+      "b043d2c",
+      "ec785db"
     ]
   },
   "unpushedVerifiedAt": "2026-10-30",
@@ -3480,10 +3421,10 @@
         {
           "id": "cms-004",
           "title": "cms-svc: stream upload limits, magic-byte MIME, and storage directory validation",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "qoder",
+          "started": "2026-10-30",
+          "finished": "2026-10-30",
           "phase": "P0",
           "priority": "P0",
           "kind": "security",
@@ -3491,7 +3432,7 @@
           "dependsOn": [
             "cms-003"
           ],
-          "log": null,
+          "log": "TASKS/done/cms-004-upload-guards.md",
           "key_decisions": [
             "Enforce the size limit before buffering and sniff magic bytes. Reason: the current checks run after the whole file is in memory and trust the client MIME header. Rejected: extension or header checks only.",
             "Validate STORAGE_LOCAL_DIR at startup and gitignore storage/. Reason: an unset or relative path can write outside the repo. Rejected: create the directory lazily on first upload."
@@ -3502,8 +3443,13 @@
             "STORAGE_LOCAL_DIR must be absolute and writable.",
             "storage/ is gitignored; tests cover the guards."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "cms-005 outbox",
+            "cms-006 cms.updated topic",
+            "cms-007 media.tasks to SQS",
+            "EXIF/dimension capture"
+          ]
         },
         {
           "id": "cms-005",
@@ -4491,10 +4437,10 @@
         {
           "id": "srch-001",
           "title": "search-svc: DLQ malformed/invalid events and persist processed_events",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "qoder",
+          "started": "2026-10-30",
+          "finished": "2026-10-30",
           "phase": "P0",
           "priority": "P0",
           "kind": "bug",
@@ -4503,7 +4449,7 @@
             "ec-001",
             "ec-002"
           ],
-          "log": null,
+          "log": "TASKS/done/srch-001-dlq-and-dedupe.md",
           "key_decisions": [
             "Send malformed JSON and invalid known payloads directly to <topic>.dlq; ignore unknown event types and commit with a metric. Reason: the current consumer commits malformed JSON silently and has no visibility for unknown types. Rejected: retry malformed payloads, which can never succeed and stalls the group.",
             "Insert processed_events in the same transaction as the index upsert. Reason: at-least-once redelivery must not duplicate documents. Rejected: Redis-only dedupe."
@@ -4514,8 +4460,12 @@
             "Duplicate event ids are no-ops.",
             "Consumer group is search-svc with manual commits."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "srch-003 owns the replay conflict: reapplying an already-claimed event id is a no-op, so an index rebuild must reset or bypass processed_events.",
+            "processed_events has no retention sweep; idx_processed_events_processed_at exists but the service has no scheduler.",
+            "cms.updated arrives on the cms.events transport topic and is classed ignored by search-svc; cms-005 decides the topic."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [
