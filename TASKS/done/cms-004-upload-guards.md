@@ -97,6 +97,6 @@ Three holes on one route, `POST /api/v1/cms/admin/media`:
 ## Open
 
 - `cms-005` (outbox), `cms-006` (`cms.updated` on the wrong topic), `cms-007`
-  (`media.resize-image` on Kafka instead of SQS) are untouched follow-ups.
+  (`media-resize-image` on Kafka instead of SQS) are untouched follow-ups.
 - EXIF re-encoding and pixel-dimension capture are not part of this task; the
   stored `width`/`height` remain unset.

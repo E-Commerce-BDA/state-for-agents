@@ -121,7 +121,7 @@ not compile.
 - No signed-URL path exists; a CDN or the storefront cannot fetch a private asset
   without an admin token. Needed before private assets are shown on a public page.
 - Resized variants are a trap for `cms-006`: `cms-svc` only *publishes*
-  `media.resize-image`, and `mediaKeySchema` allows strictly
+  `media-resize-image`, and `mediaKeySchema` allows strictly
   `media/{yyyy}/{mm}/{hex-or-dash}.{png|jpg|webp|avif}`, so a future
   `.../0190a1b2-….png_320.webp` key is rejected by containment and must be
   either contracted as its own shape or served from its own resolver.

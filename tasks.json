@@ -3,8 +3,8 @@
   "updatedAt": "2026-10-30",
   "summary": {
     "total": 128,
-    "done": 82,
-    "in_progress": 6,
+    "done": 88,
+    "in_progress": 0,
     "backlog": 40,
     "byRepo": {
       "storefront-ui": {
@@ -21,8 +21,8 @@
       },
       "ecom-contracts": {
         "total": 5,
-        "done": 2,
-        "in_progress": 1,
+        "done": 3,
+        "in_progress": 0,
         "backlog": 2
       },
       "auth-svc": {
@@ -81,14 +81,14 @@
       },
       "ecom-infra": {
         "total": 7,
-        "done": 0,
-        "in_progress": 3,
+        "done": 3,
+        "in_progress": 0,
         "backlog": 4
       },
       "Documentation": {
         "total": 4,
-        "done": 1,
-        "in_progress": 2,
+        "done": 3,
+        "in_progress": 0,
         "backlog": 1
       }
     }
@@ -429,10 +429,10 @@
     ],
     "taskQueues": [
       {
-        "queue": "notify.send-email",
+        "queue": "notify-send-email",
         "producer": "notify-svc",
         "consumer": "notify-svc",
-        "dlq": "notify.send-email-dlq",
+        "dlq": "notify-send-email-dlq",
         "type": "standard",
         "maxReceiveCount": 5,
         "visibilityTimeout": "60s",
@@ -441,10 +441,10 @@
         "note": "Created after a Kafka consumer maps an event to an email. Never a Kafka topic."
       },
       {
-        "queue": "import.process-row",
+        "queue": "import-process-row",
         "producer": "import-svc",
         "consumer": "import-svc",
-        "dlq": "import.process-row-dlq",
+        "dlq": "import-process-row-dlq",
         "type": "standard",
         "maxReceiveCount": 5,
         "visibilityTimeout": "60s",
@@ -452,10 +452,10 @@
         "payload": "processImportRowJobSchema"
       },
       {
-        "queue": "media.resize-image",
+        "queue": "media-resize-image",
         "producer": "cms-svc",
         "consumer": "cms-svc worker",
-        "dlq": "media.resize-image-dlq",
+        "dlq": "media-resize-image-dlq",
         "type": "standard",
         "maxReceiveCount": 5,
         "visibilityTimeout": "60s",
@@ -465,7 +465,7 @@
       }
     ],
     "nonKafka": [
-      "SQS tasks: notify.send-email, import.process-row, media.resize-image. Tasks never go to Kafka.",
+      "SQS tasks: notify-send-email, import-process-row, media-resize-image. Tasks never go to Kafka.",
       "Storefront page views: sendBeacon -> Next /api/track -> analytics-svc HTTP -> Kafka. The storefront holds no Kafka credentials.",
       "Storefront CMS cache invalidation: CMS calls Next /api/revalidate over HTTP with a shared secret. No storefront Kafka consumer.",
       "Admin app: API/HTTP only. No direct Kafka producer or consumer.",
@@ -477,7 +477,7 @@
     "dropped": [
       {
         "name": "reminder.dispatch",
-        "reason": "cart.abandoned + notify.send-email covers the reminder flow in v1. A separate scheduler queue would be unused."
+        "reason": "cart.abandoned + notify-send-email covers the reminder flow in v1. A separate scheduler queue would be unused."
       },
       {
         "name": "order.refunded",
@@ -485,7 +485,7 @@
       },
       {
         "name": "media.tasks",
-        "reason": "Media resize is a task, not a domain event. Use SQS media.resize-image."
+        "reason": "Media resize is a task, not a domain event. Use SQS media-resize-image."
       },
       {
         "name": "SNS->SQS event transport",
@@ -494,60 +494,25 @@
     ]
   },
   "unpushed": {
-    "catalog-svc": [
-      "f951969",
-      "51ccf7d",
-      "b305961",
-      "57af8db",
-      "3b15935",
-      "536443c",
-      "54f6bda"
+    "ecom-contracts": [
+      "1d92d1c",
+      "fcc8658"
+    ],
+    "ecom-infra": [
+      "108913f",
+      "e47f5bb",
+      "77d18b5",
+      "53cb4b6",
+      "6e8de13"
     ],
     "Documentation": [
-      "055e585",
-      "aef1626",
-      "8a8fbfb",
-      "c69674f",
-      "ccd34c5"
-    ],
-    "search-svc": [
-      "7cdc505",
-      "cdb508e",
-      "e6d46d3",
-      "d4f1e17",
-      "170f39b",
-      "06137cf",
-      "8457867"
+      "b14a748",
+      "b6c4aa7",
+      "ff2e0e6",
+      "d0bb760"
     ],
     "state-for-agents": [
-      "000f28a",
-      "04d84a5",
-      "0e8006d",
-      "7fb462e",
-      "858e181",
-      "9af926a",
-      "648db36",
-      "d10e09f",
-      "2c9fb52",
-      "19cb1d4",
-      "f6765a1",
-      "82bf9b4",
-      "b33c87b",
-      "afe0a5c",
-      "d91eabd",
-      "ae9ed7b",
-      "6f21c04",
-      "6253b12",
-      "04ec0b9",
-      "159e8eb",
-      "85c01a8",
-      "b043d2c",
-      "ec785db",
-      "5268229",
-      "061d407",
-      "10f01ac",
-      "2443c75",
-      "d52b667"
+      "15d70d1"
     ]
   },
   "unpushedVerifiedAt": "2026-10-30",
@@ -1752,10 +1717,10 @@
         {
           "id": "ec-003",
           "title": "Contracts: SQS job schemas and queue/DLQ constants",
-          "status": "in_progress",
+          "status": "done",
           "owner": "qoder",
           "started": "2026-10-30",
-          "finished": null,
+          "finished": "2026-10-30",
           "phase": "P1",
           "priority": "P0",
           "kind": "contract",
@@ -1763,41 +1728,44 @@
           "dependsOn": [
             "ec-001"
           ],
-          "log": null,
+          "log": "TASKS/done/ec-003-sqs-job-schemas.md",
           "key_decisions": [
-            "Add sendEmailJobSchema and processImportRowJobSchema, keep resizeImageJobSchema, and drop reminder.dispatch. Reason: tasks are SQS-only and reminder is covered by cart.abandoned + notify.send-email. Rejected: keep an unused reminder queue and its docs.",
+            "Add sendEmailJobSchema and processImportRowJobSchema, keep resizeImageJobSchema, and drop reminder.dispatch. Reason: tasks are SQS-only and reminder is covered by cart.abandoned + notify-send-email. Rejected: keep an unused reminder queue and its docs.",
             "Export queue names, DLQ names, and maxReceiveCount=5 constants. Reason: services must not invent queue strings. Rejected: per-service string literals, which drift."
           ],
           "acceptance": [
-            "Queue constants exist for notify.send-email, import.process-row, and media.resize-image.",
+            "Queue constants exist for notify-send-email, import-process-row, and media-resize-image.",
             "Each schema has a unique idempotencyKey and a bounded payload.",
             "reminder.dispatch is absent from schemas and docs.",
             "Tests cover valid, invalid, and oversized job payloads."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "ec-005 repins catalog-svc, cms-svc, search-svc and storefront to 1.8.0",
+            "The first task producer must safeParse on enqueue and the worker on dequeue"
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
             "taskQueues": [
               {
-                "queue": "notify.send-email",
+                "queue": "notify-send-email",
                 "role": "schema",
-                "dlq": "notify.send-email-dlq",
+                "dlq": "notify-send-email-dlq",
                 "maxReceiveCount": 5,
                 "implementation": "Schema only; notify-svc owns the producer/consumer runtime."
               },
               {
-                "queue": "import.process-row",
+                "queue": "import-process-row",
                 "role": "schema",
-                "dlq": "import.process-row-dlq",
+                "dlq": "import-process-row-dlq",
                 "maxReceiveCount": 5,
                 "implementation": "Schema only; import-svc owns the producer/consumer runtime."
               },
               {
-                "queue": "media.resize-image",
+                "queue": "media-resize-image",
                 "role": "schema",
-                "dlq": "media.resize-image-dlq",
+                "dlq": "media-resize-image-dlq",
                 "maxReceiveCount": 5,
                 "implementation": "Schema only; cms-svc owns the producer/worker runtime."
               }
@@ -3361,7 +3329,7 @@
         ],
         "consumes": [],
         "taskQueues": [
-          "media.resize-image"
+          "media-resize-image"
         ]
       },
       "claimedBy": "agent",
@@ -3528,7 +3496,7 @@
         },
         {
           "id": "cms-006",
-          "title": "cms-svc: move media resize from Kafka media.tasks to SQS media.resize-image",
+          "title": "cms-svc: move media resize from Kafka media.tasks to SQS media-resize-image",
           "status": "todo",
           "owner": null,
           "started": null,
@@ -3544,12 +3512,12 @@
           ],
           "log": null,
           "key_decisions": [
-            "Enqueue media.resize-image through ITaskQueue after the media record is saved and remove the Kafka media.tasks topic. Reason: resize is a task, not a domain event. Rejected: keep media.tasks on Kafka, which violates the transport split.",
+            "Enqueue media-resize-image through ITaskQueue after the media record is saved and remove the Kafka media.tasks topic. Reason: resize is a task, not a domain event. Rejected: keep media.tasks on Kafka, which violates the transport split.",
             "Run the worker in cms-svc for v1. Reason: no separate media service exists. Rejected: create a new service for one queue."
           ],
           "acceptance": [
             "No code publishes media.tasks to Kafka.",
-            "Media upload enqueues a media.resize-image job with an idempotency key.",
+            "Media upload enqueues a media-resize-image job with an idempotency key.",
             "The cms-svc worker consumes with long poll, batch 10, and DLQ after five receives.",
             "Tests cover enqueue, retry, and DLQ."
           ],
@@ -3560,9 +3528,9 @@
             "consumes": [],
             "taskQueues": [
               {
-                "queue": "media.resize-image",
+                "queue": "media-resize-image",
                 "role": "producer+consumer",
-                "dlq": "media.resize-image-dlq",
+                "dlq": "media-resize-image-dlq",
                 "maxReceiveCount": 5,
                 "implementation": "SQS via ITaskQueue; cms-svc worker; no Kafka."
               }
@@ -3600,7 +3568,7 @@
           "follow_ups": []
         }
       ],
-      "note": "cms-003 closed the media defects: 115 unit + 70 e2e green. Media now has one containment-checked path builder (null byte, single decode, mediaKeySchema, path.relative, then realpath re-check), visibility public/private with the field optional in contracts 1.5.0, a public file route that 404s private and orphan files with no path in the body, an admin-only ObjectId file route, and public max-age=60 must-revalidate caching. Pending: cms.updated publishes to the wrong cms.events topic with a legacy envelope; no cms_outbox or Mongo transaction; media resize still uses Kafka media.tasks instead of the SQS media.resize-image job; upload size/MIME checks run post-buffer (cms-004). No Kafka consumer in CMS.",
+      "note": "cms-003 closed the media defects: 115 unit + 70 e2e green. Media now has one containment-checked path builder (null byte, single decode, mediaKeySchema, path.relative, then realpath re-check), visibility public/private with the field optional in contracts 1.5.0, a public file route that 404s private and orphan files with no path in the body, an admin-only ObjectId file route, and public max-age=60 must-revalidate caching. Pending: cms.updated publishes to the wrong cms.events topic with a legacy envelope; no cms_outbox or Mongo transaction; media resize still uses Kafka media.tasks instead of the SQS media-resize-image job; upload size/MIME checks run post-buffer (cms-004). No Kafka consumer in CMS.",
       "messaging": {
         "role": "producer-only",
         "publishes": [
@@ -3624,9 +3592,9 @@
         "consumes": [],
         "taskQueues": [
           {
-            "queue": "media.resize-image",
+            "queue": "media-resize-image",
             "role": "producer+consumer",
-            "dlq": "media.resize-image-dlq",
+            "dlq": "media-resize-image-dlq",
             "maxReceiveCount": 5,
             "implementation": "SQS via ITaskQueue; cms-svc worker; no Kafka."
           }
@@ -3846,7 +3814,7 @@
           ],
           "log": null,
           "key_decisions": [
-            "A scheduled detector publishes cart.abandoned once per cart per idle window. Reason: notify.send-email covers the reminder flow without a separate queue. Rejected: keep reminder.dispatch, which is unused.",
+            "A scheduled detector publishes cart.abandoned once per cart per idle window. Reason: notify-send-email covers the reminder flow without a separate queue. Rejected: keep reminder.dispatch, which is unused.",
             "Key by userId and store the detection idempotency key. Reason: one reminder per cart window. Rejected: publish on every scan."
           ],
           "acceptance": [
@@ -3974,11 +3942,11 @@
         ],
         "consumes": [],
         "taskQueues": [
-          "import.process-row"
+          "import-process-row"
         ]
       },
       "claimedBy": null,
-      "note": "Not created. Planned: publish product.imported via an outbox; consume no Kafka topics; use SQS import.process-row for row work.",
+      "note": "Not created. Planned: publish product.imported via an outbox; consume no Kafka topics; use SQS import-process-row for row work.",
       "tasks": [
         {
           "id": "imp-001",
@@ -4010,7 +3978,7 @@
         },
         {
           "id": "imp-002",
-          "title": "import-svc: upload API and SQS import.process-row producer",
+          "title": "import-svc: upload API and SQS import-process-row producer",
           "status": "todo",
           "owner": null,
           "started": null,
@@ -4030,7 +3998,7 @@
           ],
           "acceptance": [
             "CSV/JSON upload creates a job and rows.",
-            "One import.process-row message per row.",
+            "One import-process-row message per row.",
             "No Kafka involvement in row work.",
             "Tests cover valid, duplicate, and malformed rows."
           ],
@@ -4041,9 +4009,9 @@
             "consumes": [],
             "taskQueues": [
               {
-                "queue": "import.process-row",
+                "queue": "import-process-row",
                 "role": "producer",
-                "dlq": "import.process-row-dlq",
+                "dlq": "import-process-row-dlq",
                 "maxReceiveCount": 5,
                 "implementation": "SQS via ITaskQueue; one message per row."
               }
@@ -4073,9 +4041,9 @@
             "Mark the row completed in the same transaction as the outbox write. Reason: row status and event must not diverge. Rejected: update the row after publishing."
           ],
           "acceptance": [
-            "Worker consumes import.process-row with long poll and batch 10.",
+            "Worker consumes import-process-row with long poll and batch 10.",
             "Successful rows write product.imported to the outbox and publish it.",
-            "Failed rows retry and then go to import.process-row-dlq.",
+            "Failed rows retry and then go to import-process-row-dlq.",
             "Duplicate rows are idempotent."
           ],
           "verified": false,
@@ -4094,9 +4062,9 @@
             "consumes": [],
             "taskQueues": [
               {
-                "queue": "import.process-row",
+                "queue": "import-process-row",
                 "role": "consumer",
-                "dlq": "import.process-row-dlq",
+                "dlq": "import-process-row-dlq",
                 "maxReceiveCount": 5,
                 "implementation": "SQS worker; long poll 20s, batch 10, maxReceiveCount 5."
               }
@@ -4120,9 +4088,9 @@
         "consumes": [],
         "taskQueues": [
           {
-            "queue": "import.process-row",
+            "queue": "import-process-row",
             "role": "producer+consumer",
-            "dlq": "import.process-row-dlq",
+            "dlq": "import-process-row-dlq",
             "maxReceiveCount": 5,
             "implementation": "SQS via ITaskQueue; one message per row; worker in import-svc."
           }
@@ -4130,7 +4098,7 @@
         "consumerGroup": null,
         "doesNotUseKafka": [
           "No Kafka consumer.",
-          "Row work is SQS import.process-row."
+          "Row work is SQS import-process-row."
         ],
         "implementation": [
           "Postgres outbox + relay",
@@ -4178,11 +4146,11 @@
           "order.status.updated"
         ],
         "taskQueues": [
-          "notify.send-email"
+          "notify-send-email"
         ]
       },
       "claimedBy": null,
-      "note": "Not created. Planned: consume order.created, cart.abandoned, user.registered, order.status.updated; publish no Kafka events; use SQS notify.send-email; resolve email via the auth internal lookup.",
+      "note": "Not created. Planned: consume order.created, cart.abandoned, user.registered, order.status.updated; publish no Kafka events; use SQS notify-send-email; resolve email via the auth internal lookup.",
       "tasks": [
         {
           "id": "ntf-001",
@@ -4231,7 +4199,7 @@
           ],
           "log": null,
           "key_decisions": [
-            "Consume order.created, cart.abandoned, user.registered, and order.status.updated with group notify-svc; map each to an SQS notify.send-email job. Reason: email work is a task with its own retry/DLQ. Rejected: send SMTP inside the Kafka handler, which blocks the consumer.",
+            "Consume order.created, cart.abandoned, user.registered, and order.status.updated with group notify-svc; map each to an SQS notify-send-email job. Reason: email work is a task with its own retry/DLQ. Rejected: send SMTP inside the Kafka handler, which blocks the consumer.",
             "Persist processed_events in the same transaction as the job enqueue marker. Reason: at-least-once redelivery must not send duplicate email. Rejected: dedupe only in memory."
           ],
           "acceptance": [
@@ -4250,35 +4218,35 @@
                 "topic": "order.created",
                 "group": "notify-svc",
                 "dlq": "order.created.dlq",
-                "implementation": "Nest Kafka consumer; enqueue notify.send-email; processed_events."
+                "implementation": "Nest Kafka consumer; enqueue notify-send-email; processed_events."
               },
               {
                 "event": "cart.abandoned",
                 "topic": "cart.abandoned",
                 "group": "notify-svc",
                 "dlq": "cart.abandoned.dlq",
-                "implementation": "Nest Kafka consumer; enqueue notify.send-email; processed_events."
+                "implementation": "Nest Kafka consumer; enqueue notify-send-email; processed_events."
               },
               {
                 "event": "user.registered",
                 "topic": "user.registered",
                 "group": "notify-svc",
                 "dlq": "user.registered.dlq",
-                "implementation": "Nest Kafka consumer; enqueue notify.send-email; processed_events."
+                "implementation": "Nest Kafka consumer; enqueue notify-send-email; processed_events."
               },
               {
                 "event": "order.status.updated",
                 "topic": "order.status.updated",
                 "group": "notify-svc",
                 "dlq": "order.status.updated.dlq",
-                "implementation": "Nest Kafka consumer; enqueue notify.send-email; processed_events."
+                "implementation": "Nest Kafka consumer; enqueue notify-send-email; processed_events."
               }
             ],
             "taskQueues": [
               {
-                "queue": "notify.send-email",
+                "queue": "notify-send-email",
                 "role": "producer+consumer",
-                "dlq": "notify.send-email-dlq",
+                "dlq": "notify-send-email-dlq",
                 "maxReceiveCount": 5,
                 "implementation": "SQS via ITaskQueue; producer from the Kafka consumer; consumer is the notify worker."
               }
@@ -4307,8 +4275,8 @@
             "Record every attempt in email_logs with a provider message id. Reason: support and retry need an audit trail. Rejected: log-only."
           ],
           "acceptance": [
-            "Worker consumes notify.send-email and sends via SMTP.",
-            "Failures retry and then go to notify.send-email-dlq.",
+            "Worker consumes notify-send-email and sends via SMTP.",
+            "Failures retry and then go to notify-send-email-dlq.",
             "Duplicate jobs do not send twice.",
             "Tests cover success, retry, and DLQ."
           ],
@@ -4319,9 +4287,9 @@
             "consumes": [],
             "taskQueues": [
               {
-                "queue": "notify.send-email",
+                "queue": "notify-send-email",
                 "role": "consumer",
-                "dlq": "notify.send-email-dlq",
+                "dlq": "notify-send-email-dlq",
                 "maxReceiveCount": 5,
                 "implementation": "SQS worker; long poll 20s, batch 10, maxReceiveCount 5."
               }
@@ -4369,35 +4337,35 @@
             "topic": "order.created",
             "group": "notify-svc",
             "dlq": "order.created.dlq",
-            "implementation": "Nest Kafka consumer; enqueue notify.send-email; processed_events."
+            "implementation": "Nest Kafka consumer; enqueue notify-send-email; processed_events."
           },
           {
             "event": "cart.abandoned",
             "topic": "cart.abandoned",
             "group": "notify-svc",
             "dlq": "cart.abandoned.dlq",
-            "implementation": "Nest Kafka consumer; enqueue notify.send-email; processed_events."
+            "implementation": "Nest Kafka consumer; enqueue notify-send-email; processed_events."
           },
           {
             "event": "user.registered",
             "topic": "user.registered",
             "group": "notify-svc",
             "dlq": "user.registered.dlq",
-            "implementation": "Nest Kafka consumer; enqueue notify.send-email; processed_events."
+            "implementation": "Nest Kafka consumer; enqueue notify-send-email; processed_events."
           },
           {
             "event": "order.status.updated",
             "topic": "order.status.updated",
             "group": "notify-svc",
             "dlq": "order.status.updated.dlq",
-            "implementation": "Nest Kafka consumer; enqueue notify.send-email; processed_events."
+            "implementation": "Nest Kafka consumer; enqueue notify-send-email; processed_events."
           }
         ],
         "taskQueues": [
           {
-            "queue": "notify.send-email",
+            "queue": "notify-send-email",
             "role": "producer+consumer",
-            "dlq": "notify.send-email-dlq",
+            "dlq": "notify-send-email-dlq",
             "maxReceiveCount": 5,
             "implementation": "SQS via ITaskQueue; producer from the Kafka consumer; consumer is the notify worker."
           }
@@ -4405,7 +4373,7 @@
         "consumerGroup": "notify-svc",
         "doesNotUseKafka": [
           "No Kafka producer.",
-          "Email sends are SQS notify.send-email."
+          "Email sends are SQS notify-send-email."
         ],
         "implementation": [
           "Nest Kafka consumer with manual commit",
@@ -4729,9 +4697,9 @@
         "produces": [],
         "consumes": [],
         "taskQueues": [
-          "notify.send-email",
-          "import.process-row",
-          "media.resize-image"
+          "notify-send-email",
+          "import-process-row",
+          "media-resize-image"
         ]
       },
       "claimedBy": null,
@@ -4740,16 +4708,16 @@
         {
           "id": "inf-001",
           "title": "ecom-infra: local compose for Kafka, Redis, Postgres, Mongo replica set, LocalStack SQS, and Mailpit",
-          "status": "in_progress",
+          "status": "done",
           "owner": "qoder",
           "started": "2026-10-30",
-          "finished": null,
+          "finished": "2026-10-30",
           "phase": "P1",
           "priority": "P0",
           "kind": "infra",
           "transport": "infra",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/inf-001-local-harness.md",
           "key_decisions": [
             "Run Mongo as a single-node replica set for CMS transactions; use LocalStack for SQS and Mailpit for SMTP. Reason: local parity with production semantics. Rejected: standalone Mongo, which cannot run transactions.",
             "Add healthchecks and named volumes for every stateful service. Reason: services must wait for readiness, not sleep. Rejected: start-order-only compose."
@@ -4761,30 +4729,33 @@
             "Mailpit receives local email.",
             "README documents ports and reset steps."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "pgdata is the only non-disposable volume; docker compose down -v empties every service database",
+            "ecom-infra has no git remote, so its commits are local only"
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
             "taskQueues": [
               {
-                "queue": "notify.send-email",
+                "queue": "notify-send-email",
                 "role": "local",
-                "dlq": "notify.send-email-dlq",
+                "dlq": "notify-send-email-dlq",
                 "maxReceiveCount": 5,
                 "implementation": "LocalStack SQS."
               },
               {
-                "queue": "import.process-row",
+                "queue": "import-process-row",
                 "role": "local",
-                "dlq": "import.process-row-dlq",
+                "dlq": "import-process-row-dlq",
                 "maxReceiveCount": 5,
                 "implementation": "LocalStack SQS."
               },
               {
-                "queue": "media.resize-image",
+                "queue": "media-resize-image",
                 "role": "local",
-                "dlq": "media.resize-image-dlq",
+                "dlq": "media-resize-image-dlq",
                 "maxReceiveCount": 5,
                 "implementation": "LocalStack SQS."
               }
@@ -4795,10 +4766,10 @@
         {
           "id": "inf-002",
           "title": "ecom-infra: declarative Kafka topic and DLQ provisioning",
-          "status": "in_progress",
+          "status": "done",
           "owner": "qoder",
           "started": "2026-10-30",
-          "finished": null,
+          "finished": "2026-10-30",
           "phase": "P1",
           "priority": "P0",
           "kind": "infra",
@@ -4806,7 +4777,7 @@
           "dependsOn": [
             "inf-001"
           ],
-          "log": null,
+          "log": "TASKS/done/inf-002-kafka-topics.md",
           "key_decisions": [
             "Create every topic and its .dlq twin with explicit partitions and retention; disable auto-create. Reason: DLQs must exist before consumers start. Rejected: auto-create, which produces wrong partitions and no DLQ.",
             "Keep the topic list in one script sourced from the contracts catalog. Reason: one source of truth. Rejected: duplicate topic lists per compose file."
@@ -4817,8 +4788,10 @@
             "Auto-create is disabled.",
             "A smoke test produces and consumes one message per topic."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "topics:provision stays a deliberate second step after compose up, not a compose hook"
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
@@ -4829,10 +4802,10 @@
         {
           "id": "inf-003",
           "title": "ecom-infra: SQS queues, DLQs, and least-privilege IAM",
-          "status": "in_progress",
+          "status": "done",
           "owner": "qoder",
           "started": "2026-10-30",
-          "finished": null,
+          "finished": "2026-10-30",
           "phase": "P1",
           "priority": "P0",
           "kind": "infra",
@@ -4840,9 +4813,9 @@
           "dependsOn": [
             "inf-001"
           ],
-          "log": null,
+          "log": "TASKS/done/inf-003-sqs-terraform.md",
           "key_decisions": [
-            "Provision only notify.send-email, import.process-row, and media.resize-image with maxReceiveCount 5; do not create reminder.dispatch. Reason: tasks are SQS-only and reminder is dropped. Rejected: create an unused queue.",
+            "Provision only notify-send-email, import-process-row, and media-resize-image with maxReceiveCount 5; do not create reminder.dispatch. Reason: tasks are SQS-only and reminder is dropped. Rejected: create an unused queue.",
             "Give each service IAM access only to the queues it produces or consumes. Reason: least privilege. Rejected: one shared queue-admin role."
           ],
           "acceptance": [
@@ -4851,30 +4824,32 @@
             "IAM policies are per service.",
             "reminder.dispatch is absent."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "aws/ has no remote backend; add S3 + DynamoDB before a real environment uses it"
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
             "taskQueues": [
               {
-                "queue": "notify.send-email",
+                "queue": "notify-send-email",
                 "role": "provision",
-                "dlq": "notify.send-email-dlq",
+                "dlq": "notify-send-email-dlq",
                 "maxReceiveCount": 5,
                 "implementation": "Terraform SQS + redrive."
               },
               {
-                "queue": "import.process-row",
+                "queue": "import-process-row",
                 "role": "provision",
-                "dlq": "import.process-row-dlq",
+                "dlq": "import-process-row-dlq",
                 "maxReceiveCount": 5,
                 "implementation": "Terraform SQS + redrive."
               },
               {
-                "queue": "media.resize-image",
+                "queue": "media-resize-image",
                 "role": "provision",
-                "dlq": "media.resize-image-dlq",
+                "dlq": "media-resize-image-dlq",
                 "maxReceiveCount": 5,
                 "implementation": "Terraform SQS + redrive."
               }
@@ -5019,23 +4994,23 @@
         "consumes": [],
         "taskQueues": [
           {
-            "queue": "notify.send-email",
+            "queue": "notify-send-email",
             "role": "provision",
-            "dlq": "notify.send-email-dlq",
+            "dlq": "notify-send-email-dlq",
             "maxReceiveCount": 5,
             "implementation": "Terraform SQS + redrive."
           },
           {
-            "queue": "import.process-row",
+            "queue": "import-process-row",
             "role": "provision",
-            "dlq": "import.process-row-dlq",
+            "dlq": "import-process-row-dlq",
             "maxReceiveCount": 5,
             "implementation": "Terraform SQS + redrive."
           },
           {
-            "queue": "media.resize-image",
+            "queue": "media-resize-image",
             "role": "provision",
-            "dlq": "media.resize-image-dlq",
+            "dlq": "media-resize-image-dlq",
             "maxReceiveCount": 5,
             "implementation": "Terraform SQS + redrive."
           }
@@ -5120,10 +5095,10 @@
         {
           "id": "doc-002",
           "title": "docs: testing matrix for Kafka, SQS, outbox, and DLQ",
-          "status": "in_progress",
+          "status": "done",
           "owner": "qoder",
           "started": "2026-10-30",
-          "finished": null,
+          "finished": "2026-10-30",
           "phase": "P1",
           "priority": "P0",
           "kind": "docs",
@@ -5131,7 +5106,7 @@
           "dependsOn": [
             "doc-001"
           ],
-          "log": null,
+          "log": "TASKS/done/doc-002-testing-matrix.md",
           "key_decisions": [
             "Add a per-transport test matrix and local harness commands. Reason: current tests mock clients and hid the checkout/catalog mismatch. Rejected: unit-only tests.",
             "Make the integration harness the acceptance gate. Reason: cross-service contracts are the failure mode. Rejected: per-service green as the only gate."
@@ -5142,16 +5117,19 @@
             "P0 regression cases are listed.",
             "No stale SNS/SQS event claims remain."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "P0-5 (task DLQ + dedupe) needs notify-svc before it has a proving file",
+            "k6 and Playwright suites are specified but not implemented"
+          ]
         },
         {
           "id": "doc-003",
           "title": "docs: versioning 1.3.0/2.0.0 release train",
-          "status": "in_progress",
+          "status": "done",
           "owner": "qoder",
           "started": "2026-10-30",
-          "finished": null,
+          "finished": "2026-10-30",
           "phase": "P1",
           "priority": "P0",
           "kind": "docs",
@@ -5160,7 +5138,7 @@
             "ec-001",
             "ec-002"
           ],
-          "log": null,
+          "log": "TASKS/done/doc-003-versioning-train.md",
           "key_decisions": [
             "Document the dual-read/write window and the 2.0.0 cutover. Reason: consumers pin mixed versions (1.0.0, 1.1.0, 1.2.0). Rejected: undocumented breaking change.",
             "Make the exact tarball URL and lockfile update part of the checklist. Reason: polyrepo discipline. Rejected: floating ranges."
@@ -5170,8 +5148,11 @@
             "Release checklist includes local pack, consumer suites, tag approval, and repin.",
             "No stale 1.0.0-only text remains."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "ec-005 owns the tag, the release asset and the consumer repins",
+            "2.0.0 step 4 waits on the longest topic retention (30d)"
+          ]
         },
         {
           "id": "doc-004",

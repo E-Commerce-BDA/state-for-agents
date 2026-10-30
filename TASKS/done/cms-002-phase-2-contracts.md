@@ -79,7 +79,7 @@ or published as a GitHub Release.
 - **Slice 2.4 (Media Subsystem)**:
   - `StoragePort` abstraction with `LocalDiskStorageAdapter` storing files under configurable local directory.
   - `cms_media` Mongoose collection with `key` format `media/{yyyy}/{mm}/{uuid}.{ext}`, size limit (10 MB), and MIME enforcement (PNG/JPEG/WebP/AVIF; rejects SVG).
-  - Background task dispatch: emits `media.resize-image` job for responsive formats.
+  - Background task dispatch: emits `media-resize-image` job for responsive formats.
   - In-use guard on deletion: checks references across `cms_sections`, `cms_pages`, and `cms_blogs`; rejects with `409 MEDIA_IN_USE` if referenced.
   - 89 unit tests passing across 17 test suites; 53 e2e tests passing across 5 test suites.
   - Oxlint 0 warnings/0 errors; tsc clean; nest build clean.
