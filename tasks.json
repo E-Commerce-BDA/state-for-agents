@@ -3,15 +3,15 @@
   "updatedAt": "2026-10-31",
   "summary": {
     "total": 128,
-    "done": 93,
+    "done": 96,
     "in_progress": 0,
-    "backlog": 35,
+    "backlog": 32,
     "byRepo": {
       "storefront-ui": {
         "total": 53,
-        "done": 48,
+        "done": 50,
         "in_progress": 0,
-        "backlog": 5
+        "backlog": 3
       },
       "admin-app": {
         "total": 1,
@@ -39,9 +39,9 @@
       },
       "cart-svc": {
         "total": 10,
-        "done": 8,
+        "done": 9,
         "in_progress": 0,
-        "backlog": 2
+        "backlog": 1
       },
       "order-svc": {
         "total": 12,
@@ -252,9 +252,9 @@
       }
     ],
     "nextUp": [
-      "srch-002",
-      "cat-008",
-      "ca-009"
+      "sf-051",
+      "cat-011",
+      "srch-002"
     ],
     "completionGate": [
       "Every P0 task is done and verified.",
@@ -494,11 +494,11 @@
     ]
   },
   "unpushed": {
-    "cms-svc": [
-      "c0257d8"
+    "cart-svc": [
+      "cb305e7"
     ],
     "Documentation": [
-      "6a1e0ce"
+      "40348b9"
     ],
     "ecom-infra": [
       "108913f",
@@ -510,15 +510,13 @@
     "ecom-messaging": [
       "ee88bfe"
     ],
-    "order-svc": [
-      "d76d10f"
-    ],
-    "search-svc": [
-      "020eaca"
+    "storefront-ui": [
+      "71f04a5",
+      "5de7d95"
     ]
   },
   "unpushedVerifiedAt": "2026-10-31",
-  "unpushedNote": "Recomputed with git rev-parse @{u} and git rev-list --count @{u}..HEAD in every repo on 2026-10-31, after the wave-2 commits. Level with their upstreams: auth-svc (5f22a2a), cart-svc (a87bde4), catalog-svc (63dae67 + 7b081ea), ecom-contracts, and state-for-agents (its own tracker commit joins on the next update). Still local-only: cms-svc 1 (c0257d8), Documentation 1 (6a1e0ce), order-svc 1 (d76d10f), search-svc 1 (020eaca), ecom-infra 5 (no upstream configured at all) and ecom-messaging 1 (ee88bfe — the repo was git init-ed this pass and has no remote). The three wave commits that did reach their remotes went out at 2026-10-31 18:18 through an out-of-band step, not through this plan, which was commits-only; nothing else was pushed, tagged, released or published. Lists run oldest to newest. au-004, ca-008, cat-007, ord-011 and cms-005 are each committed now — the 2026-10-30 'delivered with NO commit' state is history, and every working tree is clean. This block lists commits only, never a dirty tree; recompute before any handoff.",
+  "unpushedNote": "Recomputed with git rev-parse @{u} and git rev-list --count @{u}..HEAD in every repo on 2026-10-31, after the seam wave (ca-010, sf-049, sf-050). Level with their upstreams: auth-svc (5f22a2a), catalog-svc (7b081ea), order-svc (d76d10f), cms-svc (c0257d8), search-svc (020eaca), ecom-contracts and state-for-agents (this tracker commit joins the list only after it exists, so it cannot appear here). Still local-only: cart-svc 1 (cb305e7 = ca-010), storefront-ui 2 (71f04a5 = sf-049, 5de7d95 = sf-050, upstream origin/staging), Documentation 1 (40348b9 = the docs for all three), ecom-infra 5 (no upstream configured at all) and ecom-messaging 1 (ee88bfe — the repo was git init-ed in the previous pass and has no remote). The wave-2 commits that were local-only last pass (c0257d8, 6a1e0ce, d76d10f, 020eaca) have since reached their remotes at 2026-10-31 18:18 through an out-of-band step, not through this plan, which remains commits-only; nothing else was pushed, tagged, released or published. Lists run oldest to newest. Every working tree is clean; this block lists commits only, never a dirty tree. Recompute before any handoff.",
   "workflow": "Claim: create TASKS/in-progress/<id>-<slug>.md, set the entry status to in-progress, owner, and started. Build against the chained skills (router order). Close: move the log to TASKS/done/, fill verification and follow_ups, flip status to done and finished, update STATUS.md and summary in the same commit. Todo entries carry log:null until claimed; in-progress and done entries must have an existing log file. Commits: one commit per file (larger edits split per edit); stage with diff eyes-on; subject + reason body; local-only until the human says push. Unpushed lists only verified local commits; the carrier commit joins on the next update. Validation: id == filename, status == folder, log exists for in-progress/done, STATUS counts == summary.",
   "rules": "Claim: set claimedBy={agent,since,task} + stages.<stage> to in-progress (24h lease; other instances must not steal without comment). Finish: flip stage to done + update SERVICES.md + STATUS.md in same commit. Stage vocab locked: todo|in-progress|done (maps to todo/in-progress/done cells). Path truth: localRoots below are where agents edit TODAY; future split repos named in 'repo'. Never invent paths — resolve via SKILL-EXPLORE. motive is immutable (ADR change only); inProgress/next are mutable. Transport truth: Kafka is domain events only, SQS is task jobs only; each repo messaging block and the top-level messaging catalog are authoritative.",
   "repos": {
@@ -541,10 +539,9 @@
       },
       "inProgress": null,
       "next": [
-        "sf-049 thin auth client",
-        "sf-050 CMS wiring + revalidate webhook",
         "sf-051 commerce routes",
-        "sf-052 /api/track beacon"
+        "sf-052 /api/track beacon",
+        "sf-053 contracts repin"
       ],
       "blockedBy": [
         "ecom-contracts"
@@ -564,7 +561,7 @@
         "taskQueues": []
       },
       "claimedBy": null,
-      "note": "UI/auth/CMS slices delivered; commerce routes and thin clients pending. No Kafka credentials: page views go through /api/track to analytics-svc over HTTP; CMS cache invalidation uses /api/revalidate. Worktree is currently dirty (ProductCard deletion + theme changes) and must be resolved before commerce work.",
+      "note": "UI/auth/CMS slices delivered, and the two seams are live: sf-049 (thin auth client — four BFF handlers own the HttpOnly sf_at/sf_rt cookies, proxy.ts forwards only GET /api/auth/session and guards /account + /checkout) and sf-050 (lib/cms reads with tags + revalidate: 300, a bounded stale fallback for the nav, and POST /api/revalidate as the CMS->UI arrow). 475 tests in 63 files, tsc clean, next build clean. Pending: sf-051 commerce routes, sf-052 /api/track, sf-053 contracts repin. pnpm lint is dead in this repo (Next 16 removed `next lint`). No Kafka credentials: page views go through /api/track to analytics-svc over HTTP; CMS invalidation is HTTP-only.",
       "tasks": [
         {
           "id": "sf-001",
@@ -1367,19 +1364,22 @@
         {
           "id": "sf-049",
           "title": "storefront: thin auth client and proxy",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-31",
+          "finished": "2026-10-31",
           "phase": "P2",
           "priority": "P0",
           "kind": "feature",
           "transport": "http",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/sf-049-storefront-auth-client.md",
           "key_decisions": [
-            "Server actions call auth-svc over HTTP and keep tokens out of JS. Reason: AGENTS.md hard-bans localStorage and token exposure. Rejected: client-side token storage.",
-            "Replace TODO(auth-client) stubs with per-action handlers. Reason: the auth routes currently cannot complete a real login. Rejected: keep demo handlers."
+            "Four BFF handlers own the tokens and answer only {user}/{ok:true}; the browser never holds one. Reason: AGENTS.md hard-bans token exposure and localStorage. Rejected: a token in memory/context (survives one refresh, still reachable by XSS).",
+            "The proxy forwards exactly one path, GET /api/auth/session, injecting Authorization server-side and stripping the inbound cookie; the four actions are handlers. Reason: only a handler can write Set-Cookie with the storefront's own attributes. Rejected: a catch-all proxy, and refresh as a rewrite (wrong cookie scope).",
+            "sf_at lives at Path=/ for 15m, sf_rt at Path=/api/auth for 30d, both HttpOnly/SameSite=Lax and Secure in production. Reason: an ordinary page request must never carry the refresh token.",
+            "Error mapping by status + message until auth-svc emits domain codes, never forwarding auth-svc's message. Reason: one code per status (every 401 is UNAUTHENTICATED) and the message is internal phrasing plus an enumeration oracle. Rejected: render the upstream message; wait for auth-svc.",
+            "Logout is POST-only and succeeds even when auth-svc is down. Reason: SameSite=Lax still sends cookies on a top-level cross-site GET, so a GET link would let any page sign a shopper out."
           ],
           "acceptance": [
             "lib/auth/client.ts and per-action handlers exist.",
@@ -1387,16 +1387,21 @@
             "No token is stored in localStorage or client JS.",
             "Tests cover success, invalid credentials, and network failure."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "No sign-out affordance in the shell: the account menu must post a form to /api/auth/logout (POST-only by design)",
+            "auth-svc emits one error code per status; domain codes would retire the message-text tie in lib/auth/client.ts",
+            "ForgotForm stays a stub: auth-svc exposes no forgot/reset endpoint",
+            "Storefront pnpm lint is dead (Next 16 removed `next lint`); add an ESLint flat config"
+          ]
         },
         {
           "id": "sf-050",
           "title": "storefront: CMS source wiring and revalidate webhook",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-31",
+          "finished": "2026-10-31",
           "phase": "P2",
           "priority": "P0",
           "kind": "feature",
@@ -1404,10 +1409,13 @@
           "dependsOn": [
             "cms-005"
           ],
-          "log": null,
+          "log": "TASKS/done/sf-050-storefront-cms-revalidate.md",
           "key_decisions": [
-            "Replace TODO(cms-svc) null-sources with CMS HTTP fetchers. Reason: the storefront still renders demo data. Rejected: keep null-sources.",
-            "Invalidate cache through /api/revalidate with a shared secret. Reason: the storefront must not hold Kafka credentials. Rejected: storefront Kafka consumer."
+            "Every CMS read is fetch(url, { next: { tags: [cmsTag], revalidate: 300 } }); the Next Data Cache is the cross-request layer. Reason: a shared cache, a purge handle and a staleness bound in one argument. Rejected: ioredis in the storefront (no purge handle, a Redis credential in a public app).",
+            "The cascade is cms-svc -> a bounded 32-entry in-process TTL entry -> DEMO_NAV_INPUT, and the root layout has no throwing path. Reason: a cms-svc restart must not blank every route. Rejected: no fallback at all; an unbounded map keyed by page; redirect on CMS failure.",
+            "POST /api/revalidate is secret-gated (constant-time over the SHA-256 of both sides, fails closed when the env var is unset) and rejects any tag outside lib/cms/tags.ts. Reason: unvalidated, one loop flushes the whole cache. Rejected: an open endpoint; a bearer JWT; revalidatePath('/').",
+            "revalidateTag(tag, 'max') once per tag, and the tag vocabulary is one module shared by readers and the webhook. Reason: string literals at both ends would let a typo silently disable invalidation forever. Rejected: per-call literals.",
+            "Local structural guards instead of @ecom/contracts response schemas. Reason: the pinned 1.7.0 tarball does not export them and the repin is sf-053's job; the resolvers already degrade every inner field. Rejected: a cross-repo version bump hidden inside a UI task."
           ],
           "acceptance": [
             "No TODO(cms-svc) null-source remains in production paths.",
@@ -1415,8 +1423,13 @@
             "/api/revalidate validates the secret and calls revalidateTag.",
             "Tests cover cache invalidation and unauthorized calls."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "cms-007 must call POST /api/revalidate with x-revalidate-secret and {\"tags\":[...]} after its own invalidation (contract recorded verbatim in the log)",
+            "The 32-entry fallback cache is per-process: acceptable as a stale fallback, unusable as a primary cache",
+            "No metrics on the storefront's stale/fallback paths or on the webhook's 401s (observability debt)",
+            "getGlobalSettings (theme) is implemented and tested but read at no call site yet"
+          ]
         },
         {
           "id": "sf-051",
@@ -2887,19 +2900,22 @@
         {
           "id": "ca-010",
           "title": "cart-svc: replace FixtureCatalogClient with the HTTP catalog adapter",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-31",
+          "finished": "2026-10-31",
           "phase": "P2",
           "priority": "P0",
           "kind": "bug",
           "transport": "http",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/ca-010-cart-http-catalog.md",
           "key_decisions": [
-            "Inject an HttpCatalogClient in production and keep the fixture only in tests. Reason: the fixture means every cart snapshots fake products and prices. Rejected: keep the fixture and postpone integration.",
-            "Use the catalog internal batch lookup with x-service-key and a bounded timeout. Reason: one round trip for multi-item carts. Rejected: per-item HTTP calls, which add N+1 latency."
+            "HttpCatalogClient is the production binding and the fixture moved to catalog.fixture.ts as a test-only provider. Reason: the fixture meant every cart snapshotted fake products and prices. Rejected: keep the fixture and postpone integration; delete it and make e2e depend on a live catalog.",
+            "One batch call, GET /catalog/internal/products?ids=<variantId ?? productId>, with x-service-key and a 1.5 s abort. Reason: one round trip per add, and a variant price can differ from its product's. Rejected: per-item HTTP (N+1); product-id-only lookup (a wrong price for variants).",
+            "Fail closed: 5xx / abort / non-JSON / shape-invalid -> 503 CATALOG_UNAVAILABLE with nothing written, while a well-formed response with no matching row -> 422 CART_PRODUCT_UNAVAILABLE. Reason: 'the catalog is down' is retryable and must not create a cart; 'not for sale' is a user error. Rejected: a fallback or zero price; returning the upstream reason.",
+            "The snapshot price is effectivePrice ?? unitPrice. Reason: order-svc re-prices checkout from the same field, so any other choice makes the cart and the order disagree about money. Rejected: snapshot the list price and apply the discount later.",
+            "CATALOG_FETCH is an optional provider defaulting to the global fetch. Reason: the adapter spec proves the mapping without opening a socket. Rejected: a runtime NODE_ENV branch inside the client."
           ],
           "acceptance": [
             "Production provider calls GET /internal/products?ids=.",
@@ -2907,11 +2923,15 @@
             "Fixture provider is test-only and documented.",
             "Tests cover snapshot mapping and catalog failure."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "No retry or circuit breaker around the catalog call; the 1.5 s abort only caps the wait",
+            "CATALOG_UNAVAILABLE has no metric (observability debt)",
+            "catalog.fixture.ts must not grow into a second catalog"
+          ]
         }
       ],
-      "note": "Core cart/wishlist complete and verified: 6 slices, 84 unit + 79 e2e green. Pending: NoopEventBus means cart.updated is not published; FixtureCatalogClient means no real catalog snapshots; no order.created consumer; order-svc cart clear targets a non-existent internal endpoint. Kafka work: publish cart.updated via outbox; consume order.created; no SQS tasks.",
+      "note": "Core cart/wishlist complete and verified: 6 slices, 103 unit + 99 e2e green (1 skipped). Delivery is real: cart.updated rides cart.outbox/relay (ca-008) and add-to-cart prices from catalog-svc over HTTP, fail closed (ca-010). Pending: no order.created consumer (ca-009); the conversion bridge is temporary; no retention sweep for cart.outbox; CATALOG_UNAVAILABLE has no metric. Kafka work: consume order.created; no SQS tasks.",
       "messaging": {
         "role": "producer+consumer",
         "publishes": [

@@ -1,7 +1,7 @@
 # PROJECT — E-Commerce Platform (agent intro)
 
 > Scope: rough intro for agents joining this project. Docs are source of truth; this file points.
-> Status: Active | Date: 2026-09-30 | Parent: `Documentation/0.Project-Overview.md`
+> Status: Active | Date: 2026-10-31 | Parent: `Documentation/0.Project-Overview.md`
 
 ## What this is
 
@@ -19,6 +19,16 @@ transaction as the domain change — `auth/cart/catalog/order.outbox` in Postgre
 `cms_outbox` in Mongo — and a `@ecom/messaging` 0.2.0 relay publishes it. There is no
 second producer path left in any service.
 Postgres via **raw SQL + `pg`** (no ORM, no migrations in v1); Mongoose stays for Mongo.
+
+The storefront is a **client of HTTP seams only** — it holds no broker credentials and
+runs no cache server. Auth is a thin client: four BFF handlers under `app/api/auth/`
+call auth-svc and own the `HttpOnly` `sf_at`/`sf_rt` cookies, so no token ever reaches
+client JS, and `proxy.ts` forwards exactly one path (`GET /api/auth/session` → `/me`)
+while guarding `/account/*` and `/checkout/*`. CMS content is read through
+`lib/cms/*` with a cache tag and `revalidate: 300` per call, so the Next Data Cache is
+the shared layer; a cms-svc outage degrades the nav to a bounded stale copy instead of
+blanking the layout, and `POST /api/revalidate` (shared secret + tag allowlist) is the
+only purge handle — cms-svc calls it over HTTP, never through Kafka.
 
 ## How to work
 
