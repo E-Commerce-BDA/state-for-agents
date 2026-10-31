@@ -5,13 +5,19 @@
 
 ## What this is
 
-Learning-focused, event-driven e-commerce platform. Polyrepo (12 repos, 1 deployable each):
-`storefront-ui`, `admin-app`, `ecom-contracts` (`@ecom/contracts`), 9 NestJS services
+Learning-focused, event-driven e-commerce platform. Polyrepo (13 repos, 1 deployable each):
+`storefront-ui`, `admin-app`, `ecom-contracts` (`@ecom/contracts`), `ecom-messaging`
+(`@ecom/messaging`: envelope + outbox store + relay + Kafka publisher), 9 NestJS services
 (auth :4010, catalog :4020, cart :4030, order :4040, cms :4050, analytics :4060,
 import :4070, notify :4080, search :4090), plus `ecom-infra` (compose/Nginx/VERSIONS.env).
 
-Learning-based, NOT traffic-scale. Dual transport via `IEventBus`:
-`TRANSPORT=kafka` locally (self-hosted KRaft) / `TRANSPORT=sqs` on AWS (SNS→SQS).
+Learning-based, NOT traffic-scale. Two transports, never both for one workload:
+**Kafka carries domain events in every environment** (self-hosted KRaft, no env switch,
+no SNS), and **SQS carries task jobs only**. Producers never publish from a handler:
+all five of them (auth, cart, catalog, order, cms) write an outbox in the same
+transaction as the domain change — `auth/cart/catalog/order.outbox` in Postgres,
+`cms_outbox` in Mongo — and a `@ecom/messaging` 0.2.0 relay publishes it. There is no
+second producer path left in any service.
 Postgres via **raw SQL + `pg`** (no ORM, no migrations in v1); Mongoose stays for Mongo.
 
 ## How to work

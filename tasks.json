@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-30",
+  "updatedAt": "2026-10-31",
   "summary": {
     "total": 128,
-    "done": 88,
+    "done": 93,
     "in_progress": 0,
-    "backlog": 40,
+    "backlog": 35,
     "byRepo": {
       "storefront-ui": {
         "total": 53,
@@ -27,33 +27,33 @@
       },
       "auth-svc": {
         "total": 4,
-        "done": 2,
+        "done": 3,
         "in_progress": 0,
-        "backlog": 2
+        "backlog": 1
       },
       "catalog-svc": {
         "total": 11,
-        "done": 7,
+        "done": 8,
         "in_progress": 0,
-        "backlog": 4
+        "backlog": 3
       },
       "cart-svc": {
         "total": 10,
-        "done": 7,
-        "in_progress": 0,
-        "backlog": 3
-      },
-      "order-svc": {
-        "total": 12,
-        "done": 10,
+        "done": 8,
         "in_progress": 0,
         "backlog": 2
       },
+      "order-svc": {
+        "total": 12,
+        "done": 11,
+        "in_progress": 0,
+        "backlog": 1
+      },
       "cms-svc": {
         "total": 7,
-        "done": 4,
+        "done": 5,
         "in_progress": 0,
-        "backlog": 3
+        "backlog": 2
       },
       "analytics-svc": {
         "total": 4,
@@ -94,7 +94,7 @@
     }
   },
   "plan": {
-    "currentPhase": "P0",
+    "currentPhase": "P2",
     "rule": "A service is complete only when its done tasks, its P0/P1 tasks, and the integration gate are green. \"Core complete\" is not \"feature complete\".",
     "phases": [
       {
@@ -252,9 +252,9 @@
       }
     ],
     "nextUp": [
-      "ord-011",
       "srch-002",
-      "cat-008"
+      "cat-008",
+      "ca-009"
     ],
     "completionGate": [
       "Every P0 task is done and verified.",
@@ -293,7 +293,7 @@
     },
     "implementation": {
       "library": "@nestjs/microservices Kafka transport for consumers plus a kafkajs producer for the outbox relay. Domain code never imports kafkajs directly.",
-      "outbox": "auth, cart, catalog, and order use a Postgres outbox written in the same transaction as the domain change. CMS uses a Mongo transaction plus cms_outbox and requires a replica set. Relays use FOR UPDATE SKIP LOCKED, mark published, retry with next_attempt_at, and dead-letter after five attempts.",
+      "outbox": "All five producers are on the shared @ecom/messaging 0.2.0 package, with two stores behind one port. Postgres (auth, cart, catalog, order): <schema>.outbox written in the same transaction as the domain change, claimed with FOR UPDATE SKIP LOCKED under a session advisory lock per schema, published sequentially keyed by aggregate id, marked published, retried with a locked_until backoff, parked at failed after five attempts. Mongo (cms): cms_outbox written in the same session transaction as the document write and the revision bump, claimed by repeated atomic findOneAndUpdate on status 'pending' with an expired lease, guarded by a lease document in cms_outbox_locks. Identifiers are quoted, so the reserved-word schema \"order\" is addressable. catalog's producer-side KafkaEventBus and cms's direct cms.events publish are deleted; cms media.tasks stays on the direct bus until cms-006 moves it to SQS.",
       "consumer": "@EventPattern handlers with @Payload and @Ctx KafkaContext, manual commits, and @ecom/contracts envelope validation before the handler runs.",
       "topics": "Auto-create is disabled. ecom-infra creates every topic and its .dlq twin with explicit partitions and retention.",
       "noDirectPublish": "Request handlers never publish directly. They write an outbox row; the relay publishes it."
@@ -494,9 +494,11 @@
     ]
   },
   "unpushed": {
-    "ecom-contracts": [
-      "1d92d1c",
-      "fcc8658"
+    "cms-svc": [
+      "c0257d8"
+    ],
+    "Documentation": [
+      "6a1e0ce"
     ],
     "ecom-infra": [
       "108913f",
@@ -505,18 +507,18 @@
       "53cb4b6",
       "6e8de13"
     ],
-    "Documentation": [
-      "b14a748",
-      "b6c4aa7",
-      "ff2e0e6",
-      "d0bb760"
+    "ecom-messaging": [
+      "ee88bfe"
     ],
-    "state-for-agents": [
-      "15d70d1"
+    "order-svc": [
+      "d76d10f"
+    ],
+    "search-svc": [
+      "020eaca"
     ]
   },
-  "unpushedVerifiedAt": "2026-10-30",
-  "unpushedNote": "Verified with git log @{u}..HEAD across every repo on 2026-10-30: catalog-svc 7, Documentation 5, search-svc 7, state-for-agents 28; auth-svc, cart-svc, cms-svc, ecom-contracts, order-svc are level. Lists are ordered oldest to newest. Nothing was pushed; push, tag, release, and publish stay with the human. This tracker commit is the carrier and joins on the next update.",
+  "unpushedVerifiedAt": "2026-10-31",
+  "unpushedNote": "Recomputed with git rev-parse @{u} and git rev-list --count @{u}..HEAD in every repo on 2026-10-31, after the wave-2 commits. Level with their upstreams: auth-svc (5f22a2a), cart-svc (a87bde4), catalog-svc (63dae67 + 7b081ea), ecom-contracts, and state-for-agents (its own tracker commit joins on the next update). Still local-only: cms-svc 1 (c0257d8), Documentation 1 (6a1e0ce), order-svc 1 (d76d10f), search-svc 1 (020eaca), ecom-infra 5 (no upstream configured at all) and ecom-messaging 1 (ee88bfe — the repo was git init-ed this pass and has no remote). The three wave commits that did reach their remotes went out at 2026-10-31 18:18 through an out-of-band step, not through this plan, which was commits-only; nothing else was pushed, tagged, released or published. Lists run oldest to newest. au-004, ca-008, cat-007, ord-011 and cms-005 are each committed now — the 2026-10-30 'delivered with NO commit' state is history, and every working tree is clean. This block lists commits only, never a dirty tree; recompute before any handoff.",
   "workflow": "Claim: create TASKS/in-progress/<id>-<slug>.md, set the entry status to in-progress, owner, and started. Build against the chained skills (router order). Close: move the log to TASKS/done/, fill verification and follow_ups, flip status to done and finished, update STATUS.md and summary in the same commit. Todo entries carry log:null until claimed; in-progress and done entries must have an existing log file. Commits: one commit per file (larger edits split per edit); stage with diff eyes-on; subject + reason body; local-only until the human says push. Unpushed lists only verified local commits; the carrier commit joins on the next update. Validation: id == filename, status == folder, log exists for in-progress/done, STATUS counts == summary.",
   "rules": "Claim: set claimedBy={agent,since,task} + stages.<stage> to in-progress (24h lease; other instances must not steal without comment). Finish: flip stage to done + update SERVICES.md + STATUS.md in same commit. Stage vocab locked: todo|in-progress|done (maps to todo/in-progress/done cells). Path truth: localRoots below are where agents edit TODAY; future split repos named in 'repo'. Never invent paths — resolve via SKILL-EXPLORE. motive is immutable (ADR change only); inProgress/next are mutable. Transport truth: Kafka is domain events only, SQS is task jobs only; each repo messaging block and the top-level messaging catalog are authoritative.",
   "repos": {
@@ -1880,6 +1882,63 @@
         ]
       }
     },
+    "ecom-messaging": {
+      "motive": "Shared producer infrastructure (@ecom/messaging 0.2.0): canonical envelope builder, one store port with two implementations (Postgres and Mongo), one lease-based relay, Kafka publisher, and Nest dynamic-module factories (createOutboxModule / createMongoOutboxModule). Relay logic is never duplicated per service.",
+      "localRoot": "ecom-messaging/",
+      "repo": "ecom-messaging",
+      "port": null,
+      "ownerDocs": [
+        "Documentation/8.Versioning.md §10",
+        "Documentation/1.Architecture.md §6.5",
+        "Documentation/3.Database-Schema.md §2.3/§3.3",
+        "Documentation/9.Testing.md §4.4"
+      ],
+      "stages": {
+        "spec": "done",
+        "build": "done",
+        "test": "done",
+        "verify": "done"
+      },
+      "inProgress": null,
+      "next": [
+        "an outbox retention/archival helper (three Postgres tables and one collection now grow forever)",
+        "a conformance test that boots PostgresOutboxStore and MongoOutboxStore against the same assertions",
+        "decide whether the Mongo store belongs in this package or a sibling one before 1.0"
+      ],
+      "blockedBy": [],
+      "skills": [
+        "SKILL-NESTJS",
+        "SKILL-POSTGRES",
+        "SKILL-INTERFACES",
+        "SKILL-FUNCTIONS"
+      ],
+      "producesConsumes": {
+        "produces": [],
+        "consumes": [],
+        "taskQueues": []
+      },
+      "claimedBy": null,
+      "note": "Created by au-004/ca-008 and tracked through those two tasks, so its tasks array is empty and it adds no rows to summary.byRepo on purpose. 0.2.0 (pre-1.0, breaking allowed): OutboxStorePort<Ctx = Queryable>, PostgresOutboxStore (now quoting \"schema\".\"table\", which is what made order.outbox addressable), MongoOutboxStore (atomic per-document claim, lease-document relay lock), shared OutboxRelay, createOutboxModule + createMongoOutboxModule, and an always-registered OutboxInitializer that creates indexes even when the relay is off. ESM with a framework-free '.' entry and a './nest' factory; peer @ecom/contracts >=1.8.0 <2, with kafkajs and @nestjs/common optional. Distributed as a committed tarball pinned with file:, like ecom-contracts. 39 unit tests; needs no database and no broker. All five producers (auth, cart, catalog, order, cms) are repinned to 0.2.0 and share one package version.",
+      "tasks": [],
+      "messaging": {
+        "role": "producer-infrastructure",
+        "publishes": [],
+        "consumes": [],
+        "taskQueues": [],
+        "consumerGroup": null,
+        "doesNotUseKafka": [
+          "Owns the kafkajs producer used by the relays, but declares no topics of its own."
+        ],
+        "implementation": [
+          "OutboxStorePort<Ctx = Queryable> with write, claimBatch, markPublished, markFailed, tryAcquireRelayLock, initialize",
+          "PostgresOutboxStore: quoted identifiers, FOR UPDATE SKIP LOCKED claim, per-schema advisory lock",
+          "MongoOutboxStore: per-document findOneAndUpdate claim, _locks lease document, index creation on initialize",
+          "relay with lease, backoff, and sequential publish",
+          "Kafka publisher that rethrows",
+          "Nest createOutboxModule and createMongoOutboxModule factories + OutboxInitializer"
+        ]
+      }
+    },
     "auth-svc": {
       "motive": "Identity: register/login/logout, JWT+refresh rotation, RBAC (customer vs admin), profile/addresses; emits user.registered.",
       "localRoot": "auth-svc",
@@ -1896,7 +1955,6 @@
       },
       "inProgress": null,
       "next": [
-        "au-004 user.registered outbox producer",
         "au-005 internal email lookup for notify"
       ],
       "blockedBy": [],
@@ -1916,7 +1974,7 @@
         "taskQueues": []
       },
       "claimedBy": null,
-      "note": "Core auth complete and verified: 10 slices, JWT issuer/audience, shared error envelope; 29 unit + 37 e2e green. Pending for platform completion: user.registered is declared but not published. Add auth.outbox + relay and the internal email lookup for notify. No Kafka consumer; no SQS tasks.",
+      "note": "Core auth complete and verified: 10 slices, JWT issuer/audience, shared error envelope. au-004 adds auth.outbox (migration 003) written inside the registration transaction and a relay from the shared @ecom/messaging package, so user.registered is now really produced, keyed by userId, with no email in the payload. Green: 29 unit + 45 e2e (8-table schema test, outbox suite) plus a gated live Kafka spec (RUN_KAFKA_E2E=1). Pending for platform completion: au-005 internal email lookup for notify. No Kafka consumer; no SQS tasks.",
       "tasks": [
         {
           "id": "au-002",
@@ -1957,10 +2015,10 @@
         {
           "id": "au-004",
           "title": "auth-svc: publish user.registered through a transactional outbox",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-30",
+          "finished": "2026-10-30",
           "phase": "P2",
           "priority": "P0",
           "kind": "feature",
@@ -1969,10 +2027,13 @@
             "ec-001",
             "ec-002"
           ],
-          "log": null,
+          "log": "TASKS/done/au-004-auth-outbox-producer.md",
           "key_decisions": [
             "Write auth.outbox in the same Postgres transaction as the user row. Reason: a registered user must never exist without its event. Rejected: publish after commit, which loses the event on a crash.",
-            "Put userId, not email, in the payload. Reason: PII minimization; notify resolves email through an internal lookup. Rejected: embed email in every event, which spreads PII across logs and topics."
+            "Put userId, not email, in the payload. Reason: PII minimization; notify resolves email through an internal lookup. Rejected: embed email in every event, which spreads PII across logs and topics.",
+            "Share one @ecom/messaging package instead of a per-service relay copy. Reason: one fix point for the claim SQL, the lease, and the envelope. Rejected: copy order-svc's outbox into auth and cart, which would make ord-011 a third copy.",
+            "Validate the envelope and the payload inside the write transaction (fail closed). Reason: a drifted payload aborts the business write loudly instead of parking a row that can never be published.",
+            "Claim with FOR UPDATE SKIP LOCKED plus one session advisory lock per schema. Reason: SKIP LOCKED stops two workers taking one row; the advisory lock keeps a single publisher so per-aggregate order survives a multi-replica deployment."
           ],
           "acceptance": [
             "auth.outbox table, repository, and relay exist.",
@@ -1980,8 +2041,13 @@
             "The relay publishes a canonical envelope keyed by userId.",
             "Retry and DLQ behavior is tested; auth has no Kafka consumer."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "ord-011 makes order-svc the third @ecom/messaging adopter and cuts the package 1.0.0",
+            "outbox retention/archival is unplanned: rows accumulate for the life of the database while the topic keeps 7 days",
+            "alert on failed-row count, oldest pending age, and a relay lock held too long; no metrics endpoint exists yet",
+            "notification of a new user still needs au-005 (internal email lookup) because the payload carries no email"
+          ],
           "messaging": {
             "publishes": [
               {
@@ -2071,7 +2137,6 @@
       },
       "inProgress": null,
       "next": [
-        "cat-007 product/category outbox producer",
         "cat-008 product.imported consumer",
         "cat-009 order.created consumer",
         "cat-010 order.status.updated consumer"
@@ -2221,10 +2286,10 @@
         {
           "id": "cat-007",
           "title": "catalog-svc: publish product.updated and category.updated through an outbox",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-31",
+          "finished": "2026-10-31",
           "phase": "P2",
           "priority": "P0",
           "kind": "feature",
@@ -2233,10 +2298,15 @@
             "ec-001",
             "ec-002"
           ],
-          "log": null,
+          "log": "TASKS/done/cat-007-catalog-outbox.md",
           "key_decisions": [
             "Write catalog.outbox in the same transaction as product and category writes. Reason: the current producer swallows failures and can assign a producer after a failed connect. Rejected: retry inside the admin request, which couples admin latency to Kafka.",
-            "Keep one producer path for both events. Reason: one relay, one retry policy, one DLQ policy. Rejected: separate ad-hoc producers per service method."
+            "Give the mutating repository methods an optional Queryable client and run each mutation through withTransaction. Reason: catalog had no transaction at all (19 methods grabbed their own pool client), so there was nothing for the outbox write to join. Rejected: a transaction per request, which holds a connection across mapping for no benefit.",
+            "Assemble the payload inside CatalogOutbox, next to the store.write call that validates it. Reason: a drifted payload then aborts the mutation instead of parking a row that can never be published. Rejected: build the payload in the service.",
+            "Stamp occurredAt from the row's updated_at, not from wall clock. Reason: a replay or a late publish must reproduce the original event. Rejected: publish time.",
+            "Delete the producer-side event bus (IEventBus, KafkaEventBus, InMemoryEventBus, EventsService) and keep the Kafka consumer path. Reason: after this change nothing publishes through it, and a second unpersisted publish path is the drift the task removes. Rejected: keep it for later.",
+            "Emit product.updated from variant, option, image and discount mutations too, without changing the payload schema. Reason: they all make a cached product card stale and the payload already carries images; adding variants/discounts is a contracts release plus a search-svc mapper change. Rejected: a 1.9.0 contract bump inside this task.",
+            "Scope every e2e drain to the aggregate under test. Reason: all suites share one database, so an unscoped drain publishes another suite's rows. Rejected: a per-suite schema."
           ],
           "acceptance": [
             "Product and category mutations write outbox rows in the same transaction.",
@@ -2244,8 +2314,13 @@
             "The relay publishes canonical product.updated and category.updated events.",
             "Tests cover relay retry and no event on rollback."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "catalog.outbox has no retention sweep and no metrics endpoint (failed count, oldest pending age)",
+            "the aggregate_type CHECK means a third aggregate (for example brand.updated) needs a migration, not just code",
+            "cat-010 (order.status.updated consumer) and cat-008 (product.imported) are still todo; this task changed neither",
+            "delivered with no commit: the work is uncommitted in catalog-svc"
+          ],
           "messaging": {
             "publishes": [
               {
@@ -2254,7 +2329,7 @@
                 "key": "productId",
                 "version": 1,
                 "dlq": "product.updated.dlq",
-                "implementation": "Postgres catalog.outbox + relay; same transaction as the product write."
+                "implementation": "Postgres catalog.outbox + @ecom/messaging 0.2.0 relay; same transaction as the product, variant, option, image, discount or badge write."
               },
               {
                 "event": "category.updated",
@@ -2262,7 +2337,7 @@
                 "key": "categoryId",
                 "version": 1,
                 "dlq": "category.updated.dlq",
-                "implementation": "Postgres catalog.outbox + relay; same transaction as the category write."
+                "implementation": "Postgres catalog.outbox + @ecom/messaging 0.2.0 relay; same transaction as the category write."
               }
             ],
             "consumes": [],
@@ -2515,7 +2590,7 @@
       },
       "inProgress": null,
       "next": [
-        "ca-008 cart-svc: publish cart.updated through a transactional outbox"
+        "ca-009 cart-svc: consume order.created and convert the cart idempotently"
       ],
       "blockedBy": [],
       "skills": [
@@ -2536,6 +2611,7 @@
         "taskQueues": []
       },
       "claimedBy": null,
+      "note": "Cart complete through ca-008: NoopEventBus is deleted, cart.outbox (migration 003) is written inside every mutating transaction, and the shared @ecom/messaging relay publishes cart.updated keyed by cartId. convertActiveCart is now transactional so the converted status and its item snapshot commit together. Green: 91 unit + 97 e2e (7-table schema test, 8-case outbox suite, five rewired suites) plus a gated live Kafka spec (RUN_KAFKA_E2E=1), and the default run leaves the live spec skipped. Pending: ca-009 consumes order.created and removes the internal convert route. No SQS tasks.",
       "tasks": [
         {
           "id": "ca-001",
@@ -2714,10 +2790,10 @@
         {
           "id": "ca-008",
           "title": "cart-svc: publish cart.updated through a transactional outbox",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-30",
+          "finished": "2026-10-30",
           "phase": "P2",
           "priority": "P0",
           "kind": "feature",
@@ -2726,10 +2802,13 @@
             "ec-001",
             "ec-002"
           ],
-          "log": null,
+          "log": "TASKS/done/ca-008-cart-outbox-producer.md",
           "key_decisions": [
             "Add cart.outbox and write it in the same transaction as the cart mutation. Reason: exactly one event per committed mutation, with no lost or phantom events. Rejected: NoopEventBus and fire-and-forget publishing, which currently drops every event.",
-            "Key by cartId. Reason: preserves per-cart order across guest and user identities. Rejected: key only by userId/sessionId, which changes during merge."
+            "Key by cartId. Reason: preserves per-cart order across guest and user identities. Rejected: key only by userId/sessionId, which changes during merge.",
+            "Read the item snapshot with the transaction client, not the pool. Reason: the published payload must describe the committed state; a post-commit read lets a concurrent mutation leak into an older event.",
+            "Wrap convertActiveCart in a transaction. Reason: the conversion is the only path that publishes status=converted with items, and a bare UPDATE cannot hold the snapshot it reports.",
+            "Share the @ecom/messaging relay with auth rather than keeping a cart-local service. Reason: identical lease, retry, and lock semantics for every producer. Rejected: keep the order-svc-shaped OutboxService per service."
           ],
           "acceptance": [
             "NoopEventBus is deleted from production wiring.",
@@ -2737,8 +2816,14 @@
             "The relay publishes cart.updated with a canonical envelope.",
             "Tests cover relay retry and one-event-per-mutation."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "ca-009 deletes POST /cart/internal/carts/:userId/convert and its spec once the order.created consumer is green",
+            "ord-011 makes order-svc the third @ecom/messaging adopter and cuts the package 1.0.0",
+            "outbox retention/archival is unplanned; cart.outbox grows one row per mutation",
+            "the payload carries every cart item, so a very large cart produces a large record against the 1MB Kafka default",
+            "alert on failed-row count and oldest pending age; no metrics endpoint exists yet"
+          ],
           "messaging": {
             "publishes": [
               {
@@ -2879,10 +2964,7 @@
       },
       "inProgress": null,
       "next": [
-        "ord-008 idempotency scoping",
-        "ord-009 payment/persistence saga",
-        "ord-010 real refunds + order.status.updated",
-        "ord-011 real outbox relay"
+        "ord-012 retire the cart conversion bridge (P3, blocked on ca-009 only)"
       ],
       "blockedBy": [],
       "skills": [
@@ -3177,10 +3259,10 @@
         {
           "id": "ord-011",
           "title": "order-svc: real Kafka outbox relay for order events",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-31",
+          "finished": "2026-10-31",
           "phase": "P2",
           "priority": "P0",
           "kind": "feature",
@@ -3190,9 +3272,14 @@
             "ec-002",
             "ord-007"
           ],
-          "log": null,
+          "log": "TASKS/done/ord-011-order-outbox-relay.md",
           "key_decisions": [
-            "Replace the log-only dispatcher with a Nest Kafka producer and add event_type, version, idempotency_key, and next_attempt_at to outbox. Reason: the current relay marks rows published after only logging. Rejected: publish directly in checkout, which breaks the transaction guarantee.",
+            "Replace the log-only dispatcher with @ecom/messaging 0.2.0 instead of a local producer. Reason: the relay, the lease and the retry ladder are the code that gets a bug; ord-011 makes order the third adopter. Rejected: a Nest Kafka producer wired straight into dispatchEvent.",
+            "Add envelope, locked_until and last_error to the existing order.outbox rather than creating a new table. Reason: already-published rows are the only record of what consumers received, so payload stays (now nullable) and pre-envelope pending rows are parked at failed. Rejected: DROP COLUMN payload.",
+            "Quote identifiers in the Postgres store (\"schema\".\"table\"). Reason: order is a reserved word, so the old unquoted interpolation could not address order.outbox at all; this is what makes the task reachable. Rejected: backticking the schema inside the service.",
+            "Write order.created in TX2 (confirmOrder, after capture), not in TX1 (the pending insert). Reason: announcing a pending order would tell catalog to commit a stock hold for an order the provider may decline. Rejected: emit on the pending insert plus a compensating event.",
+            "Pass a payload builder (OrderCreatedWrite) instead of a payload. Reason: orderNumber only exists after INSERT ... RETURNING, so the payload cannot be built before the insert. Rejected: build it in the service.",
+            "Delete outbox.service.ts, outbox.repository.ts and their spec. Reason: two write paths into one table, one of which never publishes, is the drift the task removes. Rejected: keep dispatchEvent as a no-op.",
             "Relay with FOR UPDATE SKIP LOCKED and a bounded batch. Reason: multiple instances must not publish the same row. Rejected: a single in-process timer without locking."
           ],
           "acceptance": [
@@ -3201,8 +3288,14 @@
             "Retries back off and dead-letter after five attempts.",
             "Tests cover broker failure and replay."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "order.outbox keeps payload (nullable) for historical rows; it can be dropped once every environment has only published/failed rows",
+            "order.outbox has no retention sweep and no metrics endpoint",
+            "ord-012 (retire the cart conversion bridge) now depends only on ca-009",
+            "the relay is disabled in every e2e run (DISABLE_OUTBOX_RELAY=true); only the gated live spec proves the broker path",
+            "delivered with no commit: the work is uncommitted in order-svc"
+          ],
           "messaging": {
             "publishes": [
               {
@@ -3211,7 +3304,7 @@
                 "key": "orderId",
                 "version": 1,
                 "dlq": "order.created.dlq",
-                "implementation": "Postgres order.outbox + relay; same transaction as the order insert."
+                "implementation": "Postgres order.outbox + @ecom/messaging 0.2.0 relay; written in TX2 after capture, same transaction as the order confirmation."
               },
               {
                 "event": "order.status.updated",
@@ -3219,7 +3312,7 @@
                 "key": "orderId",
                 "version": 1,
                 "dlq": "order.status.updated.dlq",
-                "implementation": "Postgres order.outbox + relay; same transaction as the status change."
+                "implementation": "Postgres order.outbox + @ecom/messaging 0.2.0 relay; same transaction as the status change or the refund ledger update."
               }
             ],
             "consumes": [],
@@ -3311,7 +3404,8 @@
       },
       "inProgress": null,
       "next": [
-        "cms-004 cms-svc: stream upload limits, magic-byte MIME, and storage directory validation"
+        "cms-006 move media resize from Kafka media.tasks to SQS media-resize-image",
+        "cms-007 (remaining CMS slices)"
       ],
       "blockedBy": [],
       "skills": [
@@ -3444,10 +3538,10 @@
         {
           "id": "cms-005",
           "title": "cms-svc: Mongo transaction + cms_outbox for cms.updated and blog.updated",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-31",
+          "finished": "2026-10-31",
           "phase": "P2",
           "priority": "P0",
           "kind": "feature",
@@ -3457,10 +3551,17 @@
             "ec-002",
             "inf-001"
           ],
-          "log": null,
+          "log": "TASKS/done/cms-005-cms-mongo-outbox.md",
           "key_decisions": [
-            "Write content and cms_outbox in one Mongo session transaction; publish cms.updated on cms.updated, not cms.events. Reason: the current direct publish can diverge from content and uses the wrong topic. Rejected: best-effort publish after save.",
-            "Require a replica set for CMS. Reason: Mongo transactions are unavailable on a standalone node. Rejected: skip transactions and accept lost events."
+            "Write content, the revision bump and cms_outbox in one Mongo session transaction; publish cms.updated on cms.updated, not cms.events. Reason: the current direct publish can diverge from content and the relay keys on event_type, so a cms.events row would be an unknown topic. Rejected: best-effort publish after save, or teaching the relay about transport aliases.",
+            "Add MongoOutboxStore behind the existing OutboxStorePort instead of a cms-local relay. Reason: one relay means one set of claim/lease/backoff semantics; a local copy duplicates exactly what the package exists to prevent. Rejected: a CMS-specific relay.",
+            "Generalise the port as OutboxStorePort<Ctx = Queryable> so Mongo can pass a session while the four Postgres call sites stay source-compatible. Reason: the seam's only type safety is the context type. Rejected: write(client: unknown).",
+            "Claim Mongo rows with repeated atomic findOneAndUpdate (one document per call, up to limit). Reason: that is the Mongo analogue of FOR UPDATE SKIP LOCKED; find + updateMany can double-claim between the two round trips. Rejected: a single updateMany.",
+            "Guard the Mongo relay with a lease document (findOneAndUpdate with upsert) instead of insertOne as a mutex. Reason: Mongo has no advisory locks, and a crashed relay must not hold the lock forever. Rejected: an insert-based lock.",
+            "Invalidate the Redis cache after the commit, never inside the transaction. Reason: Redis cannot join a Mongo transaction; invalidating first lets a reader re-cache the pre-commit state. Rejected: invalidate-then-commit.",
+            "Pass the session into RevisionService.bumpVersion. Reason: a document and a revision that can disagree is the same defect as a document and an event that can disagree, and the payload carries the version. Rejected: bump after commit and stamp the reported version.",
+            "Keep media.tasks on the direct CMS bus. Reason: it is not an EventTopic, so the relay would park it; cms-006 moves it to SQS. Rejected: a fake topic in the registry.",
+            "Create the cms_outbox indexes from store.initialize() at boot, not from a hand-applied migration. Reason: one definition of the indexes for every environment, including when the relay is disabled in tests. Rejected: a JS migration outside the package."
           ],
           "acceptance": [
             "CMS writes require a replica set and fail clearly without one.",
@@ -3468,8 +3569,14 @@
             "The relay publishes canonical envelopes to the correct topics.",
             "CMS has no Kafka consumer."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "cms_outbox has no retention sweep and no metrics endpoint; the collection grows for the life of the database while the topics keep 7 days",
+            "media.tasks is still produced on Kafka by publishResizeImageJob; cms-006 moves it to SQS",
+            "there is no cms.updated Kafka consumer by design (storefront invalidation is the /api/revalidate webhook), so the end-to-end proof is the broker, not a consumer",
+            "session.withTransaction retries mean every converted callback must stay idempotent; the current ones only append and bump",
+            "delivered with no commit: the work is uncommitted in cms-svc"
+          ],
           "messaging": {
             "publishes": [
               {
@@ -3478,7 +3585,7 @@
                 "key": "sectionKey or pageKey",
                 "version": 1,
                 "dlq": "cms.updated.dlq",
-                "implementation": "Mongo transaction + cms_outbox + relay; topic is cms.updated."
+                "implementation": "Mongo transaction + cms_outbox + @ecom/messaging 0.2.0 MongoOutboxStore relay; topic is cms.updated, aggregate is the page/section/blog key."
               },
               {
                 "event": "blog.updated",
@@ -3486,7 +3593,7 @@
                 "key": "blogId",
                 "version": 1,
                 "dlq": "blog.updated.dlq",
-                "implementation": "Mongo transaction + cms_outbox + relay; same transaction as the blog status change."
+                "implementation": "Mongo transaction + cms_outbox + @ecom/messaging 0.2.0 relay; same transaction as the blog status change."
               }
             ],
             "consumes": [],
