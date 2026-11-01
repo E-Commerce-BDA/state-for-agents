@@ -2,16 +2,16 @@
   "version": 2,
   "updatedAt": "2026-11-01",
   "summary": {
-    "total": 128,
-    "done": 99,
+    "total": 136,
+    "done": 100,
     "in_progress": 0,
-    "backlog": 29,
+    "backlog": 36,
     "byRepo": {
       "storefront-ui": {
-        "total": 53,
-        "done": 50,
+        "total": 61,
+        "done": 51,
         "in_progress": 0,
-        "backlog": 3
+        "backlog": 10
       },
       "admin-app": {
         "total": 1,
@@ -494,11 +494,58 @@
     ]
   },
   "unpushed": {
+    "storefront-ui": [
+      "71f04a5",
+      "5de7d95",
+      "268b5d9",
+      "8eb25d7",
+      "73f7fed",
+      "43c698b",
+      "554d97c",
+      "04942d4",
+      "144c75d",
+      "3f53323",
+      "13b1b07",
+      "22dfd8c",
+      "059d999",
+      "cfb2c94",
+      "ad89900",
+      "c395d03",
+      "60dd174",
+      "8b53286",
+      "eae687c",
+      "339257d",
+      "6a02b34"
+    ],
+    "ecom-contracts": [
+      "8b4020a",
+      "08e930c"
+    ],
+    "ecom-messaging": [
+      "ee88bfe"
+    ],
+    "catalog-svc": [
+      "9cd6948"
+    ],
     "cart-svc": [
-      "cb305e7"
+      "cb305e7",
+      "f707431"
+    ],
+    "order-svc": [
+      "880af5d",
+      "728e130"
+    ],
+    "search-svc": [
+      "84dea4a"
     ],
     "Documentation": [
-      "40348b9"
+      "40348b9",
+      "081c8d0",
+      "d853bee",
+      "220b549",
+      "e4ab605",
+      "0967c17",
+      "aaf6e8a"
     ],
     "ecom-infra": [
       "108913f",
@@ -506,17 +553,10 @@
       "77d18b5",
       "53cb4b6",
       "6e8de13"
-    ],
-    "ecom-messaging": [
-      "ee88bfe"
-    ],
-    "storefront-ui": [
-      "71f04a5",
-      "5de7d95"
     ]
   },
-  "unpushedVerifiedAt": "2026-10-31",
-  "unpushedNote": "Recomputed with git rev-parse @{u} and git rev-list --count @{u}..HEAD in every repo on 2026-10-31, after the seam wave (ca-010, sf-049, sf-050). Level with their upstreams: auth-svc (5f22a2a), catalog-svc (7b081ea), order-svc (d76d10f), cms-svc (c0257d8), search-svc (020eaca), ecom-contracts and state-for-agents (this tracker commit joins the list only after it exists, so it cannot appear here). Still local-only: cart-svc 1 (cb305e7 = ca-010), storefront-ui 2 (71f04a5 = sf-049, 5de7d95 = sf-050, upstream origin/staging), Documentation 1 (40348b9 = the docs for all three), ecom-infra 5 (no upstream configured at all) and ecom-messaging 1 (ee88bfe — the repo was git init-ed in the previous pass and has no remote). The wave-2 commits that were local-only last pass (c0257d8, 6a1e0ce, d76d10f, 020eaca) have since reached their remotes at 2026-10-31 18:18 through an out-of-band step, not through this plan, which remains commits-only; nothing else was pushed, tagged, released or published. Lists run oldest to newest. Every working tree is clean; this block lists commits only, never a dirty tree. Recompute before any handoff.",
+  "unpushedVerifiedAt": "2026-11-01",
+  "unpushedNote": "Recomputed with git rev-parse @{u} and git rev-list --count @{u}..HEAD in every local repo on 2026-11-01, after the consumer wave (contracts 1.9.0, messaging 0.3.0, srch-002/ca-009/cat-008) and the sf-051 commerce wave (storefront staging, money fix: contracts 1.10.0 + order-svc repin). ecom-infra entries are carried from the 2026-10-31 pass: its repo is not in this workspace's directory table, so it was not re-walked. Nothing was pushed, tagged, released or published.",
   "workflow": "Claim: create TASKS/in-progress/<id>-<slug>.md, set the entry status to in-progress, owner, and started. Build against the chained skills (router order). Close: move the log to TASKS/done/, fill verification and follow_ups, flip status to done and finished, update STATUS.md and summary in the same commit. Todo entries carry log:null until claimed; in-progress and done entries must have an existing log file. Commits: one commit per file (larger edits split per edit); stage with diff eyes-on; subject + reason body; local-only until the human says push. Unpushed lists only verified local commits; the carrier commit joins on the next update. Validation: id == filename, status == folder, log exists for in-progress/done, STATUS counts == summary.",
   "rules": "Claim: set claimedBy={agent,since,task} + stages.<stage> to in-progress (24h lease; other instances must not steal without comment). Finish: flip stage to done + update SERVICES.md + STATUS.md in same commit. Stage vocab locked: todo|in-progress|done (maps to todo/in-progress/done cells). Path truth: localRoots below are where agents edit TODAY; future split repos named in 'repo'. Never invent paths — resolve via SKILL-EXPLORE. motive is immutable (ADR change only); inProgress/next are mutable. Transport truth: Kafka is domain events only, SQS is task jobs only; each repo messaging block and the top-level messaging catalog are authoritative.",
   "repos": {
@@ -539,9 +579,10 @@
       },
       "inProgress": null,
       "next": [
-        "sf-051 commerce routes",
         "sf-052 /api/track beacon",
-        "sf-053 contracts repin"
+        "sf-053 contracts repin",
+        "sf-054 listing depth",
+        "sf-055 PDP depth"
       ],
       "blockedBy": [
         "ecom-contracts"
@@ -1434,10 +1475,10 @@
         {
           "id": "sf-051",
           "title": "storefront: commerce routes and components",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-01",
+          "finished": "2026-11-01",
           "phase": "P2",
           "priority": "P0",
           "kind": "feature",
@@ -1449,10 +1490,15 @@
             "ca-010",
             "ord-007"
           ],
-          "log": null,
+          "log": "TASKS/done/sf-051-commerce-routes-and-components.md",
           "key_decisions": [
             "Compose existing primitives into ProductCard, Gallery, HeroSection, and MiniCartDrawer; routes fetch service APIs server-side. Reason: AGENTS.md smart-to-pure-to-dumb gradient and SEO. Rejected: client-side fetches for catalog pages.",
-            "Build /products, /products/[slug], /cart, /checkout, and /account against real services. Reason: the current app has only auth and showcase routes. Rejected: keep the showcase as the storefront."
+            "Build /products, /products/[slug], /cart, /checkout, and /account against real services. Reason: the current app has only auth and showcase routes. Rejected: keep the showcase as the storefront.",
+            "Service registry (lib/services/urls.ts) + two transports (lib/http/server.ts, browser.ts), not per-client plumbing. Reason: five call sites, one URL story. Rejected: copy createCmsClient three more times; retries in the transport (silent GET retries hide latency and double-POSTs).",
+            "Client-rendered private routes (cart/checkout/account) with a pure-reducer cart store behind one provider; catalog fetched in RSC, never through the BFF. Reason: 5.Features.md 950 mandates private data is never cached; SEO needs catalog server-side. Rejected: RSC + cookies() everywhere; a catalog BFF hop nobody needs until load-more lands (sf-054).",
+            "sf_cid minted in the proxy with a BFF fallback, merged server-side inside login/register, rotated after a successful merge. Reason: a double add before the first response lands would orphan a cart; the browser must never merge (A4.6). Rejected: mint-on-first-write; keeping the converted id.",
+            "POST /api/checkout forwards the caller's x-idempotency-key; the client keeps one {key, bodyHash} pair per logical attempt. Reason: a server-minted key turns a network retry into a second order. Rejected: server-minted keys; client-side merge calls.",
+            "Local zod schemas with loose objects; status:'active' hard-coded in the catalog client; money is a plain number (the normalizer died with ADR 41). Reason: blind casts break silently and strict schemas break on any upstream addition; a caller-supplied status can leak drafts. Rejected: casts; strict schemas; a caller status param."
           ],
           "acceptance": [
             "All five routes render from real services.",
@@ -1460,8 +1506,14 @@
             "Checkout sends an idempotency key and handles 409/stock errors.",
             "No TODO stubs remain in the commerce path."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "sf-054..sf-061 registered in this commit carry every acceptance bullet deferred out of this wave (plan: Listing depth, PDP depth, Wishlist, Coupons, Cart/checkout depth, Account depth, CMS home, cache invalidation)",
+            "Order-svc 409 stock errors carry no item ids, so the checkout banner is generic + 'review cart'; per-line attribution needs a backend change (recorded in sf-058)",
+            "sf-053 repin still outstanding: storefront is pinned to contracts 1.7.0, so response schemas live locally instead of in @ecom/contracts",
+            "No catalog cache invalidation tags yet - time-based revalidate 60 only; tags arrive with sf-061",
+            "The home strip shows the 8 newest products; the curated Featured section needs the CMS hero/section wiring (sf-060)"
+          ]
         },
         {
           "id": "sf-052",
@@ -1522,6 +1574,218 @@
           ],
           "verified": false,
           "follow_ups": []
+        },
+        {
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P2",
+          "log": null,
+          "verified": false,
+          "id": "sf-054",
+          "title": "storefront: listing depth (filter rail, sort control, load-more, breadcrumb tree)",
+          "priority": "P1",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [
+            "sf-051"
+          ],
+          "key_decisions": [
+            "Filter/sort state lives in the URL and the listing fetches through a catalog BFF with a client cache. Reason: the RSC-only read from sf-051 cannot append pages without losing server render. Rejected: client-only listing state; re-fetching the full list per append."
+          ],
+          "acceptance": [
+            "A2.1 filter rail narrows the grid and the state survives reload (URL-encoded).",
+            "A2.2 sort control changes order server-side, never client-side reshuffle.",
+            "A2.3 load-more appends without replacing the grid or re-fetching seen pages.",
+            "A2.4 breadcrumb reflects the category tree and links stay inside /products."
+          ],
+          "follow_ups": []
+        },
+        {
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P2",
+          "log": null,
+          "verified": false,
+          "id": "sf-055",
+          "title": "storefront: PDP depth (variant URL history, photo-settings precedence, compare tray, related-by-brand)",
+          "priority": "P1",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [
+            "sf-051"
+          ],
+          "key_decisions": [
+            "Variant selection pushes history entries (routing.md routing.md s4) and photo settings resolve storefront-wide precedence in one lib/commerce model. Rejected: modal-only variant state that dies on back."
+          ],
+          "acceptance": [
+            "A2.7 + routing.md routing.md s4: variant changes are push-history aware and shareable by URL.",
+            "A3.1: photo-settings precedence resolves per product with the storefront default.",
+            "A3.7: compare tray surfaces on PDP with the cards it collects.",
+            "A3.9: related-by-brand renders alongside related-by-category."
+          ],
+          "follow_ups": []
+        },
+        {
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P2",
+          "log": null,
+          "verified": false,
+          "id": "sf-056",
+          "title": "storefront: wishlist surfaces (nav count, PDP toggle, account list, guest prompt)",
+          "priority": "P1",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [
+            "sf-051"
+          ],
+          "key_decisions": [
+            "Wishlist rides the cart-svc routes already live (ca wave), with the same guest-identity seam as the cart. Reason: cart-svc owns wishlist storage; a storefront-local list would fork the truth. Rejected: a separate wishlist service call path."
+          ],
+          "acceptance": [
+            "A3.6: wishlist toggle on PDP and grid cards with optimistic state and revert.",
+            "A6.5: the wishlist renders on /account and guests get a sign-in prompt with the pending product kept."
+          ],
+          "follow_ups": []
+        },
+        {
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P2",
+          "log": null,
+          "verified": false,
+          "id": "sf-057",
+          "title": "storefront: coupons on cart and checkout",
+          "priority": "P1",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [
+            "sf-051"
+          ],
+          "key_decisions": [
+            "Discount preview comes from the cart side, not only order-time validation. Reason: showing a code as accepted before checkout while the order recomputes it invites a 409 surprise. Rejected: validate-at-submit-only."
+          ],
+          "acceptance": [
+            "A4.5: coupon input on the cart applies, previews the discount line, and removes cleanly.",
+            "A5.3: the checkout summary carries the discount line the cart previewed."
+          ],
+          "follow_ups": []
+        },
+        {
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P2",
+          "log": null,
+          "verified": false,
+          "id": "sf-058",
+          "title": "storefront: cart/checkout depth (saved addresses, shipping method, per-line stock caps, batch-select, CheckoutSteps)",
+          "priority": "P1",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [
+            "sf-051",
+            "sf-057"
+          ],
+          "key_decisions": [
+            "Per-line stock caps come from the cart response; the 409 banner stays generic until order-svc returns item ids in the 409 payload. Reason: attributing a stock failure by parsing message text is guesswork. Rejected: parsing error strings; faking item attribution."
+          ],
+          "acceptance": [
+            "A4.2: quantity input caps at the line's stock ceiling.",
+            "A4.3: batch select (remove/move selected) works on the cart.",
+            "A4.4/A5.1/A5.2: saved-address picking, shipping method selection, and the step chrome render on checkout."
+          ],
+          "follow_ups": [
+            "Backend dependency: order-svc 409 payload needs item ids for per-line stock attribution"
+          ]
+        },
+        {
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P2",
+          "log": null,
+          "verified": false,
+          "id": "sf-059",
+          "title": "storefront: account depth (profile edit, address book, order detail, password change, reviews)",
+          "priority": "P1",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [
+            "sf-051"
+          ],
+          "key_decisions": [
+            "Account keeps the sf-051 fan-out BFF pattern with per-section degradation. Reason: one service being down must not blank the whole page. Rejected: one monolithic account fetch."
+          ],
+          "acceptance": [
+            "A6.1/A6.2: profile edit and address book write through the existing seams with toasts.",
+            "A6.4: order detail route renders one order with its timeline.",
+            "A6.6: password change flows via auth-svc.",
+            "A3.10: review writing is available from delivered orders."
+          ],
+          "follow_ups": []
+        },
+        {
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P2",
+          "log": null,
+          "verified": false,
+          "id": "sf-060",
+          "title": "storefront: CMS-driven home and section set",
+          "priority": "P2",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [
+            "sf-053"
+          ],
+          "key_decisions": [
+            "Home hero and sections move from DEFAULT_HERO/newest-8 to cms-svc section payloads after the contracts repin ships the hero/section schemas. Reason: the pinned 1.7.0 tarball carries no hero schema, so the static defaults stay until ec-001/sf-053 land. Rejected: hand-rolling a private hero schema that the repin then deletes."
+          ],
+          "acceptance": [
+            "Hero and section order come from cms-svc with per-section card overrides (A2.6).",
+            "Featured/Category/Brand/Blog sections render from CMS payloads."
+          ],
+          "follow_ups": []
+        },
+        {
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P2",
+          "log": null,
+          "verified": false,
+          "id": "sf-061",
+          "title": "storefront: catalog cache invalidation hook",
+          "priority": "P2",
+          "kind": "chore",
+          "transport": "http",
+          "dependsOn": [
+            "sf-051"
+          ],
+          "key_decisions": [
+            "catalog-svc calls POST /api/revalidate on product.updated/product.imported and the storefront extends the tag allowlist with catalog:* rather than adding a new endpoint. Reason: sf-050 built the secret-gated webhook vocabulary; invalidation is a tag addition, not a new arrow. Rejected: shorter revalidate windows as a staleness tax."
+          ],
+          "acceptance": [
+            "isAllowedTag accepts catalog:* tags.",
+            "A product update from the admin invalidates its PDP and listing caches within one propagation, not one revalidate window."
+          ],
+          "follow_ups": [
+            "Requires the catalog-svc caller (producer exists; the webhook call does not)"
+          ]
         }
       ],
       "messaging": {
@@ -2641,7 +2905,7 @@
         "taskQueues": []
       },
       "claimedBy": null,
-      "note": "Cart complete through ca-008: NoopEventBus is deleted, cart.outbox (migration 003) is written inside every mutating transaction, and the shared @ecom/messaging relay publishes cart.updated keyed by cartId. convertActiveCart is now transactional so the converted status and its item snapshot commit together. Green: 91 unit + 97 e2e (7-table schema test, 8-case outbox suite, five rewired suites) plus a gated live Kafka spec (RUN_KAFKA_E2E=1), and the default run leaves the live spec skipped. Pending: ca-009 consumes order.created and removes the internal convert route. No SQS tasks.",
+      "note": "Cart is 10/10, no backlog: 119 unit + 96 e2e green (2 skipped, both live Kafka specs gated on RUN_KAFKA_E2E) and 3 live cases against ecom-kafka. Delivery is real: cart.updated rides cart.outbox/relay (ca-008), add-to-cart prices from catalog-svc over HTTP and fails closed (ca-010), and conversion is event-driven (ca-009) - POST /cart/internal/carts/:userId/convert and InternalModule are deleted, the e2e suite asserts 404 with and without x-service-key, and the processed_events claim commits or rolls back with the conversion. Consumer group is cart-svc on the shared @ecom/messaging 0.3.0 transport. Known debt: order-svc's CartClient still calls the deleted route and logs a 404 per checkout until ord-012; no consumer-stats route (the counters exist, nothing serves them); no retention sweep for cart.outbox or cart.processed_events; CATALOG_UNAVAILABLE has no metric. No SQS tasks.",
       "tasks": [
         {
           "id": "ca-001",
@@ -2957,7 +3221,6 @@
           ]
         }
       ],
-      "note": "Cart is 10/10, no backlog: 119 unit + 96 e2e green (2 skipped, both live Kafka specs gated on RUN_KAFKA_E2E) and 3 live cases against ecom-kafka. Delivery is real: cart.updated rides cart.outbox/relay (ca-008), add-to-cart prices from catalog-svc over HTTP and fails closed (ca-010), and conversion is event-driven (ca-009) - POST /cart/internal/carts/:userId/convert and InternalModule are deleted, the e2e suite asserts 404 with and without x-service-key, and the processed_events claim commits or rolls back with the conversion. Consumer group is cart-svc on the shared @ecom/messaging 0.3.0 transport. Known debt: order-svc's CartClient still calls the deleted route and logs a 404 per checkout until ord-012; no consumer-stats route (the counters exist, nothing serves them); no retention sweep for cart.outbox or cart.processed_events; CATALOG_UNAVAILABLE has no metric. No SQS tasks.",
       "messaging": {
         "role": "producer+consumer",
         "publishes": [
