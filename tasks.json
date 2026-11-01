@@ -3,9 +3,9 @@
   "updatedAt": "2026-11-01",
   "summary": {
     "total": 138,
-    "done": 106,
+    "done": 107,
     "in_progress": 0,
-    "backlog": 32,
+    "backlog": 31,
     "byRepo": {
       "storefront-ui": {
         "total": 62,
@@ -33,9 +33,9 @@
       },
       "catalog-svc": {
         "total": 12,
-        "done": 11,
+        "done": 12,
         "in_progress": 0,
-        "backlog": 1
+        "backlog": 0
       },
       "cart-svc": {
         "total": 10,
@@ -2871,10 +2871,10 @@
         {
           "id": "cat-012",
           "title": "catalog-svc: restock after a post-commit refund",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "qoder",
+          "started": "2026-11-01",
+          "finished": "2026-11-01",
           "phase": "P3",
           "priority": "P2",
           "kind": "feature",
@@ -2883,7 +2883,7 @@
             "cat-010",
             "ord-010"
           ],
-          "log": null,
+          "log": "TASKS/done/cat-012-restock-after-post-commit-refund.md",
           "key_decisions": [
             "cat-010 deliberately does not release a committed reservation: the stock was sold and already decremented at commit. Reason: releasing it would inflate stock for an order that shipped. Rejected: treat committed as releasable inside cat-010, which would double-sell.",
             "A post-delivery refund needs its own movement reason and a status decision (reuse released, or add refunded). Reason: 'cancel' would misreport why the stock came back and hide refund volume in the movement ledger. Rejected: emit no movement at all and let the operator adjust by hand."
@@ -2894,8 +2894,10 @@
             "A duplicate refunded event is a no-op.",
             "order.status.updated release for a held reservation is unchanged."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "Restock is whole-hold: order-svc refunds the entire order, so every committed item returns together. A per-line (partial) refund would need a per-item restock and is out of scope here."
+          ]
         }
       ],
       "note": "11/12 done; backlog is cat-012 (restock after a post-commit refund). Verified: 157 unit (24 files) + 118 e2e (12 files passed, 2 skipped) green, plus 3 live Kafka cases behind RUN_KAFKA_E2E. Producers are on catalog.outbox/relay (cat-007), and both consumers share one @ecom/messaging strategy on one group: order.created commits the reservation (cat-009) and product.imported upserts product, category, brand, variants and images in one transaction (cat-008), writing onHand = max(0, imported - openReserved) plus one stock_movements row with reason 'import' and no outbox re-emit. Stock reserve/release is idempotent and persisted (cat-006); release on cancelled/failed/refunded is cat-010: the same group consumes order.status.updated, finds the reservation by order_id (order-svc names the planned order id while reserving) and releases a held hold in the same transaction as the processed_events claim. A committed hold is a logged anomaly, not a dead letter - its stock was sold, so a post-commit restock is cat-012. order.created tolerates a hold that a cancellation already released, because the two topics have no cross-topic ordering. Import needs db/008 (widens products_source_check to accept 'import') - there is no cat-008 table to look for. No SQS tasks. Fixture seed is dev/test-only: db/seed.mjs refuses without CATALOG_ALLOW_FIXTURE_SEED and bootstrap fails if the flag is on in production (cat-011).",
