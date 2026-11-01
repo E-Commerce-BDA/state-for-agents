@@ -1,13 +1,13 @@
 # SERVICES — status matrix (agents update cells as work lands)
 
 > Scope: live tracker. Stages: spec → build → test → verify (⬜ todo / 🚧 in-progress / ✅ done).
-> Status: Active | Date: 2026-10-31 | Machine mirror: `tasks.json`
+> Status: Active | Date: 2026-11-01 | Machine mirror: `tasks.json`
 
 | Repo | Port | Spec doc | spec | build | test | verify |
 |---|---|---|---|---|---|---|
 | storefront-ui | 3000 | `Documentation/design-system/storefront.md`, `pages/` | ✅ | 🚧 | 🚧 | ⬜ |
 | admin-app | 3001 | `Documentation/6.Admin-Panel.md` | 🚧 | ⬜ | ⬜ | ⬜ |
-| ecom-contracts | npm | `8.Versioning.md` | 🚧 | 🚧 | 🚧 | ⬜ |
+| ecom-contracts | npm | `8.Versioning.md` | ✅ | ✅ | ✅ | ⬜ |
 | ecom-messaging | npm | `8.Versioning.md` §10, `1.Architecture.md` §6.5 | ✅ | ✅ | ✅ | ✅ |
 | auth-svc | 4010 | `Documentation/services/auth.md` | ✅ | ✅ | ✅ | ✅ |
 | catalog-svc | 4020 | `Documentation/services/catalog.md` | 🚧 | ✅ | ✅ | ✅ |
@@ -24,9 +24,12 @@ Rule: flip a cell + update `tasks.json` + `STATUS.md` in the same commit. Link P
 
 ## Row notes
 
+- `ecom-contracts` — **1.9.0** `8b4020a` (`productVariantRefSchema` + `productImportedPayloadSchema.variants[]`, the field `cat-008` needed). 3/5 tasks, **117 tests in 5 files**, typecheck, build and `pnpm pack` green. `spec`/`build`/`test` are ✅ because the shipped surface is real; `verify` stays ⬜ until `ec-004` (2.0.0) and `ec-005` (release train + storefront repin).
 - `storefront-ui` — `sf-049` `71f04a5` (thin auth client, four BFF handlers owning `sf_at`/`sf_rt`, `proxy.ts` forwarding only `GET /api/auth/session`), `sf-050` `5de7d95` (`lib/cms/*` reads with tags + `revalidate: 300`, bounded stale nav fallback, `POST /api/revalidate`). 50/53 tasks, **63 test files / 475 tests**, `tsc` clean, `next build` clean. `build`/`test` stay 🚧 because `sf-051` (commerce routes) and `sf-052` (`/api/track`) are still open; `verify` is ⬜ until those land.
-- `cart-svc` — `ca-010` `cb305e7` (add-to-cart prices from catalog-svc over HTTP, fixture moved to test-only, fail closed). 9/10 tasks; **103 unit (15 files) + 99 e2e (12 files, 1 skipped)**. `verify` remains ✅ for the shipped slices even though `tasks.json#repos["cart-svc"].stages.verify` is `in-progress` — that cell tracks the whole repo, and `ca-009` is open.
-- `Documentation` — `40348b9` carries `ca-010`/`sf-049`/`sf-050` (6 files, +135/−8).
-- `ecom-messaging` — no task entries of its own; delivered through `au-004`/`ca-008`, re-opened by `cat-007`/`ord-011`/`cms-005`, reshaped for Mongo by `cms-005`. Now **0.2.0** with Postgres + Mongo stores, adopted by all five producers.
+- `cart-svc` — `ca-009` `f707431` (consumes `order.created` on the shared Nest transport, converts in the same transaction as its `processed_events` claim, **deletes** the `ca-007` HTTP bridge). **10/10 tasks, queue empty**; **119 unit (17 files) + 96 e2e (2 skipped, 12 files)**, lint 0 (81 files). `verify` flipped to ✅ this pass because the repo-stage condition it was waiting on (`ca-009`) is what closed it. Carried debt, not a task: order-svc's `CartClient` still posts to the deleted route and logs a `404` per checkout until `ord-012`, and there is no `/consumer-stats` route, so the `cart-svc` group is observable only from `kafka-consumer-groups`.
+- `catalog-svc` — `cat-008` `9cd6948` (`product.imported` upsert + the `onHand = max(0, imported − openReserved)` stock rule + four DLQ reasons + no outbox re-emit; `KafkaOrderConsumer` replaced by two `@EventPattern` routes on one strategy with `OrderCreatedHandler` untouched). 9/11 tasks, **137 unit (22 files) + 112 e2e (12 files)**, lint 0 (128 files), 3 live cases. `spec` stays 🚧 behind `cat-010` (`order.status.updated` → stock release) and `cat-011` (fixture-seed guard).
+- `search-svc` — `srch-002` `84dea4a` (four `@EventPattern` routes, group exactly `search-svc`, `KafkaEventConsumer` and its spec deleted, `KAFKA_CONSUMER_ENABLED` guard, lag/commit on `GET /search/internal/consumer-stats`). 2/3 tasks, **120 unit (18 files) + 92 e2e (1 skipped)**, lint 0 (72 files), 1 live case. `srch-003` (dual ingestion + DLQ replay) is the one open task and it opens no new surface, so the four cells stay ✅.
+- `Documentation` — `1.Architecture.md` §6.5, `3.Database-Schema.md`, `4.API-Design.md`, `8.Versioning.md` (1.9.0 row + strict-schema ordering + §10 pin mismatch), `9.Testing.md`, `10.Observability.md`, `services/{cart,catalog,search}.md` all moved this pass; `doc-004` is the one open entry.
+- `ecom-messaging` — no task entries of its own; delivered through `au-004`/`ca-008`, re-opened by `cat-007`/`ord-011`/`cms-005`, and extended by `srch-002`/`ca-009`/`cat-008`. Now **0.3.0**: the producer half (Postgres + Mongo stores, all five producers) plus the consumer half (`createKafkaConsumerStrategy`, `KafkaEventHandler`, `ProcessedEventsStore`, `KafkaDlqPublisher`, `KafkaLagSampler`, nine counters), **100 tests in 9 files**.
 
-Cell truth for the rows above was recomputed against `tasks.json#repos[repo].stages` on 2026-10-31. Where a ✅ column and an `in-progress` stage disagree it is because the column records the shipped slices and the stage records the repo — the note says which is which; do not "fix" one without the other.
+Cell truth for the rows above was recomputed against `tasks.json#repos[repo].stages` on 2026-11-01. Where a ✅ column and an `in-progress` stage disagree it is because the column records the shipped slices and the stage records the repo — the note says which is which; do not "fix" one without the other. `cart-svc` is the one row where both now say done.

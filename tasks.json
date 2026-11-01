@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-31",
+  "updatedAt": "2026-11-01",
   "summary": {
     "total": 128,
-    "done": 96,
+    "done": 99,
     "in_progress": 0,
-    "backlog": 32,
+    "backlog": 29,
     "byRepo": {
       "storefront-ui": {
         "total": 53,
@@ -33,15 +33,15 @@
       },
       "catalog-svc": {
         "total": 11,
-        "done": 8,
+        "done": 9,
         "in_progress": 0,
-        "backlog": 3
+        "backlog": 2
       },
       "cart-svc": {
         "total": 10,
-        "done": 9,
+        "done": 10,
         "in_progress": 0,
-        "backlog": 1
+        "backlog": 0
       },
       "order-svc": {
         "total": 12,
@@ -75,9 +75,9 @@
       },
       "search-svc": {
         "total": 3,
-        "done": 1,
+        "done": 2,
         "in_progress": 0,
-        "backlog": 2
+        "backlog": 1
       },
       "ecom-infra": {
         "total": 7,
@@ -94,7 +94,7 @@
     }
   },
   "plan": {
-    "currentPhase": "P2",
+    "currentPhase": "P3",
     "rule": "A service is complete only when its done tasks, its P0/P1 tasks, and the integration gate are green. \"Core complete\" is not \"feature complete\".",
     "phases": [
       {
@@ -254,7 +254,7 @@
     "nextUp": [
       "sf-051",
       "cat-011",
-      "srch-002"
+      "ord-012"
     ],
     "completionGate": [
       "Every P0 task is done and verified.",
@@ -294,7 +294,7 @@
     "implementation": {
       "library": "@nestjs/microservices Kafka transport for consumers plus a kafkajs producer for the outbox relay. Domain code never imports kafkajs directly.",
       "outbox": "All five producers are on the shared @ecom/messaging 0.2.0 package, with two stores behind one port. Postgres (auth, cart, catalog, order): <schema>.outbox written in the same transaction as the domain change, claimed with FOR UPDATE SKIP LOCKED under a session advisory lock per schema, published sequentially keyed by aggregate id, marked published, retried with a locked_until backoff, parked at failed after five attempts. Mongo (cms): cms_outbox written in the same session transaction as the document write and the revision bump, claimed by repeated atomic findOneAndUpdate on status 'pending' with an expired lease, guarded by a lease document in cms_outbox_locks. Identifiers are quoted, so the reserved-word schema \"order\" is addressable. catalog's producer-side KafkaEventBus and cms's direct cms.events publish are deleted; cms media.tasks stays on the direct bus until cms-006 moves it to SQS.",
-      "consumer": "@EventPattern handlers with @Payload and @Ctx KafkaContext, manual commits, and @ecom/contracts envelope validation before the handler runs.",
+      "consumer": "@EventPattern handlers with @Payload and @Ctx KafkaContext on one strategy per service, over the shared @ecom/messaging 0.3.0 consumer surface: createKafkaConsumerStrategy (postfixId ''), KafkaEventHandler (parse, retry ladder, dead letter, counter, manual commit in that order), ProcessedEventsStore, KafkaDlqPublisher, KafkaLagSampler. A service contributes only its routes and its handler; the protocol lives in the package. @ecom/contracts envelope validation runs before the side effect, and a failed DLQ write throws KafkaConsumerStalledError instead of committing past a lost record.",
       "topics": "Auto-create is disabled. ecom-infra creates every topic and its .dlq twin with explicit partitions and retention.",
       "noDirectPublish": "Request handlers never publish directly. They write an outbox row; the relay publishes it."
     },
@@ -1643,7 +1643,8 @@
       },
       "inProgress": null,
       "next": [
-        "ec-003 Contracts: SQS job schemas and queue/DLQ constants"
+        "ec-004 Contracts 2.0.0: drop the legacy envelope fields",
+        "ec-005 Release tag train + storefront repin"
       ],
       "blockedBy": [],
       "skills": [
@@ -1657,7 +1658,7 @@
         "taskQueues": []
       },
       "claimedBy": "agent",
-      "note": "Package 1.4.0 adds the six missing payload schemas and the topic registry (11 topics with payload validation and DLQ names). Consumers still pin 1.0.0/1.1.0/1.2.0; auth/cart/order/import do not import contracts. Pending: SQS job schemas (ec-003), 2.0.0 cutover (ec-004), release tags (ec-005). No runtime Kafka or SQS.",
+      "note": "Package 1.9.0 (2026-11-01) adds productVariantRefSchema and productImportedPayloadSchema.variants[] - the field cat-008 needed to carry variant price/stock/image on an import. 1.8.0 added the SQS job schemas and the queue registry; 1.7.0 the product-card and variant contracts; 1.4.0 the event payload schemas and the topic registry. Consumers: catalog-svc and search-svc (vendored in-repo) pin 1.9.0, which the plan ordered deliberately - the payload schema is .strict(), so a producer emitting variants[] makes every consumer below 1.9.0 fail parseEventPayload and dead-letter, therefore publish 1.9.0 -> repin the consumers -> only then emit the new field. cart-svc, auth-svc, cms-svc, order-svc and ecom-infra stay on 1.8.0 (they read no product.* payload) and frontend/storefront stays on 1.7.0 (ec-005 moves the stragglers in one train); ecom-messaging takes 1.9.0 as a devDep. productUpdatedPayloadSchema deliberately has no variants[] - the asymmetry is recorded in Documentation/8.Versioning.md. 117 unit tests (5 files). Pending: 2.0.0 cutover (ec-004) and the release tag train (ec-005). No runtime Kafka or SQS.",
       "tasks": [
         {
           "id": "ec-001",
@@ -1896,7 +1897,7 @@
       }
     },
     "ecom-messaging": {
-      "motive": "Shared producer infrastructure (@ecom/messaging 0.2.0): canonical envelope builder, one store port with two implementations (Postgres and Mongo), one lease-based relay, Kafka publisher, and Nest dynamic-module factories (createOutboxModule / createMongoOutboxModule). Relay logic is never duplicated per service.",
+      "motive": "Shared producer and consumer infrastructure (@ecom/messaging 0.3.0): canonical envelope builder, one store port with two implementations (Postgres and Mongo), one lease-based relay, Kafka publisher, Nest dynamic-module factories (createOutboxModule / createMongoOutboxModule), and the consumer surface (KafkaEventHandler, createKafkaConsumerStrategy, ProcessedEventsStore, KafkaDlqPublisher, KafkaLagSampler). Neither relay logic nor the consume protocol is duplicated per service.",
       "localRoot": "ecom-messaging/",
       "repo": "ecom-messaging",
       "port": null,
@@ -1931,16 +1932,16 @@
         "taskQueues": []
       },
       "claimedBy": null,
-      "note": "Created by au-004/ca-008 and tracked through those two tasks, so its tasks array is empty and it adds no rows to summary.byRepo on purpose. 0.2.0 (pre-1.0, breaking allowed): OutboxStorePort<Ctx = Queryable>, PostgresOutboxStore (now quoting \"schema\".\"table\", which is what made order.outbox addressable), MongoOutboxStore (atomic per-document claim, lease-document relay lock), shared OutboxRelay, createOutboxModule + createMongoOutboxModule, and an always-registered OutboxInitializer that creates indexes even when the relay is off. ESM with a framework-free '.' entry and a './nest' factory; peer @ecom/contracts >=1.8.0 <2, with kafkajs and @nestjs/common optional. Distributed as a committed tarball pinned with file:, like ecom-contracts. 39 unit tests; needs no database and no broker. All five producers (auth, cart, catalog, order, cms) are repinned to 0.2.0 and share one package version.",
+      "note": "Created by au-004/ca-008 and tracked through those two tasks, so its tasks array is empty and it adds no rows to summary.byRepo on purpose. 0.2.0 (pre-1.0, breaking allowed): OutboxStorePort<Ctx = Queryable>, PostgresOutboxStore (now quoting \"schema\".\"table\", which is what made order.outbox addressable), MongoOutboxStore (atomic per-document claim, lease-document relay lock), shared OutboxRelay, createOutboxModule + createMongoOutboxModule, and an always-registered OutboxInitializer that creates indexes even when the relay is off. ESM with a framework-free '.' entry and a './nest' factory; peer @ecom/contracts >=1.8.0 <2, with kafkajs and @nestjs/common optional. Distributed as a committed tarball pinned with file:, like ecom-contracts. 39 unit tests; needs no database and no broker. All five producers (auth, cart, catalog, order, cms) are repinned to 0.2.0 and share one package version. 0.3.0 (additive, 2026-11-01, srch-002/ca-009/cat-008): the consumer surface. KafkaEventHandler.run(ctx, topic, raw, handle) is the only place the protocol is written down, in the order side effect -> counter -> offset: JSON.parse failure -> DLQ invalid-json with rawValue and commit; handle() returns applied/duplicate/ignored/invalid; invalid -> DLQ before the counter and before the commit; a throw -> 1/2/4/8/16s ladder then DLQ transient-exhausted, committing only after the DLQ ack; an optional translateError makes service-specific terminal errors dead-letter immediately. run() never throws except KafkaConsumerStalledError when the DLQ write itself failed, which stops the loop on purpose. Also ProcessedEventsStore (claim = INSERT ... ON CONFLICT DO NOTHING RETURNING under the caller's transaction), KafkaDlqPublisher (<topic>.dlq via the registry with a suffix fallback), KafkaLagSampler (fetchTopicOffsets minus fetchOffsets, -1 counted as never-committed), nine counters, and createKafkaConsumerStrategy (postfixId '', autoCommit false, string deserializer). Peer floor rose to @ecom/contracts >=1.9.0 <2 and @nestjs/microservices ^12.0.1 became an optional peer; cart-svc stays on contracts 1.8.0 deliberately and is the one known pin mismatch. Consumers on 0.3.0: cart-svc, catalog-svc, search-svc (vendored). Producers stay on 0.2.0 (auth, cms, order) — re-pinning a producer buys nothing until 1.0.0. 100 unit tests (9 files). 0.3.0 adds the consumer surface's own suite: kafka-event-handler (every step of the protocol, including DLQ-failure ordering), processed-events.store (claim/duplicate/rollback), dlq.publisher (registry names plus the fallback), lag.sampler (the -1 case and multi-partition), kafka-consumer.strategy (postfixId and autoCommit), consumer-metrics.",
       "tasks": [],
       "messaging": {
-        "role": "producer-infrastructure",
+        "role": "shared-infrastructure",
         "publishes": [],
         "consumes": [],
         "taskQueues": [],
         "consumerGroup": null,
         "doesNotUseKafka": [
-          "Owns the kafkajs producer used by the relays, but declares no topics of its own."
+          "Owns the kafkajs producer used by the relays and the kafkajs client behind the consumer surface, but declares no topics and joins no group of its own."
         ],
         "implementation": [
           "OutboxStorePort<Ctx = Queryable> with write, claimBatch, markPublished, markFailed, tryAcquireRelayLock, initialize",
@@ -1948,7 +1949,8 @@
           "MongoOutboxStore: per-document findOneAndUpdate claim, _locks lease document, index creation on initialize",
           "relay with lease, backoff, and sequential publish",
           "Kafka publisher that rethrows",
-          "Nest createOutboxModule and createMongoOutboxModule factories + OutboxInitializer"
+          "Nest createOutboxModule and createMongoOutboxModule factories + OutboxInitializer",
+          "consumer surface (0.3.0): ProcessedEventsStore, KafkaDlqPublisher, KafkaLagSampler, consumer metrics, KafkaEventHandler, createKafkaConsumerStrategy"
         ]
       }
     },
@@ -2150,9 +2152,8 @@
       },
       "inProgress": null,
       "next": [
-        "cat-008 product.imported consumer",
-        "cat-009 order.created consumer",
-        "cat-010 order.status.updated consumer"
+        "cat-010 order.status.updated consumer (release stock)",
+        "cat-011 fixture seed guard"
       ],
       "blockedBy": [],
       "skills": [
@@ -2361,10 +2362,10 @@
         {
           "id": "cat-008",
           "title": "catalog-svc: consume product.imported and upsert the catalog",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "qoder",
+          "started": "2026-11-01",
+          "finished": "2026-11-01",
           "phase": "P3",
           "priority": "P0",
           "kind": "feature",
@@ -2373,10 +2374,15 @@
             "ec-001",
             "ec-002"
           ],
-          "log": null,
+          "log": "TASKS/done/cat-008-product-imported-consumer.md",
           "key_decisions": [
             "Upsert by productId/SKU and persist the processed event id. Reason: import is the real data path and must be idempotent. Rejected: import-svc writes catalog tables directly, which violates service ownership.",
-            "Validate the payload before touching the database. Reason: invalid known payloads should go to the DLQ, not partially mutate the catalog. Rejected: best-effort field mapping."
+            "Validate the payload before touching the database. Reason: invalid known payloads should go to the DLQ, not partially mutate the catalog. Rejected: best-effort field mapping.",
+            "One transaction per event: product, variants, images and stock movements commit or roll back with the processed_events claim. Reason: a partially applied import is an unpriced product nobody can buy.",
+            "onHand = max(0, imported - openReserved), plus one catalog.stock_movements row with reason 'import'. Reason: products.stock is live on-hand already net of holds, while a feed reports physical stock. Rejected: write the raw figure and let the sweeper correct it.",
+            "No outbox row on import (D2). Reason: search-svc already subscribes to product.imported, so re-emitting per row turns a 10k-row import into 10k extra events. Documented so nobody later 'fixes' the missing emit.",
+            "Migration 008 widens products_source_check to accept 'import'; an update never rewrites source, external_id, photo_settings, card_settings, tags or attributes. Reason: an import states what a product is, not how it looks.",
+            "The order.created consumer moves onto the same Nest strategy in the same commit (one group, two @EventPatterns); OrderCreatedHandler is untouched."
           ],
           "acceptance": [
             "Creates and updates products, variants, images, category, and brand references.",
@@ -2384,8 +2390,13 @@
             "Invalid payload goes to product.imported.dlq; unknown types are ignored with a metric.",
             "Fixture seed remains dev/test-only."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "order.status.updated (release stock on cancel/refund) is cat-010: one more @EventPattern on the same controller, never a second strategy.",
+            "An import cannot express a discount window; effectivePrice in the payload is ignored and catalog derives it from catalog.product_discounts.",
+            "Variants are never deleted for being absent - absence is ambiguous and a deleted variant cascades its stock movements away. Withdrawal is a human decision.",
+            "cat-007's reservation-missing DLQ reason is gone: a hold whose transaction has not committed yet now retries and exhausts as transient-exhausted instead."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [
@@ -2395,6 +2406,13 @@
                 "group": "catalog-svc",
                 "dlq": "product.imported.dlq",
                 "implementation": "Nest Kafka consumer, manual commit, processed_events in the same transaction as the upsert."
+              },
+              {
+                "event": "order.created",
+                "topic": "order.created",
+                "group": "catalog-svc",
+                "dlq": "order.created.dlq",
+                "implementation": "Same Nest Kafka consumer strategy as product.imported (one group, two @EventPatterns); OrderCreatedHandler unchanged."
               }
             ],
             "taskQueues": [],
@@ -2523,7 +2541,7 @@
           "follow_ups": []
         }
       ],
-      "note": "Core catalog complete and verified: 6 phases, 82 unit + 67 e2e green. Pending: no Kafka consumer; producers are best-effort and swallow failures (no outbox); stock reserve/release is incompatible with order-svc (reservationId/qty vs orderId/quantity), release is non-idempotent, and reservations are not persisted. Kafka work: publish product.updated/category.updated via outbox; consume product.imported, order.created, order.status.updated; no SQS tasks. Fixture seed is dev/test-only.",
+      "note": "9/11 done; backlog is cat-010 (consume order.status.updated and release stock) and cat-011 (separate the fixture seed from the production path). Verified: 137 unit (22 files) + 112 e2e (12 files) green, plus 3 live Kafka cases. Producers are on catalog.outbox/relay (cat-007), and both consumers share one @ecom/messaging 0.3.0 strategy on one group: order.created commits the reservation (cat-009) and product.imported upserts product, category, brand, variants and images in one transaction (cat-008), writing onHand = max(0, imported - openReserved) plus one stock_movements row with reason 'import' and no outbox re-emit. Stock reserve/release is idempotent and persisted (cat-006); release on cancel/refund is still cat-010. Import needs db/008 (widens products_source_check to accept 'import') - there is no cat-008 table to look for. No SQS tasks. Fixture seed is dev/test-only (cat-011 guards it in production).",
       "messaging": {
         "role": "producer+consumer",
         "publishes": [
@@ -2550,21 +2568,21 @@
             "topic": "product.imported",
             "group": "catalog-svc",
             "dlq": "product.imported.dlq",
-            "implementation": "Nest Kafka consumer; manual commit; processed_events in the same transaction as the upsert."
+            "implementation": "One @EventPattern on the shared @ecom/messaging catalog-svc strategy; manual commit; processed_events in the same transaction as the upsert. No outbox re-emit."
           },
           {
             "event": "order.created",
             "topic": "order.created",
             "group": "catalog-svc",
             "dlq": "order.created.dlq",
-            "implementation": "Nest Kafka consumer; manual commit; processed_events in the same transaction as the reservation commit."
+            "implementation": "Same strategy, one group, second @EventPattern; manual commit; processed_events in the same transaction as the reservation commit. OrderCreatedHandler unchanged by the transport swap."
           },
           {
             "event": "order.status.updated",
             "topic": "order.status.updated",
             "group": "catalog-svc",
             "dlq": "order.status.updated.dlq",
-            "implementation": "Nest Kafka consumer; manual commit; processed_events in the same transaction as the release."
+            "implementation": "Not implemented (cat-010): one more @EventPattern on the same strategy, processed_events in the same transaction as the release."
           }
         ],
         "taskQueues": [],
@@ -2576,7 +2594,8 @@
           "Postgres outbox + relay",
           "Nest Kafka consumer with manual commit",
           "processed_events",
-          "idempotent reservation table"
+          "idempotent reservation table",
+          "one strategy, one group (postfixId ''), two routes now and a third in cat-010"
         ]
       }
     },
@@ -2599,12 +2618,10 @@
         "spec": "done",
         "build": "done",
         "test": "done",
-        "verify": "in-progress"
+        "verify": "done"
       },
       "inProgress": null,
-      "next": [
-        "ca-009 cart-svc: consume order.created and convert the cart idempotently"
-      ],
+      "next": [],
       "blockedBy": [],
       "skills": [
         "SKILL-EXPLORE",
@@ -2788,7 +2805,7 @@
           ],
           "verified": true,
           "follow_ups": [
-            "ord-012 and ca-009 delete this bridge: cart-svc consumes order.created and order-svc's CartClient goes with it.",
+            "Settled by ca-009 (2026-11-01): the bridge is deleted and cart-svc consumes order.created. ord-012 still removes order-svc's CartClient, which now logs a 404 warning per checkout.",
             "The order-svc SAVE10 coupon fixture is exhausted after ~100 e2e runs (uses_count reached max_uses); the seed needs ON CONFLICT DO UPDATE to stay repeatable.",
             "4.API-Design.md §6 still keys cart.updated by userId|sessionId; the 1.4.0 registry says cartId.",
             "GET /cart creates a new active cart immediately after a conversion by design; the storefront must not read that as a resurrected cart."
@@ -2797,7 +2814,7 @@
             "publishes": [],
             "consumes": [],
             "taskQueues": [],
-            "doesNotUseKafka": "Temporary HTTP bridge. The target is the order.created consumer in ca-009."
+            "doesNotUseKafka": "No Kafka. This was a temporary HTTP bridge, deleted by ca-009 and replaced by the order.created consumer."
           }
         },
         {
@@ -2850,16 +2867,16 @@
             ],
             "consumes": [],
             "taskQueues": [],
-            "doesNotUseKafka": "No Kafka consumer yet (ca-009). No SQS tasks."
+            "doesNotUseKafka": "No SQS tasks. The order.created consumer landed in ca-009."
           }
         },
         {
           "id": "ca-009",
           "title": "cart-svc: consume order.created and convert the cart idempotently",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "qoder",
+          "started": "2026-11-01",
+          "finished": "2026-11-01",
           "phase": "P3",
           "priority": "P0",
           "kind": "feature",
@@ -2869,10 +2886,14 @@
             "ec-002",
             "ca-007"
           ],
-          "log": null,
+          "log": "TASKS/done/ca-009-cart-consumes-order-created.md",
           "key_decisions": [
             "Consume order.created with consumer group cart-svc. Reason: conversion is a domain consequence, not a checkout dependency. Rejected: synchronous HTTP from order-svc, which is the current 404 and couples checkout availability to cart.",
-            "Insert the processed event id in the same transaction as conversion. Reason: at-least-once redelivery must not double-convert. Rejected: Redis-only dedupe, which is lost on flush."
+            "Insert the processed event id in the same transaction as conversion. Reason: at-least-once redelivery must not double-convert. Rejected: Redis-only dedupe, which is lost on flush.",
+            "convertForOrder(client, userId) does the UPDATE and the cart.outbox record() inside the caller's transaction, so the claim and the conversion commit or roll back together. Rejected: a claim in its own transaction, which either loses a conversion or double-converts.",
+            "No active cart is 'ignored' and committed, never a DLQ record. Reason: a shopper who checks out without building a cart is ordinary traffic. Rejected: dead-letter it, which turns normal traffic into an operational queue.",
+            "Delete the bridge instead of keeping it beside the consumer; the e2e spec asserts 404 with and without x-service-key. Rejected: a deprecated endpoint that still works.",
+            "Contracts stay at 1.8.0: cart parses no product.* payload, so there is nothing in 1.9.0 to adopt. Consequence: @ecom/messaging 0.3.0 declares >=1.9.0 <2, so cart runs one floor below its peer range; pnpm resolves it, every suite is green, and it is recorded as known debt in 8.Versioning.md 10."
           ],
           "acceptance": [
             "Consumer group is cart-svc with postfixId=\"\".",
@@ -2880,8 +2901,13 @@
             "Malformed payloads go to order.created.dlq; unknown event types are ignored and committed with a metric.",
             "Delete POST /cart/internal/carts/:userId/convert and its spec once the consumer is green; ord-012 then removes the caller."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "Named debt: order-svc's CartClient still calls the deleted endpoint and logs a 404 warning per checkout until ord-012 removes the caller. CartClient treats 404 as non-fatal, which is why ca-009 could land first.",
+            "cart-svc has the counters but no /consumer-stats route; until one exists the group is observable only from kafka-consumer-groups.sh.",
+            "cart.processed_events has no retention sweeper; idx_cart_processed_events_processed_at exists so a future one can prune without a full scan.",
+            "The peer-floor mismatch closes the next time cart repins @ecom/contracts for any other reason."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [
@@ -2931,7 +2957,7 @@
           ]
         }
       ],
-      "note": "Core cart/wishlist complete and verified: 6 slices, 103 unit + 99 e2e green (1 skipped). Delivery is real: cart.updated rides cart.outbox/relay (ca-008) and add-to-cart prices from catalog-svc over HTTP, fail closed (ca-010). Pending: no order.created consumer (ca-009); the conversion bridge is temporary; no retention sweep for cart.outbox; CATALOG_UNAVAILABLE has no metric. Kafka work: consume order.created; no SQS tasks.",
+      "note": "Cart is 10/10, no backlog: 119 unit + 96 e2e green (2 skipped, both live Kafka specs gated on RUN_KAFKA_E2E) and 3 live cases against ecom-kafka. Delivery is real: cart.updated rides cart.outbox/relay (ca-008), add-to-cart prices from catalog-svc over HTTP and fails closed (ca-010), and conversion is event-driven (ca-009) - POST /cart/internal/carts/:userId/convert and InternalModule are deleted, the e2e suite asserts 404 with and without x-service-key, and the processed_events claim commits or rolls back with the conversion. Consumer group is cart-svc on the shared @ecom/messaging 0.3.0 transport. Known debt: order-svc's CartClient still calls the deleted route and logs a 404 per checkout until ord-012; no consumer-stats route (the counters exist, nothing serves them); no retention sweep for cart.outbox or cart.processed_events; CATALOG_UNAVAILABLE has no metric. No SQS tasks.",
       "messaging": {
         "role": "producer+consumer",
         "publishes": [
@@ -2950,7 +2976,7 @@
             "topic": "order.created",
             "group": "cart-svc",
             "dlq": "order.created.dlq",
-            "implementation": "Nest Kafka consumer; manual commit; processed_events in the same transaction as conversion."
+            "implementation": "Nest Kafka consumer on the shared @ecom/messaging strategy (postfixId ''); manual commit; the processed_events claim and the convertForOrder UPDATE + cart.outbox row commit or roll back together."
           }
         ],
         "taskQueues": [],
@@ -2961,7 +2987,8 @@
         "implementation": [
           "Postgres outbox + relay",
           "Nest Kafka consumer with manual commit",
-          "processed_events"
+          "processed_events",
+          "one route, one group; a second topic is one more @EventPattern"
         ]
       }
     },
@@ -2984,7 +3011,7 @@
       },
       "inProgress": null,
       "next": [
-        "ord-012 retire the cart conversion bridge (P3, blocked on ca-009 only)"
+        "ord-012 retire the cart conversion bridge (P3, unblocked: ca-009 is done)"
       ],
       "blockedBy": [],
       "skills": [
@@ -4525,8 +4552,6 @@
       },
       "inProgress": null,
       "next": [
-        "srch-001 DLQ + processed_events",
-        "srch-002 Nest Kafka transport",
         "srch-003 dual ingestion + DLQ replay"
       ],
       "blockedBy": [],
@@ -4549,7 +4574,7 @@
         "taskQueues": []
       },
       "claimedBy": null,
-      "note": "Core 7 slices delivered and verified: 97 unit + 85 e2e green. Pending hardening: malformed JSON is committed without DLQ; unknown event types are silently ignored without metrics; no processed_events idempotency; consumer uses raw kafkajs rather than Nest transport. Kafka work: consume product.imported, product.updated, category.updated, blog.updated; publishes nothing; internal batch endpoint remains for backfill/tests.",
+      "note": "2/3 done; backlog is srch-003 (dual ingestion + DLQ replay). Verified: 120 unit (18 files) + 92 e2e (1 skipped) green, plus 1 live case against a real broker that consumes a record on the Nest transport and commits its offset. The consumer is a Nest @EventPattern controller over the shared @ecom/messaging 0.3.0 strategy (srch-002): one controller, four routes, group exactly search-svc with postfixId '' - search-svc-server must stay absent, and the proof is describeGroups state, not logs. srch-001's behaviour is unchanged: malformed JSON and invalid payloads dead-letter to <topic>.dlq, duplicate event ids are no-ops via processed_events, unknown types are ignored with a metric. contracts are vendored at 1.9.0 (from vendor/, unlike the other repos), which is what lets the index parse product.imported variants[]. Publishes nothing; the internal batch endpoint remains for backfill/tests; no SQS tasks.",
       "tasks": [
         {
           "id": "srch-001",
@@ -4622,10 +4647,10 @@
         {
           "id": "srch-002",
           "title": "search-svc: migrate the consumer to the Nest Kafka transport",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "qoder",
+          "started": "2026-11-01",
+          "finished": "2026-11-01",
           "phase": "P3",
           "priority": "P1",
           "kind": "refactor",
@@ -4633,10 +4658,17 @@
           "dependsOn": [
             "srch-001"
           ],
-          "log": null,
+          "log": "TASKS/done/srch-002-nest-transport-migration.md",
           "key_decisions": [
             "Use @nestjs/microservices Kafka transport with @EventPattern, @Payload, @Ctx, and KafkaContext; set postfixId=\"\". Reason: one consumer runtime across services and explicit manual commits. Rejected: keep raw kafkajs alongside Nest consumers.",
-            "Keep the existing indexer service as the handler boundary. Reason: transport swap must not change indexing behavior. Rejected: rewrite indexing in the same task."
+            "Keep the existing indexer service as the handler boundary. Reason: transport swap must not change indexing behavior. Rejected: rewrite indexing in the same task.",
+            "One controller, four @EventPatterns, one ServerKafka strategy. Reason: a strategy per topic is a second group with its own offsets over the same partitions. Rejected: one consumer per topic.",
+            "The protocol lives in @ecom/messaging 0.3.0's KafkaEventHandler, not in the service. Reason: srch-001's loop, cat-007's loop and ca-009's would otherwise be three copies of the same parse-retry-DLQ-commit ladder that only one of them can get right. Rejected: keep a service-local copy behind a flag.",
+            "@Payload() and @Ctx() are load-bearing: without them RpcContextCreator falls back to DEFAULT_CALLBACK_METADATA (one PAYLOAD at index 0), the context arrives undefined, and every commit throws on ctx.getMessage(). ctx is typed unknown so design:paramtypes compiles to Object, which keeps ValidationPipe#toValidate from rebuilding the context.",
+            "postfixId '' and autoCommit under run were read out of the installed @nestjs/microservices 12.3.2 source before a handler was written. Reason: the first otherwise creates search-svc-server with a second set of offsets, the second acknowledges before the side effect. 12.3.2 also requires @nestjs/common ^12.3.2 (getParamArgsMetadata from @nestjs/common/internal).",
+            "The consumer starts after app.listen, retries every 5s and is never awaited; KAFKA_CONSUMER_ENABLED parks it. Reason: search can answer from PostgreSQL with ingestion down, and a Kafka restart must not become a search outage.",
+            "The lag gauge starts only after the consumer is up. Reason: a gauge over a group that has not joined reports the whole topic as lag, a false alarm on every cold start.",
+            "vendor/ecom-contracts-1.9.0.tgz replaces 1.7.0 in the same commit. Reason: the strict payload schema makes variants[] a breaking change for anyone below 1.9.0, so every consumer repins before a producer emits it."
           ],
           "acceptance": [
             "Consumer uses @EventPattern and KafkaContext.",
@@ -4644,8 +4676,13 @@
             "All srch-001 behavior tests pass unchanged.",
             "Lag and commit metrics are exposed."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "search-svc-server must stay absent. kafkajs does not throw for an unknown group, so fetchOffsets is not proof; the check is describeGroups state (Stable vs Dead).",
+            "search.processed_events still has no retention sweeper; srch-003 owns the replay/reset conflict, because a replayed event id is already claimed.",
+            "cms.updated on the cms.events transport topic is not routed here and never reaches the controller; cms-005 decides the topic.",
+            "The lag sampler is in-process and served from /search/internal/consumer-stats; nothing scrapes it yet."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [
@@ -4787,9 +4824,10 @@
           "Backfill uses the internal batch HTTP endpoint, not Kafka replay."
         ],
         "implementation": [
-          "Nest Kafka consumer with manual commit",
+          "Nest @EventPattern controller on the shared @ecom/messaging strategy (postfixId '', autoCommit false)",
           "processed_events",
-          "DLQ per topic"
+          "DLQ per topic",
+          "lag and commit metrics served from search/internal/consumer-stats"
         ]
       }
     },
