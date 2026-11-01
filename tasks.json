@@ -3,9 +3,9 @@
   "updatedAt": "2026-11-01",
   "summary": {
     "total": 138,
-    "done": 107,
+    "done": 108,
     "in_progress": 0,
-    "backlog": 31,
+    "backlog": 30,
     "byRepo": {
       "storefront-ui": {
         "total": 62,
@@ -75,9 +75,9 @@
       },
       "search-svc": {
         "total": 3,
-        "done": 2,
+        "done": 3,
         "in_progress": 0,
-        "backlog": 1
+        "backlog": 0
       },
       "ecom-infra": {
         "total": 7,
@@ -5100,10 +5100,10 @@
         {
           "id": "srch-003",
           "title": "search-svc: preserve dual ingestion and add DLQ replay",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "qoder",
+          "started": "2026-11-01",
+          "finished": "2026-11-01",
           "phase": "P3",
           "priority": "P1",
           "kind": "feature",
@@ -5112,7 +5112,7 @@
             "srch-001",
             "srch-002"
           ],
-          "log": null,
+          "log": "TASKS/done/srch-003-dual-ingestion-and-dlq-replay.md",
           "key_decisions": [
             "Keep Kafka as the primary path and the internal batch endpoint for backfill/tests; share validation and idempotency. Reason: backfill must not depend on replaying Kafka. Rejected: Kafka-only ingestion.",
             "Add a documented DLQ replay tool that re-publishes to the source topic. Reason: DLQ messages must be recoverable. Rejected: manual copy/paste from the DLQ."
@@ -5123,7 +5123,7 @@
             "DLQ replay is documented and tested.",
             "Contracts pin 1.3.0/2.0.0 as appropriate."
           ],
-          "verified": false,
+          "verified": true,
           "follow_ups": [],
           "messaging": {
             "publishes": [],
