@@ -48,3 +48,7 @@ answers `type -> payload schema`, `type -> dlq`. Before this, the envelope was c
 
 - ec-005 must include 1.4.0/1.5.0 in the release train.
 - Normalize `refundAmount`; replace `reservationId: ''` at the source.
+  - **`refundAmount` — done 2026-11-01** by contracts 1.10.0 (ADR 42): the schema is
+    `z.number().nonnegative()` because `order-svc` now parses its `DECIMAL` at the DB
+    boundary (ADR 41) instead of the wire accepting both shapes. `reservationId: ''`
+    stays open — it is a checkout-source change, not a typing one.

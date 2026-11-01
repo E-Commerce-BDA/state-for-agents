@@ -1721,7 +1721,7 @@
           "follow_ups": [
             "ec-005 must ship 1.3.0/1.4.0/1.5.0 in one release train and tag them together.",
             "No service validates with the new payloads yet: repin cart/order/catalog/cms contracts when each consumer lands.",
-            "Normalize refundAmount to one wire type and drop the empty reservationId fallback at the source."
+            "Drop the empty reservationId fallback at the source. (refundAmount was normalized to one wire type in contracts 1.10.0, ADR 42.)"
           ],
           "messaging": {
             "publishes": [],
