@@ -2,14 +2,14 @@
   "version": 2,
   "updatedAt": "2026-11-01",
   "summary": {
-    "total": 136,
-    "done": 100,
+    "total": 138,
+    "done": 106,
     "in_progress": 0,
-    "backlog": 36,
+    "backlog": 32,
     "byRepo": {
       "storefront-ui": {
-        "total": 61,
-        "done": 51,
+        "total": 62,
+        "done": 52,
         "in_progress": 0,
         "backlog": 10
       },
@@ -32,10 +32,10 @@
         "backlog": 1
       },
       "catalog-svc": {
-        "total": 11,
-        "done": 9,
+        "total": 12,
+        "done": 11,
         "in_progress": 0,
-        "backlog": 2
+        "backlog": 1
       },
       "cart-svc": {
         "total": 10,
@@ -45,15 +45,15 @@
       },
       "order-svc": {
         "total": 12,
-        "done": 11,
+        "done": 12,
         "in_progress": 0,
-        "backlog": 1
+        "backlog": 0
       },
       "cms-svc": {
         "total": 7,
-        "done": 5,
+        "done": 7,
         "in_progress": 0,
-        "backlog": 2
+        "backlog": 0
       },
       "analytics-svc": {
         "total": 4,
@@ -181,6 +181,7 @@
           "cat-008",
           "cat-009",
           "cat-010",
+          "cat-012",
           "ca-009",
           "ord-012",
           "cms-006",
@@ -188,7 +189,7 @@
           "srch-002",
           "srch-003"
         ],
-        "count": 10
+        "count": 11
       },
       {
         "id": "P4",
@@ -232,10 +233,11 @@
           "ec-005",
           "inf-004",
           "inf-005",
+          "sf-053a",
           "tst-001",
           "tst-002"
         ],
-        "count": 6
+        "count": 7
       },
       {
         "id": "P6",
@@ -515,37 +517,46 @@
       "8b53286",
       "eae687c",
       "339257d",
-      "6a02b34"
+      "6a02b34",
+      "edc8bcf",
+      "ce15601"
     ],
     "ecom-contracts": [
       "8b4020a",
-      "08e930c"
+      "08e930c",
+      "7fdfdc2"
     ],
     "ecom-messaging": [
-      "ee88bfe"
+      "ee88bfe",
+      "9deff71",
+      "c76acbe"
     ],
     "catalog-svc": [
-      "9cd6948"
+      "9cd6948",
+      "0dcb9c9",
+      "3916f9c"
     ],
     "cart-svc": [
       "cb305e7",
       "f707431"
     ],
+    "auth-svc": [],
     "order-svc": [
       "880af5d",
-      "728e130"
+      "728e130",
+      "f7ad466",
+      "5fd303b",
+      "05d5402"
+    ],
+    "cms-svc": [
+      "fc2d646",
+      "fd02481"
     ],
     "search-svc": [
       "84dea4a"
     ],
     "Documentation": [
-      "40348b9",
-      "081c8d0",
-      "d853bee",
-      "220b549",
-      "e4ab605",
-      "0967c17",
-      "aaf6e8a"
+      "4d3149e"
     ],
     "ecom-infra": [
       "108913f",
@@ -556,7 +567,7 @@
     ]
   },
   "unpushedVerifiedAt": "2026-11-01",
-  "unpushedNote": "Recomputed with git rev-parse @{u} and git rev-list --count @{u}..HEAD in every local repo on 2026-11-01, after the consumer wave (contracts 1.9.0, messaging 0.3.0, srch-002/ca-009/cat-008) and the sf-051 commerce wave (storefront staging, money fix: contracts 1.10.0 + order-svc repin). ecom-infra entries are carried from the 2026-10-31 pass: its repo is not in this workspace's directory table, so it was not re-walked. Nothing was pushed, tagged, released or published.",
+  "unpushedNote": "Recomputed with git rev-parse @{u} and git rev-list --count @{u}..HEAD in every local repo on 2026-11-01, after the catalog/CMS/storefront wave (cat-010, cat-011, cms-006, cms-007, sf-053, ord-012 + contracts 1.11.0 and messaging 0.4.0). Every entry lists commits ahead of upstream, oldest first; auth-svc is present with an empty list because it was walked and is level with origin/master. ecom-messaging and ecom-infra have no remote at all, so their lists are only the commits this wave series produced and their full history cannot leave this machine; ecom-infra's plan/db commits are carried from the 2026-10-31 pass, since nothing in this wave touched it. state-for-agents cannot list itself. Nothing was pushed, tagged, released or published.",
   "workflow": "Claim: create TASKS/in-progress/<id>-<slug>.md, set the entry status to in-progress, owner, and started. Build against the chained skills (router order). Close: move the log to TASKS/done/, fill verification and follow_ups, flip status to done and finished, update STATUS.md and summary in the same commit. Todo entries carry log:null until claimed; in-progress and done entries must have an existing log file. Commits: one commit per file (larger edits split per edit); stage with diff eyes-on; subject + reason body; local-only until the human says push. Unpushed lists only verified local commits; the carrier commit joins on the next update. Validation: id == filename, status == folder, log exists for in-progress/done, STATUS counts == summary.",
   "rules": "Claim: set claimedBy={agent,since,task} + stages.<stage> to in-progress (24h lease; other instances must not steal without comment). Finish: flip stage to done + update SERVICES.md + STATUS.md in same commit. Stage vocab locked: todo|in-progress|done (maps to todo/in-progress/done cells). Path truth: localRoots below are where agents edit TODAY; future split repos named in 'repo'. Never invent paths — resolve via SKILL-EXPLORE. motive is immutable (ADR change only); inProgress/next are mutable. Transport truth: Kafka is domain events only, SQS is task jobs only; each repo messaging block and the top-level messaging catalog are authoritative.",
   "repos": {
@@ -602,7 +613,7 @@
         "taskQueues": []
       },
       "claimedBy": null,
-      "note": "UI/auth/CMS slices delivered, and the two seams are live: sf-049 (thin auth client — four BFF handlers own the HttpOnly sf_at/sf_rt cookies, proxy.ts forwards only GET /api/auth/session and guards /account + /checkout) and sf-050 (lib/cms reads with tags + revalidate: 300, a bounded stale fallback for the nav, and POST /api/revalidate as the CMS->UI arrow). 475 tests in 63 files, tsc clean, next build clean. Pending: sf-051 commerce routes, sf-052 /api/track, sf-053 contracts repin. pnpm lint is dead in this repo (Next 16 removed `next lint`). No Kafka credentials: page views go through /api/track to analytics-svc over HTTP; CMS invalidation is HTTP-only.",
+      "note": "UI/auth/CMS slices delivered, and the two seams are live: sf-049 (thin auth client — four BFF handlers own the HttpOnly sf_at/sf_rt cookies, proxy.ts forwards only GET /api/auth/session and guards /account + /checkout), sf-050 (lib/cms reads with tags + revalidate: 300, a bounded stale fallback for the nav, and POST /api/revalidate as the CMS->UI arrow) and sf-051 (commerce routes and components). sf-053 pinned contracts 1.10.0 and covered checkout replay. 909 tests in 117 files, tsc clean, next build clean. Pending: sf-052 /api/track, sf-054 listing depth, and the CMS-driven section set (sf-060/sf-061). The storefront imports nothing from @ecom/contracts yet: the pin is a manifest change and the local order/cart schemas are not duplicates of anything the package owns. pnpm lint is dead in this repo (Next 16 removed `next lint`). No Kafka credentials: page views go through /api/track to analytics-svc over HTTP; CMS invalidation is HTTP-only.",
       "tasks": [
         {
           "id": "sf-001",
@@ -1545,11 +1556,11 @@
         },
         {
           "id": "sf-053",
-          "title": "storefront: pin contracts 1.5.0 and add checkout integration tests",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "title": "storefront: pin contracts 1.10.0 and add checkout integration tests",
+          "status": "done",
+          "owner": "qoder",
+          "started": "2026-11-01",
+          "finished": "2026-11-01",
           "phase": "P3",
           "priority": "P1",
           "kind": "chore",
@@ -1560,17 +1571,50 @@
             "cms-003",
             "sf-051"
           ],
-          "log": null,
+          "log": "TASKS/done/sf-053-storefront-contracts-1-10-0.md",
           "key_decisions": [
             "Pin the exact tarball URL; never use ^. Reason: contract drift caused the current checkout/catalog mismatch. Rejected: floating ranges.",
-            "Test checkout against the real order-svc contract, including idempotency and stock failure. Reason: mocked clients hid the mismatch. Rejected: keep mock-only tests."
+            "Test checkout against the real order-svc contract, including idempotency and stock failure. Reason: mocked clients hid the mismatch. Rejected: keep mock-only tests.",
+            "Keep lib/order/schemas.ts and lib/cart/schemas.ts. Reason: contracts 1.10.0 ships event payloads and no order/cart response DTOs, so these are not duplicates of anything the package owns. Rejected: deleting them to satisfy the original wording, which would leave the client parsing unvalidated JSON.",
+            "The storefront imports nothing from @ecom/contracts today, so the repin is a manifest and lockfile change; the audit is recorded rather than assumed. Rejected: adding @ecom/messaging beside it (the storefront must never hold broker credentials)."
           ],
           "acceptance": [
-            "package.json and lockfile pin the exact 1.5.0 tarball.",
+            "package.json and lockfile pin the exact 1.10.0 tarball.",
             "Checkout integration tests cover success, duplicate key, and stock failure.",
             "No legacy envelope fields are read.",
+            "No schema is duplicated that contracts now owns; `money` is number-only on both sides.",
             "The 2.0.0 repin is part of ec-004/ec-005, not this task.",
             "The build and test gate is green."
+          ],
+          "verified": true,
+          "follow_ups": [
+            "sf-053a: a live checkout e2e harness (auth + cart + catalog + order) does not exist; filed as its own task",
+            "The shared-fixture mapping of `checkoutConfirmationSchema` is storefront-local and stays so until contracts exports a response DTO"
+          ]
+        },
+        {
+          "id": "sf-053a",
+          "title": "storefront: live checkout e2e harness (auth + cart + catalog + order)",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P5",
+          "priority": "P2",
+          "kind": "test",
+          "transport": "http",
+          "dependsOn": [
+            "sf-053"
+          ],
+          "log": null,
+          "key_decisions": [
+            "File the live-services checkout e2e as its own task. Reason: the storefront has no harness that boots auth, cart, catalog and order together, and building one is a task of its own rather than a line in a repin. Rejected: bodging a harness into sf-053, which would have hidden the repin behind a week of plumbing."
+          ],
+          "acceptance": [
+            "One command boots the four services the checkout path needs and seeds a product with stock.",
+            "A real browser-level checkout places an order and the cart is converted by the order.created consumer.",
+            "A duplicate idempotency key replays the same confirmation against the live order-svc.",
+            "The suite skips with a printed reason when the stack is not up."
           ],
           "verified": false,
           "follow_ups": []
@@ -2736,10 +2780,10 @@
         {
           "id": "cat-010",
           "title": "catalog-svc: consume order.status.updated and release stock on cancel/refund",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "qoder",
+          "started": "2026-11-01",
+          "finished": "2026-11-01",
           "phase": "P3",
           "priority": "P0",
           "kind": "feature",
@@ -2748,22 +2792,38 @@
             "cat-006",
             "cat-009"
           ],
-          "log": null,
+          "log": "TASKS/done/cat-010-release-stock-on-order-status.md",
           "key_decisions": [
-            "Release only when to is cancelled or refunded and the reservation is held or committed. Reason: prevents stock inflation on shipped orders. Rejected: release on every status update.",
-            "Use the reservation id, not the item list, as the idempotency boundary. Reason: one release per reservation regardless of retries. Rejected: restock by product id, which can affect other orders."
+            "Release only when the order became cancelled, failed or refunded and the reservation is still held. Reason: a committed reservation's stock was sold and decremented at commit, so releasing it would inflate stock. Rejected: release on every status update, and treat committed as releasable (a post-commit restock needs its own movement reason; filed as cat-012).",
+            "Find the reservation by order id. Reason: the event carries no reservation id, and catalog.stock_reservations.order_id is already set while the hold is held (order-svc names the planned order id at reserve time) with a partial unique index guaranteeing at most one row. Rejected: restock by product id, which can affect another order's reservation.",
+            "Keep the HTTP release throwing and add a separate outcome-returning transaction body. Reason: POST /internal/stock/release keeps its 404/409 contract for order-svc's saga compensation, while a consumer needs a committed hold to be a logged anomaly instead of a dead letter. Rejected: reuse release() as-is in the handler and let a committed hold dead-letter.",
+            "order.created tolerates a hold a cancellation already released. Reason: order.created and order.status.updated are different topics with no cross-topic ordering, so a fast cancel arrives before the commit and would otherwise dead-letter every cancelled order. Rejected: one consumer group over both topics (the topics already exist; there is nothing left to order).",
+            "One controller, one consumer group. Reason: a second group would split the partitions this service owns and double every dedupe table. Rejected: a dedicated group for order.status.updated."
           ],
           "acceptance": [
-            "Cancelled and refunded orders restock once.",
+            "Cancelled, failed and refunded orders release a held reservation exactly once.",
             "Other statuses are no-ops.",
-            "Duplicate events are no-ops.",
-            "Invalid payloads go to order.status.updated.dlq."
+            "Duplicate events are no-ops: the processed_events claim commits with the release.",
+            "Invalid payloads go to order.status.updated.dlq.",
+            "A committed reservation is not released — its stock was sold; cat-012 covers a restock after a post-delivery refund.",
+            "POST /internal/stock/release still answers 404/409 as before."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "cat-012: restock after a post-commit refund (a committed reservation needs a refund movement reason and a status decision)",
+            "Watch the releaseLogger 'not-releasable' warn: a committed hold on a cancelled order is a data anomaly, not a queue item",
+            "catalog.processed_events still has no retention sweeper"
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [
+              {
+                "event": "order.created",
+                "topic": "order.created",
+                "group": "catalog-svc",
+                "dlq": "order.created.dlq",
+                "implementation": "Shared @ecom/messaging Kafka consumer strategy; a hold that a cancellation already released is ignored instead of dead-lettered."
+              },
               {
                 "event": "order.status.updated",
                 "topic": "order.status.updated",
@@ -2779,10 +2839,10 @@
         {
           "id": "cat-011",
           "title": "catalog-svc: separate the fixture seed from the production data path",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "qoder",
+          "started": "2026-11-01",
+          "finished": "2026-11-01",
           "phase": "P2",
           "priority": "P1",
           "kind": "chore",
@@ -2790,22 +2850,55 @@
           "dependsOn": [
             "cat-008"
           ],
-          "log": null,
+          "log": "TASKS/done/cat-011-guarded-fixture-seed.md",
           "key_decisions": [
             "Keep 002-seed-catalog.sql for local and test only and require admin/import for real data. Reason: the fixture catalog is not a production catalog. Rejected: ship the seed as production data.",
-            "Fail startup in production when the fixture flag is on. Reason: a production deploy must not silently load fake products. Rejected: rely on documentation alone."
+            "Fail startup in production when the fixture flag is on. Reason: a production deploy must not silently load fake products, and the guard belongs on the flag rather than on one script path. Rejected: rely on documentation alone.",
+            "Two guards, not one: the script refuses unless NODE_ENV is not production and CATALOG_ALLOW_FIXTURE_SEED is true, and main.ts refuses to boot with the flag on in production. Reason: the script guard covers the operator, the bootstrap guard covers a compose file that sets the flag by accident. Rejected: guarding inside the SQL file, which cannot see NODE_ENV.",
+            "Run the SQL through pg from db/seed.mjs. Reason: the host has no psql and the script can print the row counts it inserted. Rejected: keep the documented psql one-liner."
           ],
           "acceptance": [
-            "Seed script is guarded by NODE_ENV or an explicit fixture flag.",
-            "Production compose does not run the fixture seed.",
+            "Seed script is guarded by NODE_ENV and an explicit fixture flag.",
+            "Production compose does not run the fixture seed, and the service will not boot in production with the flag on.",
             "Docs name admin CRUD and product.imported as the real paths.",
             "Tests cover the production guard."
+          ],
+          "verified": true,
+          "follow_ups": [
+            "Nothing invokes the seed automatically, so no compose change was needed; re-check if a deploy pipeline ever calls pnpm db:seed"
+          ]
+        },
+        {
+          "id": "cat-012",
+          "title": "catalog-svc: restock after a post-commit refund",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P3",
+          "priority": "P2",
+          "kind": "feature",
+          "transport": "kafka-consumer",
+          "dependsOn": [
+            "cat-010",
+            "ord-010"
+          ],
+          "log": null,
+          "key_decisions": [
+            "cat-010 deliberately does not release a committed reservation: the stock was sold and already decremented at commit. Reason: releasing it would inflate stock for an order that shipped. Rejected: treat committed as releasable inside cat-010, which would double-sell.",
+            "A post-delivery refund needs its own movement reason and a status decision (reuse released, or add refunded). Reason: 'cancel' would misreport why the stock came back and hide refund volume in the movement ledger. Rejected: emit no movement at all and let the operator adjust by hand."
+          ],
+          "acceptance": [
+            "A refunded order whose reservation was committed restocks exactly once, with a dedicated movement reason.",
+            "The reservation status records that the stock came back after a sale, not that it was never sold.",
+            "A duplicate refunded event is a no-op.",
+            "order.status.updated release for a held reservation is unchanged."
           ],
           "verified": false,
           "follow_ups": []
         }
       ],
-      "note": "9/11 done; backlog is cat-010 (consume order.status.updated and release stock) and cat-011 (separate the fixture seed from the production path). Verified: 137 unit (22 files) + 112 e2e (12 files) green, plus 3 live Kafka cases. Producers are on catalog.outbox/relay (cat-007), and both consumers share one @ecom/messaging 0.3.0 strategy on one group: order.created commits the reservation (cat-009) and product.imported upserts product, category, brand, variants and images in one transaction (cat-008), writing onHand = max(0, imported - openReserved) plus one stock_movements row with reason 'import' and no outbox re-emit. Stock reserve/release is idempotent and persisted (cat-006); release on cancel/refund is still cat-010. Import needs db/008 (widens products_source_check to accept 'import') - there is no cat-008 table to look for. No SQS tasks. Fixture seed is dev/test-only (cat-011 guards it in production).",
+      "note": "11/12 done; backlog is cat-012 (restock after a post-commit refund). Verified: 157 unit (24 files) + 118 e2e (12 files passed, 2 skipped) green, plus 3 live Kafka cases behind RUN_KAFKA_E2E. Producers are on catalog.outbox/relay (cat-007), and both consumers share one @ecom/messaging strategy on one group: order.created commits the reservation (cat-009) and product.imported upserts product, category, brand, variants and images in one transaction (cat-008), writing onHand = max(0, imported - openReserved) plus one stock_movements row with reason 'import' and no outbox re-emit. Stock reserve/release is idempotent and persisted (cat-006); release on cancelled/failed/refunded is cat-010: the same group consumes order.status.updated, finds the reservation by order_id (order-svc names the planned order id while reserving) and releases a held hold in the same transaction as the processed_events claim. A committed hold is a logged anomaly, not a dead letter - its stock was sold, so a post-commit restock is cat-012. order.created tolerates a hold that a cancellation already released, because the two topics have no cross-topic ordering. Import needs db/008 (widens products_source_check to accept 'import') - there is no cat-008 table to look for. No SQS tasks. Fixture seed is dev/test-only: db/seed.mjs refuses without CATALOG_ALLOW_FIXTURE_SEED and bootstrap fails if the flag is on in production (cat-011).",
       "messaging": {
         "role": "producer+consumer",
         "publishes": [
@@ -3633,10 +3726,10 @@
         {
           "id": "ord-012",
           "title": "order-svc: retire the cart convert bridge and rely on order.created",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "qoder",
+          "started": "2026-11-01",
+          "finished": "2026-11-01",
           "phase": "P3",
           "priority": "P3",
           "kind": "bug",
@@ -3645,23 +3738,27 @@
             "ca-009",
             "ord-011"
           ],
-          "log": null,
+          "log": "TASKS/done/ord-012-drop-cart-convert-bridge.md",
           "key_decisions": [
-            "CartClient.convertCart does hit a live endpoint (POST /cart/internal/carts/:userId/convert, built by ca-007). The stored rationale that it targets a non-existent endpoint is stale; what is wrong is the coupling, not the endpoint.",
-            "The call cannot be removed yet: order-svc writes order.created to order.outbox in TX2 but OutboxService.dispatchEvent only logs, and cart-svc has no consumer (ca-009). Removing it now leaves every cart active forever.",
-            "Split with ca-009: ca-009 deletes the cart-svc endpoint once its consumer is green, ord-012 deletes the call site. Neither is safe alone."
+            "ca-009 deleted the cart-svc route before its caller, so every checkout POSTed to a dead route and logged one 404 warning per order. The coupling was the defect and the endpoint is now gone; this task removes the caller. Rejected: leave the client as dead code behind a flag (it would still fire the request and still log).",
+            "Conversion now happens exactly once, from order.created: cart-svc's own consumer claims and converts in one transaction, and the event row is written in the same transaction as the order, so it exists even when the HTTP response never reaches the browser. Rejected: keep an HTTP call as a belt-and-braces path, which is the two-paths defect this task removes.",
+            "Delete CART_SVC_URL with the client, not just the call site. Reason: a config var with no reader invites the client back as a quick fix. Rejected: keep it for a future cart call (that future call is an event)."
           ],
           "acceptance": [
             "Checkout has no HTTP cart clear.",
             "Cart conversion happens from order.created.",
             "cart-svc's temporary endpoint is removed by ca-009, not by this task.",
-            "Tests cover conversion and checkout independence."
+            "Tests cover conversion and checkout independence: checkout.service.spec.ts asserts no outbound fetch during a confirmed order.",
+            "CART_SVC_URL is gone from .env, .env.example and the env schema."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "cart-svc's KAFKA_CONSUMER_ENABLED must stay true wherever checkout runs, otherwise carts never convert and nothing in order-svc notices",
+            "The e2e suite's SAVE10 coupon fixture now re-applies on seed; a test that needs an exhausted coupon must spend it itself"
+          ]
         }
       ],
-      "note": "Core order/checkout complete and verified: 6 phases, 45 unit + 60 e2e green. Pending P0s: checkout cannot succeed against real catalog due to the stock DTO mismatch; payment is captured before persistence with no compensation; Redis idempotency key is global and not user-scoped; refunds never call the payment provider; order.refunded is non-canonical; outbox only logs instead of publishing; cart clear calls a non-existent endpoint. Kafka work: publish order.created/order.status.updated via a real outbox relay; no Kafka consumer; no SQS tasks.",
+      "note": "12/12 done, no backlog. Verified: 75 unit (5 files) + 82 e2e passed (3 skipped across 8 suites) + 0/0 lint on 69 files + clean build. Checkout is idempotent per user (Redis lock, 24h replay cache and the orders row's partial unique index as the authority), pending-first, and captures payment through a saga whose compensation is the refund ledger. Stock is reserved before TX1 and released by reservation id; the hold also names the planned order id, so catalog can release it from order.status.updated (cat-010). order.created and order.status.updated are published by the outbox relay (ord-011). No Kafka consumer and no SQS tasks. The cart convert bridge is gone (ord-012: server side removed by ca-009, caller now deleted) and conversion comes from cart-svc's own order.created consumer.",
       "messaging": {
         "role": "producer-only",
         "publishes": [
@@ -3914,10 +4011,10 @@
         {
           "id": "cms-006",
           "title": "cms-svc: move media resize from Kafka media.tasks to SQS media-resize-image",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "qoder",
+          "started": "2026-11-01",
+          "finished": "2026-11-01",
           "phase": "P3",
           "priority": "P0",
           "kind": "feature",
@@ -3927,19 +4024,27 @@
             "inf-001",
             "inf-003"
           ],
-          "log": null,
+          "log": "TASKS/done/cms-006-media-resize-over-sqs.md",
           "key_decisions": [
-            "Enqueue media-resize-image through ITaskQueue after the media record is saved and remove the Kafka media.tasks topic. Reason: resize is a task, not a domain event. Rejected: keep media.tasks on Kafka, which violates the transport split.",
-            "Run the worker in cms-svc for v1. Reason: no separate media service exists. Rejected: create a new service for one queue."
+            "Enqueue media-resize-image through the task-queue port after the media record is saved and remove the Kafka media.tasks topic. Reason: resize is a task, not a domain event. Rejected: keep media.tasks on Kafka, which violates the transport split.",
+            "Run the worker in cms-svc for v1. Reason: no separate media service exists. Rejected: create a new service for one queue.",
+            "The prerequisites were understated: @ecom/contracts had TASK_QUEUES and a job schema but no envelope with an idempotency key, and @ecom/messaging 0.3.0 had no task-queue code at all. Reason: cms-006 cannot be implemented against 0.2.0/1.10.0. Rejected: a cms-local SQS client (a second implementation that Terraform, LocalStack and every future producer would each have to match).",
+            "The DLQ is the queue's redrive policy, not a worker feature. Reason: Terraform and the LocalStack init already declare -dlq with maxReceiveCount 5, and two sources for one policy drift. Rejected: hand-rolling a DLQ publisher in the worker.",
+            "The variant manifest is written once with a single $set, and a width above the source is dropped rather than upscaled. Reason: makes a re-delivered job a no-op by construction. Rejected: upsert per variant (a partial failure leaves half a manifest and no way to tell)."
           ],
           "acceptance": [
             "No code publishes media.tasks to Kafka.",
-            "Media upload enqueues a media-resize-image job with an idempotency key.",
-            "The cms-svc worker consumes with long poll, batch 10, and DLQ after five receives.",
-            "Tests cover enqueue, retry, and DLQ."
+            "Media upload enqueues a media-resize-image job with an idempotency key (contracts 1.11.0 taskMessageSchema, messaging 0.4.0 TaskQueuePort).",
+            "The cms-svc worker consumes with long poll 20s and batch 10, deletes only after the handler resolves, and lets the queue's redrive policy move a message to the DLQ after five receives.",
+            "Tests cover enqueue, replay idempotency and the failure-keeps-the-message case; the SQS e2e skips with a printed reason when AWS_ENDPOINT_URL is unset."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "SQS_TASKS_ENABLED defaults to false in development and test, so a rendition only exists once LocalStack or AWS is configured",
+            "compose has no profile that starts LocalStack, so the queue e2e is started explicitly by hand",
+            "sharp concurrency is capped by queue depth; a 1 GB box needs the visibility timeout honoured, not an in-process queue",
+            "No variant garbage collection: removing a media row leaves its renditions in storage"
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
@@ -3949,7 +4054,7 @@
                 "role": "producer+consumer",
                 "dlq": "media-resize-image-dlq",
                 "maxReceiveCount": 5,
-                "implementation": "SQS via ITaskQueue; cms-svc worker; no Kafka."
+                "implementation": "@ecom/messaging 0.4.0 TaskQueuePort/SqsTaskWorker, createSqsTaskModule, contracts 1.11.0 taskMessageSchema; long poll 20s, batch 10, delete-after-success; no Kafka."
               }
             ],
             "doesNotUseKafka": "No Kafka consumer. The media task never goes to Kafka."
@@ -3957,35 +4062,43 @@
         },
         {
           "id": "cms-007",
-          "title": "cms-svc: document no Kafka consumer and add the storefront revalidate webhook",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "title": "cms-svc: revalidate the storefront after a content publish (and document no Kafka consumer)",
+          "status": "done",
+          "owner": "qoder",
+          "started": "2026-11-01",
+          "finished": "2026-11-01",
           "phase": "P3",
           "priority": "P1",
-          "kind": "docs",
+          "kind": "feature",
           "transport": "http",
           "dependsOn": [
             "cms-005",
             "sf-050"
           ],
-          "log": null,
+          "log": "TASKS/done/cms-007-storefront-revalidate.md",
           "key_decisions": [
             "CMS does not consume product.imported or category.updated for navigation. Reason: CMS owns no product data; the old producesConsumes entry was wrong. Rejected: add a consumer without owned data.",
-            "Storefront cache invalidation uses an HTTP webhook with a shared secret. Reason: the storefront must not hold Kafka credentials. Rejected: storefront Kafka consumer."
+            "Storefront cache invalidation uses an HTTP webhook with a shared secret. Reason: the storefront must not hold Kafka credentials. Rejected: storefront Kafka consumer.",
+            "Only the three tags the storefront actually reads are sent: cms:global-settings, cms:navigation and cms:page-settings:<pageKey>. Reason: the storefront validates against its own allowlist and answers 400 INVALID_TAGS for anything it did not author, so a tag must be authored on both sides together. Rejected: inventing section/page/blog tags now (there is no storefront reader for them yet; sf-061/sf-062).",
+            "Best-effort, never a failed write: one warn line, a counter, and a 2 s AbortSignal timeout. Reason: the write has already committed; a storefront outage may cost staleness for one TTL but must never cost the publish. Rejected: a durable revalidation queue (a new relay and a second failure domain for one TTL of staleness).",
+            "Production refuses to boot without REVALIDATE_SECRET. Reason: a production cms-svc whose invalidations silently do nothing would serve stale pages with no signal. Rejected: warn-only on a missing secret.",
+            "The e2e suites blank the secret in test/setup-env.ts. Reason: ConfigModule never overwrites a variable already in process.env, so an empty string keeps every settings/navigation e2e from depending on something listening on :3000. Rejected: pointing STOREFRONT_URL at a closed port and asserting the warn line everywhere."
           ],
           "acceptance": [
             "cms-svc messaging metadata lists no Kafka consumer.",
-            "CMS calls Next /api/revalidate after a content publish.",
-            "The webhook secret is required and tested.",
+            "CMS calls Next /api/revalidate after a content publish: theme, page settings and navigation, each with its exact tag.",
+            "The webhook secret is required in production and tested (unit + an e2e against a stub storefront that records path, header and body).",
+            "A storefront 500 or timeout logs a warn and leaves the mutation successful.",
             "Docs no longer claim CMS consumes catalog events."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "Sections, pages and blogs send no tag until the storefront has a reader and a tag for them (sf-061/sf-062)",
+            "REVALIDATE_SECRET must match the storefront's value; a mismatch is a 401 warn line per publish"
+          ]
         }
       ],
-      "note": "cms-003 closed the media defects: 115 unit + 70 e2e green. Media now has one containment-checked path builder (null byte, single decode, mediaKeySchema, path.relative, then realpath re-check), visibility public/private with the field optional in contracts 1.5.0, a public file route that 404s private and orphan files with no path in the body, an admin-only ObjectId file route, and public max-age=60 must-revalidate caching. Pending: cms.updated publishes to the wrong cms.events topic with a legacy envelope; no cms_outbox or Mongo transaction; media resize still uses Kafka media.tasks instead of the SQS media-resize-image job; upload size/MIME checks run post-buffer (cms-004). No Kafka consumer in CMS.",
+      "note": "7/7 done, no backlog. Verified: 149 unit (22 files) + 87 e2e passed (4 skipped) + 0/0 lint on 100 files + clean build; the media-resize e2e runs green against real LocalStack when AWS_ENDPOINT_URL is set and skips with a printed reason otherwise. Media has one containment-checked path builder (null byte, single decode, mediaKeySchema, path.relative, then realpath re-check), visibility public/private, a public file route that 404s private and orphan files, an admin-only ObjectId file route, and public max-age=60 must-revalidate caching. cms.updated/blog.updated are written to cms_outbox inside the same Mongo transaction as the write (cms-005); media renditions are SQS tasks with an idempotency key (cms-006) and there is no producer or consumer on the direct Kafka bus left; the three storefront-read mutations POST their exact tag to /api/revalidate with the shared secret (cms-007). Named debt: upload size/MIME checks still run post-buffer (cms-004) and there is no variant garbage collection.",
       "messaging": {
         "role": "producer-only",
         "publishes": [
