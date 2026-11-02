@@ -1,17 +1,17 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-01",
+  "updatedAt": "2026-11-02",
   "summary": {
-    "total": 138,
-    "done": 108,
+    "total": 144,
+    "done": 115,
     "in_progress": 0,
-    "backlog": 30,
+    "backlog": 29,
     "byRepo": {
       "storefront-ui": {
-        "total": 62,
-        "done": 52,
+        "total": 65,
+        "done": 56,
         "in_progress": 0,
-        "backlog": 10
+        "backlog": 9
       },
       "admin-app": {
         "total": 1,
@@ -20,10 +20,16 @@
         "backlog": 1
       },
       "ecom-contracts": {
-        "total": 5,
-        "done": 3,
+        "total": 6,
+        "done": 4,
         "in_progress": 0,
         "backlog": 2
+      },
+      "ecom-messaging": {
+        "total": 0,
+        "done": 0,
+        "in_progress": 0,
+        "backlog": 0
       },
       "auth-svc": {
         "total": 4,
@@ -32,8 +38,8 @@
         "backlog": 1
       },
       "catalog-svc": {
-        "total": 12,
-        "done": 12,
+        "total": 13,
+        "done": 13,
         "in_progress": 0,
         "backlog": 0
       },
@@ -50,8 +56,8 @@
         "backlog": 0
       },
       "cms-svc": {
-        "total": 7,
-        "done": 7,
+        "total": 8,
+        "done": 8,
         "in_progress": 0,
         "backlog": 0
       },
@@ -519,12 +525,14 @@
       "339257d",
       "6a02b34",
       "edc8bcf",
-      "ce15601"
+      "ce15601",
+      "e879214"
     ],
     "ecom-contracts": [
       "8b4020a",
       "08e930c",
-      "7fdfdc2"
+      "7fdfdc2",
+      "a9eaacb"
     ],
     "ecom-messaging": [
       "ee88bfe",
@@ -534,7 +542,9 @@
     "catalog-svc": [
       "9cd6948",
       "0dcb9c9",
-      "3916f9c"
+      "3916f9c",
+      "6cc6182",
+      "b1db46b"
     ],
     "cart-svc": [
       "cb305e7",
@@ -550,24 +560,30 @@
     ],
     "cms-svc": [
       "fc2d646",
-      "fd02481"
+      "fd02481",
+      "6a0bd69"
     ],
     "search-svc": [
       "84dea4a"
     ],
     "Documentation": [
-      "4d3149e"
+      "4d3149e",
+      "1033405",
+      "bf02632",
+      "b584a72"
     ],
     "ecom-infra": [
       "108913f",
       "e47f5bb",
       "77d18b5",
       "53cb4b6",
-      "6e8de13"
+      "6e8de13",
+      "f17166e",
+      "175644b"
     ]
   },
-  "unpushedVerifiedAt": "2026-11-01",
-  "unpushedNote": "Recomputed with git rev-parse @{u} and git rev-list --count @{u}..HEAD in every local repo on 2026-11-01, after the catalog/CMS/storefront wave (cat-010, cat-011, cms-006, cms-007, sf-053, ord-012 + contracts 1.11.0 and messaging 0.4.0). Every entry lists commits ahead of upstream, oldest first; auth-svc is present with an empty list because it was walked and is level with origin/master. ecom-messaging and ecom-infra have no remote at all, so their lists are only the commits this wave series produced and their full history cannot leave this machine; ecom-infra's plan/db commits are carried from the 2026-10-31 pass, since nothing in this wave touched it. state-for-agents cannot list itself. Nothing was pushed, tagged, released or published.",
+  "unpushedVerifiedAt": "2026-11-02",
+  "unpushedNote": "Recomputed with git rev-parse @{u} and git rev-list --count @{u}..HEAD in every local repo on 2026-11-02, after the CMS-home wave (ec-006, cat-013, cms-008, sf-060/062/063/064). Ahead counts: ecom-contracts 4, catalog-svc 5, cms-svc 3, Documentation 4, storefront 24, state-for-agents 8 + this commit. ecom-messaging and ecom-infra have no remote at all, so their lists are only the commits this wave series produced and their full history cannot leave this machine. state-for-agents cannot list itself. Nothing was pushed, tagged, released or published.",
   "workflow": "Claim: create TASKS/in-progress/<id>-<slug>.md, set the entry status to in-progress, owner, and started. Build against the chained skills (router order). Close: move the log to TASKS/done/, fill verification and follow_ups, flip status to done and finished, update STATUS.md and summary in the same commit. Todo entries carry log:null until claimed; in-progress and done entries must have an existing log file. Commits: one commit per file (larger edits split per edit); stage with diff eyes-on; subject + reason body; local-only until the human says push. Unpushed lists only verified local commits; the carrier commit joins on the next update. Validation: id == filename, status == folder, log exists for in-progress/done, STATUS counts == summary.",
   "rules": "Claim: set claimedBy={agent,since,task} + stages.<stage> to in-progress (24h lease; other instances must not steal without comment). Finish: flip stage to done + update SERVICES.md + STATUS.md in same commit. Stage vocab locked: todo|in-progress|done (maps to todo/in-progress/done cells). Path truth: localRoots below are where agents edit TODAY; future split repos named in 'repo'. Never invent paths — resolve via SKILL-EXPLORE. motive is immutable (ADR change only); inProgress/next are mutable. Transport truth: Kafka is domain events only, SQS is task jobs only; each repo messaging block and the top-level messaging catalog are authoritative.",
   "repos": {
@@ -1780,13 +1796,13 @@
           "follow_ups": []
         },
         {
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-02",
+          "finished": "2026-11-02",
           "phase": "P2",
-          "log": null,
-          "verified": false,
+          "log": "TASKS/done/sf-060-cms-driven-home.md",
+          "verified": true,
           "id": "sf-060",
           "title": "storefront: CMS-driven home and section set",
           "priority": "P2",
@@ -1802,7 +1818,8 @@
             "Hero and section order come from cms-svc with per-section card overrides (A2.6).",
             "Featured/Category/Brand/Blog sections render from CMS payloads."
           ],
-          "follow_ups": []
+          "follow_ups": [],
+          "design_match": "yes"
         },
         {
           "status": "todo",
@@ -1829,6 +1846,90 @@
           ],
           "follow_ups": [
             "Requires the catalog-svc caller (producer exists; the webhook call does not)"
+          ]
+        },
+        {
+          "id": "sf-062",
+          "title": "CMS footer shell + FooterMount + minimal real-routes fallback",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-02",
+          "finished": "2026-11-02",
+          "verified": true,
+          "design_match": "yes",
+          "phase": "P3",
+          "priority": "P2",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [
+            "sf-050",
+            "cms-008"
+          ],
+          "log": "TASKS/done/sf-062-footer-shell.md",
+          "key_decisions": [
+            "Dumb Footer block + client FooterMount mounted after children, self-suppressing on AUTH_PATHS (NavbarMount pattern); CMS-down fallback is a minimal shell of real routes only, not fake content."
+          ],
+          "acceptance": [
+            "Footer columns/social/legal/contact/paymentIcons render from cms-svc; fallback appears with cms down."
+          ],
+          "follow_ups": []
+        },
+        {
+          "id": "sf-063",
+          "title": "blog list/detail routes + about/privacy/terms legal pages",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-02",
+          "finished": "2026-11-02",
+          "verified": true,
+          "design_match": "yes",
+          "phase": "P3",
+          "priority": "P2",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [
+            "sf-050",
+            "cms-008"
+          ],
+          "log": "TASKS/done/sf-063-blog-legal-routes.md",
+          "key_decisions": [
+            "Blog + legal copy live in cms-svc pages/blogs (editable through CMS), not hardcoded TSX; rich text rendered through a dependency-free allowlist sanitizer (p/h2-h4/ul/ol/li/strong/em/br/internal a)."
+          ],
+          "acceptance": [
+            "/blog, /blog/[slug], /about, /privacy, /terms ISR from cms-svc; missing/inactive page -> notFound()."
+          ],
+          "follow_ups": []
+        },
+        {
+          "id": "sf-064",
+          "title": "demo seed (committed media + idempotent admin-API seed via ecom-infra)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-02",
+          "finished": "2026-11-02",
+          "verified": true,
+          "design_match": "yes",
+          "phase": "P3",
+          "priority": "P2",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [
+            "sf-060",
+            "sf-062",
+            "sf-063",
+            "cat-013",
+            "cms-008"
+          ],
+          "log": "TASKS/done/sf-064-demo-seed.md",
+          "key_decisions": [
+            "Seed through admin HTTP APIs (not raw SQL) so validation/outbox/events/revalidation fire and seeded state equals admin-edited state; committed assets under public/media/seed referenced as internal imageRef paths.",
+            "Brand logos / dedicated blog covers omitted (image budget); wordmark fallbacks + category-tile reuse keep it honest — no invented artwork."
+          ],
+          "acceptance": [
+            "seed:demo is idempotent and produces 6 categories/6 brands/14 products/7 homepage sections/3 posts/3 pages/footer/nav."
+          ],
+          "follow_ups": [
+            "Retry generated brand logos + dedicated product/blog photos when image credits are available."
           ]
         }
       ],
@@ -2186,6 +2287,33 @@
             "taskQueues": [],
             "doesNotUseKafka": "Release metadata only; no runtime Kafka or SQS."
           }
+        },
+        {
+          "id": "ec-006",
+          "title": "contracts 1.12.0: section settings/content extensions + footer schema + catalog ids",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-02",
+          "finished": "2026-11-02",
+          "verified": true,
+          "design_match": "yes",
+          "phase": "P3",
+          "priority": "P2",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [
+            "ec-001"
+          ],
+          "log": "TASKS/done/ec-006-contracts-1-12-0.md",
+          "key_decisions": [
+            "Extend existing section types (hero height, brand-strip/testimonial motion, featured source manual|newest, per-item brand label) rather than new marquee/reviews/collection types; backward-compatible minor bump 1.11.0 -> 1.12.0, .strict() preserved.",
+            "New footer.ts schema (columns<=6, social, legal, contact, logo/wordmark, paymentIcons<=8) with no newsletter block; imageRefSchema permits internal /media paths."
+          ],
+          "acceptance": [
+            "New fields accepted, unknown keys rejected, 1.11.0 payloads still valid.",
+            "Packed tarball repined into cms-svc + storefront."
+          ],
+          "follow_ups": []
         }
       ],
       "messaging": {
@@ -2898,6 +3026,31 @@
           "follow_ups": [
             "Restock is whole-hold: order-svc refunds the entire order, so every committed item returns together. A per-line (partial) refund would need a per-item restock and is out of scope here."
           ]
+        },
+        {
+          "id": "cat-013",
+          "title": "ids filter on product list (manual curation support)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-02",
+          "finished": "2026-11-02",
+          "verified": true,
+          "design_match": "yes",
+          "phase": "P3",
+          "priority": "P2",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [
+            "cat-003"
+          ],
+          "log": "TASKS/done/cat-013-product-ids-filter.md",
+          "key_decisions": [
+            "Server-side ids (comma UUIDs, max 24) with ARRAY_POSITION ordering + status='active' guard rather than client-side filtering of paged lists — index-friendly and the only way manual 'Most Popular' stays honest."
+          ],
+          "acceptance": [
+            "GET /catalog/products?ids= returns picks in input order, caps at 24, 400s on a bad UUID, never leaks drafts."
+          ],
+          "follow_ups": []
         }
       ],
       "note": "11/12 done; backlog is cat-012 (restock after a post-commit refund). Verified: 157 unit (24 files) + 118 e2e (12 files passed, 2 skipped) green, plus 3 live Kafka cases behind RUN_KAFKA_E2E. Producers are on catalog.outbox/relay (cat-007), and both consumers share one @ecom/messaging strategy on one group: order.created commits the reservation (cat-009) and product.imported upserts product, category, brand, variants and images in one transaction (cat-008), writing onHand = max(0, imported - openReserved) plus one stock_movements row with reason 'import' and no outbox re-emit. Stock reserve/release is idempotent and persisted (cat-006); release on cancelled/failed/refunded is cat-010: the same group consumes order.status.updated, finds the reservation by order_id (order-svc names the planned order id while reserving) and releases a held hold in the same transaction as the processed_events claim. A committed hold is a logged anomaly, not a dead letter - its stock was sold, so a post-commit restock is cat-012. order.created tolerates a hold that a cancellation already released, because the two topics have no cross-topic ordering. Import needs db/008 (widens products_source_check to accept 'import') - there is no cat-008 table to look for. No SQS tasks. Fixture seed is dev/test-only: db/seed.mjs refuses without CATALOG_ALLOW_FIXTURE_SEED and bootstrap fails if the flag is on in production (cat-011).",
@@ -4098,6 +4251,33 @@
             "Sections, pages and blogs send no tag until the storefront has a reader and a tag for them (sf-061/sf-062)",
             "REVALIDATE_SECRET must match the storefront's value; a mismatch is a 401 warn line per publish"
           ]
+        },
+        {
+          "id": "cms-008",
+          "title": "footer module + revalidation parity across sections/blogs/pages",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-02",
+          "finished": "2026-11-02",
+          "verified": true,
+          "design_match": "yes",
+          "phase": "P3",
+          "priority": "P2",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [
+            "cms-007"
+          ],
+          "log": "TASKS/done/cms-008-footer-revalidation-parity.md",
+          "key_decisions": [
+            "Footer is its own Mongo module mirroring settings/ (public GET, admin GET|PUT, outbox + cache-del + revalidate), not folded into theme/navigation.",
+            "RevalidateService wired into sections/blogs/pages with the exact storefrontTags list; best-effort after commit so a revalidation failure never fails a write."
+          ],
+          "acceptance": [
+            "GET /cms/footer + admin PUT round-trip validated against contracts footerSchema.",
+            "Sections/blogs/pages mutations emit the precise cms:* tags (parity test against the storefront allowlist)."
+          ],
+          "follow_ups": []
         }
       ],
       "note": "7/7 done, no backlog. Verified: 149 unit (22 files) + 87 e2e passed (4 skipped) + 0/0 lint on 100 files + clean build; the media-resize e2e runs green against real LocalStack when AWS_ENDPOINT_URL is set and skips with a printed reason otherwise. Media has one containment-checked path builder (null byte, single decode, mediaKeySchema, path.relative, then realpath re-check), visibility public/private, a public file route that 404s private and orphan files, an admin-only ObjectId file route, and public max-age=60 must-revalidate caching. cms.updated/blog.updated are written to cms_outbox inside the same Mongo transaction as the write (cms-005); media renditions are SQS tasks with an idempotency key (cms-006) and there is no producer or consumer on the direct Kafka bus left; the three storefront-read mutations POST their exact tag to /api/revalidate with the shared secret (cms-007). Named debt: upload size/MIME checks still run post-buffer (cms-004) and there is no variant garbage collection.",
