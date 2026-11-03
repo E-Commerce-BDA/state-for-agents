@@ -1,9 +1,9 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-02",
+  "updatedAt": "2026-11-03",
   "summary": {
-    "total": 144,
-    "done": 115,
+    "total": 145,
+    "done": 116,
     "in_progress": 0,
     "backlog": 29,
     "byRepo": {
@@ -80,8 +80,8 @@
         "backlog": 4
       },
       "search-svc": {
-        "total": 3,
-        "done": 3,
+        "total": 4,
+        "done": 4,
         "in_progress": 0,
         "backlog": 0
       },
@@ -127,9 +127,10 @@
           "cms-003",
           "cms-004",
           "srch-001",
+          "srch-004",
           "doc-001"
         ],
-        "count": 13
+        "count": 14
       },
       {
         "id": "P1",
@@ -5106,12 +5107,10 @@
         "spec": "done",
         "build": "done",
         "test": "done",
-        "verify": "in-progress"
+        "verify": "done"
       },
       "inProgress": null,
-      "next": [
-        "srch-003 dual ingestion + DLQ replay"
-      ],
+      "next": [],
       "blockedBy": [],
       "skills": [
         "SKILL-EXPLORE",
@@ -5132,7 +5131,7 @@
         "taskQueues": []
       },
       "claimedBy": null,
-      "note": "2/3 done; backlog is srch-003 (dual ingestion + DLQ replay). Verified: 120 unit (18 files) + 92 e2e (1 skipped) green, plus 1 live case against a real broker that consumes a record on the Nest transport and commits its offset. The consumer is a Nest @EventPattern controller over the shared @ecom/messaging 0.3.0 strategy (srch-002): one controller, four routes, group exactly search-svc with postfixId '' - search-svc-server must stay absent, and the proof is describeGroups state, not logs. srch-001's behaviour is unchanged: malformed JSON and invalid payloads dead-letter to <topic>.dlq, duplicate event ids are no-ops via processed_events, unknown types are ignored with a metric. contracts are vendored at 1.9.0 (from vendor/, unlike the other repos), which is what lets the index parse product.imported variants[]. Publishes nothing; the internal batch endpoint remains for backfill/tests; no SQS tasks.",
+      "note": "4/4 done, no backlog. Verified: 142 unit (20 files) + 96 e2e (1 skipped) green, lint 0, clean build, plus a live drain: product.updated partition 2 advanced past the offset that used to wedge the group, with no Exhausted retries and no UNKNOWN_MEMBER_ID in the log. Index identity is the composite primary key (document_type, id) (srch-004, migration 004), which is also what the ON CONFLICT arbiter matches, so a product and a category may share an id. The consumer is a Nest @EventPattern controller over the shared @ecom/messaging 0.5.0 strategy (srch-002): one controller, four routes, group exactly search-svc with postfixId '' - search-svc-server must stay absent, and the proof is describeGroups state, not logs. The retry ladder is now bounded by the session (sessionTimeout 45s, retryBudgetMs 20s) and an index constraint violation is dead-lettered on attempt 1 as index-constraint-violation rather than walked. srch-001's behaviour is otherwise unchanged: malformed JSON and invalid payloads dead-letter to <topic>.dlq, duplicate event ids are no-ops via processed_events, unknown types are ignored with a metric. The dev index is rebuilt from its sources by pnpm search:reindex (16 products, 9 categories, 3 blogs, zero orphans); 002-seed-search.sql applies to ecom_search_test only. contracts are vendored at 1.9.0 (from vendor/, unlike the other repos), which is what lets the index parse product.imported variants[]. Publishes nothing; the internal batch endpoint remains for backfill/tests; no SQS tasks.",
       "tasks": [
         {
           "id": "srch-001",
@@ -5305,6 +5304,85 @@
           ],
           "verified": true,
           "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [
+              {
+                "event": "product.imported",
+                "topic": "product.imported",
+                "group": "search-svc",
+                "dlq": "product.imported.dlq",
+                "implementation": "Kafka primary; internal batch endpoint for backfill/tests."
+              },
+              {
+                "event": "product.updated",
+                "topic": "product.updated",
+                "group": "search-svc",
+                "dlq": "product.updated.dlq",
+                "implementation": "Kafka primary; internal batch endpoint for backfill/tests."
+              },
+              {
+                "event": "category.updated",
+                "topic": "category.updated",
+                "group": "search-svc",
+                "dlq": "category.updated.dlq",
+                "implementation": "Kafka primary; internal batch endpoint for backfill/tests."
+              },
+              {
+                "event": "blog.updated",
+                "topic": "blog.updated",
+                "group": "search-svc",
+                "dlq": "blog.updated.dlq",
+                "implementation": "Kafka primary; internal batch endpoint for backfill/tests."
+              }
+            ],
+            "taskQueues": [],
+            "doesNotUseKafka": "No Kafka producer. No SQS tasks."
+          }
+        },
+        {
+          "id": "srch-004",
+          "title": "search-svc + messaging: composite document identity, session-bounded retry ladder, trustworthy reindex",
+          "status": "done",
+          "owner": "qoder",
+          "started": "2026-11-03",
+          "finished": "2026-11-03",
+          "phase": "P0",
+          "priority": "P1",
+          "kind": "bugfix",
+          "transport": "kafka-consumer",
+          "dependsOn": [
+            "srch-002",
+            "srch-003"
+          ],
+          "log": "TASKS/done/srch-004-composite-pk-and-bounded-retry-ladder.md",
+          "key_decisions": [
+            "Identity is the composite primary key (document_type, id): migration 004 drops PRIMARY KEY (id) and the now-redundant search_documents_type_id_key, and the fresh-install DDL matches. Reason: the single-column PK outranked the ON CONFLICT (document_type, id) arbiter, so a cross-type id collision was a 23505 no retry can ever clear. Rejected: re-point the upsert at ON CONFLICT (id), which would let a category document overwrite a product one.",
+            "The consumer strategy sets sessionTimeout 45000 and heartbeatInterval 3000 explicitly. Reason: nothing set them before, so kafkajs's 30s default owned a production contract and evicted the member mid-ladder, killing both the DLQ write and the commit with UNKNOWN_MEMBER_ID. Rejected: raise only the session timeout, which leaves the ladder unbounded for the next handler that adds a delay.",
+            "KafkaEventHandler takes retryBudgetMs and truncates retryDelaysMs at construction so the total sleep stays inside the session; search-svc passes 20000, giving 1000/2000/4000/8000 over 5 handler attempts. Reason: the budget belongs with whoever owns the ladder, and the truncated ladder also matches the maxReceiveCount 5 parity the SQS relay already claims. Rejected: cap the sleep at retry time per message, which cannot keep maxRetries and the ladder length honest.",
+            "A SQLSTATE 23505 from the index write is terminal: translateIndexError maps it to index-constraint-violation and the record dead-letters on attempt 1 with the offset committed. Reason: redelivery cannot repair a deterministic constraint breach, and walking the ladder over one is exactly what wedged the partition. Rejected: treat it like a transient DB failure and retry, which stalls the group for a record that will never succeed.",
+            "reindex.mjs reads exactly one complete page per document type and refuses a type whose response carries nextCursor; a type that fails to load is dropped from the payload instead of half-loaded. Reason: IndexerService.pruneMissing runs per type present in the payload, so a partial read deletes live documents - the first run pruned 6 and reported success while products were never read at all. Rejected: walk the products cursor, which is not exhaustive (page 2 repeats 78 of page 1's 100 rows), and rejected: fix catalog-svc in this wave, which is a different repo's contract.",
+            "Dev databases stop applying 002-seed-search.sql; the index is populated by events plus pnpm search:reindex, and the seed stays ecom_search_test-only. Reason: the seed hand-authors category ids that collide with catalog product fixture ids, orphaning rows in the shared dev index. Rejected: edit the seed, which is the e2e suite's fixture and whose count assertions the suite depends on."
+          ],
+          "acceptance": [
+            "search_documents has PRIMARY KEY (document_type, id) and no search_documents_type_id_key, in migration 004, the fresh-install DDL and the live dev and test databases.",
+            "The same id can exist as a product and as a category at once, and an ON CONFLICT (document_type, id) upsert of the colliding id writes instead of raising; pruneMissing leaves the same-id row of another type alive.",
+            "The emitted Kafka consumer config carries sessionTimeout 45000 and heartbeatInterval 3000, and an explicit option overrides either.",
+            "With retryBudgetMs the ladder's total sleep stays within the budget and the attempt count follows the truncated ladder; without it the ladder is exactly 1/2/4/8/16s.",
+            "A 23505 from the repository dead-letters on the first attempt as index-constraint-violation and the offset still commits - no ladder walked.",
+            "Live boot drains without Exhausted retries or UNKNOWN_MEMBER_ID, product.updated partition 2 advances past the old offset-61 wedge, and the index matches its sources (16 products, 9 categories, 3 blogs, zero orphans).",
+            "Docs state the composite identity and the bounded-ladder rule; search-svc README separates the development database from the e2e test database."
+          ],
+          "verified": true,
+          "follow_ups": [
+            "CursorPayload.id is the bare keyset tiebreaker (src/search/cursor.codec.ts, src/search/search.repository.ts) while ids are no longer globally unique. Harmless for the uuid-keyed sources in use; a correct fix adds documentType to the cursor payload, which is a wire-format change.",
+            "search_documents.id is varchar(64) while the docs and row types still describe a uuid; changing the column type touches event-mapper.ts, db/rows.ts and the cursor codec.",
+            "cart-svc and catalog-svc stay on @ecom/messaging 0.3.0, so their retry ladders remain unbounded until their next wave; ADR 44 is the constraint they must meet. Observed live: catalog-svc loops order.created offsets 3 and 4 forever and order.created.dlq held 2696 records.",
+            "catalog-svc's public product list cursor is not a walk - ORDER BY created_at DESC, id DESC continued by id > cursor repeats 78 of page 1's 100 rows - so an archived or draft product snapshot over HTTP is impossible today. Fixing it belongs to catalog-svc.",
+            "e2e suites write into the shared dev index (cart-tee-*); a test-owned purge marker is needed so a reindex is not the only thing that cleans them up.",
+            "catalog.products holds 267 non-deleted rows of which 246 are archived, so only 16 demo products are searchable - seed hygiene, not a search defect.",
+            "cms-svc exposes no HTTP route that enumerates draft blogs (the public list is published-only, the admin list is JWT + Roles guarded), so a blog reindex snapshot can only ever cover published documents."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [
