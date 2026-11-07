@@ -2,16 +2,16 @@
   "version": 2,
   "updatedAt": "2026-11-03",
   "summary": {
-    "total": 145,
-    "done": 116,
+    "total": 147,
+    "done": 117,
     "in_progress": 0,
-    "backlog": 29,
+    "backlog": 30,
     "byRepo": {
       "storefront-ui": {
-        "total": 65,
-        "done": 56,
+        "total": 67,
+        "done": 57,
         "in_progress": 0,
-        "backlog": 9
+        "backlog": 10
       },
       "admin-app": {
         "total": 1,
@@ -1931,6 +1931,60 @@
           ],
           "follow_ups": [
             "Retry generated brand logos + dedicated product/blog photos when image credits are available."
+          ]
+        },
+        {
+          "id": "sf-065",
+          "title": "storefront: banner section renderer (bannerContentSchema)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-07",
+          "finished": "2026-11-07",
+          "verified": false,
+          "design_match": "yes",
+          "phase": "P2",
+          "priority": "P2",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [
+            "sf-060"
+          ],
+          "log": null,
+          "key_decisions": [
+            "The storefront now builds BannerViewModel from bannerContentSchema (title/subcopy/image/imageAlt/bgColor/align/ctas + settings blendMode) and renders BannerSection through SectionRenderer. Empty image fails closed; no contract change."
+          ],
+          "acceptance": [
+            "A valid published banner section renders on the storefront; an imageless banner is skipped.",
+            "Resolver + BannerSection + SectionRenderer tests cover the model, dispatch, alignment, CTAs and blend var."
+          ],
+          "follow_ups": [
+            "cms-007 follow-up: sections cache/revalidation remains owned by cms-svc tags; banner render itself needs no contract or tag change."
+          ]
+        },
+        {
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P2",
+          "log": null,
+          "verified": false,
+          "id": "sf-066",
+          "title": "storefront: search palette trending/curated regions — needs search-svc trending endpoint",
+          "priority": "P2",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [
+            "sf-060"
+          ],
+          "key_decisions": [
+            "Do not fake trending/curated data in the storefront. The palette props exist but SearchMount deliberately does not pass them until search-svc serves a trending endpoint."
+          ],
+          "acceptance": [
+            "SearchMount passes search-svc-backed trending/curated results when the endpoint exists; until then the palette fails closed with no invented data."
+          ],
+          "follow_ups": [
+            "Requires a search-svc trending endpoint (or a curated source contract) before wiring the props."
           ]
         }
       ],
