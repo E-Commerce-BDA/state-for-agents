@@ -1,15 +1,15 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-03",
+  "updatedAt": "2026-11-16",
   "summary": {
-    "total": 147,
-    "done": 117,
+    "total": 151,
+    "done": 121,
     "in_progress": 0,
     "backlog": 30,
     "byRepo": {
       "storefront-ui": {
-        "total": 67,
-        "done": 57,
+        "total": 71,
+        "done": 61,
         "in_progress": 0,
         "backlog": 10
       },
@@ -1986,6 +1986,126 @@
           "follow_ups": [
             "Requires a search-svc trending endpoint (or a curated source contract) before wiring the props."
           ]
+        },
+        {
+          "id": "sf-067",
+          "title": "storefront: per-product CMS PDP sections (description/details/reviews/related/trust/story/FAQ)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-08",
+          "finished": "2026-11-08",
+          "verified": true,
+          "design_match": "yes",
+          "phase": "P2",
+          "priority": "P2",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [
+            "sf-060"
+          ],
+          "log": "TASKS/done/sf-067-pdp-sections.md",
+          "key_decisions": [
+            "pdp-default is a materialized blueprint cloned into pdp-<product.id>; the storefront never reads pdp-default or a slug key.",
+            "An empty successful CMS response means no sections; the built-in fallback is used only when the CMS read returns null.",
+            "Reviews are CMS-authored only; the rating summary averages numeric item ratings and never invents data.",
+            "Trust moved out of PurchasePanel into pdp_trust; PRODUCT_TRUST_ITEMS is fallback-only."
+          ],
+          "acceptance": [
+            "Contracts 1.14.0 adds seven pdp_* section types plus cloneSectionsSchema and sectionListEnvelopeSchema; cms-svc exposes POST /cms/admin/sections/clone and derives its Mongoose enum from SECTION_TYPES.",
+            "The PDP reads only pdp-<product.id>, renders CMS sections in sortOrder with isActive visibility, derives #reviews and the buy-box rating only from pdp_reviews, and contains no hardcoded description/details/related/trust blocks.",
+            "Seed materializes pdp-default per product through admin APIs; SEED_RESET_PDP=1 is the explicit replace path; legacy slug-keyed demo rows are left untouched pending approval."
+          ],
+          "follow_ups": [
+            "adm-001: add the admin Apply default action and new-product clone hook; use ecom-infra pdp:backfill until then.",
+            "Decide whether to delete the legacy slug-keyed demo PDP rows.",
+            "Do not set verified on demo reviews unless genuinely verified."
+          ]
+        },
+        {
+          "id": "sf-068",
+          "title": "storefront: mini-cart drawer actions and spacing (gap between View cart and Checkout, optional admin toggle)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-16",
+          "finished": "2026-11-16",
+          "verified": true,
+          "design_match": "yes",
+          "phase": "P2",
+          "priority": "P2",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [
+            "sf-051"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Wrap minicart foot buttons in .sf-minicart__actions with display: flex; flex-direction: column; gap: 12px; so View cart and Checkout never touch.",
+            "Expose drawerActions: { showViewCart, showCheckout } in nav cart settings schema and resolve with fallback hierarchy.",
+            "Forward drawerActions via RootLayout and CartProvider to MiniCartDrawer."
+          ],
+          "acceptance": [
+            "View cart and Checkout have a 12px gap between them.",
+            "Both buttons can be independently enabled or disabled via CMS navigation settings.",
+            "All unit and style tests pass."
+          ],
+          "follow_ups": []
+        },
+        {
+          "id": "sf-069",
+          "title": "storefront: search error transparency and feedback (503 on search-svc downtime, role=alert in overlays)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-16",
+          "finished": "2026-11-16",
+          "verified": true,
+          "design_match": "yes",
+          "phase": "P2",
+          "priority": "P2",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [
+            "srch-004"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Do not mask search-svc failures with empty 200 responses in /api/search/suggest.",
+            "Throw on error in httpSearchSource so useSearch transitions status to error.",
+            "Render an accessible error banner with role=alert in SearchSheet, SearchEditorial, and SearchPalette instead of claiming no matches."
+          ],
+          "acceptance": [
+            "Search outages surface a clear error alert to the shopper.",
+            "Unit tests cover 503 response and alert banner rendering."
+          ],
+          "follow_ups": []
+        },
+        {
+          "id": "sf-070",
+          "title": "storefront: auth split layout polish (vertical centering, semantic regions, microcopy)",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-16",
+          "finished": "2026-11-16",
+          "verified": true,
+          "design_match": "yes",
+          "phase": "P2",
+          "priority": "P2",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [
+            "sf-039"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Add flex items-center justify-center to auth layout to vertically center the card in the viewport on desktop.",
+            "Organize AuthPanel into semantic head, body, and footer regions.",
+            "Support and render sanitized microcopy in the panel footer."
+          ],
+          "acceptance": [
+            "Auth cards are centered vertically in the viewport.",
+            "Configured microcopy renders with proper styling in AuthPanel.",
+            "All unit and style tests pass."
+          ],
+          "follow_ups": []
         }
       ],
       "messaging": {
