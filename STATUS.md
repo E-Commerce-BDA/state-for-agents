@@ -2,7 +2,7 @@
 
 > Scope: human-readable mirror of `tasks.json`. `tasks.json` is canonical.
 > Status: Active | Date: 2026-11-17
-> Counts: **152 total = 123 done + 0 in-progress + 29 backlog**
+> Counts: **152 total = 124 done + 0 in-progress + 28 backlog**
 > Truth rule: “core complete” is **not** “feature complete”. Every pending item
 > below has a task ID in `tasks.json`; no service is marked 100% while a task
 > remains.
@@ -170,7 +170,7 @@ worker without touching the API.
 
 | Repo | Total | Done | In progress | Backlog | Next up |
 |---|---:|---:|---:|---:|---|
-| `storefront-ui` | 71 | 62 | 0 | 9 | `sf-052`, then `sf-053a` (live checkout harness), then `sf-055..sf-059`+`sf-061` depth wave, plus `sf-066` (search palette trending/curated — needs a search-svc trending endpoint). `sf-054` listing depth, `sf-067` PDP sections and `sf-068/069/070` polish are done locally; `sf-060` CMS home and `sf-062/063/064` footer/blog-legal/seed closed the CMS-home wave |
+| `storefront-ui` | 71 | 63 | 0 | 8 | `sf-052`, then `sf-053a` (live checkout harness), then `sf-056..sf-059`+`sf-061` depth wave, plus `sf-066` (search palette trending/curated — needs a search-svc trending endpoint). `sf-055` PDP depth, `sf-054` listing depth, `sf-067` PDP sections and `sf-068/069/070` polish are done locally; `sf-060` CMS home and `sf-062/063/064` footer/blog-legal/seed closed the CMS-home wave |
 | `ecom-contracts` | 6 | 4 | 0 | 2 | `ec-004`, `ec-005` (`ec-006` 1.12.0 closed by the CMS-home wave) |
 | `ecom-messaging` | — | — | — | — | no task entries of its own: it is delivered through `au-004`/`ca-008` and re-opened by `cat-007`/`ord-011`/`cms-005`/`srch-002`/`ca-009`/`cat-008`; now **0.5.0** — Postgres + Mongo stores, the consumer surface, the session-bounded retry budget and the SQS task surface, with all five producers on the outbox API (cms-svc on 0.4.0), search-svc on 0.5.0 and cart/catalog still on 0.3.0. 0.5.0 rode inside `srch-004` exactly as 0.3.0 rode inside `ca-009`/`srch-002` and 0.4.0 inside `cms-006` |
 | `auth-svc` | 4 | 3 | 0 | 1 | `au-005` |

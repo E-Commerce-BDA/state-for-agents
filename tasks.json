@@ -3,15 +3,15 @@
   "updatedAt": "2026-11-16",
   "summary": {
     "total": 152,
-    "done": 123,
+    "done": 124,
     "in_progress": 0,
-    "backlog": 29,
+    "backlog": 28,
     "byRepo": {
       "storefront-ui": {
         "total": 71,
-        "done": 62,
+        "done": 63,
         "in_progress": 0,
-        "backlog": 9
+        "backlog": 8
       },
       "admin-app": {
         "total": 1,
@@ -1668,26 +1668,31 @@
           "follow_ups": []
         },
         {
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-17",
+          "finished": "2026-11-17",
           "phase": "P2",
-          "log": null,
-          "verified": false,
+          "log": "TASKS/done/sf-055-pdp-depth.md",
+          "verified": true,
+          "design_match": "yes",
           "id": "sf-055",
           "title": "storefront: PDP depth (variant URL history, photo-settings precedence, compare tray, related-by-brand)",
           "priority": "P1",
           "kind": "feature",
           "transport": "http",
           "dependsOn": [
-            "sf-051"
+            "sf-051",
+            "sf-067"
           ],
           "key_decisions": [
-            "Variant selection pushes history entries (routing.md routing.md s4) and photo settings resolve storefront-wide precedence in one lib/commerce model. Rejected: modal-only variant state that dies on back."
+            "Variant URL sync in a client hook with pure codec; RSC redirect would 404 on a bad query. Rejected: server-side variant validation/redirect.",
+            "One pure photo-settings resolver for product > section > global; per-component reads would re-decide precedence three times.",
+            "Compare tray is session-only in a root provider; /compare?ids= is the shareable artifact. Rejected: localStorage (banned) and a cookie BFF hop.",
+            "pdp_related.source gains brand as a contracts enum value; a new section type would duplicate the resolver/view model."
           ],
           "acceptance": [
-            "A2.7 + routing.md routing.md s4: variant changes are push-history aware and shareable by URL.",
+            "A2.7 + routing.md s4: variant changes are push-history aware and shareable by URL.",
             "A3.1: photo-settings precedence resolves per product with the storefront default.",
             "A3.7: compare tray surfaces on PDP with the cards it collects.",
             "A3.9: related-by-brand renders alongside related-by-category."
