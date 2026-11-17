@@ -2,16 +2,16 @@
   "version": 2,
   "updatedAt": "2026-11-16",
   "summary": {
-    "total": 151,
-    "done": 121,
+    "total": 152,
+    "done": 123,
     "in_progress": 0,
-    "backlog": 30,
+    "backlog": 29,
     "byRepo": {
       "storefront-ui": {
         "total": 71,
-        "done": 61,
+        "done": 62,
         "in_progress": 0,
-        "backlog": 10
+        "backlog": 9
       },
       "admin-app": {
         "total": 1,
@@ -38,8 +38,8 @@
         "backlog": 1
       },
       "catalog-svc": {
-        "total": 13,
-        "done": 13,
+        "total": 14,
+        "done": 14,
         "in_progress": 0,
         "backlog": 0
       },
@@ -1637,23 +1637,27 @@
           "follow_ups": []
         },
         {
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-17",
+          "finished": "2026-11-17",
           "phase": "P2",
-          "log": null,
-          "verified": false,
+          "log": "TASKS/done/sf-054-listing-depth.md",
+          "verified": true,
+          "design_match": "yes",
           "id": "sf-054",
           "title": "storefront: listing depth (filter rail, sort control, load-more, breadcrumb tree)",
           "priority": "P1",
           "kind": "feature",
           "transport": "http",
           "dependsOn": [
-            "sf-051"
+            "sf-051",
+            "cat-015"
           ],
           "key_decisions": [
-            "Filter/sort state lives in the URL and the listing fetches through a catalog BFF with a client cache. Reason: the RSC-only read from sf-051 cannot append pages without losing server render. Rejected: client-only listing state; re-fetching the full list per append."
+            "Filter/sort state lives in the URL and the listing fetches through a catalog BFF with a client cache. Reason: the RSC-only read from sf-051 cannot append pages without losing server render. Rejected: client-only listing state; re-fetching the full list per append.",
+            "The first page stays server-rendered; later pages come from /api/catalog/products through the shared loader. Rejected: a client-only listing that loses SEO.",
+            "A bare listing has no breadcrumb; a category-filtered one gets Home / … / Category from the facet tree. Rejected: a breadcrumb on every listing, which routing.md §2 calls noise."
           ],
           "acceptance": [
             "A2.1 filter rail narrows the grid and the state survives reload (URL-encoded).",
@@ -3226,9 +3230,37 @@
             "GET /catalog/products?ids= returns picks in input order, caps at 24, 400s on a bad UUID, never leaks drafts."
           ],
           "follow_ups": []
+        },
+        {
+          "id": "cat-015",
+          "title": "catalog-svc: keyset cursor walk and derived listing facets",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-17",
+          "finished": "2026-11-17",
+          "verified": true,
+          "design_match": "yes",
+          "phase": "P2",
+          "priority": "P1",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [
+            "cat-014"
+          ],
+          "log": "TASKS/done/cat-015-catalog-keyset-cursor-facets.md",
+          "key_decisions": [
+            "Opaque base64url cursor carries the last row's sort key plus a SHA-256 fingerprint of filters and sort; every continuation is a composite keyset predicate on the ORDER BY columns. Rejected: the previous bare-id `p.id > cursor` walk, which repeated rows on a DESC ordering.",
+            "Facet values are derived from active rows with DISTINCT unnest(tags) and min/max(price); no hardcoded or seeded facet list."
+          ],
+          "acceptance": [
+            "GET /catalog/products?cursor= walks every page without duplicate ids for all six sorts; a cursor from another filter set or sort is rejected with 400 CURSOR_INVALID.",
+            "GET /catalog/products/facets returns real tags and price bounds, optionally narrowed by categoryId/brandId.",
+            "Unit and e2e tests cover the codec, the walk, and the facets response."
+          ],
+          "follow_ups": []
         }
       ],
-      "note": "11/12 done; backlog is cat-012 (restock after a post-commit refund). Verified: 157 unit (24 files) + 118 e2e (12 files passed, 2 skipped) green, plus 3 live Kafka cases behind RUN_KAFKA_E2E. Producers are on catalog.outbox/relay (cat-007), and both consumers share one @ecom/messaging strategy on one group: order.created commits the reservation (cat-009) and product.imported upserts product, category, brand, variants and images in one transaction (cat-008), writing onHand = max(0, imported - openReserved) plus one stock_movements row with reason 'import' and no outbox re-emit. Stock reserve/release is idempotent and persisted (cat-006); release on cancelled/failed/refunded is cat-010: the same group consumes order.status.updated, finds the reservation by order_id (order-svc names the planned order id while reserving) and releases a held hold in the same transaction as the processed_events claim. A committed hold is a logged anomaly, not a dead letter - its stock was sold, so a post-commit restock is cat-012. order.created tolerates a hold that a cancellation already released, because the two topics have no cross-topic ordering. Import needs db/008 (widens products_source_check to accept 'import') - there is no cat-008 table to look for. No SQS tasks. Fixture seed is dev/test-only: db/seed.mjs refuses without CATALOG_ALLOW_FIXTURE_SEED and bootstrap fails if the flag is on in production (cat-011).",
+      "note": "14/14 done; verified 165 unit tests plus new e2e cases for the keyset walk and facets. Verified: 165 unit (25 files) + 118 e2e (12 files passed, 2 skipped) green, plus 3 live Kafka cases behind RUN_KAFKA_E2E. Producers are on catalog.outbox/relay (cat-007), and both consumers share one @ecom/messaging strategy on one group: order.created commits the reservation (cat-009) and product.imported upserts product, category, brand, variants and images in one transaction (cat-008), writing onHand = max(0, imported - openReserved) plus one stock_movements row with reason 'import' and no outbox re-emit. Stock reserve/release is idempotent and persisted (cat-006); release on cancelled/failed/refunded is cat-010: the same group consumes order.status.updated, finds the reservation by order_id (order-svc names the planned order id while reserving) and releases a held hold in the same transaction as the processed_events claim. A committed hold is a logged anomaly, not a dead letter - its stock was sold, so a post-commit restock is cat-012. order.created tolerates a hold that a cancellation already released, because the two topics have no cross-topic ordering. Import needs db/008 (widens products_source_check to accept 'import') - there is no cat-008 table to look for. No SQS tasks. Fixture seed is dev/test-only: db/seed.mjs refuses without CATALOG_ALLOW_FIXTURE_SEED and bootstrap fails if the flag is on in production (cat-011).",
       "messaging": {
         "role": "producer+consumer",
         "publishes": [
