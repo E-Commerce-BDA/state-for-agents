@@ -3,15 +3,15 @@
   "updatedAt": "2026-11-16",
   "summary": {
     "total": 152,
-    "done": 126,
+    "done": 127,
     "in_progress": 0,
-    "backlog": 26,
+    "backlog": 25,
     "byRepo": {
       "storefront-ui": {
         "total": 71,
-        "done": 63,
+        "done": 64,
         "in_progress": 0,
-        "backlog": 8
+        "backlog": 7
       },
       "admin-app": {
         "total": 1,
@@ -1546,10 +1546,10 @@
         {
           "id": "sf-052",
           "title": "storefront: /api/track page-view beacon",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-23",
+          "finished": "2026-11-23",
           "phase": "P4",
           "priority": "P0",
           "kind": "feature",
@@ -1557,10 +1557,11 @@
           "dependsOn": [
             "anl-002"
           ],
-          "log": null,
+          "log": "TASKS/done/sf-052-track-beacon.md",
           "key_decisions": [
-            "Use sendBeacon to Next /api/track, which forwards to analytics-svc over HTTP; the browser never sees Kafka. Reason: broker credentials must stay server-side. Rejected: browser Kafka client.",
-            "Respect consent and send no PII beyond the analytics contract. Reason: privacy and the PII-minimization rule. Rejected: send raw user identifiers."
+            "Browser sends sendBeacon to /api/track, never to analytics-svc: no service URL or credential in the client.",
+            "BFF always answers 202 even when analytics is down; a tracking outage is not a shopper problem.",
+            "Consent = DNT/GPC + opt-out cookie, checked in both the island and the route; no user id is sent."
           ],
           "acceptance": [
             "Page views and exit heartbeats reach analytics-svc.",
@@ -1568,8 +1569,9 @@
             "Tracking failure never blocks navigation.",
             "Tests cover consent and payload shape."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [],
+          "design_match": "yes"
         },
         {
           "id": "sf-053",
