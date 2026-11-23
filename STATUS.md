@@ -2,7 +2,7 @@
 
 > Scope: human-readable mirror of `tasks.json`. `tasks.json` is canonical.
 > Status: Active | Date: 2026-11-17
-> Counts: **152 total = 125 done + 0 in-progress + 27 backlog**
+> Counts: **152 total = 126 done + 0 in-progress + 26 backlog**
 > Truth rule: “core complete” is **not** “feature complete”. Every pending item
 > below has a task ID in `tasks.json`; no service is marked 100% while a task
 > remains.

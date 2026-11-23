@@ -3,9 +3,9 @@
   "updatedAt": "2026-11-16",
   "summary": {
     "total": 152,
-    "done": 125,
+    "done": 126,
     "in_progress": 0,
-    "backlog": 27,
+    "backlog": 26,
     "byRepo": {
       "storefront-ui": {
         "total": 71,
@@ -63,9 +63,9 @@
       },
       "analytics-svc": {
         "total": 4,
-        "done": 1,
+        "done": 2,
         "in_progress": 0,
-        "backlog": 3
+        "backlog": 2
       },
       "import-svc": {
         "total": 3,
@@ -4617,10 +4617,10 @@
         {
           "id": "anl-002",
           "title": "analytics-svc: HTTP page-view ingest and page.viewed producer",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-23",
+          "finished": "2026-11-23",
           "phase": "P4",
           "priority": "P0",
           "kind": "feature",
@@ -4629,10 +4629,12 @@
             "anl-001",
             "ec-002"
           ],
-          "log": null,
+          "log": "TASKS/done/anl-002-pageview-ingest.md",
           "key_decisions": [
-            "Storefront posts to Next /api/track, which forwards to analytics over HTTP; analytics validates and publishes page.viewed. Reason: the storefront must not hold Kafka credentials. Rejected: browser Kafka client.",
-            "Return 202 after validation and enqueue the event; do not block on the consumer. Reason: tracking must not slow navigation. Rejected: synchronous DB write in the request path."
+            "Validate then rate-limit then enqueue, so malformed bodies get 400 and cannot fill the outbox.",
+            "Server stamps timestamp; a client clock must not skew funnels.",
+            "Errors never echo rejected values because a page URL can carry a token.",
+            "In-memory sliding window per session, no Redis for one service; no ingest dedupe because the contract has no client event id."
           ],
           "acceptance": [
             "POST endpoint validates sessionId, page, eventKind, and optional userId.",
@@ -4640,7 +4642,7 @@
             "Publishes page.viewed keyed by sessionId.",
             "Rate limiting and invalid payload behavior are tested."
           ],
-          "verified": false,
+          "verified": true,
           "follow_ups": [],
           "messaging": {
             "publishes": [
@@ -4656,7 +4658,8 @@
             "consumes": [],
             "taskQueues": [],
             "doesNotUseKafka": "No SQS tasks. The storefront uses HTTP only."
-          }
+          },
+          "design_match": "yes"
         },
         {
           "id": "anl-003",
