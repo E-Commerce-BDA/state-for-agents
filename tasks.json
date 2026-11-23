@@ -3,9 +3,9 @@
   "updatedAt": "2026-11-16",
   "summary": {
     "total": 152,
-    "done": 124,
+    "done": 125,
     "in_progress": 0,
-    "backlog": 28,
+    "backlog": 27,
     "byRepo": {
       "storefront-ui": {
         "total": 71,
@@ -63,9 +63,9 @@
       },
       "analytics-svc": {
         "total": 4,
-        "done": 0,
+        "done": 1,
         "in_progress": 0,
-        "backlog": 4
+        "backlog": 3
       },
       "import-svc": {
         "total": 3,
@@ -4538,7 +4538,7 @@
     },
     "analytics-svc": {
       "motive": "Behavioral insight: page-view/exit funnel, cart idle→cart.abandoned detector, conversion + cohorts dashboards (fire-and-forget writes).",
-      "localRoot": "(to create, analytics-svc/)",
+      "localRoot": "analytics-svc/",
       "repo": "analytics-svc",
       "port": 4060,
       "ownerDocs": [
@@ -4546,7 +4546,7 @@
         "Documentation/5.Features.md B15"
       ],
       "stages": {
-        "spec": "todo",
+        "spec": "done",
         "build": "todo",
         "test": "todo",
         "verify": "todo"
@@ -4587,10 +4587,10 @@
         {
           "id": "anl-001",
           "title": "analytics-svc: scaffold, spec, and Mongo TTL schema",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-23",
+          "finished": "2026-11-23",
           "phase": "P4",
           "priority": "P0",
           "kind": "feature",
@@ -4598,10 +4598,11 @@
           "dependsOn": [
             "ec-002"
           ],
-          "log": null,
+          "log": "TASKS/done/anl-001-analytics-scaffold.md",
           "key_decisions": [
-            "Use Mongo collections with TTL indexes: page_views 30d, cart_events 60d, processed_events. Reason: high-volume append-only analytics fits TTL collections. Rejected: Postgres, which adds vacuum/write amplification.",
-            "Copy the auth.md service-spec shape. Reason: consistent service contracts. Rejected: ad-hoc README."
+            "Mongo TTL collections (page_views 30d, cart_events 60d) with no TTL on processed_events, because dedupe must outlive the facts it protects.",
+            "Copy the auth.md service-spec shape into Documentation/services/analytics.md before code, per docs-first.",
+            "Boot fails fast on a bad MONGODB_URI (retryAttempts: 0) so a misconfigured service cannot run green with no data."
           ],
           "acceptance": [
             "Nest 12 scaffold with health and readiness probes.",
@@ -4609,8 +4610,9 @@
             "Documentation/services/analytics.md exists.",
             "Unit and e2e suites are green."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [],
+          "design_match": "yes"
         },
         {
           "id": "anl-002",
