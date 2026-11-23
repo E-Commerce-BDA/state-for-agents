@@ -1,0 +1,178 @@
+repo,file,start,end,decision,reason
+cms-svc,vitest.config.e2e.ts,10,12,keep,"Non-local invariant: the relay reads the env var at module-declaration time, so it must precede app boot."
+cms-svc,src/app.module.ts,33,35,keep,Design rationale for a global RevalidateModule (best-effort collaborator across three mutations); not visible in the module list.
+cms-svc,src/app.module.ts,37,39,keep,Architecture decision: in-transaction cms_outbox events vs SQS media tasks owned by MediaModule.
+cms-svc,src/app.setup.ts,7,10,keep,Non-local invariant: configureApp is shared by production and e2e to prevent drift.
+cms-svc,test/footer.e2e-spec.ts,12,18,keep,External constraint from setup-env.ts (empty REVALIDATE_SECRET) plus a cross-file shape comparison.
+cms-svc,test/live-kafka.e2e-spec.ts,23,28,keep,Records how to run the broker-gated suite and that other suites use a recording publisher.
+cms-svc,test/live-kafka.e2e-spec.ts,65,69,keep,Kafka external behavior: a fresh consumer group per run makes fromBeginning replay the topic.
+cms-svc,test/live-kafka.e2e-spec.ts,111,112,keep,"Rejected alternative: an env flip is too late at module-declaration time, so override the publisher."
+cms-svc,test/media-resize.e2e-spec.ts,19,27,keep,External constraints: LocalStack init-script requirement and why the suite skips rather than fails.
+cms-svc,test/media-resize.e2e-spec.ts,31,31,keep,oxlint-disable directive — never touch.
+cms-svc,test/media-resize.e2e-spec.ts,39,40,keep,Non-local config invariant: explicit SQS_TASKS_ENABLED wins over the NODE_ENV=test default.
+cms-svc,test/media-resize.e2e-spec.ts,43,43,keep,External constraint: the AWS SDK needs signing credentials even for LocalStack.
+cms-svc,test/media-resize.e2e-spec.ts,73,73,keep,"Non-local invariant: the worker is a poller, hence eventual consistency and the waitFor helper."
+cms-svc,test/media-resize.e2e-spec.ts,90,92,keep,"Declaration-time env reads require the dynamic import here, not a top-level import."
+cms-svc,test/media-resize.e2e-spec.ts,122,122,keep,"External constraint: a leaked long poll keeps the run alive, hence app.close in teardown."
+cms-svc,test/media-resize.e2e-spec.ts,128,128,keep,Cross-suite test-isolation invariant behind deleting the env var.
+cms-svc,test/media-resize.e2e-spec.ts,149,149,delete,Restates visible arithmetic (3 widths x 4 formats = 12) and the source width 1200 shown in code.
+cms-svc,test/media-resize.e2e-spec.ts,163,164,keep,Non-local invariant: mediaKeySchema governs serving a variant through the original's route.
+cms-svc,test/media-resize.e2e-spec.ts,183,183,keep,Idempotency rationale: the same id means the effect is already done.
+cms-svc,test/media-resize.e2e-spec.ts,193,194,keep,Timing justification for 5000ms tied to external poll and render durations.
+cms-svc,test/media-resize.e2e-spec.ts,199,200,keep,"External filesystem fact: an identical re-write still changes mtime, so mtime proves no re-encode."
+cms-svc,test/media.e2e-spec.ts,138,140,keep,Design history (cms-006): renditions moved off Kafka so the upload needs no broker.
+cms-svc,test/media.e2e-spec.ts,186,186,delete,Test step label paraphrasing the POST /sections call below.
+cms-svc,test/media.e2e-spec.ts,203,203,delete,Test step label restating the .expect(409) assertion.
+cms-svc,test/media.e2e-spec.ts,211,211,delete,Test step label restating the DELETE call below.
+cms-svc,test/media.e2e-spec.ts,224,224,delete,Test step label paraphrasing the list GET and its assertion.
+cms-svc,test/media.e2e-spec.ts,235,235,delete,Test step label restating the .expect(404) call.
+cms-svc,test/outbox.e2e-spec.ts,69,75,keep,Non-local invariant: a shared outbox queue means a drain must filter by this aggregate.
+cms-svc,test/outbox.e2e-spec.ts,187,187,keep,Replay-dedup invariant: the event id doubles as the document key.
+cms-svc,test/outbox.e2e-spec.ts,233,233,keep,Cross-file invariant: revision bumps on every content change make the payload versions ascend.
+cms-svc,test/outbox.e2e-spec.ts,340,341,keep,External constraint: store-side schema validation aborts the transaction on a drifted payload.
+cms-svc,test/pages-blogs.e2e-spec.ts,344,344,delete,Test annotation paraphrasing the limit=1 assertions.
+cms-svc,test/revalidate.e2e-spec.ts,12,21,keep,Design decision with cross-repo constraint: a recording stub is stronger than the real route.
+cms-svc,test/revalidate.e2e-spec.ts,73,75,keep,Non-local invariant: constructor-time env reads require setting vars before compilation.
+cms-svc,test/revalidate.e2e-spec.ts,79,80,keep,"Non-local invariant: AppModule builds the Joi schema at import time, hence the dynamic import."
+cms-svc,test/revalidate.e2e-spec.ts,161,162,keep,"Cross-file invariant (cms-008): the storefront reads cms:sections:<pageKey>, never a per-section tag."
+cms-svc,test/revalidate.e2e-spec.ts,221,221,keep,"Domain invariant: a draft is not public, hence no storefront invalidation."
+cms-svc,test/revalidate.e2e-spec.ts,236,236,delete,Test step label restating the published-blog POST and tag assertion.
+cms-svc,test/revalidate.e2e-spec.ts,256,257,keep,Design decision: best-effort invalidation favors a stale page over a failed committed write.
+cms-svc,test/setup-env.ts,4,6,keep,External constraint: directConnection avoids Docker-DNS ENOTFOUND for the replica-set member.
+cms-svc,test/setup-env.ts,22,23,keep,"Non-local invariant: the storage adapter validates its root at boot, so every suite sets one."
+cms-svc,test/setup-env.ts,27,31,keep,"External constraint: ConfigModule will not overwrite present vars, so an empty secret disables calls."
+cms-svc,src/blogs/blogs.service.spec.ts,10,11,keep,"Decision (cms-005, rejected in-process bus): mutations use one Mongo tx and write cms_outbox."
+cms-svc,src/blogs/blogs.service.spec.ts,265,265,delete,"Restates the visible 'limit = 1, returned 2 items' setup and nextCursor assertion."
+cms-svc,src/blogs/blogs.service.spec.ts,372,372,keep,"Domain invariant: drafts are invisible to consumers, hence no event."
+cms-svc,src/blogs/blogs.service.spec.ts,374,374,keep,Cross-file invariant (cms-008): a draft does not change the public blog list.
+cms-svc,src/blogs/blogs.service.spec.ts,435,435,keep,Non-local invariant: publishing changes the storefront blog list tag.
+cms-svc,src/blogs/blogs.service.spec.ts,523,523,keep,"Non-local invariant: delete joins the tx, hence the chained .session()."
+cms-svc,src/blogs/blogs.service.spec.ts,560,560,delete,Paraphrases the visible status:'draft' assertion in the outbox payload.
+cms-svc,src/blogs/blogs.service.spec.ts,618,618,keep,"Domain invariant: un-publishing changes the public list, so the tag drops either way."
+cms-svc,src/blogs/blogs.service.ts,317,318,keep,Cross-file invariant (cms-008): only a publish drops the cms:blogs list tag.
+cms-svc,src/blogs/blogs.service.ts,401,402,keep,Domain invariant: an update can cross the published/draft boundary in either direction.
+cms-svc,src/blogs/blogs.service.ts,446,447,keep,External/consumer invariant: a deleted post is announced as draft for search removal.
+cms-svc,src/config/env.validation.spec.ts,57,58,keep,Design rationale for requiring REVALIDATE_SECRET in production.
+cms-svc,src/config/env.validation.ts,20,23,keep,External constraint: default-off/on choices let test and LocalStack-less dev boot.
+cms-svc,src/config/env.validation.ts,28,30,keep,Contains an oxlint-disable directive — never touch.
+cms-svc,src/config/env.validation.ts,35,36,keep,External constraint: `.empty('')` handles a blank line left in .env.
+cms-svc,src/config/env.validation.ts,45,46,keep,External constraint: AWS SDK credential chain in production vs LocalStack.
+cms-svc,src/config/env.validation.ts,49,53,keep,"Cross-file decision (cms-007): secret required in prod, no-op in dev, Next Data Cache."
+cms-svc,src/config/env.validation.ts,65,65,keep,Contains an oxlint-disable directive — never touch.
+cms-svc,src/config/env.validation.ts,74,76,keep,External constraint: compose/e2e need the dev default; production must name an absolute path.
+cms-svc,src/config/env.validation.ts,80,80,keep,Contains an oxlint-disable directive — never touch.
+cms-svc,src/db/db.module.ts,19,19,keep,Design decision: retryAttempts:0 fails boot rather than retrying for ~27s.
+cms-svc,src/db/mongo-connection.ts,6,14,keep,Non-local invariant: the outbox store is resolved via global DbModule before onModuleInit.
+cms-svc,src/db/mongo-connection.ts,34,37,keep,"External constraint: the store never imports mongodb, so the cast is the seam."
+cms-svc,src/db/mongo-tx.ts,5,16,keep,External constraint: MongoDB transactions need a replica set and withTransaction retries.
+cms-svc,src/db/mongo-tx.ts,36,42,keep,Decision (rejected startSession): injectable runner keeps one call in services and fakes in tests.
+cms-svc,src/footer/footer.schema.ts,7,13,keep,Cross-file design: single-doc footer store validated by contracts at the edge.
+cms-svc,src/footer/footer.service.spec.ts,9,10,keep,Non-local invariant: the footer spec mirrors the settings/navigation transactional skeleton.
+cms-svc,src/footer/footer.service.spec.ts,85,86,keep,External constraint: storefront fallback renders footer:{} so reads never 404 pre-publish.
+cms-svc,src/footer/footer.service.spec.ts,120,120,keep,Domain/cross-file fact: the footer is shell chrome with one broad tag like navigation.
+cms-svc,src/footer/footer.service.ts,15,20,keep,Cross-file pattern: the footer service uses the settings/navbar write path verbatim.
+cms-svc,src/footer/footer.service.ts,76,76,keep,"External constraint: Redis cannot join a Mongo transaction, so del runs after commit."
+cms-svc,src/footer/footer.service.ts,78,79,keep,Cross-file rationale: the footer tag matches cms:navigation breadth.
+cms-svc,src/media/media-resize.module.ts,10,17,keep,"External constraint: a dynamic module cannot see importer providers, hence the exported handler token."
+cms-svc,src/media/media-resize.module.ts,36,37,keep,External constraint: resolving deletes the message; idempotent replay is safe.
+cms-svc,src/media/media-resize.service.spec.ts,61,61,delete,Restates visible arithmetic (2 widths x 2 formats = 4) and the source size.
+cms-svc,src/media/media-resize.service.spec.ts,79,80,keep,External constraint: jpeg key uses the allowed 3-letter extension and stays servable.
+cms-svc,src/media/media-resize.service.spec.ts,149,150,keep,Non-local invariant: bytes are re-read and the manifest rewritten with identical values.
+cms-svc,src/media/media-resize.service.spec.ts,159,159,delete,Paraphrases the test name and the mediaNotFound expectation.
+cms-svc,src/media/media-resize.service.ts,35,35,keep,Design rationale for the mediaNotFound field: a deleted upload needs no renditions.
+cms-svc,src/media/media-resize.service.ts,39,53,keep,Design decisions: idempotent replay via pure keys and a single $set manifest.
+cms-svc,src/media/media-resize.service.ts,68,69,keep,Domain invariant: a deleted upload between enqueue and delivery is a safe no-op.
+cms-svc,src/media/media-resize.service.ts,81,82,keep,Decision: a missing original throws so the redelivery is meaningful.
+cms-svc,src/media/media-resize.service.ts,101,101,delete,Restates the visible width > sourceWidth → continue control flow.
+cms-svc,src/media/media-resize.service.ts,137,138,keep,Design invariant: one final $set keeps a partial manifest invisible.
+cms-svc,src/media/media-resize.service.ts,174,179,keep,External constraint: the variant key matches mediaKeySchema so the route serves it.
+cms-svc,src/media/media-signature.ts,3,10,keep,"Security decision: magic bytes, not attacker-controlled Content-Type, decide the type."
+cms-svc,src/media/media-signature.ts,38,38,delete,Paraphrases the RIFF/WEBP byte checks in the adjacent code.
+cms-svc,src/media/media-signature.ts,47,48,keep,External constraint: heic/mif1 must not be misread as AVIF.
+cms-svc,src/media/media-tasks.publisher.spec.ts,14,15,keep,"Design decision: the publisher owns the port, so the stub needs only enqueue."
+cms-svc,src/media/media-tasks.publisher.spec.ts,28,28,keep,Non-local invariant: the idempotency key makes a duplicate upload a no-op.
+cms-svc,src/media/media-tasks.publisher.spec.ts,52,53,keep,External contract: enqueue failure must never fail the already-committed upload.
+cms-svc,src/media/media-tasks.publisher.ts,9,9,keep,Invariant: one format/width list makes a replay identical.
+cms-svc,src/media/media-tasks.publisher.ts,13,30,keep,"Design decision (cms-006): SQS command vs Kafka event, plus two non-throwing paths."
+cms-svc,src/media/media-tasks.publisher.ts,37,38,keep,External constraint: @Optional() avoids Nest trying to inject a Function.
+cms-svc,src/media/media-tasks.publisher.ts,51,52,keep,"Non-local invariant: renditions are one effect, so the media id is the idempotency key."
+cms-svc,src/media/media.controller.ts,57,57,keep,Security decision: guards run first so anonymous callers cannot probe the size limit.
+cms-svc,src/media/media.controller.ts,61,63,keep,External constraint: multer memory engine needed for sniffing; fileSize backs up the header guard.
+cms-svc,src/media/media.controller.ts,117,120,keep,Security invariant: the public file route cannot be used to probe private files.
+cms-svc,src/media/media.controller.ts,121,131,keep,External constraint: ObjectId is used because storage keys contain slashes.
+cms-svc,src/media/media.controller.ts,151,154,keep,"Non-local invariant: one decode in the storage layer, not in the controller."
+cms-svc,src/media/media.controller.ts,163,163,keep,Design invariant: all decisions before headers keep a miss a JSON 404.
+cms-svc,src/media/media.controller.ts,190,191,keep,"Rationale: once headers are sent, the only honest response is to cut the body short."
+cms-svc,src/media/media.module.ts,3,6,keep,Rejected alternative: importing from /nest would pull in the Kafka consumer surface.
+cms-svc,src/media/media.module.ts,25,36,keep,Design decisions: the worker owns renditions and the poller is compiled out when disabled.
+cms-svc,src/media/media.module.ts,55,57,keep,"External constraint: Nest rejects tokens a module does not own, hence the re-export."
+cms-svc,src/media/media.schema.ts,11,18,keep,External constraint: variant key matches mediaKeySchema; empty array means worker not run.
+cms-svc,src/media/media.schema.ts,63,63,keep,Migration invariant: pre-cms-003 documents have no visibility and default to public.
+cms-svc,src/media/media.schema.ts,76,80,keep,"Design decision: the API contract is unchanged by cms-006, so variants stay out of contracts."
+cms-svc,src/media/media.service.spec.ts,199,200,keep,Non-local design: the publisher owns the queue name and enabled decision.
+cms-svc,src/media/media.service.ts,41,46,keep,External constraint: multipart overhead must be allowed so valid 10MB uploads pass.
+cms-svc,src/media/media.service.ts,129,130,keep,"Security decision: buffer length, not client metadata, is the trusted size."
+cms-svc,src/media/media.service.ts,138,139,keep,"Security invariant: sniffed bytes, never the declared header, decide the type."
+cms-svc,src/media/media.service.ts,292,293,keep,Non-local invariant: renditions leave with the upload so nothing collects orphans.
+cms-svc,src/media/media.service.ts,321,332,keep,Security invariant: the public route is not an existence oracle; one resolver with containment.
+cms-svc,src/media/media.service.ts,352,352,delete,Restates the catch-all → mediaNotFound behavior visible in the method body.
+cms-svc,src/media/media.service.ts,360,361,keep,"External/no-leak invariant: rejected keys, escapes and missing files are all 'not found'."
+cms-svc,src/navigation/navigation.service.spec.ts,9,9,keep,Decision (cms-005): mutations use one Mongo tx and write cms_outbox.
+cms-svc,src/navigation/navigation.service.spec.ts,92,93,keep,"Rejected alternative (cms-007): navigation uses a shared tag, not a page tag."
+cms-svc,src/navigation/navigation.service.ts,74,74,keep,"Domain rationale: the header is on every page, making this the widest tag."
+cms-svc,src/outbox/cms-outbox.module.ts,2,3,keep,Rejected alternative: the narrow /nest/outbox entry avoids the consumer surface.
+cms-svc,src/outbox/cms-outbox.module.ts,8,15,keep,Cross-file design: the Mongo twin of the Postgres outbox uses a db thunk.
+cms-svc,src/outbox/cms-outbox.ts,12,18,keep,"Decision: cms-svc owns two topics; media tasks go to SQS, never Kafka."
+cms-svc,src/outbox/cms-outbox.ts,39,50,keep,"External constraint: store validates payloads, aborting tx on drift; an alias would break the relay."
+cms-svc,src/pages/pages.service.spec.ts,10,12,keep,Decision (cms-005): mutations use a single tx and write cms_outbox.
+cms-svc,src/pages/pages.service.spec.ts,254,254,keep,Cross-file invariant (cms-008): the storefront legal route subscribes to cms:pages:<slug>.
+cms-svc,src/pages/pages.service.spec.ts,347,347,keep,"Non-local invariant: delete joins the tx, hence the chained .session()."
+cms-svc,src/pages/pages.service.ts,113,114,keep,External constraint: Redis cannot join a Mongo transaction; invalidating first re-caches stale data.
+cms-svc,src/pages/pages.service.ts,116,117,keep,Cross-file invariant (cms-008): one slug maps to exactly one storefront tag.
+cms-svc,src/revalidate/revalidate.module.ts,4,8,keep,Design decision: a global module avoids threading a one-provider module through five features.
+cms-svc,src/revalidate/revalidate.service.spec.ts,10,11,keep,"External constraint: the call leaves the process, so tests must own fetch."
+cms-svc,src/revalidate/revalidate.service.spec.ts,67,68,keep,External constraint: a fired AbortSignal would miss the deadline; a live one proves the timeout.
+cms-svc,src/revalidate/revalidate.service.spec.ts,101,102,keep,Design decision: best-effort revalidate must not turn a committed write into a failure.
+cms-svc,src/revalidate/revalidate.service.ts,4,11,keep,Cross-file constraint (cms-007): storefront tags must match its allowlist.
+cms-svc,src/revalidate/revalidate.service.ts,16,19,keep,Cross-file invariant (cms-008): tags authored against the storefront allowlist shapes.
+cms-svc,src/revalidate/revalidate.service.ts,30,30,keep,Semantics not in the name: timeouts and rejections count as failed.
+cms-svc,src/revalidate/revalidate.service.ts,32,32,keep,Semantics not in the name: disabled means skipped because no secret is configured.
+cms-svc,src/revalidate/revalidate.service.ts,36,52,keep,"Design decisions (cms-007): out-of-process call, best-effort, off without a secret."
+cms-svc,src/revalidate/revalidate.service.ts,67,67,delete,Paraphrases the getter's `secret !== undefined` and the no-op early return.
+cms-svc,src/revalidate/revalidate.service.ts,72,72,keep,"API guarantee: revalidate never throws, so callers can treat it as best-effort."
+cms-svc,src/revalidate/revalidate.service.ts,109,109,keep,Encapsulation invariant: snapshot returns a copy so callers cannot mutate live counters.
+cms-svc,src/revision/revision.service.ts,20,24,keep,Non-local invariant: a session-scoped bump keeps the revision in step with committed content.
+cms-svc,src/sections/section.schema.ts,16,17,keep,External constraint: the enum is derived from contracts so Mongo never rejects a new SECTION_TYPE.
+cms-svc,src/sections/sections.service.spec.ts,10,11,keep,Decision (cms-005): mutations use one tx and write cms_outbox.
+cms-svc,src/sections/sections.service.spec.ts,243,243,keep,Cross-file invariant (cms-008): a reorder drops the page tag.
+cms-svc,src/sections/sections.service.spec.ts,248,248,keep,"Non-local invariant: a reorder moves the whole page, so the page is the aggregate."
+cms-svc,src/sections/sections.service.spec.ts,305,305,keep,Cross-file invariant (cms-008): the storefront home subscribes to the page tag.
+cms-svc,src/sections/sections.service.spec.ts,325,325,keep,"Non-local invariant: delete joins the tx, hence the chained .session()."
+cms-svc,src/sections/sections.service.spec.ts,373,373,keep,"Rejected alternative (cms-008): one mutation uses one page tag, never the section key."
+cms-svc,src/sections/sections.service.ts,116,117,keep,"External constraint: Redis cannot join a Mongo transaction, so del runs after commit."
+cms-svc,src/sections/sections.service.ts,120,120,keep,Cross-file invariant (cms-008): the storefront home reads sections via one tag per page.
+cms-svc,src/sections/sections.service.ts,282,282,keep,"Non-local invariant: a reorder moves the whole page, so the page is the aggregate."
+cms-svc,src/settings/settings.service.spec.ts,9,9,keep,Decision (cms-005): each mutation uses one tx and writes cms_outbox.
+cms-svc,src/settings/settings.service.spec.ts,100,101,keep,External constraint (cms-007): the storefront allowlist rejects tags it did not author.
+cms-svc,src/settings/settings.service.spec.ts,141,142,keep,Non-local invariant: the tag is derived from the same page key as the upsert.
+cms-svc,src/settings/settings.service.ts,85,86,keep,Cross-file invariant: the storefront Data Cache is the one copy cms-svc cannot delete.
+cms-svc,src/settings/settings.service.ts,139,140,keep,Cross-file invariant: one page key maps to the storefront's page-settings tag.
+cms-svc,src/common/filters/http-exception.filter.ts,38,38,keep,Non-local invariant: health probes stay outside the API envelope.
+cms-svc,src/common/http/request-id.ts,4,7,keep,Purpose of the UUID fallback: tracing direct service-to-service calls.
+cms-svc,src/common/http/request-id.ts,22,25,keep,Non-local invariant: the request id is normalized once and on every response.
+cms-svc,src/media/filters/media-too-large.filter.ts,15,19,keep,External constraint: the drain window is chosen from browser/413 behavior and socket limits.
+cms-svc,src/media/filters/media-too-large.filter.ts,23,31,keep,"External constraint: a route-scoped filter replaces the global one, so it delegates."
+cms-svc,src/media/filters/media-too-large.filter.ts,52,56,keep,"External constraint: a late response would ECONNRESET, so bytes are drained up to a cap."
+cms-svc,src/media/guards/upload-size.guard.ts,16,23,keep,"External constraint: a guard runs before the interceptor, so no multipart body is read."
+cms-svc,src/media/storage/local-disk.storage.spec.ts,82,83,keep,"External constraint: Windows lacks the symlink privilege, hence the skip."
+cms-svc,src/media/storage/local-disk.storage.spec.ts,89,89,keep,External constraint: the filesystem may store a copy instead of a link.
+cms-svc,src/media/storage/local-disk.storage.spec.ts,140,140,keep,External constraint: a file where a directory is expected fails the same on every OS.
+cms-svc,src/media/storage/local-disk.storage.spec.ts,159,160,keep,"External constraint: Windows ignores mode bits, hence the skip."
+cms-svc,src/media/storage/local-disk.storage.spec.ts,165,165,keep,"External constraint: the OS may honour mode bits, hence the branch."
+cms-svc,src/media/storage/local-disk.storage.ts,28,33,keep,"External constraint: CWD-relative roots are boot-failed, not silently used."
+cms-svc,src/media/storage/local-disk.storage.ts,55,56,keep,"External constraint: a symlink resolves lexically inside root, so real paths are re-checked."
+cms-svc,src/media/storage/local-disk.storage.ts,107,107,keep,ADR-media pointer — never touch.
+cms-svc,src/media/storage/local-disk.storage.ts,112,119,keep,Non-local invariant: resolveKey is the single key→path choke point.
+cms-svc,src/media/storage/storage.port.ts,3,7,keep,"External constraint: rejection reasons span null bytes, decode, schema and escape."
+cms-svc,src/media/storage/storage.port.ts,23,23,keep,ADR-media pointer — never touch.
+cms-svc,src/media/storage/storage.port.ts,25,31,keep,"External constraint: resolvePath contract (containment, InvalidMediaKeyError/ENOENT)."

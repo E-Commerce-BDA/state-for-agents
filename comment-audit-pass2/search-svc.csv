@@ -1,0 +1,165 @@
+repo,file,start,end,decision,reason
+search-svc,vitest.config.ts,4,5,keep,Records an external toolchain constraint (Vite 8 required for tsconfigPaths) plus generator-added aliases not visible in the config.
+search-svc,src/app.setup.ts,14,17,keep,Non-local invariant: the function is shared by production and e2e so global HTTP behavior cannot drift; usage is not visible at this site.
+search-svc,src/app.setup.ts,42,46,keep,Non-local decision: preserves the previous hand-written consumer's 5s value because broker startup order is unchanged.
+search-svc,src/app.setup.ts,49,49,keep,ADR pointer; NEVER TOUCH despite the script's delete-review suggestion.
+search-svc,src/app.setup.ts,74,75,keep,"External Kafka behavior: a gauge over a group that has not joined reports the whole topic as lag, justifying the started gate."
+search-svc,src/app.setup.ts,85,91,keep,Non-local invariant: pause uses unref'd timers so a never-connected consumer cannot keep the process alive.
+search-svc,src/main.ts,20,23,keep,"Rejected alternative (awaiting would block HTTP / refuse to start) plus non-local behavior of configureEventConsumer (retries, never rejects)."
+search-svc,test/consumer-metrics.spec.ts,8,12,keep,Non-local provenance: the counter shape is owned by @ecom/messaging and shared across all three services.
+search-svc,test/consumer-metrics.spec.ts,96,96,keep,"Semantic constraint on the dlq counter (counts successful writes, not verdicts) not derivable from the assertion."
+search-svc,test/consumer-metrics.spec.ts,132,133,delete,"Why-comment paraphrasing the two assertions (lag=3, lastCommit=43); endpoint rationale lives in the source file."
+search-svc,test/dlq-replay.spec.ts,11,16,keep,"Records the non-local split: pure interpretation/replay logic here, broker wiring only in the CLI."
+search-svc,test/dlq-replay.spec.ts,166,166,delete,"Labels the recordingProducer helper, whose name already states what it does."
+search-svc,test/dlq-replay.spec.ts,198,198,delete,Paraphrases the producer.sent assertion.
+search-svc,test/event-interpreter.spec.ts,4,7,delete,Labels the envelope helper and states generic override rationale; the spread-order mechanism is visible.
+search-svc,test/event-interpreter.spec.ts,63,63,delete,Labels the cms.updated fixture whose values are all visible in the test.
+search-svc,test/event-interpreter.spec.ts,98,98,delete,Test-fixture note paraphrasing the deleted price field and the error assertion.
+search-svc,test/indexer.e2e-spec.ts,30,31,keep,"Non-local schema invariant: the dedupe table's ids do not overlap search_documents, so cleanup needs a separate DELETE."
+search-svc,test/indexer.e2e-spec.ts,136,136,delete,Numbered test step label.
+search-svc,test/indexer.e2e-spec.ts,149,149,delete,Numbered test step label.
+search-svc,test/indexer.e2e-spec.ts,162,162,delete,Numbered test step label.
+search-svc,test/indexer.e2e-spec.ts,181,181,delete,Step label restating the title assertion.
+search-svc,test/indexer.e2e-spec.ts,272,272,delete,Step label for the large string.
+search-svc,test/indexer.e2e-spec.ts,302,304,keep,"External constraint + decision: catalog-svc and the seed share ...0101; db/004 made (document_type, id) the key so both rows are legitimate."
+search-svc,test/indexer.e2e-spec.ts,326,329,keep,"Historical rejected alternative: the old id-only PK caused an unrecoverable 23505, which is why db/004 changed the key."
+search-svc,test/indexer.e2e-spec.ts,355,358,keep,Non-local invariants: pruneMissing is type-scoped and safe only because type is in the key; transaction rolled back to preserve seeds.
+search-svc,test/indexer.e2e-spec.ts,422,422,delete,Numbered test step label.
+search-svc,test/indexer.e2e-spec.ts,447,447,delete,Numbered test step label.
+search-svc,test/indexer.e2e-spec.ts,470,470,delete,Numbered test step label.
+search-svc,test/indexer.e2e-spec.ts,481,481,delete,Numbered test step label.
+search-svc,test/indexer.e2e-spec.ts,500,500,delete,Numbered test step label.
+search-svc,test/indexer.e2e-spec.ts,573,574,keep,"Non-local precedence invariant: dedupe wins over the stale-timestamp guard, so the first delivery is kept."
+search-svc,test/indexer.e2e-spec.ts,658,660,keep,"Non-local invariant: with no broker sample and an in-memory path that never commits, lag and lastCommit stay empty."
+search-svc,test/indexer.e2e-spec.ts,667,667,delete,Test label explaining why counters are non-zero; derivable from the suite's earlier operations.
+search-svc,test/indexer.e2e-spec.ts,670,670,keep,"Architectural invariant: the in-memory path can never reach a DLQ, explaining dlq === 0."
+search-svc,test/indexer.service.spec.ts,39,39,delete,Paraphrases the withTransaction mock implementation.
+search-svc,test/indexer.service.spec.ts,168,168,delete,Paraphrases the upsert assertion.
+search-svc,test/live-kafka.e2e-spec.ts,19,23,keep,"External constraint: ConfigModule.forRoot captures env at import time, forcing the dynamic AppModule import."
+search-svc,test/live-kafka.e2e-spec.ts,41,49,keep,"Non-local purpose and opt-in: proves srch-002 end-to-end over a real broker, gated by RUN_KAFKA_E2E so default e2e needs no broker."
+search-svc,test/live-kafka.e2e-spec.ts,87,89,keep,"Rejected alternative/contrast: awaited here unlike main.ts, because assertions require a connected consumer."
+search-svc,test/live-kafka.e2e-spec.ts,116,118,keep,"External Kafka behavior: a group with no committed offsets starts at latest, so the join must settle before publishing."
+search-svc,test/live-kafka.e2e-spec.ts,126,127,keep,Non-local dedupe invariant: republishing the same event id is harmless because whichever copy lands first claims it.
+search-svc,test/live-kafka.e2e-spec.ts,153,153,delete,Background note on lag sampling; its mechanism is documented in events.module.ts and is not needed for this assertion.
+search-svc,test/live-kafka.e2e-spec.ts,207,207,delete,Paraphrases the nullable return of findRow versus the throwing waitForRow.
+search-svc,test/live-kafka.e2e-spec.ts,240,240,keep,Rejected alternative: a custom actionable error instead of an opaque kafkajs timeout.
+search-svc,test/schema.e2e-spec.ts,109,113,keep,Non-locally documented decision/invariant: db/004 collapsed two constraints so redelivery cannot clear the 23505.
+search-svc,test/schema.e2e-spec.ts,129,131,keep,Non-local schema decision: the PK index covers the dropped unique index's columns so ON CONFLICT needs one index.
+search-svc,test/schema.e2e-spec.ts,181,182,keep,Non-local link: a single named constraint is what makes the index-constraint-violation DLQ reason debuggable.
+search-svc,test/schema.e2e-spec.ts,188,192,keep,"External/historical fact: catalog-svc and the seed both publish ...0101, the shape that broke the old index."
+search-svc,test/schema.e2e-spec.ts,207,208,keep,Historical rejected alternative: under the old key the second upsert raised 23505 on every retry.
+search-svc,test/schema.e2e-spec.ts,227,228,keep,Non-local invariant from the composite key: re-upserting one type leaves the id-sharing sibling untouched.
+search-svc,test/schema.e2e-spec.ts,498,498,keep,"Names the dedupe contract behind ON CONFLICT DO NOTHING (no row, no error)."
+search-svc,test/schema.e2e-spec.ts,563,563,keep,External constraint: node-pg returns numeric columns as strings to avoid float precision loss.
+search-svc,test/search-consumer.controller.spec.ts,37,43,keep,"Non-local scope: these cases replace the hand-written consumer's spec; protocol lives in @ecom/messaging, wiring is asserted here."
+search-svc,test/search-consumer.controller.spec.ts,79,83,keep,Rejected alternative (per-case builder instead of beforeEach) because one case must pass translateError.
+search-svc,test/search-consumer.controller.spec.ts,180,180,keep,"Non-local decision: deterministic malformed payloads skip the retry ladder, so only one attempt occurs."
+search-svc,test/search-consumer.controller.spec.ts,278,278,delete,Arithmetic label paraphrasing the call-count assertion (1 + 2 retries = 3).
+search-svc,test/search-consumer.controller.spec.ts,284,284,keep,Non-local ordering invariant: side effects (DLQ write) precede the offset commit.
+search-svc,test/search-consumer.controller.spec.ts,308,311,keep,External constraint + rejected alternative: skipping the ladder keeps the record inside the 30s broker session (a 31s ladder would evict it).
+search-svc,test/search-consumer.controller.spec.ts,345,345,keep,"Non-local counter invariant: a failed DLQ write is not counted, so dlq stays 0."
+search-svc,test/search.e2e-spec.ts,53,53,delete,Test step label.
+search-svc,test/search.e2e-spec.ts,132,132,delete,Test step label.
+search-svc,test/search.e2e-spec.ts,152,152,delete,Test step label.
+search-svc,test/search.e2e-spec.ts,281,281,delete,Test step label.
+search-svc,test/search.repository.e2e-spec.ts,153,153,delete,Test step label.
+search-svc,test/search.repository.e2e-spec.ts,178,178,delete,Test step label.
+search-svc,test/search.service.spec.ts,257,257,delete,Fixture label paraphrasing why three rows are returned for limit=2.
+search-svc,test/search.service.spec.ts,277,277,delete,Test step label.
+search-svc,test/security.e2e-spec.ts,63,63,keep,External security mechanism (parameterized binding) the test verifies: the injection string is treated as a literal slug.
+search-svc,test/security.e2e-spec.ts,92,92,keep,External constraint: Zod .strict() is why the __proto__ key is rejected.
+search-svc,test/security.e2e-spec.ts,97,97,delete,Test step label.
+search-svc,test/security.e2e-spec.ts,104,104,delete,Test step label.
+search-svc,test/setup-env.ts,24,25,keep,"Non-local invariant: the consumer is off by default so HTTP tests need no broker, and the live spec opts back in."
+search-svc,test/suggest.e2e-spec.ts,69,69,delete,Section label (seed assertions).
+search-svc,test/suggest.e2e-spec.ts,242,242,delete,Step label for the first cache-miss call.
+search-svc,test/suggest.e2e-spec.ts,250,250,delete,Step label for the second cached call.
+search-svc,src/common/common.module.ts,3,6,keep,Non-local decision: CommonModule is intentionally empty; global HTTP behavior lives in app.setup.ts to avoid drift.
+search-svc,src/config/env.validation.ts,20,21,keep,Non-local degraded-mode decision: disabling the consumer keeps HTTP/search usable for suites and operators parking ingestion.
+search-svc,src/db/pool.ts,6,6,delete,Paraphrases the CONNECTION_TIMEOUT_MS constant name.
+search-svc,src/db/pool.ts,8,8,delete,Paraphrases the QUERY_TIMEOUT_MS constant name.
+search-svc,src/db/rows.ts,3,11,keep,"External constraint: node-pg maps numeric(12,2) to string and timestamptz to Date, which is why the row types are what they are."
+search-svc,src/events/consumer-metrics.ts,12,19,keep,Rejected alternative (subclassing vs aliasing) keeps ConsumerMetrics injectable with unchanged constructor signatures; counters live in @ecom/messaging.
+search-svc,src/events/consumer-metrics.ts,23,29,keep,"Design rationale: lag plus lastCommit is required to distinguish behind from stopped, the endpoint's purpose."
+search-svc,src/events/consumer-metrics.ts,37,42,keep,Non-local decision: dlq is excluded because only the transport knows which DLQ writes succeeded.
+search-svc,src/events/consumer-runtime.ts,9,15,keep,"External constraint: Nest appends -server unless postfixId is empty, which would create a second group; the constant must agree."
+search-svc,src/events/consumer-runtime.ts,26,29,delete,"Adapter pattern visible in the class (implements RelayLogger, delegates to Nest Logger); the rationale is generic."
+search-svc,src/events/consumer-runtime.ts,67,74,keep,Rejected alternative (not onModuleInit) so constructing the module in tests opens no broker admin connection.
+search-svc,src/events/consumer-stats.controller.ts,10,18,keep,Backward-compatibility decision: srch-002 fields are additive so old dashboards keep working.
+search-svc,src/events/dlq-replay.cli.ts,14,41,keep,Non-local architecture: this is a one-shot CLI tool; pure interpretation lives in dlq-replay.ts and this file is only broker wiring.
+search-svc,src/events/dlq-replay.cli.ts,84,85,keep,"Decision with operator constraint: unknown topics warn rather than fail because they may predate registration, but are almost always a typo."
+search-svc,src/events/dlq-replay.cli.ts,94,100,keep,"External Kafka constraint: fromBeginning is needed because a fresh group would start at the tail, and the drain stops on max or idle."
+search-svc,src/events/dlq-replay.cli.ts,120,122,keep,Non-local dedupe invariant: re-reading a dead letter is harmless because downstream dedupe makes the second copy a no-op.
+search-svc,src/events/dlq-replay.cli.ts,144,145,keep,"External constraint: kafkajs has no end-of-log signal, so a quiet window is used to stop the drain."
+search-svc,src/events/dlq-replay.cli.ts,244,244,keep,External consumer rationale: the JSON stdout tail exists so a wrapper or CI step can parse the outcome.
+search-svc,src/events/dlq-replay.cli.ts,248,249,keep,Non-local invariant: the entry-point guard prevents a type-check import from opening a socket.
+search-svc,src/events/dlq-replay.ts,1,29,keep,"Documents the external DLQ record contract from @ecom/messaging (JSON shape), the only place that restates it."
+search-svc,src/events/dlq-replay.ts,31,35,keep,Rejected alternative: DLQ_SUFFIX is inlined to keep this module free of a broker-side import.
+search-svc,src/events/dlq-replay.ts,38,43,keep,Decision: the message shape is deliberately wider than kafkajs' Message so tests can pass plain strings without reproducing its full type.
+search-svc,src/events/dlq-replay.ts,49,49,delete,One-line type label for ReplaySkipReason.
+search-svc,src/events/dlq-replay.ts,52,55,delete,Paraphrases the ReplayPlan union.
+search-svc,src/events/dlq-replay.ts,63,63,delete,One-line field label for deadLetterReason.
+search-svc,src/events/dlq-replay.ts,68,72,keep,Decision: ReplayProducerPort stays structural (like @ecom/messaging's KafkaProducerLike) so tests can record sends without a broker.
+search-svc,src/events/dlq-replay.ts,80,80,delete,Generic rationale for the ReplayLogger seam; the interface itself is visible.
+search-svc,src/events/dlq-replay.ts,114,127,keep,"Recovery policy decision: only originalPayload/rawValue are replayed, everything else is skipped rather than guessed at."
+search-svc,src/events/dlq-replay.ts,165,166,keep,"Non-local invariant: a source topic that is itself a .dlq would replay back and loop, so it is left parked."
+search-svc,src/events/dlq-replay.ts,206,214,keep,Rejected alternative + non-local invariant: producer rejection is not swallowed because a half-sent pass is safely re-run thanks to processed_events dedupe.
+search-svc,src/events/event-consumer.interface.ts,1,9,keep,Non-local context: this start/stop interface is now only the in-memory consumer's shape; the Kafka path uses @ecom/messaging.
+search-svc,src/events/event-interpreter.ts,13,17,delete,Paraphrases the InterpretResult union and maps branches to obvious consumer actions.
+search-svc,src/events/event-interpreter.ts,40,46,keep,"Non-local design decision: interpret is kept pure so Kafka, in-memory, and unit tests need no broker or DB to classify a record."
+search-svc,src/events/event-interpreter.ts,50,50,keep,"External/historical constraint: readEventEnvelope normalizes the legacy eventType/topic dual-write, invisible at the call site."
+search-svc,src/events/event-interpreter.ts,63,65,keep,"External example and policy: registered-but-unsubscribed events (cms.updated) are committed and counted, never DLQed."
+search-svc,src/events/events.module.ts,19,29,keep,External constraint (45s broker session) + decision: the 20s retry budget truncates the ladder so sleeping members are not evicted.
+search-svc,src/events/events.module.ts,32,40,keep,Non-local invariant: module providers are constructed lazily so building the module in a test touches no broker.
+search-svc,src/events/events.module.ts,69,70,keep,External rationale: the sampler measures the group itself so reported lag matches kafka-consumer-groups --describe.
+search-svc,src/events/handler-outcome.ts,4,14,keep,Rejected alternative + invariant: two verdict types are kept apart as the single seam; topic is dropped from invalid because the DLQ already carries it.
+search-svc,src/events/handler-outcome.ts,20,21,keep,Non-local semantics: indexed vs skipped are both preserved through the protocol via outcome.status.
+search-svc,src/events/index-errors.spec.ts,3,8,keep,"External constraint + decision: assertions use pg's SQLSTATE code, not the message, which varies by constraint/version."
+search-svc,src/events/index-errors.spec.ts,20,20,keep,"External DB behavior: 40001 (deadlock) is retryable, so translateIndexError returns null."
+search-svc,src/events/index-errors.ts,1,19,keep,Design decision with rejected alternative + external session constraint: deterministic constraint breaches dead-letter on the first attempt.
+search-svc,src/events/index-errors.ts,23,23,keep,"Cross-file invariant: the DLQ reason constant is named here so README, tests, and code agree."
+search-svc,src/events/index-errors.ts,27,28,keep,External constraint + cross-file behavior: pg attaches SQLSTATE to the error and withTransaction rethrows it untouched.
+search-svc,src/events/search-consumer.controller.ts,8,37,keep,"Rejected alternative + architecture: one controller/protocol, never a second consumer group with its own offsets."
+search-svc,src/events/search-consumer.controller.ts,77,77,keep,ADR pointer; NEVER TOUCH despite the script's delete-review suggestion.
+search-svc,src/events/search-topics.ts,3,7,keep,"Non-local single-source-of-truth invariant: this list drives consumer subscription, interpreter acceptance, and DLQ naming."
+search-svc,src/health/health.service.ts,38,42,keep,Design decision: only Postgres is critical for readiness; Redis/Kafka are degraded because search still works without them.
+search-svc,src/health/kafka-health.service.ts,28,31,keep,Scope boundary (non-local): broker reachability only here; topic/group health is the ingestion consumer's job.
+search-svc,src/indexer/event-mapper.ts,79,79,keep,"Business rule: search visibility follows catalog status, independent of stock level."
+search-svc,src/indexer/indexer.repository.ts,29,31,keep,"External/schema invariant: the composite PK is the upsert arbiter, so the same id under another type is a different document."
+search-svc,src/indexer/indexer.repository.ts,74,75,keep,Caller contract (non-local): an optional client lets the upsert join an existing transaction instead of taking a connection.
+search-svc,src/indexer/indexer.repository.ts,88,88,keep,Pointer to the arbiter rationale above rather than a restatement; avoids duplicating the db/004 decision.
+search-svc,src/indexer/indexer.repository.ts,152,156,keep,Non-local invariant: callers pass the client down so dedupe row and index write land in one transaction.
+search-svc,src/indexer/indexer.repository.ts,168,169,keep,Decision: a failed rollback is swallowed because the original error is the one worth propagating.
+search-svc,src/indexer/indexer.repository.ts,177,180,keep,Caller contract: markProcessed's boolean is the sole signal used to skip the write.
+search-svc,src/indexer/indexer.service.ts,10,13,keep,Non-local provenance: each outcome variant originates either in the database or in the interpreter.
+search-svc,src/indexer/indexer.service.ts,35,36,keep,Non-local invariant + rejected alternative: one transaction prevents an id being claimed for a document never written.
+search-svc,src/indexer/indexer.service.ts,69,70,keep,External constraint: Postgres SQLSTATE class 23 is why a 23 prefix identifies constraint violations.
+search-svc,src/indexer/indexer.service.ts,78,78,keep,Design decision with rejected alternative: critical/connection errors throw instead of being counted as rejected records.
+search-svc,src/indexer/indexer.service.ts,95,95,delete,Paraphrases the idsByType grouping loop.
+search-svc,src/search/cursor.codec.ts,69,69,delete,Stale/mismatched label: it claims a re-encode check that the adjacent code (buf.length check) does not perform.
+search-svc,src/search/query-normalizer.ts,13,21,delete,Bullet list paraphrasing every step of normalizeQuery; all claims are visible in the function.
+search-svc,src/search/query-normalizer.ts,38,38,delete,Paraphrases the Unicode regex on the next line.
+search-svc,src/search/query-normalizer.ts,55,58,delete,Paraphrases toPrefixTsQuery with an illustrative example derivable from the code.
+search-svc,src/search/search-query.pipe.ts,29,29,delete,Numbered validation-step label.
+search-svc,src/search/search-query.pipe.ts,40,40,delete,Numbered validation-step label.
+search-svc,src/search/search-query.pipe.ts,60,60,delete,Numbered validation-step label.
+search-svc,src/search/search-query.pipe.ts,69,69,delete,Numbered validation-step label.
+search-svc,src/search/search-query.pipe.ts,78,78,delete,Step label.
+search-svc,src/search/search-query.pipe.ts,92,92,delete,Classic paraphrase (Check minPrice <= maxPrice) of the condition below.
+search-svc,src/search/search-query.pipe.ts,104,104,delete,Step label.
+search-svc,src/search/search-query.pipe.ts,127,127,delete,Step label.
+search-svc,src/search/search-query.pipe.ts,137,137,delete,Step label.
+search-svc,src/search/search.repository.ts,73,73,delete,Filter label matching the if-block.
+search-svc,src/search/search.repository.ts,82,82,keep,Schema-driven business rule: price filters/sorts imply products because only products carry price fields.
+search-svc,src/search/search.repository.ts,86,86,delete,Filter label.
+search-svc,src/search/search.repository.ts,94,94,delete,Filter label.
+search-svc,src/search/search.repository.ts,100,100,delete,Filter label.
+search-svc,src/search/search.repository.ts,106,106,delete,Section label.
+search-svc,src/search/search.repository.ts,159,159,delete,Paraphrases limit + 1.
+search-svc,src/search/suggest-query.pipe.ts,26,26,delete,Step label.
+search-svc,src/search/suggest-query.pipe.ts,37,37,delete,Step label.
+search-svc,src/search/suggest-query.pipe.ts,57,57,delete,Step label.
+search-svc,src/search/suggest-query.pipe.ts,66,66,delete,Step label.
+search-svc,src/common/filters/http-exception.filter.ts,38,38,delete,Paraphrases the isHealthPath early-return branch.
+search-svc,src/common/http/request-id.ts,4,7,delete,Paraphrases getRequestId; the UUID fallback rationale is generic.
+search-svc,src/common/http/request-id.ts,22,25,keep,Non-local invariant: the middleware must set the id even on successful responses that skip the exception filter.

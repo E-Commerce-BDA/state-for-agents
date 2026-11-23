@@ -1,0 +1,100 @@
+repo,file,start,end,decision,reason
+auth-svc,vitest.config.e2e.ts,9,10,keep,External constraint: NODE_ENV is unreliable here and without this flag every e2e run would boot a real relay against the broker; not visible in the config.
+auth-svc,vitest.config.ts,4,5,keep,"External constraint: tsconfigPaths requires Vite 8, a version requirement not visible in the config itself."
+auth-svc,test/addresses.e2e-spec.ts,39,39,delete,Numbered test step label; the following request and assertions show the step.
+auth-svc,test/addresses.e2e-spec.ts,52,52,delete,Numbered test step label; the following request and assertions show the step.
+auth-svc,test/addresses.e2e-spec.ts,69,69,delete,Numbered test step label; the following request and assertions show the step.
+auth-svc,test/addresses.e2e-spec.ts,86,86,delete,Numbered test step label; the following request and assertions show the step.
+auth-svc,test/addresses.e2e-spec.ts,99,99,delete,Numbered test step label; the following request and assertions show the step.
+auth-svc,test/addresses.e2e-spec.ts,108,108,delete,Numbered test step label; the following request and assertions show the step.
+auth-svc,test/addresses.e2e-spec.ts,114,114,delete,Numbered test step label; the following request and assertions show the step.
+auth-svc,test/admin.e2e-spec.ts,39,39,delete,Numbered test step label; the following request and assertions show the step.
+auth-svc,test/admin.e2e-spec.ts,52,52,delete,Numbered test step label; the following request and assertions show the step.
+auth-svc,test/admin.e2e-spec.ts,64,64,delete,Numbered test step label; the following request and assertions show the step.
+auth-svc,test/admin.e2e-spec.ts,77,77,delete,Numbered test step label; the following request and assertions show the step.
+auth-svc,test/admin.e2e-spec.ts,91,91,delete,Numbered test step label; the following request and assertions show the step.
+auth-svc,test/admin.e2e-spec.ts,104,104,delete,Numbered test step label; the following request and assertions show the step.
+auth-svc,test/admin.e2e-spec.ts,113,113,delete,Numbered test step label; the following request and assertions show the step.
+auth-svc,test/admin.e2e-spec.ts,123,123,delete,Numbered test step label; the following request and assertions show the step.
+auth-svc,test/admin.e2e-spec.ts,137,137,delete,Numbered test step label; the following request and assertions show the step.
+auth-svc,test/admin.e2e-spec.ts,148,148,delete,Numbered test step label; the following request and assertions show the step.
+auth-svc,test/admin.e2e-spec.ts,157,157,delete,Numbered test step label; the following request and assertions show the step.
+auth-svc,test/db-resilience.e2e-spec.ts,9,12,keep,External constraint: pg-pool emits an error event on server-side termination and Node throws on unhandled error events; explains why this regression test exists.
+auth-svc,test/db-resilience.e2e-spec.ts,36,36,keep,Documents the async pool observation that the 500ms wait is for; library timing behavior is not visible in the code.
+auth-svc,test/db-resilience.e2e-spec.ts,39,41,keep,"Non-local invariant: liveness is a constant and would pass regardless, so only readiness proves recovery."
+auth-svc,test/health.e2e-spec.ts,41,42,keep,Non-local invariant: the pool is an unowned module-level singleton that hangs the test run if left open.
+auth-svc,test/live-kafka.e2e-spec.ts,102,102,keep,External constraint: Kafka fromBeginning:false only sees records produced after subscribe; justifies subscribe-before-produce ordering.
+auth-svc,test/live-kafka.e2e-spec.ts,120,120,keep,External constraint: the Kafka group join is asynchronous; justifies the 2s wait before producing.
+auth-svc,test/live-kafka.e2e-spec.ts,191,191,delete,The PII rule is fully visible in the three explicit no-email assertions that follow.
+auth-svc,test/live-kafka.e2e-spec.ts,201,207,keep,Non-local invariant: parallel spec files share one DB and a real broker; the aggregate-scoped store prevents claiming another suite's pending row.
+auth-svc,test/live-kafka.e2e-spec.ts,248,248,keep,Rejected alternative: letting kafkajs time out; the helper exists to produce an actionable failure message.
+auth-svc,test/login.e2e-spec.ts,39,39,delete,Test step/label paraphrasing the immediately following assertions or request.
+auth-svc,test/login.e2e-spec.ts,63,63,delete,Test step/label paraphrasing the immediately following assertions or request.
+auth-svc,test/login.e2e-spec.ts,71,71,delete,Test step/label paraphrasing the immediately following assertions or request.
+auth-svc,test/login.e2e-spec.ts,99,99,delete,Test step/label paraphrasing the immediately following assertions or request.
+auth-svc,test/me.e2e-spec.ts,38,38,delete,Numbered test step label; the following request and assertions show the step.
+auth-svc,test/me.e2e-spec.ts,49,49,delete,Numbered test step label; the following request and assertions show the step.
+auth-svc,test/me.e2e-spec.ts,173,173,delete,Numbered test step label; the following request and assertions show the step.
+auth-svc,test/me.e2e-spec.ts,183,183,delete,Numbered test step label; the following request and assertions show the step.
+auth-svc,test/me.e2e-spec.ts,193,193,delete,Numbered test step label; the following request and assertions show the step.
+auth-svc,test/me.e2e-spec.ts,203,203,delete,Numbered test step label; the following request and assertions show the step.
+auth-svc,test/me.e2e-spec.ts,209,209,delete,Numbered test step label; the following request and assertions show the step.
+auth-svc,test/me.e2e-spec.ts,215,215,delete,Numbered test step label; the following request and assertions show the step.
+auth-svc,test/outbox.e2e-spec.ts,54,54,delete,The SQL sets locked_until to the past; the helper name and body make the intent visible.
+auth-svc,test/outbox.e2e-spec.ts,62,68,keep,"Non-local invariant: parallel spec files share one DB, justifying aggregate scoping, the raised claim limit and leaseSeconds:0."
+auth-svc,test/outbox.e2e-spec.ts,187,187,delete,The PII rule is visible in the not.toContain('@') assertion that follows.
+auth-svc,test/outbox.e2e-spec.ts,204,204,delete,Paraphrases the length assertion and the visible 409-conflict setup.
+auth-svc,test/outbox.e2e-spec.ts,207,207,keep,"Non-local invariant: a rolled-back registration must not leave an orphan outbox row, which is what the check protects."
+auth-svc,test/outbox.e2e-spec.ts,218,218,keep,"Non-local invariant: parallel spec files share one DB, explaining why the store is aggregate-scoped."
+auth-svc,test/outbox.e2e-spec.ts,289,289,delete,The expireLease helper name and loop make this step visible.
+auth-svc,test/outbox.e2e-spec.ts,293,293,delete,The loop and final attempts=5 assertion make the failed=1 check rationale recoverable from the code.
+auth-svc,test/outbox.e2e-spec.ts,343,343,keep,"Names the non-local DB constraints (type registry, envelope agreement) that are not visible in the SQL."
+auth-svc,test/refresh.e2e-spec.ts,39,39,delete,Test step/label paraphrasing the immediately following request or assertion.
+auth-svc,test/refresh.e2e-spec.ts,52,52,delete,Test step/label paraphrasing the immediately following request or assertion.
+auth-svc,test/refresh.e2e-spec.ts,62,62,delete,Test step/label paraphrasing the immediately following request or assertion.
+auth-svc,test/refresh.e2e-spec.ts,88,88,delete,Test step/label paraphrasing the immediately following request or assertion.
+auth-svc,test/refresh.e2e-spec.ts,94,94,delete,Test step/label paraphrasing the immediately following request or assertion.
+auth-svc,test/refresh.e2e-spec.ts,119,119,delete,Test step/label paraphrasing the immediately following request or assertion.
+auth-svc,test/refresh.e2e-spec.ts,127,127,delete,Test step/label paraphrasing the immediately following request or assertion.
+auth-svc,test/refresh.e2e-spec.ts,137,137,delete,Test step/label paraphrasing the immediately following request or assertion.
+auth-svc,test/refresh.e2e-spec.ts,143,143,delete,Test step/label paraphrasing the immediately following request or assertion.
+auth-svc,test/refresh.e2e-spec.ts,172,172,delete,Test step/label paraphrasing the immediately following request or assertion.
+auth-svc,test/register.e2e-spec.ts,10,10,delete,The afterAll block visibly uses this array for outbox cleanup.
+auth-svc,test/register.e2e-spec.ts,35,35,keep,"Non-local invariant: spec files run in parallel against one database, so cleanup is scoped by aggregate id."
+auth-svc,test/register.e2e-spec.ts,81,81,delete,Test step label paraphrasing the following request and assertion.
+auth-svc,test/register.e2e-spec.ts,88,88,delete,Test step label paraphrasing the following request and assertion.
+auth-svc,test/schema.e2e-spec.ts,203,203,delete,Test step label paraphrasing the following SQL statement.
+auth-svc,test/schema.e2e-spec.ts,210,210,delete,Test step label paraphrasing the following SQL statement.
+auth-svc,test/schema.e2e-spec.ts,217,217,delete,Test step label paraphrasing the following SQL statement.
+auth-svc,test/schema.e2e-spec.ts,228,228,delete,Test step label paraphrasing the following SQL statement.
+auth-svc,test/schema.e2e-spec.ts,231,231,delete,Test step label paraphrasing the following SQL statement.
+auth-svc,test/schema.e2e-spec.ts,274,274,delete,Test step label paraphrasing the following SQL statement.
+auth-svc,test/schema.e2e-spec.ts,282,282,delete,Test step label paraphrasing the following SQL statement.
+auth-svc,test/schema.e2e-spec.ts,327,327,delete,Test step label paraphrasing the following SQL statement.
+auth-svc,src/auth/auth.constants.ts,1,7,keep,Non-local cross-service token protocol invariant plus a deferred decision to deduplicate into @ecom/contracts.
+auth-svc,src/auth/auth.controller.ts,121,121,delete,Section divider comment over the admin endpoints.
+auth-svc,src/auth/auth.module.ts,30,31,keep,"Non-local architectural boundary: all outbox mechanics live in the messaging package, so auth-svc only supplies config."
+auth-svc,src/auth/auth.service.ts,93,94,keep,Non-local invariant: the outbox write shares the user transaction so one registration yields one event (ADR-events).
+auth-svc,src/auth/auth.service.ts,200,200,delete,Paraphrases the if (token.revoked_at !== null) condition directly below.
+auth-svc,src/auth/auth.service.ts,205,205,delete,Paraphrases the activeFamilyToken && diff < 10000 condition directly below.
+auth-svc,src/auth/auth.service.ts,226,226,delete,The theft branch's revokeTokenFamily call and security-violation throw make this visible.
+auth-svc,src/auth/auth.service.ts,231,231,delete,Section label for the normal-rotation branch; visible in the following control flow.
+auth-svc,src/auth/auth.service.ts,237,237,delete,Paraphrases the revokeRefreshToken call directly below.
+auth-svc,src/auth/auth.service.ts,240,240,delete,Paraphrases the createRefreshToken call and its familyId argument below.
+auth-svc,src/auth/auth.service.ts,364,364,delete,The revokeAllUserTokens call after the password update is self-explanatory.
+auth-svc,src/auth/auth.service.ts,483,483,delete,Section divider comment over the admin methods.
+auth-svc,src/auth/auth.service.ts,526,526,delete,Paraphrases the if (status === 'disabled') branch and revokeAllUserTokens call.
+auth-svc,src/db/pool.spec.ts,33,35,keep,External constraint: pg-pool error event and Node's unhandled-error crash behavior explain why the listener test exists.
+auth-svc,src/db/pool.ts,6,6,delete,Restates the self-explanatory CONNECTION_TIMEOUT_MS constant name.
+auth-svc,src/db/pool.ts,8,8,delete,Restates the self-explanatory QUERY_TIMEOUT_MS constant name.
+auth-svc,src/db/pool.ts,22,24,keep,"External constraint: distinguishes query_timeout (client read deadline) from statement_timeout (server cancel), not visible where both are set to the same value."
+auth-svc,src/db/pool.ts,30,33,keep,External constraint: pg-pool error event and Node's unhandled-error crash behavior justify the listener.
+auth-svc,src/health/health.service.spec.ts,30,31,keep,Rejected alternative (console logging) and reason for spying on the logger.
+auth-svc,src/health/health.service.ts,12,16,keep,Non-local invariant: liveness avoids dependency calls to prevent a restart loop; cites API design doc section 1.9.
+auth-svc,src/health/health.service.ts,21,24,keep,Non-local scope note: the database is the only wired dependency in v1.
+auth-svc,src/health/health.service.ts,37,38,keep,"Rejected alternative plus external constraint: a Nest string body would take the {statusCode,message,error} shape and break section 1.9."
+auth-svc,src/outbox/auth-outbox.ts,7,12,keep,Non-local invariant: the contract's 120-char displayName limit versus two varchar(100) columns requires clipping to avoid validation failure at write time.
+auth-svc,src/outbox/auth-outbox.ts,15,20,keep,Non-local invariant: the event write must share the user's transaction so event and account commit or roll back together (ADR-events).
+auth-svc,src/outbox/auth-outbox.ts,36,36,keep,Rejected alternative: wall-clock timestamp at publish time; records why the transaction's created_at is used.
+auth-svc,src/outbox/auth-outbox.ts,40,40,keep,Non-local PII policy: email must never enter the payload; an absence is not visible in the payload construction.
+auth-svc,src/common/filters/http-exception.filter.ts,38,39,keep,"External constraint: Docker and the load balancer parse {status, checks}, not the API error envelope."

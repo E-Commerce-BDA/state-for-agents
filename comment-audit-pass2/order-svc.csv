@@ -1,0 +1,151 @@
+repo,file,start,end,decision,reason
+order-svc,vitest.config.e2e.ts,10,11,keep,Records why an explicit env var is used instead of a NODE_ENV guard (e2e config never loads .env; otherwise a real relay boots) - a rejected alternative and external config fact.
+order-svc,test/checkout.e2e-spec.ts,37,40,keep,"Encodes the migration-006 schema invariant that payload is null and the envelope is what the relay publishes, which the helper alone cannot show."
+order-svc,test/checkout.e2e-spec.ts,95,100,keep,Documents why the catalog fake is contract-strict (a looser mock hid a past 400-on-every-checkout bug) - a rejected alternative and regression rationale.
+order-svc,test/checkout.e2e-spec.ts,113,114,keep,Cross-service invariant: the hold names its order while held so catalog can find it for cancellation without waiting for order.created.
+order-svc,test/checkout.e2e-spec.ts,149,152,keep,"Test-isolation decision behind launchApp (separate catalog fakes keep call counts local), not derivable from the helper signature."
+order-svc,test/checkout.e2e-spec.ts,177,180,keep,External ioredis behaviour (enableOfflineQueue:false errors before connect) justifies the ping wait loop.
+order-svc,test/checkout.e2e-spec.ts,191,192,keep,Records the decision to discover migrations dynamically so new db/NNN files need no edit here (rejected: hardcoded list).
+order-svc,test/orders.e2e-spec.ts,85,86,keep,Records dynamic migration discovery (rejected: hardcoded list) so new db/NNN files reach the spec.
+order-svc,test/checkout.e2e-spec.ts,322,322,delete,Summarises the asserted totals; every number is visible in the surrounding expect calls.
+order-svc,test/checkout.e2e-spec.ts,331,331,delete,Step label for a query whose target table and assertions are self-evident.
+order-svc,test/checkout.e2e-spec.ts,341,341,delete,Step label; the SQL and asserts already say what is verified.
+order-svc,test/checkout.e2e-spec.ts,352,352,delete,Step label; the payment query and assertions are visible.
+order-svc,test/checkout.e2e-spec.ts,360,360,delete,Step label; the outbox query and assertions are visible.
+order-svc,test/checkout.e2e-spec.ts,369,370,keep,Cross-service invariant (cat-009/cancellation locate the hold via the persisted reservation id) not visible in the assertion.
+order-svc,test/checkout.e2e-spec.ts,373,374,keep,Cross-service invariant (cat-010: catalog cancels by order_id before commit) not visible in the assertion.
+order-svc,test/checkout.e2e-spec.ts,379,379,delete,Test-step note paraphrasing the getProductSnapshots assertion.
+order-svc,test/checkout.e2e-spec.ts,397,397,delete,Summarises asserted totals; the values are all in the expect calls.
+order-svc,test/checkout.e2e-spec.ts,433,433,delete,Bare step label.
+order-svc,test/checkout.e2e-spec.ts,448,448,delete,Bare step label.
+order-svc,test/checkout.e2e-spec.ts,459,459,delete,Bare step label.
+order-svc,test/checkout.e2e-spec.ts,478,478,delete,Paraphrases the immediately following payload2.items[0].qty = 5.
+order-svc,test/checkout.e2e-spec.ts,493,494,keep,"Records the ord-008 regression (global idem key leaked one customer confirmation to another), an invariant not in the test code."
+order-svc,test/checkout.e2e-spec.ts,561,561,keep,Explains why the Redis key is deleted - to force the answer to come from the persisted body hash.
+order-svc,test/checkout.e2e-spec.ts,591,592,keep,"Documents the race invariant (loser is 409 or replay, never a second order) the assertions only sample."
+order-svc,test/checkout.e2e-spec.ts,622,622,delete,Step label; the releaseStock assertion is self-evident.
+order-svc,test/checkout.e2e-spec.ts,626,629,keep,"ADR-style invariant for the payment saga (money only after a durable row, every post-write failure leaves consistency)."
+order-svc,test/checkout.e2e-spec.ts,654,656,keep,"Explains the structural purpose of reading the row at capture time (proof no payment precedes the order), not visible in code."
+order-svc,test/checkout.e2e-spec.ts,835,836,keep,Cross-service invariant: the hold must survive the transient failure or resume confirms released stock.
+order-svc,test/checkout.e2e-spec.ts,844,845,delete,"Summarises assertions whose claims (two captures, one reservation, one order) are all visible."
+order-svc,test/checkout.e2e-spec.ts,863,867,keep,Records the fail-closed decision for Redis before the first durable write (rejected: risking a second order).
+order-svc,test/discounts.e2e-spec.ts,29,29,delete,Step label; the schema and seed file reads are visible.
+order-svc,test/live-kafka.e2e-spec.ts,37,42,keep,"Carries the invocation command and the fact that other suites use a recording publisher, neither derivable from code."
+order-svc,test/live-kafka.e2e-spec.ts,142,146,keep,External Kafka behaviour (fresh group so fromBeginning replays instead of seeking to the current offset) justifies the per-run groupId.
+order-svc,test/live-kafka.e2e-spec.ts,190,191,keep,Nest module-initialisation timing is an external constraint that rules out flipping the env flag (rejected alternative).
+order-svc,test/live-kafka.e2e-spec.ts,207,208,keep,External ioredis offline-queue behaviour justifies the connect-wait loop.
+order-svc,test/orders.e2e-spec.ts,41,44,keep,Records the test-design decision to seed a delivered order directly instead of replaying the whole lifecycle.
+order-svc,test/orders.e2e-spec.ts,149,149,delete,Step label; the INSERT and its values are visible.
+order-svc,test/orders.e2e-spec.ts,186,187,keep,Records the FSM invariant (delivered to refunded is legal) and the provider-refusal setup the seed calls alone do not show.
+order-svc,test/orders.e2e-spec.ts,351,352,keep,Domain constraint (the provider alone moves money) justifies asserting on the spy rather than HTTP status - rejected alternative.
+order-svc,test/orders.e2e-spec.ts,394,394,delete,"Paraphrases the providerRefund assertion, which already shows the captured transaction id."
+order-svc,test/orders.e2e-spec.ts,427,427,keep,Schema/relay invariant (migration 006 nulls payload; the envelope is what the relay sends) not visible in the query.
+order-svc,test/orders.e2e-spec.ts,440,441,keep,"Non-local test invariant: older runs leave order.refunded rows, so the check is scoped to this aggregate."
+order-svc,test/orders.e2e-spec.ts,491,492,keep,"Invariant: a failed refund must stay retryable, so status and captured payment remain unchanged."
+order-svc,test/orders.e2e-spec.ts,522,522,keep,"Records the ledger invariant that a retry reuses the reserved amount and reason, not the current request."
+order-svc,test/outbox.e2e-spec.ts,39,44,keep,Schema invariant (migration 006 leaves payload null; the envelope is the only event description and what the relay publishes).
+order-svc,test/outbox.e2e-spec.ts,133,137,keep,Records the decision to omit a discount code so expected payloads do not depend on another suite seed row (cross-suite invariant).
+order-svc,test/outbox.e2e-spec.ts,170,173,delete,Paraphrases the seedPendingOrder helper name and inserted values; the intent is generic.
+order-svc,test/outbox.e2e-spec.ts,198,204,keep,"Non-local invariant: the outbox table is shared with suites that start no relay, so drains must count only this aggregate."
+order-svc,test/outbox.e2e-spec.ts,251,253,keep,External ioredis offline-queue behaviour justifies the connect-wait loop.
+order-svc,test/outbox.e2e-spec.ts,298,298,keep,DB cascade invariant (children are removed with the parent) that the two DELETE statements do not show.
+order-svc,test/outbox.e2e-spec.ts,332,332,keep,Schema invariant explaining why payload is retained only for pre-envelope audit rows.
+order-svc,test/outbox.e2e-spec.ts,351,351,delete,"Summarises asserted payload numbers, all visible in the expect calls."
+order-svc,test/outbox.e2e-spec.ts,419,419,keep,Non-local ordering invariant (sequential publish in claim order preserves per-order order).
+order-svc,test/outbox.e2e-spec.ts,431,431,keep,"FSM invariant that confirmed to delivered is illegal, not visible in the transition test code."
+order-svc,test/outbox.e2e-spec.ts,453,453,delete,Restates the thrown error message and test intent; no additional invariant.
+order-svc,test/outbox.e2e-spec.ts,510,510,delete,Paraphrases the in-transaction assertion that the store used the passed client.
+order-svc,test/schema.e2e-spec.ts,26,27,keep,Records dynamic migration discovery and the consequence that new files must reach the spec without an edit.
+order-svc,test/schema.e2e-spec.ts,167,167,delete,Bare step label.
+order-svc,test/schema.e2e-spec.ts,174,174,delete,Bare step label.
+order-svc,test/schema.e2e-spec.ts,177,177,delete,Step label; the countAfter assertion already proves the cascade.
+order-svc,test/schema.e2e-spec.ts,196,196,delete,Paraphrases the setTimeout that is directly below.
+order-svc,test/schema.e2e-spec.ts,217,219,keep,ord-011 schema invariant about envelope vs legacy payload null that the INSERT alone cannot show.
+order-svc,test/security.e2e-spec.ts,60,60,keep,Cross-file invariant that the test bootstrap must wire filters/interceptors identically to main.ts.
+order-svc,test/security.e2e-spec.ts,111,111,delete,Step label; the INSERT is self-evident.
+order-svc,src/checkout/checkout.repository.ts,43,48,keep,Cross-service invariant: the hold names the order (catalog.stock_reservations.order_id) so cancellation can find it; column default otherwise.
+order-svc,src/checkout/checkout.repository.ts,77,82,keep,Non-local constraint: payload is a builder because the order number does not exist until INSERT RETURNING.
+order-svc,src/checkout/checkout.repository.ts,85,89,keep,Records the DB unique-constraint meaning and the caller cross-file obligation (refund/release and serve the winner).
+order-svc,src/checkout/checkout.repository.ts,97,101,keep,Design decision to centralise SQL for failure injection (rejected: stubbing pg) plus the one-transaction invariant.
+order-svc,src/checkout/checkout.repository.ts,109,112,keep,"Non-local invariants: idempotency key is user-scoped and the DB row, not the cache, is authoritative."
+order-svc,src/checkout/checkout.repository.ts,133,142,keep,"External constraint: two unique constraints have different handling (retry order number, surface idempotency conflict)."
+order-svc,src/checkout/checkout.repository.ts,203,206,keep,Cross-service invariant (a drifted order id would orphan catalog reservation) plus the decision to fail in-transaction.
+order-svc,src/checkout/checkout.repository.ts,291,295,keep,Invariant: status='pending' guards make a replayed confirmation a no-op instead of a double capture.
+order-svc,src/checkout/checkout.repository.ts,353,357,keep,Records the replay-idempotency invariant (returns false when already settled) behind failOrder.
+order-svc,src/checkout/checkout.service.spec.ts,396,397,keep,"Non-local design invariant (insert is the first durable write, so a race loser has no capture to refund)."
+order-svc,src/checkout/checkout.service.spec.ts,418,420,keep,Cross-service history (ca-009 removed the cart convert route; ord-012 removed the HTTP bridge) not visible in the test.
+order-svc,src/checkout/checkout.service.spec.ts,445,445,delete,Phase label for an assertion whose claimed fields are all visible.
+order-svc,src/checkout/checkout.service.spec.ts,460,460,keep,"Non-local invariant: the provider key is the order id, so a resumed attempt cannot re-charge."
+order-svc,src/checkout/checkout.service.spec.ts,470,470,delete,Phase label; the confirmOrder assertion shows the capture and outbox event.
+order-svc,src/checkout/checkout.service.spec.ts,519,520,keep,Cross-service invariant: a released hold under a pending order would let resume confirm stock that is gone.
+order-svc,src/checkout/checkout.service.spec.ts,568,568,delete,"Summarises assertions (no new reservation/order, one capture) that are all visible."
+order-svc,src/checkout/checkout.service.ts,62,69,keep,Documents the SagaPhase meanings - which durable side effects exist at each phase - that the type alone cannot show.
+order-svc,src/checkout/checkout.service.ts,84,91,keep,"Non-local invariants: guard order, cache is not authority, and fail-closed before commit vs warning after."
+order-svc,src/checkout/checkout.service.ts,112,112,keep,"Invariant that a cache entry is a claim, not proof, so the named order must still exist."
+order-svc,src/checkout/checkout.service.ts,138,140,keep,Saga invariant for losing the insert race (no capture; winner order may still be pending) not visible locally.
+order-svc,src/checkout/checkout.service.ts,151,153,keep,Cross-service invariant (ca-009 cart conversion via consumer; ord-012 removed HTTP bridge) explaining why nothing else happens.
+order-svc,src/checkout/checkout.service.ts,160,163,keep,Records the release-hold-exactly-once invariant behind placeOrder.
+order-svc,src/checkout/checkout.service.ts,170,171,keep,Non-local invariant: a locally generated reservation id lets compensation release exactly this hold.
+order-svc,src/checkout/checkout.service.ts,173,179,keep,Cross-service invariant (cat-010: hold names the order while held so catalog can release via status event) plus rejected alternatives.
+order-svc,src/checkout/checkout.service.ts,227,228,keep,Invariant that TX1 must follow the hold and precede any money movement.
+order-svc,src/checkout/checkout.service.ts,259,260,keep,Invariant that the row own id is authoritative and insertOrder refuses a drifted id.
+order-svc,src/checkout/checkout.service.ts,268,268,keep,Saga ordering invariant that the order may only leave pending after capture.
+order-svc,src/checkout/checkout.service.ts,317,323,keep,External provider semantics: decline is terminal (402) while a thrown error is retryable (503).
+order-svc,src/checkout/checkout.service.ts,362,366,keep,"Invariant that compensation never throws over the original failure, plus the phase-to-undo matrix."
+order-svc,src/checkout/checkout.service.ts,378,378,delete,Branch label paraphrasing 'return error'; status codes are defined elsewhere.
+order-svc,src/checkout/checkout.service.ts,386,386,keep,Cross-file intent: the duplicate-key error is returned so checkout() can serve the winner.
+order-svc,src/checkout/checkout.service.ts,406,407,keep,Invariant: a transient capture failure keeps the pending row and hold so the retry resumes the same hold.
+order-svc,src/checkout/checkout.service.ts,415,415,delete,Branch label paraphrasing the rollBackCapture call.
+order-svc,src/checkout/checkout.service.ts,424,428,keep,"Resume-saga invariant (same order, hold and provider key; never a second reservation/order)."
+order-svc,src/checkout/checkout.service.ts,483,487,keep,Invariant: refund failure is loud but must not mask the original error or tell a customer to retry while money is taken.
+order-svc,src/checkout/checkout.service.ts,534,537,keep,External constraints (catalog releases are idempotent; holds expire) justify one attempt and a warning.
+order-svc,src/checkout/checkout.service.ts,602,605,keep,"Non-local replay rules (conflict on body change, burned closed key, resume pending saga)."
+order-svc,src/checkout/checkout.service.ts,653,656,keep,Records the decision to treat cache corruption as a logged miss rather than a crash/pass-through.
+order-svc,src/checkout/checkout.service.ts,691,695,keep,"Invariant: the Redis lock only serialises; the unique index dedupes, so an unreachable store must fail closed."
+order-svc,src/checkout/checkout.service.ts,728,731,keep,Non-local invariant: a post-commit cache failure is only a warning because retries replay from the database.
+order-svc,src/checkout/checkout.service.ts,750,754,keep,Decision mapping stock failures to 409/502/503 so the storefront can retry rather than report an item gone.
+order-svc,src/clients/catalog.client.ts,4,4,delete,Generic rationale for a self-evident timeout constant and AbortSignal usage.
+order-svc,src/clients/catalog.client.ts,19,23,keep,Cross-service wire-contract fact: qty exists only in the public DTO and is translated to quantity here.
+order-svc,src/clients/catalog.client.ts,75,79,keep,Invariant: reservationId doubles as the idempotency key so a timed-out replay returns the original hold.
+order-svc,src/clients/catalog.client.ts,115,119,keep,External contract semantics (stock already decremented at hold; unknown hold is ok) not in the method body.
+order-svc,src/clients/catalog.client.ts,145,149,keep,Invariant: sending only the reservation id prevents a retry from inflating stock.
+order-svc,src/clients/catalog.client.ts,156,156,keep,External hold-expiry constraint justifies warning instead of failure.
+order-svc,src/clients/catalog.client.ts,163,164,keep,External contract semantics for 404/409 from catalog release (desired end state for compensation).
+order-svc,src/clients/catalog.client.ts,184,188,keep,"Contract fact that the endpoint resolves variantId or productId, driving the map key."
+order-svc,src/clients/catalog.client.ts,223,223,delete,Paraphrases the post() catch that returns null.
+order-svc,src/clients/clients.module.ts,4,10,keep,Cross-service invariants (single client avoids duplicate instances/cycles; no cart client because cart-svc reacts to order.created).
+order-svc,src/common/canonical-json.ts,1,6,keep,Rejected alternative: without recursive key sorting a reordered body would hash differently and be rejected as an idempotency conflict.
+order-svc,src/db/pool.ts,11,29,keep,External node-postgres numeric-as-text behaviour plus the history of scattered Number() casts justifies the parser.
+order-svc,src/db/rows.ts,1,9,keep,Cross-file invariant (NUMERIC parser in pool.ts keeps money as number) plus a documentation reference.
+order-svc,src/db/rows.ts,113,113,keep,Non-local invariant: one refund per order (unique constraint) and the row doubles as the retry slot.
+order-svc,src/discounts/discounts.controller.ts,28,31,delete,Type label paraphrasing the validate() delegation.
+order-svc,src/discounts/discounts.service.ts,70,70,delete,Paraphrases the Math.max/Math.round expression directly below.
+order-svc,src/orders/order-state-machine.ts,4,7,delete,Type label; terminal states are visible as empty arrays in the transition map.
+order-svc,src/orders/order-state-machine.ts,27,29,delete,Paraphrases the guard and the BadRequestException it throws.
+order-svc,src/orders/orders.controller.ts,81,83,delete,Type label; @Roles('admin') and the method names already show it.
+order-svc,src/orders/orders.controller.ts,97,102,keep,Domain invariant that the refund is the provider answer and the ledger row carries the provider reference.
+order-svc,src/orders/orders.repository.ts,66,68,delete,Type label for a query whose COALESCE aggregates are visible.
+order-svc,src/orders/orders.repository.ts,116,118,delete,Type label explicitly listed as DELETE in classification.md.
+order-svc,src/orders/orders.repository.ts,200,202,delete,"Paraphrases the transaction body (UPDATE, history insert, outbox enqueue)."
+order-svc,src/orders/orders.service.spec.ts,297,298,keep,"Invariant: the provider is asked for the ledger-reserved amount, not the DTO amount (rejected alternative)."
+order-svc,src/orders/orders.service.spec.ts,336,337,keep,External provider constraint: the payment row transaction id is the only handle the provider recognises.
+order-svc,src/orders/orders.service.spec.ts,416,416,delete,Restates the test title ('loser of a concurrent double refund') and the created:false mock.
+order-svc,src/orders/orders.service.spec.ts,487,487,keep,"Business invariant that the customer is owed the reserved amount, not the requested 118 (rejected alternative)."
+order-svc,src/orders/orders.service.ts,85,90,keep,Cross-service invariant explaining why a terminal status releases the hold (only the order row knows it).
+order-svc,src/orders/orders.service.ts,111,112,keep,Invariant: a failed release is only a warning because the reservation expires and the order is already correct.
+order-svc,src/orders/orders.service.ts,137,141,keep,"Invariant that the ledger is reserved before the provider call and settled after, so the books never claim an unmade refund."
+order-svc,src/orders/orders.service.ts,154,155,keep,Invariant: a settled refund returns as-is so replay never moves money twice.
+order-svc,src/orders/orders.service.ts,195,196,keep,Invariant: a failed attempt retries in place with its reserved amount so an outage cannot change the refund.
+order-svc,src/orders/refunds.repository.ts,19,23,keep,"Non-local invariant: one ledger row per order, with a transaction on each side of the provider call."
+order-svc,src/orders/refunds.repository.ts,36,39,keep,"Domain invariant that a payment without a transaction id was never captured, hence nothing to reverse."
+order-svc,src/orders/refunds.repository.ts,51,55,keep,External constraint (UNIQUE(order_id)) plus the decision to return the existing row on a concurrent double-click.
+order-svc,src/orders/refunds.repository.ts,78,81,keep,"Atomicity invariant across ledger, payment, order, history and the canonical event."
+order-svc,src/orders/refunds.repository.ts,110,111,keep,Concurrency invariant: 'from' must be read under the same lock that updates the order.
+order-svc,src/orders/refunds.repository.ts,163,166,keep,Invariant: a failed refund changes only the ledger row so the order stays put and the slot is reusable.
+order-svc,src/outbox/order-outbox.module.ts,6,17,keep,"External constraint (@ecom/messaging 0.2.0 quotes identifiers; order is reserved) plus rejected alternatives (three imports/relays, unquoted schema)."
+order-svc,src/outbox/order-outbox.ts,22,28,keep,DB constraint (order number exists only after INSERT RETURNING) justifies the deferred payload builder.
+order-svc,src/outbox/order-outbox.ts,34,42,keep,Non-local invariants: schema validation before insert and taking the timestamp from the payload so replay reproduces the original envelope.
+order-svc,src/payments/mock-payment.provider.ts,19,19,delete,Label paraphrasing the successful capture return.
+order-svc,src/payments/payments.service.ts,19,19,delete,Paraphrases the switch routing every provider to the mock engine.
+order-svc,src/common/filters/http-exception.filter.ts,38,38,delete,Paraphrases the isHealthPath branch and early health response.
+order-svc,src/common/http/request-id.ts,4,7,delete,Paraphrases the header extraction and randomUUID fallback; the trailing purpose is generic.

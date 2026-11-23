@@ -1,0 +1,122 @@
+repo,file,start,end,decision,reason
+cart-svc,vitest.config.e2e.ts,9,13,keep,Non-local invariants: e2e config skips .env so NODE_ENV is unreliable; no suite may join the cart-svc group or boot a real relay.
+cart-svc,src/app.module.ts,23,24,keep,Documents why the consumer toggle exists (suites disable it; operators can park conversions) - cross-file operational invariant.
+cart-svc,src/app.module.ts,27,27,delete,Type label for CATALOG_SVC_URL; its purpose is implied by the name and the domain.
+cart-svc,src/app.module.ts,29,29,keep,Security invariant spanning guard and app.module: the dev fallback must be impossible in production (enforced by the Joi when-clause).
+cart-svc,src/app.module.ts,34,34,keep,oxlint-disable lint directive - never touch.
+cart-svc,src/main.ts,25,27,keep,Deliberate non-await of startEventConsumer plus external behavior: it retries every 5s and never rejects.
+cart-svc,test/cart-merge.e2e-spec.ts,45,45,delete,Field label; cartIds purpose is recoverable from its use in countCartOutboxFor.
+cart-svc,test/cart-security.e2e-spec.ts,189,189,keep,Rejected alternative (not mutating the settings API) and a parallel-test invariant on the shared settings version.
+cart-svc,test/cart-security.e2e-spec.ts,243,243,delete,Restates the assertion that a 404 leaves the outbox count unchanged; no decision beyond it.
+cart-svc,test/cart.e2e-spec.ts,55,55,keep,Records the rejected in-process-spy approach replaced by cart.outbox rows.
+cart-svc,test/cart.e2e-spec.ts,363,363,delete,Both claims are visible: the preceding lines mutate user B's cart and track() scopes its rows.
+cart-svc,test/cart.e2e-spec.ts,549,550,keep,"External constraint: production reads catalog over HTTP, so the fixture keeps the suite offline."
+cart-svc,test/catalog-failure.e2e-spec.ts,39,44,keep,External constraint (enableOfflineQueue: false -> 503) explaining why Redis must be warmed before the catalog-failure assertion.
+cart-svc,test/db-resilience.e2e-spec.ts,32,32,keep,Explains the non-obvious 500 ms sleep: the pg pool needs time to observe the dropped connection.
+cart-svc,test/db-resilience.e2e-spec.ts,35,35,delete,Step label restating the two health-check assertions that follow.
+cart-svc,test/internal.e2e-spec.ts,18,32,keep,ca-009 decision and rejected alternative (internal HTTP bridge) with the reason the route must be absent.
+cart-svc,test/internal.e2e-spec.ts,71,72,keep,Rationale for asserting identical errors: the guard was removed with the route so the 404 is not an auth failure.
+cart-svc,test/live-kafka.e2e-spec.ts,97,97,keep,External Kafka behavior: fromBeginning: false only sees new records.
+cart-svc,test/live-kafka.e2e-spec.ts,115,115,keep,External Kafka behavior: the group join is asynchronous.
+cart-svc,test/live-kafka.e2e-spec.ts,195,201,keep,Non-local invariant: shared DB and parallel specs require scoping the relay to this cart before publishing to the real broker.
+cart-svc,test/live-kafka.e2e-spec.ts,242,242,keep,Decision to fail with an actionable message instead of a kafkajs timeout.
+cart-svc,test/live-kafka.order-created.e2e-spec.ts,17,20,keep,External constraint: the flag must be set before AppModule import because Joi/ConfigModule capture env at module evaluation.
+cart-svc,test/live-kafka.order-created.e2e-spec.ts,37,46,keep,Test purpose and scope for the ca-009 live proof; explains the RUN_KAFKA_E2E gate and what only this suite shows.
+cart-svc,test/live-kafka.order-created.e2e-spec.ts,76,78,keep,Decision: await the consumer here (unlike main.ts) because assertions depend on a connected consumer.
+cart-svc,test/live-kafka.order-created.e2e-spec.ts,107,108,keep,External Kafka behavior: a group with no committed offsets resets to latest.
+cart-svc,test/live-kafka.order-created.e2e-spec.ts,134,134,keep,Decision: build the payload through the contract parser so the suite cannot drift from the producer.
+cart-svc,test/live-kafka.order-created.e2e-spec.ts,219,219,keep,Same actionable-message decision as the other live spec.
+cart-svc,test/order-created.e2e-spec.ts,23,31,keep,"Scope rationale for ca-009 e2e: the transaction, not the controller or protocol, is what this suite proves."
+cart-svc,test/order-created.e2e-spec.ts,37,37,delete,Label for the tracking arrays; their purpose (scoping assertions and teardown) is visible in usage.
+cart-svc,test/order-created.e2e-spec.ts,126,127,keep,Decision: commit (not dead-letter) a no-cart buyer so redelivery does not retry forever.
+cart-svc,test/outbox.e2e-spec.ts,54,54,delete,"Explains what expireLease does, already clear from its name and SQL."
+cart-svc,test/outbox.e2e-spec.ts,62,67,keep,"Non-local invariant: parallel specs share the DB, so attempts are scoped and leaseSeconds: 0 keeps filtered rows claimable."
+cart-svc,test/outbox.e2e-spec.ts,114,118,keep,Non-local invariant: the outbox queue is shared with suites that never start a relay.
+cart-svc,test/outbox.e2e-spec.ts,422,422,keep,Ordering rationale: sequential publish in claim order preserves per-cart order (ADR-events).
+cart-svc,test/outbox.e2e-spec.ts,484,484,delete,Restates why expireLease is called on each retry iteration.
+cart-svc,test/outbox.e2e-spec.ts,488,488,delete,Restates the failed===1 assertion; no additional constraint.
+cart-svc,test/outbox.helpers.ts,4,9,keep,"Non-local invariant: vitest runs spec files in parallel against one DB, so helpers scope by aggregate_id."
+cart-svc,test/outbox.helpers.ts,43,47,keep,Rejected alternative (in-process spy) and why rows are read oldest-first.
+cart-svc,test/outbox.helpers.ts,83,83,keep,"Non-local cascade invariant: deleting a cart removes its events, which is why this teardown helper exists."
+cart-svc,test/outbox.helpers.ts,98,104,keep,"External constraint: the envelope schema cannot know the topic, so assertions use this typed accessor instead of casting."
+cart-svc,test/schema.e2e-spec.ts,103,103,delete,Test step label ('First active cart').
+cart-svc,test/schema.e2e-spec.ts,109,109,delete,Step label restating the unique-constraint violation the assertion checks.
+cart-svc,test/schema.e2e-spec.ts,122,122,delete,Step label restating the abandoned-cart insert and its assertion.
+cart-svc,test/schema.e2e-spec.ts,137,137,delete,Step label for the qty check.
+cart-svc,test/schema.e2e-spec.ts,151,151,delete,Step label for the unit_price check.
+cart-svc,test/schema.e2e-spec.ts,173,173,delete,Step label for the first NULL-variant insert.
+cart-svc,test/schema.e2e-spec.ts,180,180,delete,Step label restating the NULLS NOT DISTINCT unique-violation assertion.
+cart-svc,test/schema.e2e-spec.ts,205,205,delete,Step label for the DELETE query.
+cart-svc,test/schema.e2e-spec.ts,208,208,delete,Step label restating the empty-rows assertion.
+cart-svc,test/schema.e2e-spec.ts,349,349,delete,Step label marking the happy-path insert.
+cart-svc,test/wishlist.e2e-spec.ts,149,149,delete,Step label restating the DB-row query and assertion.
+cart-svc,test/wishlist.e2e-spec.ts,168,168,delete,Step label restating the no-duplicate-row query and assertion.
+cart-svc,test/wishlist.e2e-spec.ts,215,215,delete,Step label for the foreign-user deletion test.
+cart-svc,test/wishlist.e2e-spec.ts,225,225,delete,Step label for customer B's setup POST.
+cart-svc,test/wishlist.e2e-spec.ts,232,232,delete,Step label for the deletion attempt.
+cart-svc,test/wishlist.e2e-spec.ts,252,252,delete,Step label for the updated_at read.
+cart-svc,test/wishlist.e2e-spec.ts,259,259,keep,Explains the non-obvious 20 ms sleep: DB timestamp resolution needs a measurable difference.
+cart-svc,test/wishlist.e2e-spec.ts,267,267,delete,Step label restating the item-deleted query and assertion.
+cart-svc,test/wishlist.e2e-spec.ts,274,274,delete,Step label restating the updated_at assertion.
+cart-svc,test/wishlist.e2e-spec.ts,285,287,keep,Domain invariant (wishlist never mutates a cart) plus parallel-spec scoping by user.
+cart-svc,src/auth/access-token.ts,15,21,keep,Decision: one shared verification path; rejected alternative (duplicating JWT options across guards) and drift risk.
+cart-svc,src/auth/auth.constants.ts,1,6,keep,External constraint: cross-service protocol constants shared with auth-svc until @ecom/contracts lands.
+cart-svc,src/cart/cart-merge.service.spec.ts,54,54,keep,Non-local invariant explaining why findItems is not called: the outbox row is written in the repository transaction.
+cart-svc,src/cart/cart-merge.service.ts,19,20,keep,Non-local invariant: a no-change merge records nothing because the repository writes only on mutating branches.
+cart-svc,src/cart/cart.mapper.ts,49,52,keep,Type-design decision and rejected alternative (local interface) so contract field changes fail to compile.
+cart-svc,src/cart/cart.module.ts,24,25,keep,Architecture fact: outbox internals live in the package; cart-svc only supplies schema/producer.
+cart-svc,src/cart/cart.module.ts,34,35,keep,Explains why CartRepository is exported: the consumer needs it for its claim transaction.
+cart-svc,src/cart/cart.module.ts,46,48,keep,Decision and rejected alternative: the real HttpCatalogClient must be wired; the fixture is test-only.
+cart-svc,src/cart/cart.repository.ts,40,44,keep,"Concurrency invariant: totals come from the mutation snapshot, not a post-commit re-read."
+cart-svc,src/cart/cart.repository.ts,103,103,keep,ADR pointer (ADR-db) - never touch.
+cart-svc,src/cart/cart.repository.ts,227,227,keep,Domain decision: clearing an empty cart is still a state change and emits an outbox row.
+cart-svc,src/cart/cart.repository.ts,234,250,keep,ca-009 transaction decision and why the caller's client is taken.
+cart-svc,src/cart/cart.repository.ts,282,284,keep,Race condition (unique index) and the one-retry decision.
+cart-svc,src/cart/cart.repository.ts,520,524,keep,"Non-local invariant: one committed mutation, one outbox row, by funneling through record()."
+cart-svc,src/cart/cart.repository.ts,534,541,keep,Non-local invariant: withTransaction is public for the consumer's atomic claim and conversion.
+cart-svc,src/cart/cart.service.spec.ts,122,123,keep,Non-local invariant explaining the no-re-read assertion.
+cart-svc,src/cart/cart.service.ts,66,67,keep,Non-local invariant: response totals and outbox payload share one snapshot.
+cart-svc,src/cart/catalog.client.ts,3,7,keep,Decision and rejected alternative: deliberately narrower snapshot so only the adapter knows stock/sku.
+cart-svc,src/cart/catalog.fixture.ts,7,11,keep,"Test-seam rationale: the fixture avoids catalog-svc, a catalog schema, and network in e2e."
+cart-svc,src/cart/http-catalog.client.spec.ts,82,82,keep,Rationale for the AbortSignal timeout: a hung catalog must not hold the add-to-cart request open.
+cart-svc,src/cart/http-catalog.client.ts,15,19,keep,"Decision and rejected alternative: one attempt, fail fast; a retry would double the worst case."
+cart-svc,src/cart/http-catalog.client.ts,22,25,keep,Test-seam rationale: the DI fetch token keeps suites socket-free.
+cart-svc,src/cart/http-catalog.client.ts,33,33,keep,ADR pointer (ADR-contracts) - never touch.
+cart-svc,src/cart/http-catalog.client.ts,70,76,keep,Domain decision and cross-file behavior (422 mapping) of the one-id lookup.
+cart-svc,src/cart/http-catalog.client.ts,91,93,keep,"Rejected alternative: never degrade to null, which would lie to the customer."
+cart-svc,src/cart/http-catalog.client.ts,127,129,keep,Cross-service constraint: the payable price must match order-svc re-pricing.
+cart-svc,src/cart/http-catalog.client.ts,135,138,keep,ADR-privacy constraint: only the stable code leaves; the reason stays in the log.
+cart-svc,src/cart/idempotency.interceptor.ts,21,27,keep,Decision: dedupe before the handler; replays skip the service and its single event.
+cart-svc,src/cart/idempotency.service.ts,80,83,keep,"Decision: a Redis failure after commit is logged, not surfaced as an error."
+cart-svc,src/db/pool.ts,6,6,delete,Label restating CONNECTION_TIMEOUT_MS.
+cart-svc,src/db/pool.ts,8,8,delete,Label restating QUERY_TIMEOUT_MS.
+cart-svc,src/events/cart-consumer.controller.spec.ts,34,38,keep,Scope rationale: the protocol lives in @ecom/messaging; this suite tests cart-svc wiring and ordering.
+cart-svc,src/events/cart-consumer.controller.spec.ts,156,156,keep,Decision: a malformed payload skips the retry ladder.
+cart-svc,src/events/cart-consumer.controller.spec.ts,228,228,delete,Count label; the toHaveBeenCalledTimes(3) assertion shows it.
+cart-svc,src/events/cart-consumer.controller.spec.ts,233,233,keep,"Ordering invariant: side effect then offset, never the reverse."
+cart-svc,src/events/cart-consumer.controller.spec.ts,261,261,keep,"Invariant: the DLQ counter follows the write, so failed writes are not counted."
+cart-svc,src/events/cart-consumer.controller.ts,13,33,keep,"Architecture decision: one controller, consumer, and commit protocol; new topics are methods, not groups."
+cart-svc,src/events/cart-consumer.controller.ts,46,47,keep,Decision and rejected alternative: pass the topic explicitly so a mistyped pattern fails the DLQ-name test.
+cart-svc,src/events/consumer-runtime.ts,11,17,keep,External Nest behavior (appends -server) and the invariant that postfixId: '' matches the constant.
+cart-svc,src/events/consumer-runtime.ts,28,31,delete,Class doc restating what the three delegating logger methods do.
+cart-svc,src/events/consumer-runtime.ts,73,88,keep,"Deliberate separation from HTTP bootstrap, Nest behavior, and flag-not-module-presence switch."
+cart-svc,src/events/consumer-runtime.ts,126,131,keep,External constraint: the separate DLQ kafkajs producer would keep the process alive.
+cart-svc,src/events/events.module.ts,18,25,keep,Non-local invariant: providers are lazy so building the module in tests touches no broker.
+cart-svc,src/events/events.module.ts,32,32,keep,Cross-file invariant: only the DDL is cart-svc's; the claim itself is shared.
+cart-svc,src/events/order-created.handler.spec.ts,63,63,keep,"Non-local invariant: the claim runs on the transaction client, not the pool."
+cart-svc,src/events/order-created.handler.spec.ts,66,66,keep,Atomicity invariant: one transaction for claim and conversion.
+cart-svc,src/events/order-created.handler.spec.ts,84,84,keep,Decision: commit a no-cart buyer rather than dead-letter.
+cart-svc,src/events/order-created.handler.spec.ts,128,129,keep,Atomicity invariant: failure aborts claim and conversion together.
+cart-svc,src/events/order-created.handler.spec.ts,135,136,keep,Non-local invariant: convertForOrder matches on user_id taken from the payload.
+cart-svc,src/events/order-created.handler.ts,17,43,keep,"ca-009 decision, rejected cross-service bridge, and atomicity rationale."
+cart-svc,src/events/order-created.handler.ts,56,56,keep,External constraint: the legacy topic/eventType dual-write is normalized by readEventEnvelope.
+cart-svc,src/events/order-created.handler.ts,63,64,keep,"Decision: unsubscribed events are committed, not dead-lettered."
+cart-svc,src/health/health.service.ts,12,15,keep,Distinguishes liveness from readiness and cites the external API design doc.
+cart-svc,src/outbox/cart-outbox.ts,8,15,keep,Non-local invariant: the outbox write shares the mutation transaction and snapshot.
+cart-svc,src/outbox/cart-outbox.ts,29,29,keep,External constraint: the topic registry fixes partitions and key.
+cart-svc,src/outbox/cart-outbox.ts,31,31,keep,"Decision: occurredAt is the mutation timestamp, not publish-time wall clock."
+cart-svc,src/redis/redis.service.ts,7,13,keep,Decision and rejected alternative: fail closed with 503 when Redis is down.
+cart-svc,src/auth/guards/cart-identity.guard.ts,23,29,keep,Security decision and rejected alternative: a malformed token must not fall back to the guest session.
+cart-svc,src/auth/guards/service-key.guard.ts,12,16,keep,Cross-file invariant: app.module makes the key mandatory in production so the dev fallback cannot leak.
+cart-svc,src/common/filters/http-exception.filter.ts,38,39,keep,"External constraint: Docker and the load balancer parse {status, checks}, so probes bypass the API envelope."
+cart-svc,src/common/http/request-id.ts,4,7,keep,Decision: echo the gateway request id or mint one so local calls stay traceable.

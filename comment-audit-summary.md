@@ -85,7 +85,55 @@ extractor deleted a few adjacent code lines — those were repaired and `tsc` is
 clean. Three focused test runs green. ~510 storefront blocks + other repos
 remain. Nothing is committed.
 
+## Pass 2 — per-repo decision tables
+
+Ten subagents, one per repo, each ran the extractor fresh and produced a full
+decisions CSV. Every table was spot-checked before any deletion was applied.
+Reviewed 1,810 comment blocks; kept 1,375, deleted 435 blocks / 610 lines.
+Every diff is deletions-only, zero added lines.
+
+| Repo | Blocks | Delete blocks | Lines | Comment commit |
+|---|---:|---:|---:|---|
+| storefront | 576 | 105 | 203 | `624d456` |
+| ecom-contracts | 45 | 4 | 7 | `aabf398` |
+| auth-svc | 99 | 69 | 69 | `a408ea6` |
+| cart-svc | 121 | 31 | 34 | `1867f2a` |
+| cms-svc | 177 | 16 | 16 | `ca5267f` |
+| search-svc | 164 | 69 | 97 | `f777c8f` |
+| analytics-svc | 25 | 3 | 7 | `593c975` |
+| catalog-svc | 268 | 70 | 81 | `81c80e1` |
+| ecom-messaging | 185 | 23 | 28 | `af9c979` |
+| order-svc | 150 | 45 | 68 | `11ba701` |
+
+Per-block decisions with reasons: `state-for-agents/comment-audit-pass2/<repo>.csv`.
+
+### What the second pass corrected
+
+- The storefront table first marked 186 deletes. Spot-checks found a systematic
+  error: comments whose reason is invisible in code were cut because the action
+  was visible. 81 were flipped to keep. The root cause was in the skill's own
+  `references/classification.md`, which taught that the "0-cap would swallow
+  every push" comment was DELETE; it is now the KEEP example. Final storefront
+  count: 105 deletes.
+- Two agents wrote uppercase `DELETE` and the apply script silently no-oped.
+  The script now normalizes casing, warns on unknown values, hints on a zero
+  apply, and skips `// ADR-*:` pointers by shape.
+- Agents overrode extractor suggestions to keep ADR pointers and lint/TS
+  directives in several repos. One catalog comment was flipped to keep because
+  "the join-shaped read the controllers return" is a cross-file fact.
+
+### Gates
+
+- storefront: `tsc` clean, 1290 tests, webpack build 39/39 pages.
+- contracts 163, auth 29, cart 119, cms 163, analytics 20, catalog 165,
+  messaging 136, order 75 tests — all green, all `tsc` clean.
+- search-svc: 142 tests green. Its four pre-existing `dlq` errors are fixed in
+  commit `7af63fe` (local `HandlerOverrides` type, spread moved first), so the
+  whole polyrepo now has a green typecheck.
+
 ## Next step
 
-Continue batches or stop and commit. Fix the pre-existing search-svc test
-type errors separately.
+No immediate task. Live-stack verification is still blocked: cms-svc :4050 and
+Mongo :27018 are not listening, so the catalog popularity migration, demo seed
+backfill and service-backed e2e suites remain unverified. `frontend/admin`,
+notify-svc and import-svc are empty scaffolds.

@@ -1,0 +1,269 @@
+repo,file,start,end,decision,reason
+catalog-svc,vitest.config.e2e.ts,10,14,keep,"External constraint: e2e config skips .env, so NODE_ENV cannot guard the relay."
+catalog-svc,src/app.module.ts,29,30,keep,Non-local constraint: the e2e suite sets this to avoid draining a shared test DB.
+catalog-svc,src/app.module.ts,40,41,keep,Non-local invariant: global so the three producer modules can inject CatalogOutbox.
+catalog-svc,src/main.ts,9,10,keep,Non-local invariant: the guard must run before Nest opens a DB connection.
+catalog-svc,src/main.ts,30,33,keep,Deliberate non-await with a broker-outage reason the code cannot show.
+catalog-svc,test/brands.e2e-spec.ts,197,197,delete,Test step label; the 404 assertion on the next line shows it.
+catalog-svc,test/categories.e2e-spec.ts,223,223,delete,Test step label; the 404 assertion on the next line shows it.
+catalog-svc,test/internal.e2e-spec.ts,25,26,keep,Non-local invariant: shared e2e database forces fixture cleanup.
+catalog-svc,test/internal.e2e-spec.ts,81,81,delete,Numbered test-step label; the following 401 assertion is self-explanatory.
+catalog-svc,test/internal.e2e-spec.ts,86,86,delete,Numbered test-step label; the wrong-key 401 assertion follows.
+catalog-svc,test/internal.e2e-spec.ts,92,92,delete,Numbered test-step label; the 200 assertion follows.
+catalog-svc,test/internal.e2e-spec.ts,102,102,delete,Test step label; the 404 assertion follows.
+catalog-svc,test/internal.e2e-spec.ts,110,110,delete,Test step label; the product create POST follows.
+catalog-svc,test/internal.e2e-spec.ts,128,128,delete,Test step label; the stock GET and assertions follow.
+catalog-svc,test/internal.e2e-spec.ts,169,169,keep,Rejected alternative: returning a promise would lose supertest's .expect().
+catalog-svc,test/internal.e2e-spec.ts,312,312,delete,Test step label; the create POST follows.
+catalog-svc,test/internal.e2e-spec.ts,329,329,delete,Test step label; the image POST follows.
+catalog-svc,test/internal.e2e-spec.ts,340,340,delete,Test step label; the discount POST follows.
+catalog-svc,test/internal.e2e-spec.ts,352,352,delete,Test step label; the snapshot GET follows.
+catalog-svc,test/internal.e2e-spec.ts,370,370,delete,Test step label; the 400 assertion follows.
+catalog-svc,test/inventory.e2e-spec.ts,84,84,delete,Numbered step label; stock 10 in the POST body is visible.
+catalog-svc,test/inventory.e2e-spec.ts,101,101,delete,Numbered step label; the 401 assertion follows.
+catalog-svc,test/inventory.e2e-spec.ts,107,107,delete,Numbered step label; the 403 assertion follows.
+catalog-svc,test/inventory.e2e-spec.ts,114,114,delete,Numbered step label; delta 5 and the 201 assertions follow.
+catalog-svc,test/inventory.e2e-spec.ts,127,127,delete,Numbered step label; delta -20 and the 409 assertion follow.
+catalog-svc,test/inventory.e2e-spec.ts,136,136,delete,Numbered step label; the movements GET follows.
+catalog-svc,test/live-kafka.consumer.e2e-spec.ts,17,20,keep,External constraint: Joi/ConfigModule capture env at module evaluation.
+catalog-svc,test/live-kafka.consumer.e2e-spec.ts,39,50,keep,Records cat-007/cat-008 lineage and why one shared transport is exercised.
+catalog-svc,test/live-kafka.consumer.e2e-spec.ts,82,84,keep,Cross-file invariant: unlike main.ts this await must block on the consumer.
+catalog-svc,test/live-kafka.consumer.e2e-spec.ts,119,119,delete,Step label plus a generic checkout analogy; reserve call and assertions are visible.
+catalog-svc,test/live-kafka.consumer.e2e-spec.ts,166,167,keep,External constraint: contract 1.9.0 strict schema would reject older consumers.
+catalog-svc,test/live-kafka.consumer.e2e-spec.ts,191,192,keep,Records D2 decision and the cross-service index path.
+catalog-svc,test/live-kafka.consumer.e2e-spec.ts,205,206,keep,External constraint: Nest's default postfixId would create a second group.
+catalog-svc,test/live-kafka.consumer.e2e-spec.ts,215,215,delete,Step label; the two committed-offset assertions are visible.
+catalog-svc,test/live-kafka.consumer.e2e-spec.ts,237,237,delete,Restates the parseEventPayload call; the no-drift rationale is generic.
+catalog-svc,test/live-kafka.consumer.e2e-spec.ts,303,303,keep,Rejected alternative: a raw kafkajs timeout would be unactionable.
+catalog-svc,test/live-kafka.e2e-spec.ts,31,37,keep,Non-local reason for the RUN_KAFKA_E2E gate plus the invocation command.
+catalog-svc,test/live-kafka.e2e-spec.ts,85,89,keep,External constraint: fresh group + fromBeginning replays instead of skipping.
+catalog-svc,test/live-kafka.e2e-spec.ts,131,132,keep,External constraint: the relay flag is read at module declaration time.
+catalog-svc,test/order-created.e2e-spec.ts,16,20,keep,Non-local invariant: the handler is the only thing between a record and the transaction.
+catalog-svc,test/order-created.e2e-spec.ts,154,155,keep,"Non-local invariant: stock was decremented at reserve time, so commit must not repeat it."
+catalog-svc,test/order-created.e2e-spec.ts,207,209,keep,External constraint: cross-topic Kafka ordering makes a fast cancellation legitimate.
+catalog-svc,test/order-created.e2e-spec.ts,215,216,keep,Non-local invariant: the claim and concession share one transaction.
+catalog-svc,test/order-created.e2e-spec.ts,259,261,keep,Records cat-007/cat-008 counter history that explains the empty lag fields.
+catalog-svc,test/order-status-updated.e2e-spec.ts,14,21,keep,"Non-local invariant: tests duplicate/gone/out-of-order cases, not restock itself."
+catalog-svc,test/order-status-updated.e2e-spec.ts,82,85,keep,Non-local invariant: checkout generates the order id before reserving.
+catalog-svc,test/order-status-updated.e2e-spec.ts,164,168,keep,External constraint: uuid ids and transaction-start now() cannot order movements.
+catalog-svc,test/order-status-updated.e2e-spec.ts,202,202,keep,"Rejected alternative: expected stock is pre-hold 8, not 8+3."
+catalog-svc,test/order-status-updated.e2e-spec.ts,253,253,keep,"Non-local invariant: shipped statuses take no transaction, hence no claim row."
+catalog-svc,test/order-status-updated.e2e-spec.ts,274,276,keep,"Rejected alternative: refund uses return/refunded, not cancel/released."
+catalog-svc,test/order-status-updated.e2e-spec.ts,282,282,delete,Step label; duplicate result and unchanged stock are asserted below.
+catalog-svc,test/order-status-updated.e2e-spec.ts,298,299,keep,"Non-local invariant: a new event id bypasses the claim, so status guards dedupe."
+catalog-svc,test/order-status-updated.e2e-spec.ts,326,327,keep,Rejected alternative: cancelling a shipped order would double-sell.
+catalog-svc,test/order-status-updated.e2e-spec.ts,339,340,keep,External constraint: cross-topic ordering lets cancellation arrive first.
+catalog-svc,test/order-status-updated.e2e-spec.ts,346,346,delete,Step label; the ignored/released-by-cancellation assertion follows.
+catalog-svc,test/outbox.e2e-spec.ts,104,110,keep,Non-local invariant: the outbox queue is shared with relay-less e2e suites.
+catalog-svc,test/outbox.e2e-spec.ts,182,182,keep,Non-local invariant: child rows cascade on product delete.
+catalog-svc,test/outbox.e2e-spec.ts,239,239,keep,"Rejected alternative: envelope timestamp is the row's, not relay run time."
+catalog-svc,test/outbox.e2e-spec.ts,290,290,delete,Restates the loop's assertions; the storefront rationale adds no constraint.
+catalog-svc,test/outbox.e2e-spec.ts,352,352,delete,Restates the visible isActive: false assertion.
+catalog-svc,test/outbox.e2e-spec.ts,383,383,keep,Non-local invariant: sequential publish preserves per-product order.
+catalog-svc,test/outbox.e2e-spec.ts,421,422,keep,Rejected alternative: an outbox outside the transaction would survive the failure.
+catalog-svc,test/outbox.helpers.ts,4,10,keep,"Non-local invariant: vitest shares one database, so helpers scope by aggregate id."
+catalog-svc,test/outbox.helpers.ts,49,49,delete,Step label; the DELETE query is visible.
+catalog-svc,test/product-ids.e2e-spec.ts,19,26,keep,"Non-local invariants: CMS manual-curation contract, status floor and shared DB."
+catalog-svc,test/product-ids.e2e-spec.ts,154,155,keep,Non-local invariant: an unknown id behaves like an unmet admin pick.
+catalog-svc,test/product-imported.e2e-spec.ts,34,41,keep,Non-local invariant: handler-level testing covers every cat-008 rule without a broker.
+catalog-svc,test/product-imported.e2e-spec.ts,249,249,keep,External constraint: migration 001's CHECK disallowed 'import'.
+catalog-svc,test/product-imported.e2e-spec.ts,269,270,keep,"Records D2: search learns via product.imported, so no product.updated flood."
+catalog-svc,test/product-imported.e2e-spec.ts,273,273,delete,Step label; the three-movements assertion is visible.
+catalog-svc,test/product-imported.e2e-spec.ts,329,330,keep,"Rejected alternative: an import sets identity fields, not presentation/provenance."
+catalog-svc,test/product-imported.e2e-spec.ts,351,352,keep,"Non-local invariant: the claim shares the transaction, so rejection leaves no trace."
+catalog-svc,test/product-imported.e2e-spec.ts,385,386,keep,Rejected alternative: a second import reuses the brand row instead of failing on slug.
+catalog-svc,test/product-imported.e2e-spec.ts,452,452,delete,Step label; reserve of 2 and stock 8 are visible.
+catalog-svc,test/product-imported.e2e-spec.ts,461,462,keep,Non-local invariant: physical feed net of holds; import must not erase a live hold.
+catalog-svc,test/product-imported.e2e-spec.ts,466,467,delete,Step label; the two-movements assertion is visible.
+catalog-svc,test/product-imported.e2e-spec.ts,519,519,keep,"Non-local invariant: absent fields mean partial feed, not withdrawal."
+catalog-svc,test/products.e2e-spec.ts,83,84,keep,Non-local invariant: shared e2e fixtures force limit 100 and self-created products.
+catalog-svc,test/products.e2e-spec.ts,340,340,delete,Step label; the PDP assertions follow.
+catalog-svc,test/products.e2e-spec.ts,362,362,delete,Step label; the 404 assertion follows.
+catalog-svc,test/schema.e2e-spec.ts,204,204,delete,Step label; the rating-0 insert is visible.
+catalog-svc,test/schema.e2e-spec.ts,212,212,delete,Step label; the rating-6 insert is visible.
+catalog-svc,test/schema.e2e-spec.ts,230,230,delete,Step label; the 'bogo' insert is visible.
+catalog-svc,test/schema.e2e-spec.ts,243,243,delete,Step label; the value-105 insert is visible.
+catalog-svc,test/schema.e2e-spec.ts,278,278,delete,The 50 ms sleep and timestamp comparison make the purpose recoverable.
+catalog-svc,test/schema.e2e-spec.ts,324,324,keep,"External constraint: a failed statement aborts the transaction, hence the savepoint."
+catalog-svc,test/schema.e2e-spec.ts,331,332,keep,"Non-local invariant: checkout reserves before the order exists, so null order ids are legal."
+catalog-svc,test/schema.e2e-spec.ts,359,359,delete,Step label; the duplicate-key rejection assertion follows.
+catalog-svc,test/schema.e2e-spec.ts,370,370,delete,Step label; the INSERT statements follow.
+catalog-svc,test/schema.e2e-spec.ts,443,443,delete,Step label; the valid INSERT and assertion follow.
+catalog-svc,test/schema.e2e-spec.ts,452,452,delete,Step label; the rejects.toThrow(/product_options_card_placement_check/) is visible.
+catalog-svc,test/schema.e2e-spec.ts,497,497,keep,Non-local invariant: the claim is the consumer's idempotency gate.
+catalog-svc,test/schema.e2e-spec.ts,501,501,keep,Non-local invariant: event id is global identity across topics.
+catalog-svc,test/schema.e2e-spec.ts,524,525,keep,Non-local invariant: a non-null envelope is required for the relay to drain.
+catalog-svc,test/schema.e2e-spec.ts,561,563,keep,Non-local test-design invariant: only the field under test varies in rejected inserts.
+catalog-svc,test/schema.e2e-spec.ts,577,577,keep,Non-local invariant: the envelope is the wire contract and must match the row id.
+catalog-svc,test/schema.e2e-spec.ts,590,591,keep,Non-local invariant: aggregate id is the partition key.
+catalog-svc,test/schema.e2e-spec.ts,598,598,keep,Non-local invariant: only cat-007's two topics are addressable in this table.
+catalog-svc,test/security.e2e-spec.ts,154,154,delete,Step label; the GET 200 assertion follows.
+catalog-svc,src/auth/access-token.ts,15,20,keep,Non-local invariant: guards must agree with auth-svc on token parameters.
+catalog-svc,src/auth/auth.constants.ts,1,6,keep,Non-local invariant: cross-service protocol constants mirrored until contracts land.
+catalog-svc,src/badges/badges.module.ts,11,12,keep,Non-local invariant: ProductsModule supplies the repo used to rebuild the payload.
+catalog-svc,src/badges/badges.repository.ts,198,199,keep,Non-local invariant: client reuse keeps badge rows and the event in one transaction.
+catalog-svc,src/badges/badges.service.spec.ts,8,8,delete,Restates the withTransaction mock; no database in unit tests is implied.
+catalog-svc,src/badges/badges.service.spec.ts,152,153,delete,Restates the recordProduct expectation; the rationale lives in badges.service.ts.
+catalog-svc,src/badges/badges.service.ts,92,100,keep,Non-local invariants: payload read through tx client and repo optional only for tests.
+catalog-svc,src/badges/badges.types.ts,27,31,delete,Type label restating the interface fields.
+catalog-svc,src/categories/categories.repository.ts,191,194,keep,Non-local invariant: the caller emits category.updated from the RETURNING row.
+catalog-svc,src/categories/categories.service.spec.ts,11,12,delete,Restates the withTransaction mock.
+catalog-svc,src/categories/categories.service.spec.ts,162,163,keep,"Rejected alternative: isActive comes from the UPDATE result, not a pre-read."
+catalog-svc,src/categories/categories.service.ts,174,175,keep,Non-local invariant: softDelete's RETURNING row feeds the event.
+catalog-svc,src/categories/categories.service.ts,184,184,delete,Step label; the map-building loop follows.
+catalog-svc,src/categories/categories.service.ts,189,189,delete,Step label; the child-linking loop follows.
+catalog-svc,src/config/fixture-seed.guard.spec.ts,36,37,keep,Rejected alternative: a near-miss flag must not block boot in the safe direction.
+catalog-svc,src/config/fixture-seed.guard.ts,1,11,keep,Non-local invariant: db/seed.mjs is insufficient; a deployed process must also refuse.
+catalog-svc,src/db/pool.ts,6,6,delete,Paraphrases the CONNECTION_TIMEOUT_MS constant name.
+catalog-svc,src/db/pool.ts,8,8,delete,Paraphrases the QUERY_TIMEOUT_MS constant name.
+catalog-svc,src/db/tx.ts,4,12,keep,"Rejected alternative: Pick<Pool,'query'> keeps row-type inference that Queryable erases."
+catalog-svc,src/db/tx.ts,15,26,keep,Non-local invariant: outbox and domain row must commit together; history of the helper.
+catalog-svc,src/events/catalog-consumer.controller.spec.ts,81,95,keep,"Non-local invariant: tests wiring, not the protocol already tested in @ecom/messaging."
+catalog-svc,src/events/catalog-consumer.controller.spec.ts,191,191,keep,Deliberate coupling to the real translateError so a change breaks the test.
+catalog-svc,src/events/catalog-consumer.controller.spec.ts,225,225,keep,"Rejected alternative: cat-007's dashboard reads 'committed', not 'accepted'."
+catalog-svc,src/events/catalog-consumer.controller.spec.ts,265,265,keep,Non-local invariant: a payload that can never succeed skips the retry ladder.
+catalog-svc,src/events/catalog-consumer.controller.spec.ts,355,358,keep,External constraint: AppliedCounter labels plus a deliberate non-terminal 404.
+catalog-svc,src/events/catalog-consumer.controller.spec.ts,423,423,keep,Non-local invariant: one consumer and one group for both routes.
+catalog-svc,src/events/catalog-consumer.controller.spec.ts,444,444,keep,Non-local invariant: a missing id will still be missing after retries.
+catalog-svc,src/events/catalog-consumer.controller.spec.ts,470,470,keep,Non-local invariant: the counter is incremented after the DLQ write succeeds.
+catalog-svc,src/events/catalog-consumer.controller.spec.ts,475,477,keep,"Non-local invariant: one list feeds patterns, sampler and DLQ names."
+catalog-svc,src/events/catalog-consumer.controller.spec.ts,496,497,keep,External constraint: AppliedCounter is a closed union in @ecom/messaging.
+catalog-svc,src/events/catalog-consumer.controller.spec.ts,513,514,keep,Non-local invariant: the explicit topic string is what names the DLQ.
+catalog-svc,src/events/catalog-consumer.controller.ts,20,47,keep,Non-local invariant: one controller/consumer/group; a second group splits partitions.
+catalog-svc,src/events/catalog-consumer.controller.ts,87,87,keep,ADR pointer - never touch.
+catalog-svc,src/events/catalog-topics.ts,3,12,keep,Non-local invariant: one topic list must not disagree with patterns and DLQ names.
+catalog-svc,src/events/consumer-metrics.ts,9,22,keep,Non-local invariant: shared counters preserve cat-007 dashboards; subclassing is deliberate.
+catalog-svc,src/events/consumer-metrics.ts,26,32,keep,Records why lag sits beside lastCommit: distinguish behind from stopped.
+catalog-svc,src/events/consumer-runtime.ts,12,19,keep,External constraint: Nest appends -server unless postfixId is empty.
+catalog-svc,src/events/consumer-runtime.ts,30,33,delete,Restates the NestRelayLogger adapter; the same-log-stream rationale is generic.
+catalog-svc,src/events/consumer-runtime.ts,75,94,keep,Non-local invariant: an HTTP test must never join a consumer group; Nest transport detail.
+catalog-svc,src/events/consumer-runtime.ts,119,120,keep,External constraint: a gauge over an unjoined group reports the whole topic as lag.
+catalog-svc,src/events/consumer-runtime.ts,130,133,keep,Non-local detail: the retry wait is unref'd so a never-connected process can exit.
+catalog-svc,src/events/consumer-runtime.ts,148,155,keep,Rejected alternative: starting the gauge in onModuleInit would open a broker connection in tests.
+catalog-svc,src/events/consumer-stats.controller.ts,10,20,keep,Non-local invariants: cat-008 additive counters and a separate admin connection for lag.
+catalog-svc,src/events/events.module.ts,26,38,keep,Non-local invariant: providers are lazy so building the module in tests touches no broker.
+catalog-svc,src/events/events.module.ts,41,42,keep,Non-local invariant: StockModule must be imported for the handler's repository.
+catalog-svc,src/events/events.module.ts,67,70,keep,"Non-local invariant: terminal errors dead-letter on first attempt, not after 31 seconds."
+catalog-svc,src/events/events.module.ts,77,78,keep,External constraint: sampler measures the group so lag matches kafka-consumer-groups.
+catalog-svc,src/events/events.module.ts,95,107,keep,Rejected alternative: NotFoundException stays retryable for visibility lag; label cost noted.
+catalog-svc,src/events/handler-outcome.ts,10,23,keep,Non-local invariant: handler-outcome is the single seam between business and transport.
+catalog-svc,src/events/handler-outcome.ts,29,30,keep,Non-local invariant: operators need reservation and order on one log line.
+catalog-svc,src/events/handler-outcome.ts,50,58,keep,External constraint: AppliedCounter's closed union forces 'accepted' for releases.
+catalog-svc,src/events/handler-outcome.ts,75,77,keep,Non-local invariant: a restock needs its own log line and names the refunded reservation.
+catalog-svc,src/events/handler-outcome.ts,92,95,keep,"Rejected alternative: a shipped cancellation is a warning, not a DLQ or silent no-op."
+catalog-svc,src/events/handler-outcome.ts,106,112,keep,Non-local invariant: no cat-008 dashboard for imports; accepted is the protocol default.
+catalog-svc,src/inventory/inventory.repository.ts,215,215,delete,Restates the empty catch; no reason is given for ignoring the cursor.
+catalog-svc,src/outbox/catalog-outbox.module.ts,6,13,keep,Non-local invariant: global module avoids a second relay/store registration.
+catalog-svc,src/outbox/catalog-outbox.ts,12,12,keep,ADR pointer - never touch.
+catalog-svc,src/outbox/catalog-outbox.ts,17,21,keep,Non-local invariant: every storefront-visible mutation emits product.updated.
+catalog-svc,src/outbox/catalog-outbox.ts,31,32,keep,Rejected alternative: use the row's timestamp so a replay reproduces the event.
+catalog-svc,src/outbox/catalog-outbox.ts,60,64,keep,"Non-local facts about controllers and the join-shaped read that the adjacent guard cannot prove."
+catalog-svc,src/outbox/catalog-outbox.ts,72,73,keep,"External constraint: pg returns DECIMAL as a string, hence Number()."
+catalog-svc,src/products/cursor.codec.spec.ts,33,33,keep,Non-local invariant: limit is excluded from the fingerprint by design.
+catalog-svc,src/products/cursor.codec.ts,3,14,keep,Rejected alternative: the old id predicate repeated page-1 rows; mirrors search-svc.
+catalog-svc,src/products/cursor.codec.ts,48,48,delete,Short field label; the array_position tie is visible in products.repository.ts.
+catalog-svc,src/products/cursor.codec.ts,59,59,delete,Paraphrases the manual/created_desc ternary.
+catalog-svc,src/products/cursor.codec.ts,65,65,delete,Paraphrases the fingerprint function's name and body.
+catalog-svc,src/products/products.controller.ts,105,105,delete,Section divider.
+catalog-svc,src/products/products.repository.ts,141,143,keep,"Non-local invariants: CMS manual curation is a filter first, status floor never lifts."
+catalog-svc,src/products/products.repository.ts,167,168,keep,Non-local invariant: discounted uses the already-joined active-discount lateral.
+catalog-svc,src/products/products.repository.ts,195,195,delete,Restates the array_position ordering expression.
+catalog-svc,src/products/products.repository.ts,202,204,keep,Non-local invariant: keyset predicates mirror ORDER BY; NULL ratings sort last.
+catalog-svc,src/products/products.repository.ts,904,907,keep,Non-local invariant: the RETURNING row feeds product.updated.
+catalog-svc,src/products/products.repository.ts,920,920,delete,Section divider.
+catalog-svc,src/products/products.repository.ts,980,981,keep,Non-local invariant: variant and option values must land in one transaction.
+catalog-svc,src/products/products.repository.ts,1113,1117,keep,Non-local invariant: caller re-reads the product in the same transaction for the event.
+catalog-svc,src/products/products.repository.ts,1130,1130,delete,Section divider.
+catalog-svc,src/products/products.repository.ts,1312,1312,delete,Section divider.
+catalog-svc,src/products/products.repository.ts,1430,1430,delete,Section divider.
+catalog-svc,src/products/products.repository.ts,1465,1468,keep,Non-local invariant: caller re-reads the product in the same transaction after delete.
+catalog-svc,src/products/products.service.spec.ts,11,14,keep,"Non-local test-design decision: mocking withTransaction exposes call sequence, not tx mechanics."
+catalog-svc,src/products/products.service.spec.ts,219,220,delete,History plus rationale already recorded at the emitting service.
+catalog-svc,src/products/products.service.ts,184,185,keep,Non-local invariant: re-read through the client makes the payload match the committing row.
+catalog-svc,src/products/products.service.ts,202,202,delete,Section divider.
+catalog-svc,src/products/products.service.ts,276,276,delete,Section divider.
+catalog-svc,src/products/products.service.ts,313,313,delete,Section divider.
+catalog-svc,src/products/products.service.ts,351,351,delete,Section divider.
+catalog-svc,src/products/products.service.ts,386,391,keep,Non-local invariant: reads after child deletion describe the state consumers need.
+catalog-svc,src/stock/stock-reservations.errors.ts,3,10,keep,Non-local invariant: terminal error keeps the HTTP 409 contract and maps to DLQ.
+catalog-svc,src/stock/stock-reservations.errors.ts,23,27,keep,Non-local invariant: a cross-order hold is terminal and cannot be repaired by retry.
+catalog-svc,src/stock/stock-reservations.repository.ts,59,62,keep,Rejected alternative: caller-supplied id as primary key prevents double decrement on replay.
+catalog-svc,src/stock/stock-reservations.repository.ts,73,75,keep,External constraint: Postgres unique-index blocking makes concurrent replay a no-op.
+catalog-svc,src/stock/stock-reservations.repository.ts,99,100,keep,"Non-local invariant: replay writes nothing, so the rollback is a no-op."
+catalog-svc,src/stock/stock-reservations.repository.ts,136,144,keep,Non-local invariants: idempotent release and the HTTP 404/409 contract order-svc relies on.
+catalog-svc,src/stock/stock-reservations.repository.ts,170,178,keep,Non-local invariants: null vs reported outcomes let HTTP and consumer map differently.
+catalog-svc,src/stock/stock-reservations.repository.ts,218,233,keep,"Rejected alternative: refunds use 'return'/'refunded', not 'cancel'/'released'."
+catalog-svc,src/stock/stock-reservations.repository.ts,274,283,keep,External constraint: partial unique index plus checkout's pre-order-id behaviour.
+catalog-svc,src/stock/stock-reservations.repository.ts,298,306,keep,Non-local invariant: transaction boundary belongs here so claim and effect commit together.
+catalog-svc,src/stock/stock-reservations.repository.ts,320,320,keep,Reason for an empty catch: a failed ROLLBACK must not mask the original error.
+catalog-svc,src/stock/stock-reservations.repository.ts,328,334,keep,Non-local invariant: claim and side effect share the transaction.
+catalog-svc,src/stock/stock-reservations.repository.ts,350,357,keep,Non-local invariant: commit records ownership only; stock moved at hold time.
+catalog-svc,src/stock/stock-reservations.repository.ts,386,386,keep,External constraint: the hold may still be uncommitted in another transaction.
+catalog-svc,src/stock/stock-reservations.repository.ts,390,391,keep,"Non-local invariant: HTTP without an order id stays idempotent, events check ownership."
+catalog-svc,src/stock/stock-reservations.repository.ts,444,447,keep,External constraint: SKIP LOCKED prevents concurrent sweeps from colliding.
+catalog-svc,src/stock/stock-reservations.repository.ts,559,561,keep,Non-local invariant: soft-deleted rows still get stock; hard-deleted ones close cleanly.
+catalog-svc,src/stock/stock-reservations.repository.ts,666,669,keep,Rejected alternative: unsorted locks deadlock two checkouts sharing products.
+catalog-svc,src/stock/stock-reservations.scheduler.ts,7,11,keep,"Non-local invariant: without the sweep, abandoned holds are lost permanently."
+catalog-svc,src/stock/stock-reservations.scheduler.ts,20,21,keep,Non-local invariant: a background timer would race e2e assertions.
+catalog-svc,src/stock/stock-reservations.service.ts,85,88,keep,Rejected alternative: duplicate lines would lock the same row twice.
+catalog-svc,src/stock/stock.module.ts,12,13,keep,Non-local invariant: the order.created handler owns the claim-and-commit transaction.
+catalog-svc,src/stock/stock.types.ts,1,11,keep,Non-local invariant: lifecycle semantics span order-svc and this service.
+catalog-svc,src/stock/stock.types.ts,58,63,keep,Non-local invariant: two callers interpret the same outcome differently.
+catalog-svc,src/stock/stock.types.ts,75,83,keep,"Non-local invariant: HTTP throws, consumer reports; a committed hold is an anomaly."
+catalog-svc,src/stock/stock.types.ts,91,91,keep,Rejected alternative: releasing a shipped item would restock sold stock.
+catalog-svc,src/stock/stock.types.ts,94,105,keep,Non-local invariant: refund restock is keyed on committed holds with a return movement.
+catalog-svc,src/stock/stock.types.ts,120,124,keep,Non-local invariant: released/expired/refunded stock has already moved on.
+catalog-svc,src/common/filters/http-exception.filter.ts,38,39,keep,External constraint: Docker/LB parse health responses outside the API envelope.
+catalog-svc,src/common/http/request-id.ts,4,7,keep,Non-local invariant: local calls still need a request id for traceable errors.
+catalog-svc,src/events/order-created/order-created.handler.spec.ts,113,113,delete,Step label; the withTransaction-not-called assertion is visible.
+catalog-svc,src/events/order-created/order-created.handler.spec.ts,165,167,keep,External constraint: cross-topic ordering lets cancellation win; must not DLQ.
+catalog-svc,src/events/order-created/order-created.handler.spec.ts,181,182,keep,"Non-local invariant: an expired hold's stock was resold, so it is terminal."
+catalog-svc,src/events/order-created/order-created.handler.ts,18,27,keep,Non-local invariant: thrown errors roll back the claim so the consumer can classify them.
+catalog-svc,src/events/order-created/order-created.handler.ts,44,52,keep,Non-local invariant: unreadable messages are dead-lettered before a transaction opens.
+catalog-svc,src/events/order-created/order-created.handler.ts,62,62,keep,External constraint: legacy topic/eventType dual-write needs normalisation.
+catalog-svc,src/events/order-created/order-created.handler.ts,71,72,keep,"Non-local invariant: unsubscribed events are committed, never dead-lettered."
+catalog-svc,src/events/order-created/order-created.handler.ts,84,85,keep,External constraint: contract allows an empty reservationId for legacy orders.
+catalog-svc,src/events/order-created/order-created.handler.ts,126,139,keep,Rejected alternative: dead-lettering a correct cancellation outcome wastes a DLQ record.
+catalog-svc,src/events/order-status-updated/order-status-updated.handler.spec.ts,105,105,keep,"External constraint: the payload has no reservation id, so lookup is by order id."
+catalog-svc,src/events/order-status-updated/order-status-updated.handler.spec.ts,114,115,keep,Non-local invariant: claim and release share one transaction.
+catalog-svc,src/events/order-status-updated/order-status-updated.handler.spec.ts,144,144,delete,Step label; the withTransaction-not-called assertion is visible.
+catalog-svc,src/events/order-status-updated/order-status-updated.handler.spec.ts,193,194,keep,Non-local invariant: committed holds skip release and use the refund-only restock.
+catalog-svc,src/events/order-status-updated/order-status-updated.handler.spec.ts,200,201,keep,Non-local invariant: claim and restock share one transaction.
+catalog-svc,src/events/order-status-updated/order-status-updated.handler.spec.ts,221,222,keep,Rejected alternative: cancelling a shipped order would double-sell.
+catalog-svc,src/events/order-status-updated/order-status-updated.handler.spec.ts,248,248,delete,Step label; the already-restocked expectation is visible.
+catalog-svc,src/events/order-status-updated/order-status-updated.handler.ts,12,19,keep,Rejected alternative: forward and pending statuses must not release.
+catalog-svc,src/events/order-status-updated/order-status-updated.handler.ts,25,31,keep,"Non-local invariant: a shipped cancellation is logged, not dead-lettered."
+catalog-svc,src/events/order-status-updated/order-status-updated.handler.ts,61,73,keep,Non-local invariant: the HTTP release is best-effort; Kafka is the durable retry path.
+catalog-svc,src/events/order-status-updated/order-status-updated.handler.ts,91,92,keep,"Non-local invariant: unsubscribed events are committed, never dead-lettered."
+catalog-svc,src/events/order-status-updated/order-status-updated.handler.ts,104,104,delete,Fluff label; the forward-move status check is visible.
+catalog-svc,src/events/order-status-updated/order-status-updated.handler.ts,129,130,keep,"Non-local invariant: no reservation is a correct end state, not a failure."
+catalog-svc,src/events/order-status-updated/order-status-updated.handler.ts,137,142,keep,Non-local invariant: refund is the only committed-hold restock; redelivery is a no-op.
+catalog-svc,src/events/order-status-updated/order-status-updated.handler.ts,156,158,keep,"Non-local invariant: the row lock makes not-refundable unreachable; report, keep claim."
+catalog-svc,src/events/order-status-updated/order-status-updated.handler.ts,180,181,keep,Non-local invariant: the row lock makes deletion between statements impossible.
+catalog-svc,src/events/product-imported/import.errors.ts,1,1,keep,ADR pointer - never touch.
+catalog-svc,src/events/product-imported/import.errors.ts,8,8,keep,ADR pointer - never touch.
+catalog-svc,src/events/product-imported/product-import.repository.ts,30,46,keep,"Rejected alternative: not ProductsRepository, so presentation columns stay untouched."
+catalog-svc,src/events/product-imported/product-import.repository.ts,88,95,keep,"Rejected alternative: key by id, never by sku; stock is net of open holds."
+catalog-svc,src/events/product-imported/product-import.repository.ts,157,159,keep,"Non-local invariant: imports set identity fields only, never presentation/provenance."
+catalog-svc,src/events/product-imported/product-import.repository.ts,198,212,keep,"Rejected alternative: absence is ambiguous, so variants are never deleted."
+catalog-svc,src/events/product-imported/product-import.repository.ts,296,321,keep,"Non-local money rule: feeds report physical stock, table stores on-hand net of holds."
+catalog-svc,src/events/product-imported/product-import.repository.ts,381,390,keep,External constraint: 'import' was already legal in the 001 CHECK; one row per stated figure.
+catalog-svc,src/events/product-imported/product-import.repository.ts,410,427,keep,External constraint: one_primary_per_product partial unique index forces the step order.
+catalog-svc,src/events/product-imported/product-import.repository.ts,437,438,keep,External constraint: duplicate urls could both claim primary and violate the index.
+catalog-svc,src/events/product-imported/product-import.repository.ts,477,485,keep,Non-local invariant: creating missing categories/brands is intentional; no deleted_at filter.
+catalog-svc,src/events/product-imported/product-import.repository.ts,515,515,keep,Non-local pointer to resolveCategory's documented rule.
+catalog-svc,src/events/product-imported/product-import.repository.ts,545,548,keep,Rejected alternative: ON CONFLICT DO NOTHING avoids raising on concurrent brand creation.
+catalog-svc,src/events/product-imported/product-import.repository.ts,579,579,keep,Non-local invariant: the row cannot vanish between the two statements under the lock.
+catalog-svc,src/events/product-imported/product-import.repository.ts,589,597,keep,Rejected alternative: explicit checks name the constraint and check both keys before writing.
+catalog-svc,src/events/product-imported/product-import.repository.ts,626,633,keep,"Non-local invariant: inactive->draft, and archived is never lifted by an import."
+catalog-svc,src/events/product-imported/product-imported.handler.spec.ts,6,16,keep,Non-local test-design decision: unit asserts claim order; SQL is proved in Postgres e2e.
+catalog-svc,src/events/product-imported/product-imported.handler.spec.ts,199,200,keep,Non-local invariant: the exception is what makes the transport dead-letter the record.
+catalog-svc,src/events/product-imported/product-imported.handler.ts,18,18,keep,ADR pointer - never touch.
+catalog-svc,src/events/product-imported/product-imported.handler.ts,25,40,keep,Non-local invariant: claim and write share one transaction; D2 means no outbox row.
+catalog-svc,src/events/product-imported/product-imported.handler.ts,45,48,keep,Non-local invariant: the claim store is shared with search-svc and cart-svc.
+catalog-svc,src/events/product-imported/product-imported.handler.ts,62,63,keep,"Non-local invariant: unsubscribed events are committed, never dead-lettered."
+catalog-svc,src/events/product-imported/product-imported.handler.ts,74,76,keep,External constraint: producers vary on money type; PG 22P02 retry would waste 31 seconds.
+catalog-svc,src/events/product-imported/product-imported.handler.ts,109,118,keep,Non-local invariant: effectivePrice is derived and never carried by import events.
+catalog-svc,src/products/dto/product-query.dto.ts,94,99,keep,"Non-local invariants: CMS manual ids contract, max 24, status floor never lifts."
+catalog-svc,src/stock/dto/release-stock.dto.ts,3,7,keep,"Non-local invariant: items come from the stored reservation, preventing stock inflation."
+catalog-svc,src/stock/dto/reserve-stock.dto.ts,26,29,keep,Non-local invariant: caller-supplied id is the primary-key idempotency gate.

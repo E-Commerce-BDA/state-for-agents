@@ -1,0 +1,186 @@
+repo,file,start,end,decision,reason
+ecom-messaging,src/envelope.ts,18,28,keep,Records the contracts 1.x pre-1.3.0 field-name migration and that validation aborts the producer transaction; not visible in the constructor.
+ecom-messaging,src/index.ts,14,16,keep,Barrel placement is driven by the Nest optional-peer split (strategy/handler live in ./nest); not derivable from the exports.
+ecom-messaging,src/index.ts,23,28,keep,Records the SQS optional-peer rule keeping implementations off the root entry and names their locations; not visible from the port export.
+ecom-messaging,src/logger.ts,7,7,delete,Class body shows the console prefix and there is no Nest import; pure paraphrase.
+ecom-messaging,test/entry-points.spec.ts,59,60,delete,The assertion already states the no-SQS-on-root claim; label otherwise.
+ecom-messaging,test/entry-points.spec.ts,69,69,keep,Explains why the positive toContain assertions exist: to guard against a vacuous pass when the walk finds nothing.
+ecom-messaging,test/entry-points.spec.ts,85,86,delete,The exists() assertions are self-explanatory; the rationale is generic test context.
+ecom-messaging,test/mongo-outbox.store.spec.ts,89,93,keep,Driver 6.20 vs typings findOneAndUpdate result shape is an external constraint that bareResults toggles.
+ecom-messaging,test/mongo-outbox.store.spec.ts,278,279,keep,The .strict() rejection of the extra key is an external schema constraint explaining the fixture.
+ecom-messaging,test/mongo-outbox.store.spec.ts,341,341,keep,Driver 6.20 returning the bare document is an external constraint defining the fake's shape.
+ecom-messaging,test/outbox.relay.spec.ts,37,37,delete,The suffix derivation is visible in the helper; 'readable assertions' is generic.
+ecom-messaging,test/outbox.relay.spec.ts,176,176,delete,The attempts/backoff assertions are self-explanatory.
+ecom-messaging,test/postgres-outbox.store.spec.ts,85,86,keep,SQL reserved-word parsing (order.outbox) is the external constraint behind the quoted identifiers.
+ecom-messaging,src/consumer/consumer-metrics.ts,3,10,keep,Cross-repo counter-name origins and the no-metrics-sidecar choice are not visible in the code.
+ecom-messaging,src/consumer/consumer-metrics.ts,68,73,keep,The call-ordering invariant (commit gauge only after commitOffsets resolves) is not visible in the method.
+ecom-messaging,src/consumer/consumer-metrics.ts,100,105,keep,"Records that dlq is counted in the transport, not here, because only it knows a write succeeded."
+ecom-messaging,src/consumer/dlq.publisher.ts,4,12,keep,"Registry-vs-fallback DLQ naming is an explicit decision, not visible in the one-line function."
+ecom-messaging,src/consumer/dlq.publisher.ts,28,28,keep,"States when originalPayload is set, contrasting with rawValue; a data contract not visible in the type."
+ecom-messaging,src/consumer/dlq.publisher.ts,30,30,keep,The key field exists so a replay keeps the partition key; a decision not visible in the type.
+ecom-messaging,src/consumer/dlq.publisher.ts,34,37,keep,Records the choice of a structural injectable producer interface so tests need no broker.
+ecom-messaging,src/consumer/dlq.publisher.ts,54,61,keep,The commit-after-DLQ invariant and lazy shared connection are decisions not visible in the class.
+ecom-messaging,src/consumer/dlq.publisher.ts,83,83,keep,Explains why topicFor is exposed (health output); not visible from the method.
+ecom-messaging,src/consumer/dlq.publisher.ts,128,128,keep,Explains the empty catch: a lost connection is not a shutdown error (external driver behavior).
+ecom-messaging,src/consumer/kafka-consumer.strategy.ts,3,10,keep,External constraint: kafkajs 30s default vs the 31s retry ladder and UNKNOWN_MEMBER_ID eviction.
+ecom-messaging,src/consumer/kafka-consumer.strategy.ts,13,13,keep,Records that 3000 is kafkajs's default pinned so session/heartbeat are one decision.
+ecom-messaging,src/consumer/kafka-consumer.strategy.ts,19,23,keep,Nest appending -server is the external constraint behind the groupId rule.
+ecom-messaging,src/consumer/kafka-consumer.strategy.ts,25,25,delete,fromBeginning defaults to false in the code; 'as before' is a vague historical note.
+ecom-messaging,src/consumer/kafka-consumer.strategy.ts,27,33,keep,Cross-file invariant: lowering session timeout requires a smaller retryBudgetMs on the handler.
+ecom-messaging,src/consumer/kafka-consumer.strategy.ts,35,35,delete,Pure param doc; the default is DEFAULT_HEARTBEAT_INTERVAL_MS in code.
+ecom-messaging,src/consumer/kafka-consumer.strategy.ts,39,69,keep,Load-bearing @nestjs/microservices 12.3.2 and kafkajs facts cannot be recovered from code.
+ecom-messaging,src/consumer/kafka-consumer.strategy.ts,84,86,keep,External kafkajs heartbeat/session constraint explains the boot-time validation.
+ecom-messaging,src/consumer/kafka-consumer.strategy.ts,100,100,keep,Records the decision to fail loudly on an @EventPattern typo instead of auto-creating a topic.
+ecom-messaging,src/consumer/kafka-consumer.strategy.ts,124,127,keep,ServerKafka#handleMessage merges topic/partition into the deserialized value; framework behavior not in code.
+ecom-messaging,src/consumer/kafka-event-handler.ts,12,20,keep,The single DLQ-failure cause and the health-endpoint requirement are decisions/invariants.
+ecom-messaging,src/consumer/kafka-event-handler.ts,38,51,keep,External session-expiry constraint and cross-file ladder budget are not visible in code.
+ecom-messaging,src/consumer/kafka-event-handler.ts,53,53,keep,ADR pointer; never touch.
+ecom-messaging,src/consumer/kafka-event-handler.ts,55,55,keep,Injectable sleep exists so tests avoid the real 31s ladder; a decision not in the signature.
+ecom-messaging,src/consumer/kafka-event-handler.ts,59,65,keep,Structural publisher interface chosen for substitutability and broker-free tests.
+ecom-messaging,src/consumer/kafka-event-handler.ts,70,81,keep,The side-effect to counter to offset invariant and never-throw rule are non-local decisions.
+ecom-messaging,src/consumer/kafka-event-handler.ts,100,102,keep,The maxRetries-vs-ladder math is driven by not overshooting the budget; rationale not in code.
+ecom-messaging,src/consumer/kafka-event-handler.ts,111,112,keep,Records the decision to warn at boot rather than silently shorten the ladder.
+ecom-messaging,src/consumer/kafka-event-handler.ts,129,129,keep,ADR pointer; never touch.
+ecom-messaging,src/consumer/kafka-event-handler.ts,140,140,keep,"Kafka commits the next offset, not the just-read one; external semantics behind +1n."
+ecom-messaging,src/consumer/kafka-event-handler.ts,164,166,keep,The DLQ-before-counter-before-commit ordering is a non-local protocol invariant.
+ecom-messaging,src/consumer/kafka-event-handler.ts,183,185,keep,A stalled consumer must not be retried; records a rejected alternative.
+ecom-messaging,src/consumer/kafka-event-handler.ts,193,194,keep,Terminal failures skip the ladder because redelivery cannot repair them; a decision.
+ecom-messaging,src/consumer/kafka-event-handler.ts,218,218,keep,Commit-after-DLQ-ack ordering is a protocol invariant; stress not in code.
+ecom-messaging,src/consumer/kafka-event-handler.ts,235,242,keep,Dual string/parsed input exists so the protocol serves both entry points; a decision.
+ecom-messaging,src/consumer/kafka-event-handler.ts,288,289,keep,"dlq counts only successful broker writes, counted here alone; non-local invariant."
+ecom-messaging,src/consumer/kafka-event-handler.ts,312,312,keep,The invalid outcome is already dead-lettered by the caller; non-local invariant.
+ecom-messaging,src/consumer/kafka-event-handler.ts,322,328,keep,boundRetryLadder returns the budget so the caller can report truncation; a decision.
+ecom-messaging,src/consumer/kafka-event-handler.ts,347,349,keep,Keeping the first delay avoids accidental dead-letter on a tight budget; a decision.
+ecom-messaging,src/consumer/lag.sampler.ts,6,6,keep,Kafka high-watermark terminology (-1 = none) is external and not in the code.
+ecom-messaging,src/consumer/lag.sampler.ts,15,21,keep,Injectable admin client chosen for lag testing without a broker and over the Nest consumer.
+ecom-messaging,src/consumer/lag.sampler.ts,33,33,delete,Field label; the lag sum is computed in topicLag.
+ecom-messaging,src/consumer/lag.sampler.ts,42,42,keep,Group-id-must-equal-service-name is a cross-file invariant.
+ecom-messaging,src/consumer/lag.sampler.ts,45,45,keep,The 15s default matches a runbook scrape interval; external constraint.
+ecom-messaging,src/consumer/lag.sampler.ts,54,66,keep,Separate admin connection and -1-never-committed semantics are decisions/external constraints.
+ecom-messaging,src/consumer/lag.sampler.ts,98,98,delete,Behavioral label; sample() propagates admin errors in the adjacent code.
+ecom-messaging,src/consumer/lag.sampler.ts,117,122,keep,unref'd timer rationale (a gauge must not keep the process alive) is a decision.
+ecom-messaging,src/consumer/lag.sampler.ts,128,131,keep,Backgrounded connect failure handling is a decision; unhandled rejection would kill boot.
+ecom-messaging,src/consumer/lag.sampler.ts,143,143,delete,Pure paraphrase of latest() returning latestSample.
+ecom-messaging,src/consumer/lag.sampler.ts,157,157,keep,Empty catch explained by an external driver behavior (disconnect on never-connected client).
+ecom-messaging,src/consumer/lag.sampler.ts,166,168,keep,Observability must not kill the process on a failed scrape; a decision.
+ecom-messaging,src/consumer/lag.sampler.ts,211,211,keep,"-1 is kafkajs's no-committed-offset sentinel, not a position; external constraint."
+ecom-messaging,src/consumer/processed-events.store.ts,3,3,keep,SQL identifiers cannot be bound; external constraint behind IDENTIFIER_PATTERN.
+ecom-messaging,src/consumer/processed-events.store.ts,11,24,keep,Cross-service table history and DB-side ON CONFLICT claim are invariants/decisions.
+ecom-messaging,src/consumer/processed-events.store.ts,26,26,keep,Reserved-word quoting is an external SQL constraint behind the quoted table.
+ecom-messaging,src/consumer/processed-events.store.ts,42,46,keep,ON CONFLICT DO NOTHING means the DB decides the race and claim shares the caller's tx; invariants.
+ecom-messaging,src/consumer/processed-events.store.ts,59,63,keep,Only claim closes the redelivery race; a non-local invariant.
+ecom-messaging,src/consumer/types.ts,8,14,keep,Structural consumer type keeps the root barrel free of the Nest peer; a decision.
+ecom-messaging,src/consumer/types.ts,21,27,keep,Avoiding the Nest import lets eachMessage tests use the same run(); a decision.
+ecom-messaging,src/consumer/types.ts,34,43,keep,Three counter names exist because services disagree and dashboards are not worth breaking; a decision.
+ecom-messaging,src/consumer/types.ts,46,53,keep,Handler outcomes are values because destinations differ; a protocol decision.
+ecom-messaging,src/consumer/types.ts,55,55,delete,Variant label; applied is committed and counted per the enclosing doc.
+ecom-messaging,src/consumer/types.ts,57,60,keep,A duplicate means the effect ran earlier so the offset is safe; a protocol invariant.
+ecom-messaging,src/consumer/types.ts,63,66,keep,DLQ-before-offset means a parked record is never counted as handled; invariant.
+ecom-messaging,src/nest/consumer.ts,1,12,keep,Narrow consumer entry exists to avoid loading the eager SQS peer; a decision.
+ecom-messaging,src/nest/index.ts,4,5,keep,Re-export via the narrow entry avoids loading tasks.module.js without the SQS peer; decision.
+ecom-messaging,src/nest/outbox.module.ts,30,33,keep,enabled default and evaluate-once timing are a non-local invariant.
+ecom-messaging,src/nest/outbox.module.ts,41,41,delete,"Field label; db is normally () => connection.db, visible in the type/usage."
+ecom-messaging,src/nest/outbox.module.ts,65,70,keep,Lifecycle provider registered only when enabled prevents a stray publisher on shared DB.
+ecom-messaging,src/nest/outbox.module.ts,88,91,keep,Initializer always runs so e2e suites still get Mongo indexes; a decision.
+ecom-messaging,src/nest/outbox.module.ts,112,115,keep,buildProviders takes only the store factory because the rest is shared; a design decision.
+ecom-messaging,src/nest/outbox.module.ts,155,160,keep,Records what stays in the package vs supplied by the service; a scope decision.
+ecom-messaging,src/nest/outbox.module.ts,179,184,keep,Records that only claim/lock differ for Mongo; a shared-components decision.
+ecom-messaging,src/nest/tasks.module.ts,30,34,keep,"Resolving deletes, throwing retries, and handlerToken for DI are semantics/decisions."
+ecom-messaging,src/nest/tasks.module.ts,36,43,keep,Nest dynamic-module DI limitation is an external constraint; example names a cross-repo module.
+ecom-messaging,src/nest/tasks.module.ts,46,49,delete,Param description; PayloadParser<P> with default P=unknown already shows it.
+ecom-messaging,src/nest/tasks.module.ts,58,63,keep,"isSqsTasksEnabled default, evaluate-once, and LocalStack rationale are a decision."
+ecom-messaging,src/nest/tasks.module.ts,67,74,keep,Precedence of the explicit flag over NODE_ENV is a decision (no faking NODE_ENV).
+ecom-messaging,src/nest/tasks.module.ts,87,92,keep,Lifecycle gated on enabled prevents a poller holding the process open in tests.
+ecom-messaging,src/nest/tasks.module.ts,112,118,keep,One module for producer+poller records a rejected alternative (two modules).
+ecom-messaging,src/nest/tasks.module.ts,125,127,keep,Enabled-without-handler is a boot failure by design; rejected alternative documented.
+ecom-messaging,src/nest/tasks.module.ts,166,168,keep,Two explicit factories rather than conditional spread is a rejected-alternative decision.
+ecom-messaging,src/nest/tasks.module.ts,190,191,keep,Conditional imports exist only for the token form; a decision.
+ecom-messaging,src/outbox/mongo-outbox.store.ts,21,21,delete,Default <collection>_locks is visible in the constructor.
+ecom-messaging,src/outbox/mongo-outbox.store.ts,26,26,delete,LOCK_ID='relay' is in code; the rest is a data-shape label.
+ecom-messaging,src/outbox/mongo-outbox.store.ts,38,44,keep,Driver 6.20 vs 6.x result shapes and the unambiguous discriminator are external constraints.
+ecom-messaging,src/outbox/mongo-outbox.store.ts,60,74,keep,SKIP LOCKED to findOneAndUpdate and advisory lock to lease are cross-store invariants.
+ecom-messaging,src/outbox/mongo-outbox.store.ts,99,99,delete,Paraphrases the two createIndex calls.
+ecom-messaging,src/outbox/mongo-outbox.store.ts,130,131,keep,Driver uniqueness as idempotency replaces a hand-written check; rejected alternative.
+ecom-messaging,src/outbox/mongo-outbox.store.ts,142,143,keep,created_at vs occurredAt is a decision matching Postgres now() ordering.
+ecom-messaging,src/outbox/mongo-outbox.store.ts,159,160,keep,Per-row atomic findOneAndUpdate is this driver's SKIP LOCKED; external constraint.
+ecom-messaging,src/outbox/mongo-outbox.store.ts,205,211,keep,Pipeline atomicity prevents two relays reading attempts=4; non-local invariant.
+ecom-messaging,src/outbox/mongo-outbox.store.ts,243,244,keep,Explains the wider document type (published rows); a type invariant.
+ecom-messaging,src/outbox/mongo-outbox.store.ts,251,258,keep,E11000 means another holder and lease expiry unblocks a crashed holder; external constraints.
+ecom-messaging,src/outbox/outbox.relay.ts,7,11,keep,never typed so one relay drives both stores; a decision.
+ecom-messaging,src/outbox/outbox.relay.ts,17,17,delete,Field doc with default 30 in DEFAULTS; visible.
+ecom-messaging,src/outbox/outbox.relay.ts,26,26,delete,Paraphrases the skipped field.
+ecom-messaging,src/outbox/outbox.relay.ts,37,44,keep,"At-least-once redelivery, consumer dedupe, and single-relay ordering are non-local invariants."
+ecom-messaging,src/outbox/outbox.relay.ts,79,79,keep,unref rationale: a timer must not keep the process alive; decision.
+ecom-messaging,src/outbox/outbox.relay.ts,95,95,keep,Public drainOnce exists so tests need no timer; decision.
+ecom-messaging,src/outbox/outbox.relay.ts,97,98,keep,Postgres advisory lock ignores the lease hint; external constraint tied to ordering.
+ecom-messaging,src/outbox/outbox.relay.ts,113,113,keep,Sequential publish preserves per-aggregate ordering; decision.
+ecom-messaging,src/outbox/outbox.relay.ts,199,200,keep,Lease expiry retries the row and bookkeeping failure must not abort the batch; decision.
+ecom-messaging,src/outbox/postgres-outbox.store.ts,14,14,keep,SQL identifiers cannot be bound; external constraint behind IDENTIFIER_PATTERN.
+ecom-messaging,src/outbox/postgres-outbox.store.ts,24,34,keep,Caller-client write and SKIP LOCKED plus advisory lock are the two load-bearing invariants.
+ecom-messaging,src/outbox/postgres-outbox.store.ts,38,38,keep,order is a reserved word; external SQL constraint behind quoting.
+ecom-messaging,src/outbox/postgres-outbox.store.ts,40,40,keep,Unquoted lockKey preserves the shared advisory-lock namespace; rejected alternative.
+ecom-messaging,src/outbox/postgres-outbox.store.ts,62,62,keep,Schema/index come from service SQL files; external constraint behind empty initialize.
+ecom-messaging,src/outbox/postgres-outbox.store.ts,64,64,keep,Empty initialize exists for a shared port; decision.
+ecom-messaging,src/outbox/postgres-outbox.store.ts,206,206,keep,Empty catch explained by pool already reclaiming the client; external behavior.
+ecom-messaging,src/outbox/types.ts,7,13,keep,Structural pg types avoid a direct dependency; rejected alternative.
+ecom-messaging,src/outbox/types.ts,29,35,keep,Structural Mongo session type avoids importing the driver; rejected alternative.
+ecom-messaging,src/outbox/types.ts,60,67,keep,Driver 6.20 vs 6.x findOneAndUpdate shapes are external constraints.
+ecom-messaging,src/outbox/types.ts,73,79,keep,All claim/lease paths read findOneAndUpdate; non-local invariant behind the union.
+ecom-messaging,src/outbox/types.ts,112,116,keep,Caller-supplied eventId and transaction occurredAt are decisions with rejected alternatives.
+ecom-messaging,src/outbox/types.ts,134,139,keep,"_id as primary key is the idempotency guarantee, so no extra index; rejected alternative."
+ecom-messaging,src/outbox/types.ts,155,161,keep,Ctx default keeps call sites compiling and relay uses never; design decisions.
+ecom-messaging,src/outbox/types.ts,163,167,keep,write uses caller's tx so row and domain mutation commit together; non-local invariant.
+ecom-messaging,src/outbox/types.ts,173,173,delete,Pure paraphrase of claimBatch's signature.
+ecom-messaging,src/outbox/types.ts,185,189,keep,Relay serialisation preserves per-aggregate order across replicas; non-local invariant.
+ecom-messaging,src/outbox/types.ts,192,195,keep,initialize runs on boot including tests; cross-file invariant.
+ecom-messaging,src/publishers/discard.publisher.ts,4,8,keep,DiscardPublisher's drop behavior prevents broker access when relay is disabled; decision.
+ecom-messaging,src/publishers/discard.publisher.ts,23,23,delete,Tautology on an empty method body.
+ecom-messaging,src/publishers/kafka.publisher.ts,12,20,keep,Rethrow and maxInFlightRequests are deliberate differences from catalog-svc; rejected alternatives.
+ecom-messaging,src/publishers/publisher.port.ts,10,13,keep,MUST-reject contract is a non-local invariant the relay depends on.
+ecom-messaging,src/publishers/recording.publisher.ts,3,6,keep,Records why this test double exists (retry path without a broker); a test-design decision.
+ecom-messaging,src/publishers/recording.publisher.ts,22,22,delete,Tautology on an empty method body.
+ecom-messaging,src/tasks/index.ts,1,12,keep,Root barrel excludes the optional SQS peer; a decision repeated with implementation locations.
+ecom-messaging,src/tasks/sqs-client.ts,11,14,keep,Credentials use the SDK default chain deliberately; rejected alternative (hard-coding would leak).
+ecom-messaging,src/tasks/sqs-client.ts,19,26,keep,GetQueueUrl avoids per-env URL templates and queueUrls is an escape hatch; decisions.
+ecom-messaging,src/tasks/sqs-client.ts,36,44,keep,Default chain and endpoint env var are SDK behaviors; external constraint.
+ecom-messaging,src/tasks/sqs-client.ts,65,66,keep,Failed lookups must not be cached; a non-local invariant.
+ecom-messaging,src/tasks/sqs-task-queue.ts,12,12,keep,Injectable clock exists so tests need not freeze time; decision.
+ecom-messaging,src/tasks/sqs-task-queue.ts,17,25,keep,"Producer validates with taskMessageSchema, catching what types cannot; decision."
+ecom-messaging,src/tasks/sqs-task-queue.ts,53,54,keep,"Pre-validation surfaces a producer bug at the call site, not later in a DLQ; decision."
+ecom-messaging,src/tasks/sqs-task-queue.ts,65,66,keep,One JSON body avoids SQS attributes drifting from the validated envelope; decision.
+ecom-messaging,src/tasks/sqs-task-queue.ts,69,70,keep,Attributes are duplicated only for queue-policy/CloudWatch filtering; external constraint.
+ecom-messaging,src/tasks/sqs-task-worker.ts,17,23,keep,payloadSchema exists to catch drift from jobs.ts before handler storage; decision.
+ecom-messaging,src/tasks/sqs-task-worker.ts,38,56,keep,"The four no-task-loss rules (delete-after-resolve, never-delete-on-failure, no DLQ publisher) are decisions."
+ecom-messaging,src/tasks/sqs-task-worker.ts,108,109,keep,stop() mid-batch leaves messages for redelivery; invariant.
+ecom-messaging,src/tasks/sqs-task-worker.ts,136,138,keep,VisibilityTimeout restated per receive because a hand-edited queue is a real case; decision.
+ecom-messaging,src/tasks/sqs-task-worker.ts,159,160,keep,Leaving parse failures for redrive is a decision; log line explains the DLQ entry.
+ecom-messaging,src/tasks/sqs-task-worker.ts,176,177,keep,Optional handler call exists only for the compiler; a local invariant.
+ecom-messaging,src/tasks/sqs-task-worker.ts,208,210,keep,Wrong-queue envelope refused so another service's job is not applied; decision.
+ecom-messaging,src/tasks/sqs-task-worker.ts,228,229,keep,Drifted payload re-delivered to reach DLQ with its failures; decision.
+ecom-messaging,src/tasks/sqs-task-worker.ts,256,257,keep,Delete failure absorbed by handler idempotency; non-local invariant.
+ecom-messaging,src/tasks/task-queue.port.ts,3,3,keep,ADR pointer; never touch.
+ecom-messaging,src/tasks/task-queue.port.ts,6,13,keep,id/enqueuedAt/queue absent so a caller cannot mis-address a message; decision.
+ecom-messaging,src/tasks/task-queue.port.ts,16,19,keep,"idempotencyKey is the effect's identity, kept across retry/redrive; decision."
+ecom-messaging,src/tasks/task-queue.port.ts,24,29,keep,Structural PayloadParser avoids a zod dependency; rejected alternative.
+ecom-messaging,src/tasks/task-queue.port.ts,35,40,keep,MUST-reject contract is a non-local invariant.
+ecom-messaging,src/tasks/task-queue.port.ts,48,48,keep,ApproximateReceiveCount semantics are external SQS behavior.
+ecom-messaging,src/tasks/task-queue.port.ts,53,60,keep,Resolve/throw semantics and handler idempotency are protocol decisions.
+ecom-messaging,src/tasks/task-queue.port.ts,67,72,keep,Double-run no-op with warning prevents two pollers; decision.
+ecom-messaging,src/tasks/task-queue.port.ts,75,75,delete,Paraphrase of stop(); waiting for in-flight batch is implied by Promise<void>.
+ecom-messaging,test/consumer/fakes.ts,19,19,delete,Type label for the small fake; its methods are visible.
+ecom-messaging,test/consumer/fakes.ts,40,40,keep,"Class purpose: dead letters are collected, not sent; test-double decision."
+ecom-messaging,test/consumer/fakes.ts,43,43,keep,Setting failure stalls the consumer; a non-visible effect of the field.
+ecom-messaging,test/consumer/fakes.ts,58,58,keep,Collects log lines so tests can assert operator visibility; test-design decision.
+ecom-messaging,test/consumer/fakes.ts,75,75,keep,FakeSleeper never waits; the ladder is asserted by delay values; test-design decision.
+ecom-messaging,test/consumer/kafka-consumer.strategy.spec.ts,105,108,keep,kafkajs 30s default vs 31s ladder and UNKNOWN_MEMBER_ID are external constraints.
+ecom-messaging,test/consumer/kafka-event-handler.spec.ts,241,243,keep,1+2+4+8=15s vs 31s ladder/30s session is an external constraint.
+ecom-messaging,test/consumer/kafka-event-handler.spec.ts,267,268,keep,A tight budget must still allow one retry; decision.
+ecom-messaging,test/consumer/kafka-event-handler.spec.ts,285,286,keep,More attempts than sleeps would overshoot the budget; decision.
+ecom-messaging,test/consumer/lag.sampler.spec.ts,10,10,keep,kafkajs -1 sentinel semantics are external.
+ecom-messaging,test/consumer/lag.sampler.spec.ts,186,187,keep,Backgrounded connect must not surface as unhandled rejection; decision.
+ecom-messaging,test/consumer/lag.sampler.spec.ts,198,198,keep,The next sample retries a failed connection; decision.
+ecom-messaging,test/consumer/processed-events.store.spec.ts,53,54,keep,Exactly one statement on the caller's client; invariant.
+ecom-messaging,test/tasks/sqs-task-queue.spec.ts,84,86,keep,Both halves exist because a mismatch is only visible after the receive; decision.
+ecom-messaging,test/tasks/sqs-task-worker.spec.ts,29,36,keep,drained/reset timing detail exists so a spinning loop cannot starve the test; decision.
+ecom-messaging,test/tasks/sqs-task-worker.spec.ts,120,120,keep,Long polling would add 20s to every empty batch; external constraint.
+ecom-messaging,test/tasks/tasks.module.spec.ts,66,66,keep,E2E without LocalStack must not leave a poller open; decision.

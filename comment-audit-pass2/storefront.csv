@@ -1,0 +1,577 @@
+repo,file,start,end,decision,reason
+storefront,proxy.ts,1,35,keep,Records framework (Next 16 rename) and security constraint on cookie stripping.
+storefront,proxy.ts,63,68,keep,Rejected alternative plus Turbopack compile-time literal requirement.
+storefront,proxy.ts,84,86,keep,Framework behavior (NextResponse.next snapshots headers) not visible in code.
+storefront,proxy.ts,101,101,keep,Browser retention (30 days) lives in guestCookie config in another module; not recoverable locally.
+storefront,proxy.ts,108,109,keep,Makes it safe is an open-redirect security constraint not visible in the code.
+storefront,lib/site.ts,1,8,keep,"Cross-file invariant: mirrors demo manifest, CMS wordmark overrides."
+storefront,test/proxy.test.ts,1,13,keep,Documents Next wire-level header behavior the test relies on.
+storefront,test/proxy.test.ts,64,64,keep,External framework behavior (Next deletes headers absent from overrides).
+storefront,test/proxy.test.ts,98,99,keep,Non-local distinction between cookie scope constant and route handler path.
+storefront,test/proxy.test.ts,120,121,keep,Non-local invariant: render needs the cookie present on the request.
+storefront,app/hooks/useQuickAdd.ts,3,8,keep,Double taps must not double-add is a rejected alternative; PDP reuse is a cross-file plan.
+storefront,app/hooks/useQuickAdd.ts,56,56,keep,"Error-policy decision: aborts are silence, real failures surface."
+storefront,app/hooks/useRecentSearches.ts,3,8,keep,External constraint (localStorage ban) and rejected alternative (no persistence).
+storefront,app/hooks/useRecentSearches.ts,18,19,keep,"Rejected alternatives for the clamp (0-cap swallows pushes, unbounded is a leak) are not in the code."
+storefront,app/hooks/useSearch.ts,3,8,keep,Cross-file call-site swap plan and stale-kill rationale are not in the adjacent lines.
+storefront,app/hooks/useSelectOptions.ts,3,9,keep,Third-instance cross-file note and no-typing rationale are not in the adjacent lines.
+storefront,app/hooks/useVariantFromURL.ts,3,12,keep,"Non-local invariant: decisions live in lib/commerce/variantUrl, never 404."
+storefront,app/hooks/useVariantFromURL.ts,49,51,keep,So the repair does not loop is a rejected alternative not visible in the effect.
+storefront,app/hooks/useVariantFromURL.ts,66,66,delete,Restates the optimistic pendingRef branch.
+storefront,app/hooks/useVariantFromURL.ts,72,74,keep,Records a specific rejected failure mode (mock router infinite loop).
+storefront,app/api/account/route.ts,1,16,keep,"Service failure policy (profile fatal, history degradable) not in code."
+storefront,app/api/cart/route.ts,1,16,keep,Rejected alternative: BFF hides cart-svc 401 by design.
+storefront,app/api/cart/route.ts,34,34,keep,Cross-file invariant: these zeros match the client store's empty cart.
+storefront,app/api/checkout/route.ts,1,18,keep,External service contract (idempotency key) plus rejected alternative.
+storefront,app/api/checkout/route.ts,38,40,keep,Non-local rationale for the belt-and-braces session check (proxy redirect).
+storefront,app/api/checkout/route.ts,56,57,keep,Service contract: a replay returns the same created order.
+storefront,app/api/revalidate/route.ts,1,25,keep,Verbatim external HTTP contract plus cross-service handoff.
+storefront,app/api/revalidate/route.ts,50,51,keep,Security policy: a missing secret must never turn this into an open cache-flush endpoint.
+storefront,app/api/track/route.ts,1,12,keep,External constraint: browser sendBeacon fire-and-forget behavior.
+storefront,app/api/track/route.ts,34,35,keep,Documents intentional omission (ignoring analytics result) code cannot prove.
+storefront,app/api/auth/login/route.ts,1,11,keep,Non-local invariant: merge is last and must not fail sign-in (A4.6).
+storefront,app/api/auth/login/route.ts,53,55,keep,Non-local invariant: basket merge degrades rather than blocking sign-in.
+storefront,app/api/auth/logout/route.ts,1,12,keep,"Rejected alternative plus browser constraint (GET side effect, SameSite=Lax)."
+storefront,app/api/auth/refresh/route.ts,1,13,keep,Rejected alternative (dead rt bounce) plus two-caller contract.
+storefront,app/api/auth/refresh/route.ts,28,28,keep,Rejected alternative: has() is used instead of get() so empty ?next= still resumes.
+storefront,app/api/auth/register/route.ts,1,11,keep,"External contract: register then login, and 409 mapping rationale."
+storefront,app/api/auth/register/route.ts,57,58,keep,Non-local invariant (A4.6): basket carries over and never blocks 201.
+storefront,app/api/cart/items/route.ts,1,10,keep,External constraint on cookie timing (identityForWrite fallback).
+storefront,app/api/cart/items/[id]/route.ts,1,9,keep,External constraints: cart-svc 400 lacks field path; Next 16 params is a Promise.
+storefront,app/api/catalog/products/route.ts,5,12,keep,"Cross-file invariant: never catalog-svc directly, and the shared loader prevents drift."
+storefront,app/api/orders/[id]/route.ts,1,9,keep,External contract: order-svc owner-or-admin 404; no id leakage.
+storefront,app/api/wishlist/items/route.ts,32,32,delete,Section label paraphrasing the authenticated forward.
+storefront,components/sections/index.ts,1,9,keep,"Non-local invariant: dumb painters, route composes the orchestration."
+storefront,components/sections/toHeroFields.ts,1,12,keep,Rejected alternative: separate file required by client/server boundary.
+storefront,components/shell/searchRegistry.ts,1,8,keep,Bundle invariant: unselected overlays never enter the client bundle.
+storefront,components/shell/searchRegistry.ts,15,16,keep,Records why a cast is needed at the dynamic-import boundary.
+storefront,lib/analytics/client.ts,1,8,keep,"Cross-file caller note plus error policy: a failure is a value, not an exception reaching navigation."
+storefront,lib/analytics/consent.ts,1,9,keep,External constraints: DNT/GPC signals and spec default-on policy.
+storefront,lib/auth/browser.ts,1,11,keep,"External constraint: tokens stay in HttpOnly cookies, never in JS."
+storefront,lib/auth/client.ts,1,22,keep,"Cross-file invariant: sole module holding tokens, imported only by BFF routes."
+storefront,lib/auth/client.ts,69,72,keep,Non-local usage note: profile carries fields no cookie has.
+storefront,lib/auth/client.ts,80,85,keep,Rejected alternative plus edge-runtime env inlining constraint.
+storefront,lib/auth/client.ts,124,124,delete,Restates the 204 empty-body branch.
+storefront,lib/auth/client.ts,148,148,keep,Privacy constraint (a cached profile is somebody else's) is not visible in the code.
+storefront,lib/auth/client.ts,180,181,keep,External contract: auth-svc returns { user } only and errors use the existing taxonomy.
+storefront,lib/auth/client.ts,185,187,keep,External contract: auth-svc does not issue tokens on register.
+storefront,lib/auth/client.ts,245,248,keep,"External service contract: status is stable, message breaks 401 ties."
+storefront,lib/auth/client.ts,257,258,keep,"External constraint: user-enumeration oracle, pinned by errors.ts."
+storefront,lib/auth/cssVars.ts,1,11,keep,"Non-local invariants: decisions happen in resolveSettings, paint-only vars."
+storefront,lib/auth/next.ts,1,13,keep,"Cross-file contract (signin, refresh, proxy) plus phishing rejected alternative."
+storefront,lib/auth/next.ts,25,26,keep,External browser behavior: scheme-relative and backslash paths are redirects.
+storefront,lib/auth/next.ts,33,34,keep,External security constraint: header-value smuggling via control characters.
+storefront,lib/auth/resolveSettings.ts,33,35,keep,Non-local invariant: theming must never make rendering fail.
+storefront,lib/auth/resolveSettings.ts,71,74,keep,External zero-new-deps rule plus rejected alternative (dedicated sanitizer).
+storefront,lib/auth/resolveSettings.ts,132,133,delete,Restates the isolateFromShared helper visible directly below.
+storefront,lib/auth/resolveSettings.ts,210,211,delete,Restates the isolateFromShared=true argument visible below.
+storefront,lib/auth/session.ts,1,14,keep,Browser constraint on refresh-cookie scoping plus framework-free rationale.
+storefront,lib/auth/session.ts,65,69,keep,External browser behavior: a path mismatch leaves the original cookie alive.
+storefront,lib/auth/settings.ts,14,19,keep,"CSS angle convention (0 toward top, 135 diagonal) is external knowledge, not in the type."
+storefront,lib/auth/settings.ts,104,104,keep,Cross-file invariant: sanitization allowlist lives in resolveSettings.
+storefront,lib/auth/settings.ts,111,111,keep,"Security invariant on the field: plain text only, never HTML."
+storefront,lib/auth/settings.ts,119,120,keep,Cross-file invariant with errors.ts default and resolver precedence.
+storefront,lib/auth/settings.ts,139,139,delete,Section label restating the interface's shape.
+storefront,lib/auth/settings.ts,159,159,delete,Restates the AuthSettings shape shown immediately below.
+storefront,lib/auth/settings.ts,169,169,delete,Type label plus obvious provenance.
+storefront,lib/auth/settings.ts,243,243,keep,Records the repo rule that defaults are the one legal home for literals.
+storefront,lib/auth/settings.ts,278,280,keep,Non-local cascade order plus legibility rationale for the overlay.
+storefront,lib/bff/handler.ts,1,25,keep,Privacy constraint (no-store on private data) encoded once here.
+storefront,lib/bff/handler.ts,58,62,keep,Non-local invariant claiming this is the one place a service result becomes an HTTP response.
+storefront,lib/bff/handler.ts,77,81,keep,Browser behavior: a host mismatch means the write came from another site.
+storefront,lib/bff/handler.ts,92,92,keep,External browser edge case (Origin: null) explaining the catch branch.
+storefront,lib/bff/handler.ts,105,109,keep,External service contract (replay cache key) plus rejected alternative.
+storefront,lib/bff/handler.ts,115,119,keep,External service contract: IdempotencyInterceptor only needs a key present.
+storefront,lib/blog/present.ts,1,10,keep,Cross-file invariants plus cms-svc published-filter behavior.
+storefront,lib/blog/present.ts,15,16,keep,Cross-file invariant: slugs validated by contracts parse elsewhere.
+storefront,lib/blog/present.ts,49,57,keep,External timezone constraint plus cross-file locale consistency.
+storefront,lib/blog/present.ts,65,67,keep,Never 1.02 min is a rejected alternative with a precision rationale.
+storefront,lib/cart/absorb.ts,1,1,keep,ADR pointer — never delete.
+storefront,lib/cart/absorb.ts,14,14,keep,External service constraint: a malformed guest id would 400 the merge.
+storefront,lib/cart/client.ts,1,17,keep,"External service contracts (interceptor, identity guard) read from source."
+storefront,lib/cart/client.ts,31,35,keep,Cross-file producer note plus rejected alternative (structural vs imported type).
+storefront,lib/cart/client.ts,54,54,keep,Cross-file contract: reuse the key across retries of one logical mutation.
+storefront,lib/cart/client.ts,159,160,keep,Cross-file invariant: tighter merge budget so login cannot hang.
+storefront,lib/cart/client.ts,171,171,keep,Rejected alternative (memoising) plus call-time env-read constraint.
+storefront,lib/cart/merge.ts,1,21,keep,"A4.6 cross-file invariants, HttpOnly/race rationale, 1.5s budget."
+storefront,lib/cart/merge.ts,51,53,keep,Reason-required console.warn (no logger yet) — must keep.
+storefront,lib/cart/merge.ts,63,64,keep,Reason-required console.warn justification — must keep.
+storefront,lib/cart/port.ts,3,24,keep,Cross-file consumer notes and demo-stub replacement rule.
+storefront,lib/cart/port.ts,87,90,keep,Purpose (so the caller's store shows the real price) is not in the adjacent lines.
+storefront,lib/cart/port.ts,94,100,keep,Cross-file abort contract that useQuickAdd relies on.
+storefront,lib/cart/quickAdd.ts,1,10,keep,"Rejected alternative: replace the port, never rewrite it."
+storefront,lib/cart/quickAdd.ts,23,23,keep,"Cross-file note that cart-svc, not callers, replaces the stub."
+storefront,lib/cart/schemas.ts,56,64,keep,External service contract plus rejected alternative (loosening the service schema).
+storefront,lib/cart/schemas.ts,84,84,delete,Restates cart being nullish in the snapshot schema.
+storefront,lib/cart/state.ts,1,25,keep,"Non-local design decisions (derived totals, reducer purity) stated once here."
+storefront,lib/cart/state.ts,55,59,keep,Optimistic-step intent and the cross-function applyItem handoff are not in the code.
+storefront,lib/cart/state.ts,67,68,keep,Cross-function invariant: the pending id is replaced by applyItem later.
+storefront,lib/cart/state.ts,74,77,keep,Never adds quantities is a rejected alternative distinguishing this from applyAdd.
+storefront,lib/cart/state.ts,108,113,keep,External authority (cart-svc is authority) plus rejected alternative (merging).
+storefront,lib/cart/state.ts,134,134,keep,Error-policy rule: never trust a stale total after an optimistic qty.
+storefront,lib/cart/state.ts,157,157,delete,Section label cross-referencing applyAdd.
+storefront,lib/catalog/client.ts,1,19,keep,External catalog-svc contract (active-only) plus cross-file invariants.
+storefront,lib/catalog/client.ts,41,41,keep,Deliberate omission: absence of status cannot prove the intent to keep it absent.
+storefront,lib/catalog/client.ts,53,57,keep,External service behavior (array_position ordering) plus cross-file use.
+storefront,lib/catalog/client.ts,192,199,keep,Rejected alternative (memoising) plus call-time env-read constraint.
+storefront,lib/catalog/facets.ts,1,9,keep,Cross-file dumb-painter rule plus rejected alternative (inventing a parent).
+storefront,lib/catalog/facets.ts,57,60,keep,External constraint: malformed cycles must terminate.
+storefront,lib/catalog/listing.ts,1,25,keep,Non-local invariant: whitelist/clamp rules have one home.
+storefront,lib/catalog/listing.ts,31,31,keep,External service constraint: catalog-svc caps limit at 100.
+storefront,lib/catalog/listing.ts,41,45,keep,Cross-file invariant explaining the CatalogQuery subset.
+storefront,lib/catalog/listing.ts,52,52,keep,External framework behavior (repeated searchParams values).
+storefront,lib/catalog/listing.ts,57,57,delete,Paraphrases the trimmed helper.
+storefront,lib/catalog/listing.ts,65,65,delete,Paraphrases the CATALOG_SORTS whitelist check.
+storefront,lib/catalog/listing.ts,74,74,delete,Paraphrases the toTags implementation.
+storefront,lib/catalog/listing.ts,92,92,delete,Paraphrases the discounted flag check.
+storefront,lib/catalog/listing.ts,105,105,delete,Paraphrases the toLimit clamp.
+storefront,lib/catalog/listing.ts,114,114,keep,Never throws is a guarantee a reader cannot prove from the adjacent lines.
+storefront,lib/catalog/listing.ts,138,143,keep,External cache-key constraint (fixed key order) plus routing.md §3 ref.
+storefront,lib/catalog/listingPage.ts,1,8,keep,Cross-file invariant: shared loader prevents duplicate mapping logic.
+storefront,lib/catalog/listingPage.ts,120,121,keep,Non-local degradation policy: facet failure must not blank products.
+storefront,lib/catalog/schemas.ts,1,15,keep,External contract version rationale plus rejected alternative (strict fields).
+storefront,lib/catalog/schemas.ts,93,93,keep,Cross-file pointer to fromCatalog for the effective price.
+storefront,lib/catalog/schemas.ts,122,122,delete,Section label restating what the schema is.
+storefront,lib/catalog/schemas.ts,133,133,delete,Section divider.
+storefront,lib/catalog/schemas.ts,219,219,delete,Section divider.
+storefront,lib/catalog/schemas.ts,257,257,keep,External service contract: brand detail wrapped in { brand }.
+storefront,lib/checkout/idempotency.ts,1,25,keep,External replay-cache contract plus retry-vs-change tension.
+storefront,lib/checkout/idempotency.ts,32,32,keep,So field order cannot change the hash is a rationale not visible in the serialization.
+storefront,lib/checkout/idempotency.ts,48,48,keep,"FNV-1a is external algorithm knowledge, not readable from the magic constants."
+storefront,lib/checkout/idempotency.ts,59,64,keep,"Cross-file injection constraint (browser UUID, test counter)."
+storefront,lib/cms/authSettings.ts,1,16,keep,Non-local cache-first/stale fallback and never-blank invariants.
+storefront,lib/cms/authSettings.ts,45,45,keep,External constraint: a slow CMS must never block a render.
+storefront,lib/cms/authSettings.ts,67,67,keep,Error-policy decision: source failure falls through to the stale cache.
+storefront,lib/cms/authSettings.ts,78,78,delete,Paraphrases the default source URL.
+storefront,lib/cms/authSettings.ts,87,88,keep,Cross-file invariant: tag needed for POST /api/revalidate.
+storefront,lib/cms/buttonAnimation.ts,26,27,keep,So apply-to-all-of-type can target one group is a nesting rationale.
+storefront,lib/cms/buttonAnimation.ts,32,43,keep,"A11y/contrast constraint (explicit solids, never opacity) from design review."
+storefront,lib/cms/buttonAnimation.ts,52,56,keep,Records historical constraint (no :active rule existed) behind the default.
+storefront,lib/cms/buttonAnimation.ts,61,61,delete,Paraphrases the shadow field's type.
+storefront,lib/cms/buttonAnimation.ts,73,73,keep,Never auto is a constraint on the resolved field that its type does not show.
+storefront,lib/cms/buttonAnimation.ts,127,131,keep,Records why colors are absent here (variant supplies them).
+storefront,lib/cms/buttonAnimation.ts,154,157,keep,External a11y contract with cross-file ref to globals.css.
+storefront,lib/cms/buttonAnimation.ts,172,175,keep,Records historical constraint (no :active rule existed) behind the default.
+storefront,lib/cms/buttonAnimation.ts,204,204,keep,Cross-file plan: the future ctas[].animation payload lands here at highest precedence.
+storefront,lib/cms/buttonAnimation.ts,208,208,keep,Cross-file source: colors come from Button.tsx VARIANTS.
+storefront,lib/cms/buttonAnimation.ts,212,216,keep,Independently pickable from day one is a design rationale not in the merge chain.
+storefront,lib/cms/buttonAnimation.ts,232,235,keep,Cross-file invariant: Button.tsx folds flat props into cta before this.
+storefront,lib/cms/buttonAnimation.ts,309,309,keep,Cross-file ref naming the globals.css consumer.
+storefront,lib/cms/cache.ts,1,18,keep,External repo-scope constraint plus rejected alternative (unbounded map).
+storefront,lib/cms/cache.ts,26,26,delete,Restates the default max-entries constant.
+storefront,lib/cms/cache.ts,55,56,keep,Cache-policy decision: a still-being-read page should not be the first dropped.
+storefront,lib/cms/client.ts,1,27,keep,External Next Data Cache behavior that makes revalidation work.
+storefront,lib/cms/client.ts,90,94,keep,Call-time env-read constraint plus historic name note.
+storefront,lib/cms/client.ts,115,115,delete,Paraphrases the catch-all in get().
+storefront,lib/cms/client.ts,122,122,keep,External security constraint: a bad key would become a path segment.
+storefront,lib/cms/client.ts,152,152,keep,External constraint: a bad key would mint an off-allowlist tag.
+storefront,lib/cms/client.ts,158,160,keep,"Non-local invariant: renderer skips invalid sections, envelope is outage."
+storefront,lib/cms/client.ts,166,167,keep,Reason-required console.warn (no logger) — must keep.
+storefront,lib/cms/client.ts,216,216,keep,External service contract: controller wraps page in { page }.
+storefront,lib/cms/footer.ts,1,18,keep,Rejected alternative (inventing footer content) plus cascade rationale.
+storefront,lib/cms/footer.ts,40,40,delete,Paraphrases the fallback field.
+storefront,lib/cms/footer.ts,44,44,keep,"Process-lifecycle invariant: survives between requests, resets on deploy."
+storefront,lib/cms/footer.ts,58,63,keep,Non-local invariant: getFooter already returns null on all failures.
+storefront,lib/cms/footer.ts,75,75,keep,Error-policy decision: source failure falls through to the stale cache.
+storefront,lib/cms/footer.ts,82,82,keep,Error-policy decision: a minimal shell is better than a 500.
+storefront,lib/cms/loadDocuments.ts,1,19,keep,External Next fetch-dedupe constraint plus drift rationale.
+storefront,lib/cms/loadDocuments.ts,24,26,keep,Cross-file invariant: exported for test and footer link list.
+storefront,lib/cms/loadDocuments.ts,39,41,keep,Rejected alternative (fake load-more) plus cms-svc ordering.
+storefront,lib/cms/loadDocuments.ts,49,50,keep,Non-local invariant: the route distinguishes empty from outage.
+storefront,lib/cms/navigation.ts,1,13,keep,"Cross-file/infrastructure invariants (navbar on every page, no Redis)."
+storefront,lib/cms/navigation.ts,42,42,delete,Paraphrases the fallback field.
+storefront,lib/cms/navigation.ts,46,46,keep,"Process-lifecycle invariant: survives between requests, resets on deploy."
+storefront,lib/cms/navigation.ts,73,73,keep,Error-policy decision: source failure falls through to the stale cache.
+storefront,lib/cms/pageSettings.ts,1,11,keep,Rejected alternative: centralizes three duplicated no-op deps into one edit.
+storefront,lib/cms/tags.ts,1,18,keep,Cross-file parity contract between tag readers and the revalidate writer.
+storefront,lib/cms/tags.ts,35,35,keep,External service contract: the slug format cms-svc accepts.
+storefront,lib/cms/tags.ts,58,62,keep,Cross-file invariant: accepted tags are exactly those the readers can produce.
+storefront,lib/cms/theme.ts,1,10,keep,Cross-file cascade and DEFAULT_THEME no-op invariants.
+storefront,lib/cms/theme.ts,32,32,delete,Paraphrases the fallback field.
+storefront,lib/cms/theme.ts,36,36,keep,"Process-lifecycle invariant: survives between requests, resets on deploy."
+storefront,lib/cms/theme.ts,50,55,keep,Non-local invariant: getGlobalSettings already returns null on all failures.
+storefront,lib/cms/theme.ts,67,67,keep,Error-policy decision: source failure falls through to the stale cache.
+storefront,lib/cms/theme.ts,74,74,keep,Error-policy decision: a builtin theme is better than a 500.
+storefront,lib/cms/themeSettings.ts,68,71,keep,Cross-file invariant: animation resolves at Button with variant colors.
+storefront,lib/cms/themeSettings.ts,99,103,keep,"Resolver invariant: incomplete badges are dropped, defaults applied there."
+storefront,lib/cms/themeSettings.ts,133,138,keep,External design constraint (product.md §9) plus rejected CSS-side capping.
+storefront,lib/cms/themeSettings.ts,196,196,keep,External browser constraint: native select ignores custom faces (OS chrome).
+storefront,lib/cms/themeSettings.ts,201,201,keep,Cross-component behavior: horizontal padding aligns with the trigger text.
+storefront,lib/cms/themeSettings.ts,204,204,keep,"Cross-component behavior: empty means chevron, broken falls back at render."
+storefront,lib/cms/themeSettings.ts,206,209,keep,Cross-file note: per-variant instance of the shared motion shape.
+storefront,lib/cms/themeSettings.ts,213,218,keep,Cross-file invariant feeding styleOverrides plus rejected component change.
+storefront,lib/cms/themeSettings.ts,230,230,keep,Cross-component precedence: owner direct styles win automatically.
+storefront,lib/cms/themeSettings.ts,236,236,keep,Cross-file precedence: per-instance flat props still win over the global scope.
+storefront,lib/cms/themeSettings.ts,252,252,delete,Type label with obvious provenance.
+storefront,lib/cms/themeSettings.ts,254,254,keep,Cross-file precedence layer (product > section > global) is not in the type.
+storefront,lib/cms/themeSettings.ts,346,346,keep,Cross-component behavior: the resolved style feeds styleOverrides as-is.
+storefront,lib/cms/themeSettings.ts,461,462,keep,Design rationale: a popping dropdown feels broken; opt-out documented.
+storefront,lib/cms/themeSettings.ts,479,480,keep,Rejected alternative (duplication) plus cross-file single-source invariant.
+storefront,lib/cms/themeSettings.ts,482,483,delete,Lists the literal values visible in the default object below.
+storefront,lib/cms/themeSettings.ts,497,498,delete,Lists the literal values visible in the default object below.
+storefront,lib/cms/themeSettings.ts,535,535,delete,Restates the hidden default values.
+storefront,lib/cms/themeSettings.ts,564,564,keep,Records the empty-string no-override sentinel convention.
+storefront,lib/cms/themeSettings.ts,576,581,keep,Cross-file invariant: tones map passed down so Badge never fetches.
+storefront,lib/cms/themeSettings.ts,596,596,keep,"Error-policy decision: null/undefined means CMS unreadable, so builtins render."
+storefront,lib/cms/themeSettings.ts,600,605,keep,Cross-file merge/forwarding invariants plus rejected alternative.
+storefront,lib/cms/themeSettings.ts,626,627,delete,Paraphrases the badge resolver filter and defaults.
+storefront,lib/cms/themeSettings.ts,702,703,keep,Cross-file invariant: imported limits cannot disagree with the component.
+storefront,lib/cms/themeSettings.ts,729,730,keep,External legibility constraint plus rejected alternative (CSS absurd counts).
+storefront,lib/cms/themeSettings.ts,847,847,delete,Paraphrases the photo-settings resolver.
+storefront,lib/cms/themeVars.ts,1,9,keep,Cross-file zero-visual-change invariant and no-override sentinel rule.
+storefront,lib/commerce/compare.ts,1,8,keep,Cross-file id rules plus rejected alternative (dropping oldest).
+storefront,lib/commerce/compare.ts,34,34,delete,Paraphrases parseCompareQuery.
+storefront,lib/commerce/fromCatalog.ts,1,25,keep,Cross-file invariant: sole mapper knowing both catalog shapes.
+storefront,lib/commerce/fromCatalog.ts,50,55,keep,Rejected alternative: inventing a category name would be a lie.
+storefront,lib/commerce/fromCatalog.ts,65,74,keep,Cross-file invariant: orderImageRows is the one home of image ordering.
+storefront,lib/commerce/fromCatalog.ts,95,96,keep,Rejected alternative: inventing an image would misrepresent a photoless product.
+storefront,lib/commerce/fromCatalog.ts,109,112,keep,External contract (product.md §3) plus rejected alternative (painted border).
+storefront,lib/commerce/fromCatalog.ts,159,176,keep,Cross-file invariants on variant projection plus rejected re-derivation.
+storefront,lib/commerce/fromCatalog.ts,196,204,keep,External theme-contract ranges plus rejected alternative (guessing columns).
+storefront,lib/commerce/fromCatalog.ts,233,239,keep,External schema invariant enabling a shape test instead of casts.
+storefront,lib/commerce/fromCatalog.ts,244,252,keep,Cross-file precedence chain plus rejected alternative (pre-resolving).
+storefront,lib/commerce/fromCatalog.ts,262,263,keep,So no as-cast is needed below is a design invariant not in the code.
+storefront,lib/commerce/fromCatalog.ts,282,284,keep,"Cross-file routing contract (slugs, card-not-a-link)."
+storefront,lib/commerce/fromCatalog.ts,297,298,keep,Cross-file invariant: the card reads a tag only when badges are empty.
+storefront,lib/commerce/fromCatalog.ts,302,303,keep,External service behavior: absent rating is not a zero.
+storefront,lib/commerce/gallery.ts,1,16,keep,Cross-file invariant: the block must not remember catalog ordering rules.
+storefront,lib/commerce/gallery.ts,28,32,keep,Design constraint: cap prevents an over-photographed product flooding the rail.
+storefront,lib/commerce/gallery.ts,35,42,keep,"Cross-file invariant: one home of ordering, fromCatalog must not re-derive."
+storefront,lib/commerce/gallery.ts,62,68,keep,External browser behavior (<img src=''>) plus cross-file dedupe rule.
+storefront,lib/commerce/jsonLd.ts,1,22,keep,"External routing/schema contracts (§5 offers, ADR 41 money as number)."
+storefront,lib/commerce/jsonLd.ts,35,43,keep,Cross-file embedding invariant plus rejected alternative (inventing a host).
+storefront,lib/commerce/jsonLd.ts,62,62,delete,Paraphrases the effectivePrice choice.
+storefront,lib/commerce/productCard.ts,73,73,delete,Field label; owner-routing behavior is generic.
+storefront,lib/commerce/productCard.ts,75,75,delete,Field label restating paint behavior.
+storefront,lib/commerce/productCard.ts,87,87,keep,Records the repo policy that deferred slices are never stubbed UI.
+storefront,lib/commerce/productCard.ts,89,89,keep,Records why the quick-pick slice is deferred.
+storefront,lib/commerce/productCard.ts,237,238,keep,Cross-file capability: admin/theme can opt the hidden carousel controls back in.
+storefront,lib/commerce/productCard.ts,262,264,keep,For contrast fallback is an a11y purpose not visible in isDarkHex.
+storefront,lib/commerce/productCard.ts,315,315,keep,Readable tokens / contrast-safety intent is not recoverable from the branch.
+storefront,lib/commerce/productCard.ts,473,475,delete,Function label restating the signature.
+storefront,lib/commerce/productCard.ts,498,498,delete,Section label.
+storefront,lib/commerce/productTrust.ts,1,9,keep,Cross-file invariants: CMS pdp_trust fallback and contracts icon vocabulary.
+storefront,lib/commerce/quantity.ts,1,15,keep,Cross-file clamp-owner rule plus rejected alternative (per-call-site Math.max).
+storefront,lib/commerce/quantity.ts,24,30,keep,External constraint: out-of-stock must not render a zero stepper.
+storefront,lib/commerce/quantity.ts,34,36,keep,External input context (NaN from typed fields) explaining the guard.
+storefront,lib/commerce/quickView.ts,14,14,delete,Paraphrases the in-stock variant search.
+storefront,lib/commerce/variants.ts,1,23,keep,Cross-file URL-vocabulary rule plus rejected alternative (removing swatches).
+storefront,lib/commerce/variants.ts,34,34,keep,Cross-function invariant defining the available flag.
+storefront,lib/commerce/variants.ts,45,45,delete,Paraphrases isPurchasable.
+storefront,lib/commerce/variants.ts,50,50,delete,Paraphrases valueOf.
+storefront,lib/commerce/variants.ts,56,56,delete,Paraphrases selectionFits.
+storefront,lib/commerce/variants.ts,66,71,keep,Cross-file panel invariant plus rejected alternative (advertising dead variant).
+storefront,lib/commerce/variants.ts,80,83,keep,Domain decision: a product without variants sells itself.
+storefront,lib/commerce/variants.ts,105,105,keep,Cross-file invariant: service order is the URL key order.
+storefront,lib/commerce/variants.ts,112,115,delete,Paraphrases selectionOptions.
+storefront,lib/commerce/variants.ts,128,128,keep,Design rejected alternative: a dead end must let the shopper escape.
+storefront,lib/commerce/variantUrl.ts,1,14,keep,Cross-file routing.md §4 contract plus repair rule.
+storefront,lib/commerce/variantUrl.ts,55,55,delete,Paraphrases the filter of undeclared options.
+storefront,lib/commerce/variantUrl.ts,106,106,delete,Paraphrases the empty-selection branch.
+storefront,lib/commerce/variantUrl.ts,111,112,keep,Never silently kept is an error-policy decision with a rejected alternative.
+storefront,lib/http/browser.ts,3,26,keep,Cross-file BFF-only seam and shared failure-vocabulary invariants.
+storefront,lib/http/browser.ts,40,44,keep,Cross-file checkout-key context plus safe-by-default rationale.
+storefront,lib/http/browser.ts,55,58,keep,Cross-file rationale for exporting a single-flight refresh.
+storefront,lib/http/browser.ts,73,73,keep,External HttpOnly cookie constraint from browser behavior.
+storefront,lib/http/browser.ts,94,94,keep,One shared refresh and the same key are non-local guarantees.
+storefront,lib/http/browser.ts,116,116,keep,External browser constraint: HttpOnly cookies need same-origin.
+storefront,lib/http/client.ts,1,30,keep,Cross-file transport invariants and the no-URL-building rule.
+storefront,lib/http/result.ts,1,24,keep,Cross-file fetch-agnostic/import-nothing invariant.
+storefront,lib/http/result.ts,70,70,delete,Paraphrases the final invalid fallback.
+storefront,lib/http/result.ts,82,87,keep,Rejected alternative (deriving kind from status) plus retry cost.
+storefront,lib/http/result.ts,92,96,keep,Cross-file invariant: a page must always render something useful.
+storefront,lib/http/result.ts,110,110,delete,Paraphrases the JSON catch branch.
+storefront,lib/http/result.ts,119,122,keep,External API fact: 204 responses have no body by design.
+storefront,lib/order/client.ts,1,13,keep,External replay-cache contract plus rejected alternative (minting key here).
+storefront,lib/order/client.ts,107,107,keep,Call-time env-read constraint.
+storefront,lib/order/schemas.ts,1,13,keep,External service contract (snake_case/money type) plus rejected coercion.
+storefront,lib/pages/richText.ts,1,22,keep,External security constraint: HTML must be inert before the DOM.
+storefront,lib/pages/richText.ts,40,40,keep,Security rationale: opaque tag content is code and must be dropped.
+storefront,lib/pages/richText.ts,45,47,keep,External HTML entity behavior plus rejected alternative (double-encoding).
+storefront,lib/pages/richText.ts,50,50,keep,"Security rule never //host, never javascript: is not fully enforced by the code shown."
+storefront,lib/pages/richText.ts,55,56,keep,"External browser behaviors (protocol-relative, backslash hosts)."
+storefront,lib/pages/richText.ts,67,67,delete,Paraphrases readHref regex.
+storefront,lib/pages/richText.ts,76,76,delete,Paraphrases the stripped field.
+storefront,lib/pages/richText.ts,80,87,keep,"External safety invariant: worst input returns inert, balanced HTML."
+storefront,lib/pages/richText.ts,91,91,keep,Security rationale: a stray closer cannot nest a lie.
+storefront,lib/pages/richText.ts,106,106,keep,A comment is not content is a sanitizer policy decision.
+storefront,lib/pages/richText.ts,116,116,delete,Paraphrases the unmatched-< branch.
+storefront,lib/pages/richText.ts,131,131,keep,Code is not prose is a security policy decision.
+storefront,lib/pages/richText.ts,135,135,delete,Paraphrases the unwrap branch.
+storefront,lib/pages/richText.ts,145,145,keep,Keeping the tree balanced is a security invariant the loop alone cannot prove.
+storefront,lib/pages/richText.ts,161,161,keep,Dead or dangerous link does not exist is a security/UX purpose.
+storefront,lib/pages/richText.ts,185,185,keep,Cross-file invariant stating the block renderer's blank-input rule.
+storefront,lib/recently-viewed/cookie.ts,1,6,keep,External localStorage ban is the reason for the HttpOnly cookie.
+storefront,lib/search/demoSource.ts,1,5,keep,Cross-file invariant: never import the demo source from production.
+storefront,lib/search/demoSource.ts,17,21,keep,"Cross-file invariant: trending comes through the port, never the component."
+storefront,lib/search/demoSource.ts,30,34,keep,"Cross-file invariant: CMS collections replace this export, never the component."
+storefront,lib/search/motion.ts,1,11,keep,Cross-file no-leak invariant between overlay variants plus preset-switch ban.
+storefront,lib/search/motion.ts,19,19,keep,Only read when preset is custom is a cross-field constraint.
+storefront,lib/search/motion.ts,23,23,keep,Component inlines them as CSS vars + data hooks is cross-component behavior.
+storefront,lib/search/motion.ts,28,32,keep,External constraint (CSS switches on concrete values) plus rejected alternative.
+storefront,lib/search/motion.ts,40,48,keep,Rejected alternative (changing stored presets) plus admin-value constraint.
+storefront,lib/search/motion.ts,60,60,keep,Security constraint: never inject raw CSS easing strings.
+storefront,lib/search/motion.ts,78,82,delete,Paraphrases resolveOverlayMotion's preset/custom branches.
+storefront,lib/search/motion.ts,88,90,keep,Non-local cascade invariant (miss means inherit) plus per-variant builtins.
+storefront,lib/search/source.ts,1,9,keep,Rejected alternative (rewrite) plus call-site replacement rule.
+storefront,lib/search/source.ts,24,27,keep,Cross-file invariants: hook gates debounce and aborts stale responses.
+storefront,lib/search/tagTone.ts,1,7,keep,"Cross-file invariant: single mapping home, cards never switch on tags."
+storefront,lib/search/trending.ts,1,10,keep,Rejected alternative plus call-site port replacement rule.
+storefront,lib/sections/hero.ts,1,13,keep,Cross-file CMS-ownership and dumb-block invariants plus rejected default hero.
+storefront,lib/sections/hero.ts,48,48,delete,Section label restating the resolver/block contract.
+storefront,lib/sections/hero.ts,62,62,keep,Rejected alternative (multiple ratio shapes) plus CSS-form constraint.
+storefront,lib/sections/hero.ts,74,84,keep,"Rejected alternatives (a button that goes nowhere, an empty paragraph) and the block-never-guesses rule."
+storefront,lib/sections/marquee.ts,1,13,keep,External units and CSS-fallback invariants plus rejected own-constant.
+storefront,lib/sections/marquee.ts,16,16,keep,Cross-file invariant: constant matches the stylesheet's --grid-gap fallback.
+storefront,lib/sections/marquee.ts,20,20,keep,Cross-file contract default stated once for blocks.
+storefront,lib/sections/marquee.ts,27,37,keep,"Design constraints (strobing, hours-long runs) with rejected alternatives."
+storefront,lib/sections/pdp.ts,8,13,keep,External key-format and outage-handling constraints.
+storefront,lib/sections/pdp.ts,24,28,keep,Cross-file invariant: no invented rating; all active reviews sections count.
+storefront,lib/sections/pdp.ts,58,64,keep,Cross-file invariant plus rejected alternative (empty CMS response).
+storefront,lib/sections/present.ts,1,12,keep,External plumbing-leak and locale-stability constraints.
+storefront,lib/sections/resolveSections.ts,1,26,keep,Cross-file fan-out and skip invariants stated once here.
+storefront,lib/sections/resolveSections.ts,94,99,keep,Non-local resilience invariant: one bad section costs only that section.
+storefront,lib/sections/resolveSections.ts,100,103,keep,"Cross-file invariant: PDP context required, never guessed."
+storefront,lib/sections/resolveSections.ts,121,122,keep,Cross-file invariant: the reviews anchor exists exactly once.
+storefront,lib/sections/resolveSections.ts,198,200,keep,External CMS value-shape constraint plus cross-file toCssRatio note.
+storefront,lib/sections/resolveSections.ts,238,241,keep,External next/image constraint plus fail-closed rationale.
+storefront,lib/sections/resolveSections.ts,281,283,keep,"Cross-file invariant: card resolver guards mediaRatio, custom never reaches it."
+storefront,lib/sections/resolveSections.ts,356,357,keep,Cross-file contract ref (section-content.ts) for skipped ids.
+storefront,lib/sections/resolveSections.ts,441,442,keep,External service contract: contract uuids vs stringified Mongo ids.
+storefront,lib/sections/resolveSections.ts,479,481,keep,Reason-required console.warn (sanitized-empty fallback) — must keep.
+storefront,lib/sections/viewModels.ts,5,8,keep,Cross-file invariant: card's own vocabulary prevents smuggled CMS values.
+storefront,lib/sections/viewModels.ts,65,66,keep,Cross-file precedence invariant for cardSettings and theme.
+storefront,lib/sections/viewModels.ts,89,90,keep,"Cross-file paint rule: label replaces name, never a second text."
+storefront,lib/sections/viewModels.ts,93,94,keep,Cross-file paint rule: logoless brands still show a name.
+storefront,lib/select/demoOptions.ts,1,5,keep,Cross-file invariant: never import the demo source from production.
+storefront,lib/select/options.ts,1,11,keep,Rejected alternative plus call-site replacement rule for the port.
+storefront,lib/services/urls.ts,1,23,keep,Cross-file single-registry invariant plus call-time-read rationale.
+storefront,lib/services/urls.ts,29,29,delete,Paraphrases the fallback field's role.
+storefront,lib/services/urls.ts,31,31,keep,"Design decision: timeout is a reviewable budget, not an exception."
+storefront,lib/services/urls.ts,40,40,keep,External constraint: payment path needs a longer budget.
+storefront,lib/services/urls.ts,46,55,keep,External edge-runtime env-inlining constraint plus cross-file sharing.
+storefront,lib/services/urls.ts,63,63,keep,Rejected alternative (env-configured budgets) with reviewability reason.
+storefront,lib/session/guest.ts,1,25,keep,External cart-svc contract plus XSS/HttpOnly rejected alternative.
+storefront,lib/session/guest.ts,42,45,keep,Cross-file invariant: maxAge 0 clears after merge rotation.
+storefront,lib/session/identity.ts,1,19,keep,Cross-file testability invariant (no next/headers) plus identity rules.
+storefront,lib/session/identity.ts,34,34,keep,External service pattern constraint on the guest id.
+storefront,lib/session/identity.ts,38,44,keep,External cart-svc 400 behavior plus rejected alternative.
+storefront,lib/session/identity.ts,50,52,keep,Cross-file/JWT constraint explaining userId=null.
+storefront,lib/session/identity.ts,56,56,delete,Paraphrases hasIdentity.
+storefront,lib/session/identity.ts,61,65,keep,External service guard-order contract plus rejected alternative.
+storefront,lib/session/identity.ts,73,84,keep,External proxy failure mode plus rejected alternative (lost cart item).
+storefront,lib/shell/demoNavInput.ts,3,14,keep,Cross-file consumer notes plus rejected alternative (blank navbar).
+storefront,lib/shell/navSettings.ts,12,12,keep,External JSON constraint rejects Date objects for schedule windows.
+storefront,lib/shell/navSettings.ts,158,162,keep,External stored-admin-value constraint plus additive-union rationale.
+storefront,lib/shell/navSettings.ts,164,167,keep,External stored-admin-value constraint plus additive-union rationale.
+storefront,lib/shell/navSettings.ts,170,176,keep,Rejected alternative (fifteen flat fields) plus cross-file collision constraint.
+storefront,lib/shell/navSettings.ts,180,180,delete,Paraphrases the blur field.
+storefront,lib/shell/navSettings.ts,203,206,keep,Cross-file no-leak invariant between overlay motion instances.
+storefront,lib/shell/navSettings.ts,210,213,keep,External stored-admin-value constraint plus additive-union rationale.
+storefront,lib/shell/navSettings.ts,215,218,keep,Rejected alternative (view/both) plus owner-handled-view constraint.
+storefront,lib/shell/navSettings.ts,221,225,keep,Cross-file invariant: pill faces map onto --pill-* vars.
+storefront,lib/shell/navSettings.ts,230,230,delete,Paraphrases the blur field.
+storefront,lib/shell/navSettings.ts,232,232,keep,Only read when blur is true is a cross-field constraint.
+storefront,lib/shell/navSettings.ts,260,260,keep,999 = stadium is a convention; later shape presets ride this var.
+storefront,lib/shell/navSettings.ts,269,269,delete,Cross-reference label restating the union type.
+storefront,lib/shell/navSettings.ts,271,271,keep,"Cross-component behavior: the owner surfaces a notification, default on."
+storefront,lib/shell/navSettings.ts,273,276,keep,Cross-file no-leak invariant between overlay motion instances.
+storefront,lib/shell/navSettings.ts,284,287,keep,Cross-file no-leak invariant between overlay motion instances.
+storefront,lib/shell/navSettings.ts,321,321,keep,External a11y constraint: reduced-motion forces instant collapse.
+storefront,lib/shell/navSettings.ts,330,330,delete,Type label restating the single-scope shape.
+storefront,lib/shell/navSettings.ts,348,348,delete,Type label with obvious provenance.
+storefront,lib/shell/navSettings.ts,411,411,keep,Repo rule: defaults are the one legal home for literals.
+storefront,lib/shell/navSettings.ts,441,443,keep,"External design verdict (reuse token, no second token) with reason."
+storefront,lib/shell/navSettings.ts,476,478,keep,Repo rule: this file is the one legal home for literal tokens.
+storefront,lib/shell/pageHeader.ts,1,10,keep,Cross-file last-crumb decision plus rejected alternative (caller href).
+storefront,lib/shell/pageHeader.ts,17,17,keep,"Cross-file invariant: block reads current, never recomputes it."
+storefront,lib/shell/pageHeader.ts,24,31,keep,Cross-file routing.md §2 rule plus rejected alternative (empty trail).
+storefront,lib/shell/pageHeader.ts,38,39,keep,"Rejected alternative: a stale caller must not make ""you are here"" clickable."
+storefront,lib/shell/resolveNav.ts,1,16,keep,Cross-file cascade/time-filter rules plus reason-required ?? note.
+storefront,lib/shell/resolveNav.ts,42,42,delete,Paraphrases mergeGroup with a header cross-reference.
+storefront,lib/shell/resolveNav.ts,50,50,keep,Never an error is an error-policy decision for malformed bounds.
+storefront,lib/shell/resolveNav.ts,57,57,delete,Paraphrases inWindow.
+storefront,lib/shell/resolveNav.ts,86,86,keep,Cross-file invariant: resolver never knows the active route.
+storefront,lib/shell/resolveNav.ts,100,103,keep,Rejected alternative (generic merge passing raw presets) plus no-leak rule.
+storefront,lib/shell/resolveNav.ts,115,116,keep,Rejected alternative: per-object merge wiping a global key.
+storefront,lib/shell/resolveNav.ts,123,124,keep,"External constraint: bad admin strings are misses, never injected garbage."
+storefront,lib/shell/resolveNav.ts,140,142,keep,Rejected alternative: per-object merge wiping a global key.
+storefront,lib/shell/resolveNav.ts,182,183,keep,External stored-value constraint: unknown union members are misses.
+storefront,lib/shell/resolveNav.ts,220,221,keep,External stored-value constraint: unknown union members are misses.
+storefront,lib/shell/resolveNav.ts,237,237,keep,External stored-value constraint with future-extension rule.
+storefront,lib/shell/resolveNav.ts,247,249,keep,External CMS field mismatch plus rejected alternative (merge overwriting).
+storefront,lib/wishlist/pending.ts,1,7,keep,Cross-file consume flow plus external localStorage ban.
+storefront,test/components/button-states.test.ts,1,13,keep,Records two shipped bugs and browser :hover behavior the test guards.
+storefront,test/components/button-states.test.ts,28,28,delete,Paraphrases the hover-selector regex.
+storefront,test/components/button-states.test.ts,33,36,keep,Records the shipped hover bug and opt-in default the test enforces.
+storefront,test/components/cart-line-item-style.test.ts,1,5,delete,Summarizes the assertions; every claim is in the test code.
+storefront,test/components/css-structure.test.ts,1,7,keep,Records history (sf-034 stray brace) and parser difference (webpack vs Turbopack).
+storefront,test/components/doc-style.test.ts,1,8,keep,Cross-file design constraints plus rejected alternative (second card painter).
+storefront,test/components/doc-style.test.ts,46,47,keep,External design intent (centred column) plus var-only theming rule.
+storefront,test/components/doc-style.test.ts,50,51,keep,Records the opposite design ask for the blog list.
+storefront,test/components/doc-style.test.ts,56,57,keep,External browser behavior: auto height is 0 until image decode (layout jump).
+storefront,test/components/doc-style.test.ts,60,60,delete,Paraphrases the natural-ratio assertion.
+storefront,test/components/empty-state-style.test.ts,1,4,delete,Summarizes the assertions; every claim is in the test code.
+storefront,test/components/footer-style.test.ts,1,9,keep,Cross-file rationale: raw hex would defeat CMS repainting of the footer.
+storefront,test/components/footer-style.test.ts,47,48,keep,External design-system §4 rule with cross-file scope.
+storefront,test/components/footer-style.test.ts,73,75,keep,External theming rule (bare hex bypass) plus cross-file navbar mirror.
+storefront,test/components/gallery-style.test.ts,1,4,delete,Summarizes the assertions; every claim is in the test code.
+storefront,test/components/hero-style.test.ts,1,9,keep,Cross-file class-vocabulary promise that keeps the hero motion-free.
+storefront,test/components/mini-cart-drawer-style.test.ts,1,6,keep,Rejected alternative (sliding drawer) plus v1 instant-open decision.
+storefront,test/components/navbar-style.test.ts,1,6,delete,Summarizes the assertions; every claim is in the test code.
+storefront,test/components/page-header-style.test.ts,1,5,delete,Summarizes the assertions; every claim is in the test code.
+storefront,test/components/pill-style.test.ts,1,5,delete,Summarizes the assertions; every claim is in the test code.
+storefront,test/components/product-card-style.test.ts,1,6,delete,Summarizes the assertions; every claim is in the test code.
+storefront,test/components/product-card-style.test.ts,47,47,keep,External a11y rule (keyboard parity) the assertion enforces.
+storefront,test/components/product-grid-style.test.ts,1,4,delete,Summarizes the assertions; every claim is in the test code.
+storefront,test/components/product-grid-style.test.ts,45,46,keep,Readability rationale plus cross-file CMS-tint hook note.
+storefront,test/components/quantity-stepper-style.test.ts,1,6,keep,So there is nothing to kill under reduced-motion is a rationale.
+storefront,test/components/quantity-stepper-style.test.ts,49,50,keep,External AGENTS §5 opacity ban plus reduced-motion rationale.
+storefront,test/components/search-editorial-style.test.ts,1,5,delete,Summarizes the assertions; every claim is in the test code.
+storefront,test/components/search-editorial-style.test.ts,41,42,keep,External browser behavior (bare :hover) plus white-on-ink constraint.
+storefront,test/components/search-palette-style.test.ts,1,5,delete,Summarizes the assertions; every claim is in the test code.
+storefront,test/components/search-palette-style.test.ts,50,51,keep,Cross-file invariant: the Pill contract owns the active face.
+storefront,test/components/search-palette-style.test.ts,66,67,keep,Cross-file ownership note (Pill owns --pill-radius).
+storefront,test/components/search-registry-guard.test.ts,1,8,keep,Cross-file bundle invariant plus rejected alternative (static import).
+storefront,test/components/search-registry-guard.test.ts,15,16,keep,External chunk-splitting mechanism explains the regex exclusion.
+storefront,test/components/search-registry-guard.test.ts,18,19,keep,Cross-file launch-checklist invariant about the showcase exemption.
+storefront,test/components/search-sheet-style.test.ts,1,5,delete,Summarizes the assertions; every claim is in the test code.
+storefront,test/components/search-sheet-style.test.ts,37,38,keep,External browser bleed behavior plus cross-file wave-park guard ref.
+storefront,test/components/sections-style.test.ts,1,12,keep,External design-system promises plus rejected alternative (hardcoded hex).
+storefront,test/components/sections-style.test.ts,56,57,keep,Vacuous-pass guard: a renamed class would make all assertions meaningless.
+storefront,test/components/sections-style.test.ts,80,81,keep,External full-bleed rule plus rejected alternative (old 1280 container).
+storefront,test/components/sections-style.test.ts,87,90,keep,External design-system §4 layout promise plus history of the 1280 container.
+storefront,test/components/sections-style.test.ts,100,101,keep,External measure rule plus rejected alternative (px container creeping back).
+storefront,test/components/sections-style.test.ts,132,133,keep,External regex reason (shared declaration block) plus rejected duplicate rule.
+storefront,test/components/sections-style.test.ts,136,136,keep,So a static row must not show the loop copy twice is a rationale.
+storefront,test/components/select-style.test.ts,1,5,delete,Summarizes the assertions; every claim is in the test code.
+storefront,test/components/toast-style.test.ts,1,5,delete,Summarizes the assertions; every claim is in the test code.
+storefront,test/components/tooltip-style.test.ts,1,7,keep,Cross-file customization model plus rejected alternative (painting directly).
+storefront,test/components/tooltip-style.test.ts,19,19,keep,Non-local CSS structure: the first match is the reduced-motion guard.
+storefront,test/components/tooltip-style.test.ts,46,47,delete,Paraphrases the animation-mode assertions.
+storefront,test/components/variant-selector-style.test.ts,1,5,delete,Summarizes the assertions; every claim is in the test code.
+storefront,test/components/variant-selector-style.test.ts,48,50,keep,"External design constraint plus rejected alternatives (ring, opacity)."
+storefront,test/components/wave-park.test.ts,8,8,keep,Non-local reason for stripping CSS comments before scanning.
+storefront,test/components/wave-park.test.ts,13,21,keep,External subpixel-bleed behavior plus cross-file marquee seam ref.
+storefront,test/components/wave-park.test.ts,34,35,keep,Vacuous-pass guard: a renamed class would leave a real park unwatched.
+storefront,test/components/wave-park.test.ts,40,41,keep,External zoom-bleed behavior explaining the regex and buffer form.
+storefront,test/components/wave-park.test.ts,72,72,keep,External CSS mechanism: clipping is what hides the parked layer.
+storefront,test/components/wave-park.test.ts,78,79,keep,"Cross-file invariant: one shared geometry, no second buggy copy."
+storefront,test/lib/authSettings.test.ts,1,4,delete,Summarizes the test cases; stubbed deps are visible in the code.
+storefront,test/lib/cssVars.test.ts,1,4,delete,Summarizes the test cases; AGENTS §4 ref is incidental.
+storefront,test/lib/errors.test.ts,1,4,keep,"Display safety is a test, not a hope is a design rationale."
+storefront,test/lib/productCard.test.ts,140,140,delete,Test step label restating the assertion.
+storefront,test/lib/productCard.test.ts,147,147,delete,Test step label restating the assertion.
+storefront,test/lib/resolveEditorial.test.ts,1,4,delete,Summarizes the test cases; every claim is in the code.
+storefront,test/lib/resolveEditorial.test.ts,70,71,keep,Cross-file per-variant cascade invariant with the sheet equivalent.
+storefront,test/lib/resolveNav.test.ts,1,4,keep,No Date mocking is a rejected test alternative.
+storefront,test/lib/resolvePalette.test.ts,1,4,delete,Summarizes the test cases; every claim is in the code.
+storefront,test/lib/resolvePalette.test.ts,68,68,keep,Cross-file per-variant cascade invariant on bogus easing.
+storefront,test/lib/resolveSettings.test.ts,1,6,keep,Locked rule from auth-design.md is a cross-file spec pointer.
+storefront,test/lib/resolveSettings.test.ts,33,33,delete,Restates the cascade assertions.
+storefront,test/lib/resolveSettings.test.ts,36,36,delete,Restates the inheritance assertion.
+storefront,test/lib/themeSettings.test.ts,1,5,delete,Summarizes the test cases; every claim is in the code.
+storefront,test/lib/themeSettings.test.ts,252,253,keep,"Cross-file invariant: animation resolves at Button, never here."
+storefront,test/app/api/account.test.ts,1,8,keep,External partial-degradation policy and its page-quality rationale.
+storefront,test/app/api/account.test.ts,97,97,delete,Restates the assertions about Bearer headers and parallel calls.
+storefront,test/app/api/checkout.test.ts,1,12,keep,Cross-file rationale: the island switches on verbatim error codes.
+storefront,test/app/api/checkout.test.ts,134,134,keep,External idempotency contract for the retry loop.
+storefront,test/app/api/orders.test.ts,1,8,keep,External service 404 contract plus rejected alternative (BFF check).
+storefront,test/app/api/orders.test.ts,77,78,keep,External service contract: DECIMAL parsed to number at order-svc boundary.
+storefront,test/app/api/revalidate.test.ts,1,8,keep,External invariant: an unauthorized call must never purge the cache first.
+storefront,test/app/api/auth/login.test.ts,1,9,keep,"Cross-file G3 guarantee: tokens go to cookies, only { user } in the body."
+storefront,test/app/api/auth/login.test.ts,149,149,keep,External constraint: client status 0 is not a valid HTTP status.
+storefront,test/app/api/auth/login.test.ts,178,178,delete,Restates the ordering of cookie assertions.
+storefront,test/app/api/auth/login.test.ts,183,183,keep,Cross-file invariant: the converted id must not survive for sign-out.
+storefront,test/app/api/auth/login.test.ts,220,220,delete,Restates the no-rotation assertion.
+storefront,test/app/api/auth/logout.test.ts,1,7,keep,External failure policy: sign-out always wins even if auth-svc is down.
+storefront,test/app/api/auth/refresh.test.ts,1,9,keep,Browser behavior (JSON renders as text) plus rejected redirect loop.
+storefront,test/app/api/auth/register.test.ts,1,9,keep,"External service flow: register creates the user, then login issues tokens."
+storefront,test/app/api/cart/cart.test.ts,1,8,keep,Cross-file rationale: an empty-cart 200 avoids drawer special-casing.
+storefront,test/app/api/cart/cart.test.ts,37,37,keep,External Web API behavior: a 204 response cannot carry a body.
+storefront,test/app/api/cart/cart.test.ts,69,69,keep,External service behavior: cart-svc would 401 with no identity.
+storefront,test/app/api/cart/cart.test.ts,126,126,keep,External constraint: status 0 is not an HTTP status.
+storefront,test/app/api/cart/item.test.ts,1,8,keep,External service (400 has no field path) and framework (Promise params) constraints.
+storefront,test/app/api/cart/items.test.ts,1,9,keep,External proxy failure mode plus rejected alternative (dropped first add).
+storefront,test/app/api/cart/items.test.ts,125,125,keep,Cross-file invariant: the browser must keep sending the minted id.
+storefront,test/lib/auth/client.test.ts,1,7,keep,External service constraint: auth-svc emits no domain codes yet.
+storefront,test/lib/auth/client.test.ts,73,73,keep,External security constraint: disabled must not be distinguishable at sign-in.
+storefront,test/lib/auth/next.test.ts,1,4,keep,External open-redirect constraint on URL-supplied next values.
+storefront,test/lib/auth/session.test.ts,1,5,keep,External security story behind the literal cookie-attribute assertions.
+storefront,test/lib/auth/session.test.ts,71,71,keep,"External browser bug history (""looks signed out, is not"") for path mismatch."
+storefront,test/lib/blog/present.test.ts,1,7,keep,Cross-file invariant: shared helpers must not drift between two faces.
+storefront,test/lib/cart/absorb.test.ts,1,10,keep,Non-local no-lost-basket invariants plus rejected rotation-on-failure.
+storefront,test/lib/cart/absorb.test.ts,80,80,delete,Restates the assertion that the old id still resolves.
+storefront,test/lib/cart/client.test.ts,1,6,keep,External service constraints on keys and identity the tests enforce.
+storefront,test/lib/cart/merge.test.ts,1,8,keep,"Non-local failure policy: no throws, bounded budget, sign-in never fails."
+storefront,test/lib/cart/merge.test.ts,116,116,keep,Reason-required console.warn — must keep.
+storefront,test/lib/cart/port.test.ts,1,9,keep,Cross-file abort-as-silence contract with useQuickAdd.
+storefront,test/lib/cart/port.test.ts,54,54,keep,Cross-file invariant: bff() mints before the 401 replay reuses the key.
+storefront,test/lib/cart/state.test.ts,1,8,keep,"Cross-file testability invariant (pure reducer, provider reverts)."
+storefront,test/lib/cart/state.test.ts,96,96,keep,"External service contract: server qty is a total, not a delta."
+storefront,test/lib/cart/state.test.ts,177,177,keep,External service contract: cart-svc prices at write time.
+storefront,test/lib/catalog/client.test.ts,1,6,keep,"Cross-file invariants: envelope hidden, status=active not overridable."
+storefront,test/lib/catalog/listing.test.ts,1,8,keep,"Query string is untrusted, so the interesting cases are the rejected ones."
+storefront,test/lib/catalog/listing.test.ts,52,52,keep,Cross-file invariant: slug resolution belongs to the page's fetch.
+storefront,test/lib/checkout/idempotency.test.ts,1,8,keep,External replay-cache contract behind key reuse vs body change.
+storefront,test/lib/checkout/replay.test.ts,1,17,keep,External order-svc replay contract (checkout.service.ts) the fixtures mirror.
+storefront,test/lib/checkout/replay.test.ts,64,68,keep,Cross-file note: the stub reproduces service's replay cache contract.
+storefront,test/lib/checkout/replay.test.ts,82,83,keep,Cross-file rationale: local hash answers the same same-attempt question.
+storefront,test/lib/checkout/replay.test.ts,115,115,keep,Cross-file browser retry-loop behavior the test simulates.
+storefront,test/lib/checkout/replay.test.ts,128,129,keep,"External idempotency contract: the header, not the body, makes the guarantee."
+storefront,test/lib/checkout/replay.test.ts,151,153,keep,External DECIMAL-to-number contract plus history of the drift bug.
+storefront,test/lib/checkout/replay.test.ts,165,166,keep,Cross-file browser behavior: qty edits mint a new key.
+storefront,test/lib/checkout/replay.test.ts,190,191,keep,External contract: 409 needs a code so the island can branch.
+storefront,test/lib/cms/cache.test.ts,1,7,keep,"Test-design rationale: inject clock, never sleep through expiry."
+storefront,test/lib/cms/cache.test.ts,36,36,delete,Restates the inclusive-expiry boundary assertion.
+storefront,test/lib/cms/cache.test.ts,49,49,delete,Restates the post-eviction slot assertion.
+storefront,test/lib/cms/cache.test.ts,81,81,keep,So it must survive the next insert is a cache-policy rationale.
+storefront,test/lib/cms/cache.test.ts,106,106,keep,Not immortal is a rejected alternative for a negative TTL.
+storefront,test/lib/cms/client.test.ts,1,7,keep,External framework behavior: missing tags silently disable revalidation.
+storefront,test/lib/cms/client.test.ts,104,104,keep,External contract default (isActive defaults true) after parse.
+storefront,test/lib/cms/footer.test.ts,1,9,keep,Cross-file invariant: the global shell never disappears or invents content.
+storefront,test/lib/cms/navigation.test.ts,1,7,keep,Cross-file invariant: navbar must get settings even when CMS is down.
+storefront,test/lib/cms/navigation.test.ts,54,54,keep,Cross-file note naming the layout's NavbarMount consumer.
+storefront,test/lib/cms/navigation.test.ts,80,80,delete,Restates the assertion that demo input still resolves.
+storefront,test/lib/cms/tags.test.ts,1,6,keep,Cross-file security invariant: accepted tags are purgeable cache keys.
+storefront,test/lib/cms/theme.test.ts,1,7,keep,Cross-file never-reject cascade; theme must never blank a route.
+storefront,test/lib/cms/themeVars.test.ts,1,7,keep,Cross-file zero-visual-change invariant for builtin themes.
+storefront,test/lib/commerce/fromCatalog.test.ts,1,8,keep,Not the JSON shuffle and must not swallow are rejected alternatives.
+storefront,test/lib/commerce/fromCatalog.test.ts,77,77,keep,No strikethrough is cross-component paint behavior.
+storefront,test/lib/commerce/fromCatalog.test.ts,83,83,delete,Restates the effective-price comparison assertion.
+storefront,test/lib/commerce/fromCatalog.test.ts,173,173,keep,Cross-file invariant: an empty dict must not shadow the theme.
+storefront,test/lib/commerce/fromCatalog.test.ts,178,178,keep,External service contract: DECIMAL parsed to number at the DB boundary.
+storefront,test/lib/commerce/gallery.test.ts,1,6,keep,Design rationale: a duplicated upload must not become a dead thumb control.
+storefront,test/lib/commerce/gallery.test.ts,36,36,delete,Restates the stable-sort assertion.
+storefront,test/lib/commerce/jsonLd.test.ts,1,7,keep,Cross-file routing.md §5.4 offer/availability contract the tests pin.
+storefront,test/lib/commerce/quantity.test.ts,1,6,delete,Enumerates the test cases; every claim is in the assertions.
+storefront,test/lib/commerce/quantity.test.ts,38,39,keep,External constraint: stock 0 must never render a zero-quantity stepper.
+storefront,test/lib/commerce/quantity.test.ts,44,45,keep,External service behavior (NaN 400) plus cross-file total-blanking risk.
+storefront,test/lib/commerce/variants.test.ts,61,61,delete,Test fixture description restating the variant matrix.
+storefront,test/lib/commerce/variants.test.ts,143,143,delete,Test fixture description restating which option is a dead end.
+storefront,test/lib/commerce/variants.test.ts,156,156,keep,Rejected alternative (greying all values) plus shopper-escape invariant.
+storefront,test/lib/http/browser.test.ts,1,11,keep,External service behavior (TOKEN_REUSED) plus key-reuse money guarantee.
+storefront,test/lib/http/browser.test.ts,139,140,keep,External JS event-loop behavior (macrotask drains microtasks) for the test gate.
+storefront,test/lib/http/client.test.ts,1,8,keep,"Cross-file promises (never throws, never returns schema-failing body)."
+storefront,test/lib/http/result.test.ts,1,7,keep,Cross-file retry-policy invariant plus rejected alternative (retrying a 409).
+storefront,test/lib/order/client.test.ts,1,5,keep,External replay-cache contract plus cross-file island banner selection.
+storefront,test/lib/pages/richText.test.ts,1,8,keep,External security constraint: XSS via dangerouslySetInnerHTML.
+storefront,test/lib/pages/richText.test.ts,40,40,delete,Restates the balanced-tag assertion.
+storefront,test/lib/sections/hero.test.ts,1,8,keep,Cross-file CMS-ownership and dumb-block invariants (no default hero).
+storefront,test/lib/sections/hero.test.ts,108,109,keep,Cross-file invariant: only one ratio converter for the hero family.
+storefront,test/lib/sections/marquee.test.ts,32,32,delete,Arithmetic restating the duration assertion.
+storefront,test/lib/sections/marquee.test.ts,53,53,delete,Arithmetic restating the quote-row duration assertion.
+storefront,test/lib/sections/pdp.test.ts,1,8,delete,Enumerates the covered cases; every claim is in the tests.
+storefront,test/lib/sections/present.test.ts,1,7,keep,Cross-file dumb-block invariant plus external ISO-string leak.
+storefront,test/lib/sections/present.test.ts,17,18,keep,External locale constraint (server LANG must not change layout).
+storefront,test/lib/sections/resolveSections.test.ts,1,9,keep,"Cross-file invariants: dumb blocks, skips, outage rule, sparse theme keys."
+storefront,test/lib/sections/resolveSections.test.ts,225,225,keep,Cross-file resilience invariant: one bad section does not cost the page.
+storefront,test/lib/sections/resolveSections.test.ts,367,368,keep,Cross-file card-limit invariant plus rejected alternative (undefined shadow).
+storefront,test/lib/sections/resolveSections.test.ts,387,387,delete,Section divider.
+storefront,test/lib/sections/resolveSections.test.ts,439,439,delete,Test fixture description restating logo fallback.
+storefront,test/lib/services/urls.test.ts,1,6,keep,Cross-file call-time-read and slash-trim invariants plus silent-failure modes.
+storefront,test/lib/session/guest.test.ts,1,9,keep,External cart-svc guard pattern plus whole-object assertion rationale.
+storefront,test/lib/session/identity.test.ts,1,8,keep,Cross-file reader/header separation plus Bearer-precedence invariant.
+storefront,test/lib/session/identity.test.ts,49,50,keep,External service guard order (authorization before x-session-id).
+storefront,test/lib/session/identity.test.ts,63,64,keep,External service 400 plus browser HttpOnly constraint.
+storefront,test/lib/shell/pageHeader.test.ts,1,6,keep,Cross-file routing.md §2 rule plus rejected alternative (pasted href).
