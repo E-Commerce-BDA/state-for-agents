@@ -100,7 +100,7 @@ every cart `active` forever, which is the regression the bridge was built to pre
 | `admin-app` | — | — | — | No direct Kafka/SQS; HTTP only |
 | `ecom-infra` | — | — | provisions 22 topics + 3 queues | No producer/consumer |
 | `@ecom/contracts` | — | — | — | No runtime transport; schemas only |
-| `@ecom/messaging` | provides the store port and relay every producer uses (Postgres **and** Mongo), the consumer surface (`KafkaEventHandler`, `ProcessedEventsStore`, DLQ publisher, lag sampler, strategy — **0.5.0** adds the explicit session timeout and `retryBudgetMs`) that cart, catalog and search run on (search on 0.5.0, cart and catalog on 0.3.0), and the SQS task surface (`TaskQueuePort`, `SqsTaskQueue`, `SqsTaskWorker`, `createSqsTaskModule`) that cms runs on | — | — | Declares no topics and joins no group of its own; never imported by domain code for kafkajs or SQS access |
+| `@ecom/messaging` | provides the store port and relay every producer uses (Postgres **and** Mongo), the consumer surface (`KafkaEventHandler`, `ProcessedEventsStore`, DLQ publisher, lag sampler, strategy — **0.5.0** adds the explicit session timeout and `retryBudgetMs`) that cart, catalog and search run on (all three on 0.5.0), and the SQS task surface (`TaskQueuePort`, `SqsTaskQueue`, `SqsTaskWorker`, `createSqsTaskModule`) that cms runs on | — | — | Declares no topics and joins no group of its own; never imported by domain code for kafkajs or SQS access |
 
 **Delivery rules:** at-least-once; manual commit after the side effect and
 `processed_events` insert commit together; one consumer group per service
@@ -120,8 +120,8 @@ record. **A ladder that outruns the session is not a retry:** the member is evic
 while it is still sleeping, and `UNKNOWN_MEMBER_ID` then fails the DLQ publish and
 the offset commit together, so the group re-joins and replays the same record
 forever — which is why the strategy owns `sessionTimeout`/`heartbeatInterval` and the
-handler owns `retryBudgetMs` (ADR 44). `search-svc` runs 0.5.0; `cart-svc` and
-`catalog-svc` still run 0.3.0 with an unbounded ladder, observed live on
+handler owns `retryBudgetMs` (ADR 44). `search-svc`, `cart-svc` and
+`catalog-svc` now run 0.5.0 with a bounded ladder; the earlier live wedge on
 `order.created` while this wave was being verified.
 `KAFKA_CONSUMER_ENABLED` (default `true`, `false` in the e2e suites) parks a consumer
 without touching the API, and a broker that is down retries every 5 s instead of blocking boot.
@@ -172,7 +172,7 @@ worker without touching the API.
 |---|---:|---:|---:|---:|---|
 | `storefront-ui` | 71 | 63 | 0 | 8 | `sf-052`, then `sf-053a` (live checkout harness), then `sf-056..sf-059`+`sf-061` depth wave, plus `sf-066` (search palette trending/curated — needs a search-svc trending endpoint). `sf-055` PDP depth, `sf-054` listing depth, `sf-067` PDP sections and `sf-068/069/070` polish are done locally; `sf-060` CMS home and `sf-062/063/064` footer/blog-legal/seed closed the CMS-home wave |
 | `ecom-contracts` | 6 | 4 | 0 | 2 | `ec-004`, `ec-005` (`ec-006` 1.12.0 closed by the CMS-home wave) |
-| `ecom-messaging` | — | — | — | — | no task entries of its own: it is delivered through `au-004`/`ca-008` and re-opened by `cat-007`/`ord-011`/`cms-005`/`srch-002`/`ca-009`/`cat-008`; now **0.5.0** — Postgres + Mongo stores, the consumer surface, the session-bounded retry budget and the SQS task surface, with all five producers on the outbox API (cms-svc on 0.4.0), search-svc on 0.5.0 and cart/catalog still on 0.3.0. 0.5.0 rode inside `srch-004` exactly as 0.3.0 rode inside `ca-009`/`srch-002` and 0.4.0 inside `cms-006` |
+| `ecom-messaging` | — | — | — | — | no task entries of its own: it is delivered through `au-004`/`ca-008` and re-opened by `cat-007`/`ord-011`/`cms-005`/`srch-002`/`ca-009`/`cat-008`; now **0.5.0** — Postgres + Mongo stores, the consumer surface, the session-bounded retry budget and the SQS task surface, with all five producers on the outbox API (cms-svc on 0.4.0), search-svc, cart-svc and catalog-svc all on 0.5.0. 0.5.0 rode inside `srch-004` exactly as 0.3.0 rode inside `ca-009`/`srch-002` and 0.4.0 inside `cms-006` |
 | `auth-svc` | 4 | 3 | 0 | 1 | `au-005` |
 | `cart-svc` | 10 | 10 | 0 | 0 | — (queue empty; `ord-012` removed order-svc's caller, so nothing references a cart route it no longer serves) |
 | `catalog-svc` | 14 | 14 | 0 | 0 | — (queue empty; `cat-015` added the keyset cursor walk and derived facets on top of `cat-014`'s tag/discounted/rating/popularity query support) |
