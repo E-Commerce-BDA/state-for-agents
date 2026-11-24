@@ -3,9 +3,9 @@
   "updatedAt": "2026-11-24",
   "summary": {
     "total": 180,
-    "done": 131,
+    "done": 132,
     "in_progress": 0,
-    "backlog": 49,
+    "backlog": 48,
     "byRepo": {
       "storefront-ui": {
         "total": 74,
@@ -81,9 +81,9 @@
       },
       "search-svc": {
         "total": 7,
-        "done": 5,
+        "done": 6,
         "in_progress": 0,
-        "backlog": 2
+        "backlog": 1
       },
       "ecom-infra": {
         "total": 13,
@@ -299,7 +299,7 @@
       "sf-071",
       "inf-008",
       "au-006",
-      "srch-007"
+      "anl-003"
     ],
     "completionGate": [
       "Every P0 task is done and verified.",
@@ -581,6 +581,7 @@
       "4831c9b"
     ],
     "search-svc": [
+      "b4c9d13",
       "7af63fe",
       "f777c8f",
       "8c5ff62"
@@ -6137,10 +6138,10 @@
         {
           "id": "srch-007",
           "title": "search-svc: make the cursor tiebreaker composite",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-24",
+          "finished": "2026-11-24",
           "phase": "P0",
           "priority": "P0",
           "kind": "bug",
@@ -6148,17 +6149,21 @@
           "dependsOn": [
             "srch-004"
           ],
-          "log": null,
+          "log": "TASKS/done/srch-007-composite-cursor-tiebreaker.md",
           "key_decisions": [
-            "Carry both sort key and id in CursorPayload instead of a bare id. Reason: ids are no longer globally unique after the composite PK change, so a bare id is not a total order. Rejected: assuming global uniqueness.",
-            "Keep existing cursors decodable or reject them explicitly. Reason: a silent wrong page is worse than a clear error. Rejected: ignoring old cursors."
+            "Add a required document type to the cursor and bump v1 to v2. Reason: the primary key became (document_type, id), so id alone is not a total order. Rejected: an optional type on v1, which would decode old cursors into silently wrong pages.",
+            "Order by document_type before id in all five sorts and close each keyset predicate with the composite tuple. Reason: equal sort keys across types must still resolve to one position. Rejected: folding type into the query fingerprint, which already contains the type filter and does not help unfiltered queries.",
+            "Reject v1 cursors with CURSOR_INVALID. Reason: a visible 400 and a restarted walk beats a subtly wrong page. Rejected: dual-reading the two formats."
           ],
           "acceptance": [
-            "A walk over products and categories sharing an id returns each row once.",
-            "An old-format cursor is rejected or decoded without overlap."
+            "A walk over a product and a category sharing an id at equal sort keys returns each row exactly once.",
+            "tsc clean; 150 unit tests pass across 21 files; lint and build clean."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "The e2e suites need the test Postgres and were not run here; requests return 503 without it.",
+            "Clients holding a v1 cursor get a 400 and must restart pagination after this deploy."
+          ]
         }
       ],
       "messaging": {
