@@ -3,9 +3,9 @@
   "updatedAt": "2026-11-24",
   "summary": {
     "total": 180,
-    "done": 132,
+    "done": 133,
     "in_progress": 0,
-    "backlog": 48,
+    "backlog": 47,
     "byRepo": {
       "storefront-ui": {
         "total": 74,
@@ -63,9 +63,9 @@
       },
       "analytics-svc": {
         "total": 5,
-        "done": 2,
+        "done": 3,
         "in_progress": 0,
-        "backlog": 3
+        "backlog": 2
       },
       "import-svc": {
         "total": 3,
@@ -299,7 +299,7 @@
       "sf-071",
       "inf-008",
       "au-006",
-      "anl-003"
+      "anl-004"
     ],
     "completionGate": [
       "Every P0 task is done and verified.",
@@ -589,6 +589,7 @@
       "8c5ff62"
     ],
     "Documentation": [
+      "5874907",
       "5d19e0e",
       "2c9894c",
       "83b0aaf",
@@ -596,7 +597,10 @@
       "bec4e04",
       "9f1e59d"
     ],
-    "ecom-infra": []
+    "ecom-infra": [],
+    "analytics-svc": [
+      "3f1d415"
+    ]
   },
   "unpushedVerifiedAt": "2026-11-02",
   "unpushedNote": "Recomputed with git rev-parse @{u} and git rev-list --count @{u}..HEAD in every local repo on 2026-11-02, after the CMS-home wave (ec-006, cat-013, cms-008, sf-060/062/063/064). Ahead counts: ecom-contracts 4, catalog-svc 5, cms-svc 3, Documentation 4, storefront 24, state-for-agents 8 + this commit. ecom-messaging and ecom-infra have no remote at all, so their lists are only the commits this wave series produced and their full history cannot leave this machine. state-for-agents cannot list itself. Nothing was pushed, tagged, released or published.",
@@ -5090,10 +5094,10 @@
         {
           "id": "anl-003",
           "title": "analytics-svc: consume cart.updated, order.created, page.viewed, and user.registered",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-24",
+          "finished": "2026-11-24",
           "phase": "P4",
           "priority": "P0",
           "kind": "feature",
@@ -5103,19 +5107,22 @@
             "anl-002",
             "ec-002"
           ],
-          "log": null,
+          "log": "TASKS/done/anl-003-four-event-consumer.md",
           "key_decisions": [
-            "Persist facts with processed_events in the same Mongo transaction. Reason: at-least-once redelivery must not double-count. Rejected: best-effort inserts.",
-            "Use one consumer group, analytics-svc. Reason: one service, one group. Rejected: one group per topic."
+            "Claim events in Mongo by inserting _id = eventId into processed_events inside the caller's session. Reason: messaging's ProcessedEventsStore is SQL-only and the claim and fact must commit together. Rejected: a new @ecom/messaging 0.6.0 with a Mongo store, which would repack the tarball and repin every consumer for one adopter.",
+            "Add order_events and user_events at 60d TTL beside page_views (30d) and cart_events (60d). Reason: funnels need an order and a signup fact, and the user fact needs only an id and a timestamp. Rejected: folding orders into cart_events, which would blur two different stages.",
+            "One group named analytics-svc with four @EventPattern routes and retryBudgetMs 20_000. Reason: one service, one group, and a ladder that fits the 45s session. Rejected: a group per topic; an unbounded ladder."
           ],
           "acceptance": [
-            "Funnel and exit aggregates build from the four event types.",
-            "TTL indexes match 30d/60d.",
-            "Duplicate events are no-ops; invalid payloads go to the topic DLQ.",
-            "Consumer group is analytics-svc."
+            "Four topics write to their fact collections; duplicates are no-ops; invalid payloads go to the topic DLQ.",
+            "tsc clean; 33 unit tests pass across 9 files; lint and build clean."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "E2E suites need the live Mongo replica set and Kafka and were not run here.",
+            "anl-004 can now build the idle-cart detector on these facts.",
+            "If a second Mongo consumer appears, move the claim into @ecom/messaging as a shared store."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [
