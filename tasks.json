@@ -2,16 +2,16 @@
   "version": 2,
   "updatedAt": "2026-11-24",
   "summary": {
-    "total": 157,
+    "total": 180,
     "done": 131,
     "in_progress": 0,
-    "backlog": 26,
+    "backlog": 49,
     "byRepo": {
       "storefront-ui": {
-        "total": 71,
+        "total": 74,
         "done": 64,
         "in_progress": 0,
-        "backlog": 7
+        "backlog": 10
       },
       "admin-app": {
         "total": 1,
@@ -32,10 +32,10 @@
         "backlog": 0
       },
       "auth-svc": {
-        "total": 4,
+        "total": 6,
         "done": 3,
         "in_progress": 0,
-        "backlog": 1
+        "backlog": 3
       },
       "catalog-svc": {
         "total": 15,
@@ -44,28 +44,28 @@
         "backlog": 0
       },
       "cart-svc": {
-        "total": 11,
+        "total": 14,
         "done": 11,
         "in_progress": 0,
-        "backlog": 0
+        "backlog": 3
       },
       "order-svc": {
-        "total": 12,
+        "total": 14,
         "done": 12,
         "in_progress": 0,
-        "backlog": 0
+        "backlog": 2
       },
       "cms-svc": {
-        "total": 8,
+        "total": 11,
         "done": 8,
         "in_progress": 0,
-        "backlog": 0
+        "backlog": 3
       },
       "analytics-svc": {
-        "total": 4,
+        "total": 5,
         "done": 2,
         "in_progress": 0,
-        "backlog": 2
+        "backlog": 3
       },
       "import-svc": {
         "total": 3,
@@ -80,24 +80,30 @@
         "backlog": 4
       },
       "search-svc": {
-        "total": 5,
+        "total": 7,
         "done": 5,
         "in_progress": 0,
-        "backlog": 0
+        "backlog": 2
       },
       "ecom-infra": {
-        "total": 8,
+        "total": 13,
         "done": 3,
         "in_progress": 0,
-        "backlog": 5
+        "backlog": 10
       },
       "Documentation": {
-        "total": 5,
+        "total": 7,
         "done": 4,
         "in_progress": 0,
-        "backlog": 1
+        "backlog": 3
       }
-    }
+    },
+    "logDebt": [
+      "sf-065",
+      "sf-068",
+      "sf-069",
+      "sf-070"
+    ]
   },
   "plan": {
     "currentPhase": "P3",
@@ -130,9 +136,11 @@
           "srch-004",
           "doc-001",
           "doc-005",
-          "srch-005"
+          "srch-005",
+          "doc-007",
+          "srch-007"
         ],
-        "count": 16
+        "count": 18
       },
       {
         "id": "P1",
@@ -172,9 +180,13 @@
           "ca-008",
           "ca-010",
           "ord-011",
-          "cms-005"
+          "cms-005",
+          "ca-014",
+          "sf-072",
+          "srch-006",
+          "ord-013"
         ],
-        "count": 10
+        "count": 14
       },
       {
         "id": "P3",
@@ -198,9 +210,13 @@
           "srch-002",
           "srch-003",
           "ca-011",
-          "cat-014"
+          "cat-014",
+          "cms-009",
+          "cms-010",
+          "cms-011",
+          "ord-014"
         ],
-        "count": 13
+        "count": 17
       },
       {
         "id": "P4",
@@ -225,9 +241,12 @@
           "ntf-002",
           "ntf-003",
           "ntf-004",
-          "doc-004"
+          "doc-004",
+          "au-006",
+          "au-007",
+          "anl-005"
         ],
-        "count": 14
+        "count": 17
       },
       {
         "id": "P5",
@@ -247,9 +266,19 @@
           "sf-053a",
           "tst-001",
           "tst-002",
-          "inf-006"
+          "inf-006",
+          "ca-012",
+          "ca-013",
+          "sf-071",
+          "sf-073",
+          "doc-006",
+          "inf-007",
+          "inf-008",
+          "inf-009",
+          "inf-010",
+          "tst-003"
         ],
-        "count": 8
+        "count": 18
       },
       {
         "id": "P6",
@@ -266,9 +295,11 @@
       }
     ],
     "nextUp": [
-      "au-005",
-      "anl-003",
-      "sf-056"
+      "ca-012",
+      "sf-071",
+      "inf-008",
+      "au-006",
+      "srch-007"
     ],
     "completionGate": [
       "Every P0 task is done and verified.",
@@ -565,7 +596,7 @@
   },
   "unpushedVerifiedAt": "2026-11-02",
   "unpushedNote": "Recomputed with git rev-parse @{u} and git rev-list --count @{u}..HEAD in every local repo on 2026-11-02, after the CMS-home wave (ec-006, cat-013, cms-008, sf-060/062/063/064). Ahead counts: ecom-contracts 4, catalog-svc 5, cms-svc 3, Documentation 4, storefront 24, state-for-agents 8 + this commit. ecom-messaging and ecom-infra have no remote at all, so their lists are only the commits this wave series produced and their full history cannot leave this machine. state-for-agents cannot list itself. Nothing was pushed, tagged, released or published.",
-  "workflow": "Claim: create TASKS/in-progress/<id>-<slug>.md, set the entry status to in-progress, owner, and started. Build against the chained skills (router order). Close: move the log to TASKS/done/, fill verification and follow_ups, flip status to done and finished, update STATUS.md and summary in the same commit. Todo entries carry log:null until claimed; in-progress and done entries must have an existing log file. Commits: one commit per file (larger edits split per edit); stage with diff eyes-on; subject + reason body; local-only until the human says push. Unpushed lists only verified local commits; the carrier commit joins on the next update. Validation: id == filename, status == folder, log exists for in-progress/done, STATUS counts == summary.",
+  "workflow": "Claim: create TASKS/in-progress/<id>-<slug>.md, set the entry status to in-progress, owner, and started. Build against the chained skills (router order). Close: move the log to TASKS/done/, fill verification and follow_ups, flip status to done and finished, update STATUS.md and summary in the same commit. Todo entries carry log:null until claimed; in-progress and done entries must have an existing log file. Commits: one commit per file (larger edits split per edit); stage with diff eyes-on; subject + reason body; local-only until the human says push. Unpushed lists only verified local commits; the carrier commit joins on the next update. Validation: id == filename, status == folder, log exists for in-progress/done, STATUS counts == summary. Before any tracker commit, run scripts/validate-tasks.py and require exit 0. followUpAudit must classify every original follow-up; counts are derived from entries, never hand-set.",
   "rules": "Claim: set claimedBy={agent,since,task} + stages.<stage> to in-progress (24h lease; other instances must not steal without comment). Finish: flip stage to done + update SERVICES.md + STATUS.md in same commit. Stage vocab locked: todo|in-progress|done (maps to todo/in-progress/done cells). Path truth: localRoots below are where agents edit TODAY; future split repos named in 'repo'. Never invent paths — resolve via SKILL-EXPLORE. motive is immutable (ADR change only); inProgress/next are mutable. Transport truth: Kafka is domain events only, SQS is task jobs only; each repo messaging block and the top-level messaging catalog are authoritative.",
   "repos": {
     "storefront-ui": {
@@ -1949,8 +1980,10 @@
             "Resolver + BannerSection + SectionRenderer tests cover the model, dispatch, alignment, CTAs and blend var."
           ],
           "follow_ups": [
-            "cms-007 follow-up: sections cache/revalidation remains owned by cms-svc tags; banner render itself needs no contract or tag change."
-          ]
+            "cms-007 follow-up: sections cache/revalidation remains owned by cms-svc tags; banner render itself needs no contract or tag change.",
+            "No log was ever written for this done task; verification evidence is not recorded. Kept as known tracker debt rather than backfilled with invented detail."
+          ],
+          "logDebt": true
         },
         {
           "status": "todo",
@@ -1966,7 +1999,8 @@
           "kind": "feature",
           "transport": "http",
           "dependsOn": [
-            "sf-060"
+            "sf-060",
+            "srch-006"
           ],
           "key_decisions": [
             "Do not fake trending/curated data in the storefront. The palette props exist but SearchMount deliberately does not pass them until search-svc serves a trending endpoint."
@@ -2019,7 +2053,7 @@
           "owner": "agent",
           "started": "2026-11-16",
           "finished": "2026-11-16",
-          "verified": true,
+          "verified": false,
           "design_match": "yes",
           "phase": "P2",
           "priority": "P2",
@@ -2039,7 +2073,10 @@
             "Both buttons can be independently enabled or disabled via CMS navigation settings.",
             "All unit and style tests pass."
           ],
-          "follow_ups": []
+          "follow_ups": [
+            "No log was ever written for this done task; verification evidence is not recorded. Kept as known tracker debt rather than backfilled with invented detail."
+          ],
+          "logDebt": true
         },
         {
           "id": "sf-069",
@@ -2048,7 +2085,7 @@
           "owner": "agent",
           "started": "2026-11-16",
           "finished": "2026-11-16",
-          "verified": true,
+          "verified": false,
           "design_match": "yes",
           "phase": "P2",
           "priority": "P2",
@@ -2067,7 +2104,10 @@
             "Search outages surface a clear error alert to the shopper.",
             "Unit tests cover 503 response and alert banner rendering."
           ],
-          "follow_ups": []
+          "follow_ups": [
+            "No log was ever written for this done task; verification evidence is not recorded. Kept as known tracker debt rather than backfilled with invented detail."
+          ],
+          "logDebt": true
         },
         {
           "id": "sf-070",
@@ -2076,7 +2116,7 @@
           "owner": "agent",
           "started": "2026-11-16",
           "finished": "2026-11-16",
-          "verified": true,
+          "verified": false,
           "design_match": "yes",
           "phase": "P2",
           "priority": "P2",
@@ -2096,6 +2136,85 @@
             "Configured microcopy renders with proper styling in AuthPanel.",
             "All unit and style tests pass."
           ],
+          "follow_ups": [
+            "No log was ever written for this done task; verification evidence is not recorded. Kept as known tracker debt rather than backfilled with invented detail."
+          ],
+          "logDebt": true
+        },
+        {
+          "id": "sf-071",
+          "title": "storefront: restore lint with an ESLint flat config",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P5",
+          "priority": "P1",
+          "kind": "chore",
+          "transport": "docs",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Add a flat config for Next 16 and wire pnpm lint to it. Reason: next lint was removed, so the command is dead. Rejected: deleting the script and pretending lint is gone.",
+            "Keep the existing style-contract assertions as tests, not lint rules. Reason: those are contract tests, not style preferences. Rejected: folding them into ESLint."
+          ],
+          "acceptance": [
+            "pnpm lint exits 0 on the current tree.",
+            "A deliberate unused import fails lint."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "sf-072",
+          "title": "storefront: sign-out affordance in the shell",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P2",
+          "priority": "P2",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [
+            "sf-049"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Post a form to the existing POST /api/auth/logout from the account menu. Reason: the endpoint exists but no UI reaches it. Rejected: a client-side token clear, which leaves the HttpOnly cookies.",
+            "Keep the menu link semantics as a form, not a GET. Reason: the endpoint is POST-only by design. Rejected: an anchor to /api/auth/logout."
+          ],
+          "acceptance": [
+            "Signing out clears sf_at/sf_rt and redirects to the public shell.",
+            "The account menu has a visible sign-out control."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "sf-073",
+          "title": "storefront: metrics for stale/fallback paths and revalidation webhook",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P5",
+          "priority": "P1",
+          "kind": "chore",
+          "transport": "http",
+          "dependsOn": [
+            "sf-050"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Count stale/fallback reads and 401s on POST /api/revalidate. Reason: both paths are currently logged but unscraped. Rejected: adding more console logging.",
+            "Expose the counters on the existing metrics surface. Reason: a log line is not a metric. Rejected: a second, separate endpoint."
+          ],
+          "acceptance": [
+            "A forced CMS outage increments the fallback counter.",
+            "A wrong revalidate secret increments the 401 counter."
+          ],
+          "verified": false,
           "follow_ups": []
         }
       ],
@@ -2703,6 +2822,58 @@
             "Unknown user returns 404 with the shared error envelope.",
             "Tests cover success, 401, and 404.",
             "No Kafka involvement."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "au-006",
+          "title": "auth-svc: emit domain error codes for token reuse and disabled accounts",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P4",
+          "priority": "P1",
+          "kind": "feature",
+          "transport": "kafka",
+          "dependsOn": [
+            "au-004"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Return stable codes alongside the status instead of encoding meaning in message text. Reason: the storefront currently matches prose to map TOKEN_REUSED/ACCOUNT_DISABLED. Rejected: making the UI parse messages.",
+            "Keep the existing status codes stable. Reason: response shape is a contract. Rejected: renumbering statuses."
+          ],
+          "acceptance": [
+            "Both conditions carry distinct machine-readable codes in the error body.",
+            "The storefront maps on the codes and no longer reads message text."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "au-007",
+          "title": "auth-svc: forgot/reset endpoints and wire the storefront form",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P4",
+          "priority": "P2",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [
+            "au-005"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Implement the forgot/reset flow behind the existing error envelope. Reason: ForgotForm is a stub because no endpoint exists. Rejected: leaving a dead form in the UI.",
+            "Never put the raw email in an emitted event. Reason: the user.registered payload already excludes it. Rejected: reusing the registration payload shape."
+          ],
+          "acceptance": [
+            "A reset request issues a one-time token and the form reaches it end to end.",
+            "No event payload carries an email address."
           ],
           "verified": false,
           "follow_ups": []
@@ -3724,6 +3895,82 @@
             "E2E suites need the live Postgres/Kafka stack and were not run here.",
             "The accumulated order.created.dlq backlog still needs the replay task inf-006."
           ]
+        },
+        {
+          "id": "ca-012",
+          "title": "cart-svc: expose consumer stats on an HTTP route",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P5",
+          "priority": "P1",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [
+            "ca-011"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Serve the existing KafkaEventHandler counters on GET /cart/internal/consumer-stats. Reason: the group is otherwise observable only with kafka-consumer-groups.sh. Rejected: scraping a log line.",
+            "Guard the route with x-service-key like the other internal routes. Reason: counters are operational, not shopper data. Rejected: a public endpoint."
+          ],
+          "acceptance": [
+            "The route returns the same lag/commit counters search and catalog expose.",
+            "An authorized request needs no broker credentials."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "ca-013",
+          "title": "cart-svc: emit a CATALOG_UNAVAILABLE metric",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P5",
+          "priority": "P1",
+          "kind": "chore",
+          "transport": "http",
+          "dependsOn": [
+            "ca-010"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Count every 503 from HttpCatalogClient instead of logging only. Reason: a catalog outage currently has no signal. Rejected: inferring it from access logs.",
+            "Export the counter where the other service metrics are read. Reason: an unexported counter is still invisible. Rejected: a counter local to the client instance."
+          ],
+          "acceptance": [
+            "A forced catalog timeout increments the counter by exactly one per failed add.",
+            "The counter is reachable from the service's metrics surface."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "ca-014",
+          "title": "cart-svc: enforce append-only audit with a least-privilege role",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P2",
+          "priority": "P1",
+          "kind": "feature",
+          "transport": "database",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Grant the application role INSERT/SELECT only on the audit table. Reason: a mutable audit trail defeats the point. Rejected: relying on code discipline.",
+            "Run the e2e suite under the restricted role. Reason: otherwise the grant is untested. Rejected: granting UPDATE in test only."
+          ],
+          "acceptance": [
+            "An UPDATE or DELETE on the audit table is rejected by Postgres.",
+            "All existing e2e flows pass under the restricted role."
+          ],
+          "verified": false,
+          "follow_ups": []
         }
       ],
       "messaging": {
@@ -4168,6 +4415,58 @@
             "cart-svc's KAFKA_CONSUMER_ENABLED must stay true wherever checkout runs, otherwise carts never convert and nothing in order-svc notices",
             "The e2e suite's SAVE10 coupon fixture now re-applies on seed; a test that needs an exhausted coupon must spend it itself"
           ]
+        },
+        {
+          "id": "ord-013",
+          "title": "Add item ids to 409 stock errors for per-line attribution",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P2",
+          "priority": "P1",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [
+            "sf-051"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Include the conflicting item ids in the stock-shortfall payload. Reason: the checkout banner is generic because the response cannot name lines. Rejected: parsing the error message in the UI.",
+            "Keep the 409 status and existing error envelope. Reason: clients already branch on them. Rejected: a new status code."
+          ],
+          "acceptance": [
+            "A stock failure names each affected line.",
+            "The storefront highlights those lines in checkout."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "ord-014",
+          "title": "Sweep stale pending payments and stuck refunds",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P3",
+          "priority": "P1",
+          "kind": "chore",
+          "transport": "database",
+          "dependsOn": [
+            "ord-011"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Reclaim a pending order whose capture succeeded but TX2 never landed. Reason: recovery currently depends on the customer retrying. Rejected: waiting indefinitely for user action.",
+            "Resolve a refund stuck between startRefund and markSucceeded through the provider. Reason: it otherwise answers 409 forever. Rejected: an operator marking it failed by hand."
+          ],
+          "acceptance": [
+            "A backdated pending capture is resumed or compensated without double charge.",
+            "A stuck refund reaches a terminal state after one sweep."
+          ],
+          "verified": false,
+          "follow_ups": []
         }
       ],
       "note": "12/12 done, no backlog. Verified: 75 unit (5 files) + 82 e2e passed (3 skipped across 8 suites) + 0/0 lint on 69 files + clean build. Checkout is idempotent per user (Redis lock, 24h replay cache and the orders row's partial unique index as the authority), pending-first, and captures payment through a saga whose compensation is the refund ledger. Stock is reserved before TX1 and released by reservation id; the hold also names the planned order id, so catalog can release it from order.status.updated (cat-010). order.created and order.status.updated are published by the outbox relay (ord-011). No Kafka consumer and no SQS tasks. The cart convert bridge is gone (ord-012: server side removed by ca-009, caller now deleted) and conversion comes from cart-svc's own order.created consumer.",
@@ -4535,6 +4834,84 @@
             "Sections/blogs/pages mutations emit the precise cms:* tags (parity test against the storefront allowlist)."
           ],
           "follow_ups": []
+        },
+        {
+          "id": "cms-009",
+          "title": "Broaden SQS task-worker integration and LocalStack gating",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P3",
+          "priority": "P2",
+          "kind": "feature",
+          "transport": "sqs",
+          "dependsOn": [
+            "cms-006"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Add an integration test with LocalStack started explicitly. Reason: cms is the only task adopter and has one gated e2e. Rejected: a compose profile that silently starts it everywhere.",
+            "Keep SQS_TASKS_ENABLED explicit in development and test. Reason: a default-on worker would surprise local runs. Rejected: enabling it by default."
+          ],
+          "acceptance": [
+            "The worker integration passes against LocalStack when invoked.",
+            "Development without LocalStack still boots with tasks disabled."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "cms-010",
+          "title": "Define a signed-URL path for private media",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P3",
+          "priority": "P2",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [
+            "cms-003"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Choose and implement a time-limited URL mechanism. Reason: a private asset cannot be shown on a public page without an admin token. Rejected: widening the public route.",
+            "Keep containment and visibility checks on the issuing path. Reason: a signed URL must not bypass the one path resolver. Rejected: signing any path by key alone."
+          ],
+          "acceptance": [
+            "A private asset is viewable through an unguessable expiring URL.",
+            "An expired or altered URL is rejected."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "cms-011",
+          "title": "Garbage-collect renditions when a media row is removed",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P3",
+          "priority": "P2",
+          "kind": "chore",
+          "transport": "storage",
+          "dependsOn": [
+            "cms-006"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Delete the variant objects in the same operation that removes the media row. Reason: renditions are orphaned today. Rejected: a nightly sweep with no ownership signal.",
+            "Make the deletion idempotent so a retry cannot fail on missing files. Reason: the worker is at-least-once. Rejected: treating a missing file as an error."
+          ],
+          "acceptance": [
+            "Removing a media row leaves no variant objects behind.",
+            "Repeating the removal succeeds."
+          ],
+          "verified": false,
+          "follow_ups": []
         }
       ],
       "note": "7/7 done, no backlog. Verified: 149 unit (22 files) + 87 e2e passed (4 skipped) + 0/0 lint on 100 files + clean build; the media-resize e2e runs green against real LocalStack when AWS_ENDPOINT_URL is set and skips with a printed reason otherwise. Media has one containment-checked path builder (null byte, single decode, mediaKeySchema, path.relative, then realpath re-check), visibility public/private, a public file route that 404s private and orphan files, an admin-only ObjectId file route, and public max-age=60 must-revalidate caching. cms.updated/blog.updated are written to cms_outbox inside the same Mongo transaction as the write (cms-005); media renditions are SQS tasks with an idempotency key (cms-006) and there is no producer or consumer on the direct Kafka bus left; the three storefront-read mutations POST their exact tag to /api/revalidate with the shared secret (cms-007). Named debt: upload size/MIME checks still run post-buffer (cms-004) and there is no variant garbage collection.",
@@ -4814,6 +5191,33 @@
             "taskQueues": [],
             "doesNotUseKafka": "No SQS tasks. reminder.dispatch is dropped."
           }
+        },
+        {
+          "id": "anl-005",
+          "title": "Decide and align PII in the cart.abandoned payload",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P4",
+          "priority": "P1",
+          "kind": "chore",
+          "transport": "kafka",
+          "dependsOn": [
+            "anl-004",
+            "au-005"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Decide whether the payload carries an email and document the reason. Reason: 1.Architecture.md still shows an email field while the contract and PII rule exclude it. Rejected: keeping two conflicting descriptions.",
+            "If notify needs an address, route through au-005's internal lookup rather than the event. Reason: events must stay PII-minimal. Rejected: adding the email back to the payload."
+          ],
+          "acceptance": [
+            "The spec, schema and shipped payloads agree.",
+            "No emitted cart.abandoned event contains an email."
+          ],
+          "verified": false,
+          "follow_ups": []
         }
       ],
       "messaging": {
@@ -5705,6 +6109,56 @@
           ],
           "verified": true,
           "follow_ups": []
+        },
+        {
+          "id": "srch-006",
+          "title": "search-svc: expose a trending/curated source for the search palette",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P2",
+          "priority": "P2",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Add an internal read endpoint that returns a bounded trending list. Reason: sf-066 cannot wire its regions without a source. Rejected: hardcoding the list in the storefront.",
+            "Keep it a read from existing catalog data, not a new write model. Reason: no new state is needed. Rejected: a persisted ranking table for v1."
+          ],
+          "acceptance": [
+            "The endpoint returns a bounded list and the palette renders it.",
+            "sf-066 no longer depends on an unspecified source."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "srch-007",
+          "title": "search-svc: make the cursor tiebreaker composite",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P0",
+          "kind": "bug",
+          "transport": "database",
+          "dependsOn": [
+            "srch-004"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Carry both sort key and id in CursorPayload instead of a bare id. Reason: ids are no longer globally unique after the composite PK change, so a bare id is not a total order. Rejected: assuming global uniqueness.",
+            "Keep existing cursors decodable or reject them explicitly. Reason: a silent wrong page is worse than a clear error. Rejected: ignoring old cursors."
+          ],
+          "acceptance": [
+            "A walk over products and categories sharing an id returns each row once.",
+            "An old-format cursor is rejected or decoded without overlap."
+          ],
+          "verified": false,
+          "follow_ups": []
         }
       ],
       "messaging": {
@@ -6101,6 +6555,128 @@
           ],
           "verified": false,
           "follow_ups": []
+        },
+        {
+          "id": "inf-007",
+          "title": "Give ecom-messaging a git remote",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P5",
+          "priority": "P0",
+          "kind": "chore",
+          "transport": "git",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Add the remote and push the local-only commits after approval. Reason: the package's commits cannot leave this machine. Rejected: copying the tarball alone, which loses history.",
+            "Verify the committed tarball and package version match the remote tag before release. Reason: a stale tarball is how the peer drift happened. Rejected: trusting the local build."
+          ],
+          "acceptance": [
+            "git rev-parse @{u} resolves in ecom-messaging.",
+            "The remote contains every local commit once push is approved."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "inf-008",
+          "title": "Add retention sweeping for outbox and processed_events tables",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P5",
+          "priority": "P1",
+          "kind": "chore",
+          "transport": "database",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "One scheduled sweep per store (Postgres schemas and Mongo cms_outbox). Reason: every service accumulates rows forever while topics keep seven days. Rejected: per-service one-off scripts.",
+            "Prune only rows older than the topic retention, using the existing processed_at/published_at indexes. Reason: deleting newer rows breaks replay and audit. Rejected: a fixed row cap."
+          ],
+          "acceptance": [
+            "A backdated row is pruned and a recent one survives in every store.",
+            "The sweep is idempotent and safe to run twice."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "inf-009",
+          "title": "Expose outbox relay, lag and queue metrics with alerts",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P5",
+          "priority": "P1",
+          "kind": "chore",
+          "transport": "observability",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Export failed-row count, oldest pending age and relay lock age per producer. Reason: currently only logs exist. Rejected: alerting on log text.",
+            "Scrape consumer lag and SQS queue age on the same dashboard. Reason: the lag sampler exists but nothing reads it. Rejected: a separate per-service dashboard."
+          ],
+          "acceptance": [
+            "A forced failed publish increments the failed-row metric and fires the alert rule.",
+            "Lag and queue age are visible for every consumer and task queue."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "inf-010",
+          "title": "Add a remote backend for Terraform state",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P5",
+          "priority": "P1",
+          "kind": "chore",
+          "transport": "terraform",
+          "dependsOn": [
+            "inf-003"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Use S3 plus DynamoDB locking before any real environment. Reason: aws/ currently has no backend, so state is local and unsafe to share. Rejected: committing state to git.",
+            "Migrate the existing LocalStack state without losing the three queues. Reason: the provisioned resources are the source of truth. Rejected: recreating from scratch."
+          ],
+          "acceptance": [
+            "terraform plan reads state from the remote backend.",
+            "A second apply does not recreate the queues."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "tst-003",
+          "title": "Implement the specified k6 and Playwright suites",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P5",
+          "priority": "P2",
+          "kind": "feature",
+          "transport": "tests",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Add the load and browser suites the testing spec already describes. Reason: they are specified but not implemented. Rejected: leaving the spec as aspirational.",
+            "Gate them on the live stack rather than CI by default. Reason: they need running services. Rejected: making every CI run boot the whole stack."
+          ],
+          "acceptance": [
+            "Both suites run against the local stack and report results.",
+            "The testing spec's claimed coverage matches reality."
+          ],
+          "verified": false,
+          "follow_ups": []
         }
       ],
       "messaging": {
@@ -6327,6 +6903,56 @@
             "Implement the ADR-comments-ratchet counter and CI gate; the ADR is written but no implementation exists.",
             "Live-stack verification of service-backed e2e remains blocked by the unavailable stack."
           ]
+        },
+        {
+          "id": "doc-006",
+          "title": "Implement the comment ratchet from ADR-comments-ratchet",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P5",
+          "priority": "P1",
+          "kind": "chore",
+          "transport": "docs",
+          "dependsOn": [
+            "doc-005"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Record a per-repo comment baseline and fail CI only when the count rises. Reason: the ADR is written but no counter or gate exists. Rejected: a lint rule banning all comments now.",
+            "Exclude generated files and the sanctioned reason-required constructs from the count. Reason: they are not removable by choice. Rejected: counting every line indiscriminately."
+          ],
+          "acceptance": [
+            "Adding one unapproved comment fails the gate in that repo.",
+            "Removing comments never fails the gate."
+          ],
+          "verified": false,
+          "follow_ups": []
+        },
+        {
+          "id": "doc-007",
+          "title": "Rewrite stale payload examples and field docs",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P1",
+          "kind": "docs",
+          "transport": "docs",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Bring 1.Architecture.md 7.1-7.5 and the other named stale sections in line with the current contracts. Reason: examples predate 1.4.0 and actively mislead. Rejected: leaving them as historical footnotes.",
+            "Fix the media collection's snake_case field names in 3.Database-Schema.md to match the Mongoose model. Reason: the schema doc is wrong, not merely old. Rejected: changing the model to match the doc."
+          ],
+          "acceptance": [
+            "Every payload example validates against the current event schemas.",
+            "The documented media fields equal the persisted fields."
+          ],
+          "verified": false,
+          "follow_ups": []
         }
       ],
       "messaging": {
@@ -6341,6 +6967,663 @@
         "implementation": [
           "Markdown docs"
         ]
+      }
+    }
+  },
+  "followUpAudit": {
+    "rule": "filed = made into a task; tracked = already covered by a task; named = real debt not yet specified; historical = superseded note",
+    "total": 195,
+    "counts": {
+      "filed": 36,
+      "tracked": 24,
+      "named": 32,
+      "historical": 103
+    },
+    "entries": {
+      "sf-007:0": {
+        "class": "historical"
+      },
+      "sf-007:1": {
+        "class": "historical"
+      },
+      "sf-010:0": {
+        "class": "historical"
+      },
+      "sf-011:0": {
+        "class": "historical"
+      },
+      "sf-012:0": {
+        "class": "historical"
+      },
+      "sf-024:0": {
+        "class": "historical"
+      },
+      "sf-027:0": {
+        "class": "historical"
+      },
+      "sf-025:0": {
+        "class": "historical"
+      },
+      "sf-028:0": {
+        "class": "historical"
+      },
+      "sf-030:0": {
+        "class": "historical"
+      },
+      "sf-031:0": {
+        "class": "historical"
+      },
+      "sf-033:0": {
+        "class": "historical"
+      },
+      "sf-037:0": {
+        "class": "historical"
+      },
+      "sf-038:0": {
+        "class": "historical"
+      },
+      "sf-040:0": {
+        "class": "historical"
+      },
+      "sf-041:0": {
+        "class": "historical"
+      },
+      "sf-042:0": {
+        "class": "historical"
+      },
+      "sf-043:0": {
+        "class": "historical"
+      },
+      "sf-044:0": {
+        "class": "historical"
+      },
+      "sf-045:0": {
+        "class": "historical"
+      },
+      "sf-046:0": {
+        "class": "historical"
+      },
+      "sf-047:0": {
+        "class": "historical"
+      },
+      "sf-036:0": {
+        "class": "historical"
+      },
+      "sf-035:0": {
+        "class": "historical"
+      },
+      "sf-032:0": {
+        "class": "historical"
+      },
+      "sf-023:0": {
+        "class": "historical"
+      },
+      "sf-015:0": {
+        "class": "historical"
+      },
+      "sf-016:0": {
+        "class": "historical"
+      },
+      "sf-017:0": {
+        "class": "historical"
+      },
+      "sf-018:0": {
+        "class": "historical"
+      },
+      "sf-019:0": {
+        "class": "historical"
+      },
+      "sf-020:0": {
+        "class": "historical"
+      },
+      "sf-021:0": {
+        "class": "historical"
+      },
+      "sf-022:0": {
+        "class": "historical"
+      },
+      "sf-049:0": {
+        "class": "filed",
+        "task": "sf-072"
+      },
+      "sf-049:1": {
+        "class": "filed",
+        "task": "au-006"
+      },
+      "sf-049:2": {
+        "class": "filed",
+        "task": "au-007"
+      },
+      "sf-049:3": {
+        "class": "filed",
+        "task": "sf-071"
+      },
+      "sf-050:0": {
+        "class": "historical"
+      },
+      "sf-050:1": {
+        "class": "named"
+      },
+      "sf-050:2": {
+        "class": "filed",
+        "task": "sf-073"
+      },
+      "sf-050:3": {
+        "class": "named"
+      },
+      "sf-051:0": {
+        "class": "tracked",
+        "task": "sf-056"
+      },
+      "sf-051:1": {
+        "class": "filed",
+        "task": "ord-013"
+      },
+      "sf-051:2": {
+        "class": "historical"
+      },
+      "sf-051:3": {
+        "class": "historical"
+      },
+      "sf-051:4": {
+        "class": "historical"
+      },
+      "sf-053:0": {
+        "class": "tracked",
+        "task": "sf-053a"
+      },
+      "sf-053:1": {
+        "class": "named"
+      },
+      "sf-058:0": {
+        "class": "filed",
+        "task": "ord-013"
+      },
+      "sf-061:0": {
+        "class": "historical"
+      },
+      "sf-064:0": {
+        "class": "named"
+      },
+      "sf-065:0": {
+        "class": "historical"
+      },
+      "sf-066:0": {
+        "class": "filed",
+        "task": "srch-006"
+      },
+      "sf-067:0": {
+        "class": "tracked",
+        "task": "adm-001"
+      },
+      "sf-067:1": {
+        "class": "named"
+      },
+      "sf-067:2": {
+        "class": "named"
+      },
+      "ec-002:0": {
+        "class": "tracked",
+        "task": "ec-005"
+      },
+      "ec-002:1": {
+        "class": "historical"
+      },
+      "ec-002:2": {
+        "class": "historical"
+      },
+      "ec-003:0": {
+        "class": "tracked",
+        "task": "ec-005"
+      },
+      "ec-003:1": {
+        "class": "historical"
+      },
+      "au-002:0": {
+        "class": "historical"
+      },
+      "au-003:0": {
+        "class": "historical"
+      },
+      "au-004:0": {
+        "class": "historical"
+      },
+      "au-004:1": {
+        "class": "filed",
+        "task": "inf-008"
+      },
+      "au-004:2": {
+        "class": "filed",
+        "task": "inf-009"
+      },
+      "au-004:3": {
+        "class": "historical"
+      },
+      "cat-006:0": {
+        "class": "tracked",
+        "task": "ec-002"
+      },
+      "cat-006:1": {
+        "class": "tracked",
+        "task": "cat-009"
+      },
+      "cat-007:0": {
+        "class": "filed",
+        "task": "inf-008"
+      },
+      "cat-007:1": {
+        "class": "historical"
+      },
+      "cat-007:2": {
+        "class": "historical"
+      },
+      "cat-007:3": {
+        "class": "historical"
+      },
+      "cat-008:0": {
+        "class": "tracked",
+        "task": "cat-010"
+      },
+      "cat-008:1": {
+        "class": "historical"
+      },
+      "cat-008:2": {
+        "class": "historical"
+      },
+      "cat-008:3": {
+        "class": "historical"
+      },
+      "cat-009:0": {
+        "class": "tracked",
+        "task": "ord-011"
+      },
+      "cat-009:1": {
+        "class": "tracked",
+        "task": "cat-010"
+      },
+      "cat-009:2": {
+        "class": "filed",
+        "task": "inf-008"
+      },
+      "cat-010:0": {
+        "class": "tracked",
+        "task": "cat-012"
+      },
+      "cat-010:1": {
+        "class": "historical"
+      },
+      "cat-010:2": {
+        "class": "filed",
+        "task": "inf-008"
+      },
+      "cat-011:0": {
+        "class": "historical"
+      },
+      "cat-012:0": {
+        "class": "historical"
+      },
+      "cat-014:0": {
+        "class": "historical"
+      },
+      "cat-014:1": {
+        "class": "historical"
+      },
+      "ca-001:0": {
+        "class": "historical"
+      },
+      "ca-002:0": {
+        "class": "historical"
+      },
+      "ca-002:1": {
+        "class": "filed",
+        "task": "ca-014"
+      },
+      "ca-002:2": {
+        "class": "historical"
+      },
+      "ca-003:0": {
+        "class": "historical"
+      },
+      "ca-003:1": {
+        "class": "historical"
+      },
+      "ca-003:2": {
+        "class": "historical"
+      },
+      "ca-003:3": {
+        "class": "historical"
+      },
+      "ca-003:4": {
+        "class": "historical"
+      },
+      "ca-004:0": {
+        "class": "historical"
+      },
+      "ca-004:1": {
+        "class": "historical"
+      },
+      "ca-004:2": {
+        "class": "historical"
+      },
+      "ca-004:3": {
+        "class": "historical"
+      },
+      "ca-005:0": {
+        "class": "historical"
+      },
+      "ca-005:1": {
+        "class": "historical"
+      },
+      "ca-005:2": {
+        "class": "historical"
+      },
+      "ca-007:0": {
+        "class": "tracked",
+        "task": "ord-012"
+      },
+      "ca-007:1": {
+        "class": "historical"
+      },
+      "ca-007:2": {
+        "class": "named"
+      },
+      "ca-007:3": {
+        "class": "historical"
+      },
+      "ca-008:0": {
+        "class": "tracked",
+        "task": "ca-009"
+      },
+      "ca-008:1": {
+        "class": "tracked",
+        "task": "ord-011"
+      },
+      "ca-008:2": {
+        "class": "filed",
+        "task": "inf-008"
+      },
+      "ca-008:3": {
+        "class": "named"
+      },
+      "ca-008:4": {
+        "class": "filed",
+        "task": "inf-009"
+      },
+      "ca-009:0": {
+        "class": "historical"
+      },
+      "ca-009:1": {
+        "class": "filed",
+        "task": "ca-012"
+      },
+      "ca-009:2": {
+        "class": "filed",
+        "task": "inf-008"
+      },
+      "ca-009:3": {
+        "class": "historical"
+      },
+      "ca-010:0": {
+        "class": "historical"
+      },
+      "ca-010:1": {
+        "class": "filed",
+        "task": "ca-013"
+      },
+      "ca-010:2": {
+        "class": "named"
+      },
+      "ca-011:0": {
+        "class": "historical"
+      },
+      "ca-011:1": {
+        "class": "tracked",
+        "task": "inf-006"
+      },
+      "ord-004:0": {
+        "class": "historical"
+      },
+      "ord-005:0": {
+        "class": "historical"
+      },
+      "ord-007:0": {
+        "class": "historical"
+      },
+      "ord-007:1": {
+        "class": "historical"
+      },
+      "ord-007:2": {
+        "class": "historical"
+      },
+      "ord-008:0": {
+        "class": "historical"
+      },
+      "ord-008:1": {
+        "class": "named"
+      },
+      "ord-008:2": {
+        "class": "historical"
+      },
+      "ord-009:0": {
+        "class": "named"
+      },
+      "ord-009:1": {
+        "class": "filed",
+        "task": "ord-014"
+      },
+      "ord-009:2": {
+        "class": "named"
+      },
+      "ord-009:3": {
+        "class": "historical"
+      },
+      "ord-010:0": {
+        "class": "named"
+      },
+      "ord-010:1": {
+        "class": "filed",
+        "task": "ord-014"
+      },
+      "ord-010:2": {
+        "class": "named"
+      },
+      "ord-010:3": {
+        "class": "named"
+      },
+      "ord-011:0": {
+        "class": "historical"
+      },
+      "ord-011:1": {
+        "class": "filed",
+        "task": "inf-008"
+      },
+      "ord-011:2": {
+        "class": "tracked",
+        "task": "ord-012"
+      },
+      "ord-011:3": {
+        "class": "named"
+      },
+      "ord-011:4": {
+        "class": "historical"
+      },
+      "ord-012:0": {
+        "class": "historical"
+      },
+      "ord-012:1": {
+        "class": "historical"
+      },
+      "cms-001:0": {
+        "class": "historical"
+      },
+      "cms-001:1": {
+        "class": "historical"
+      },
+      "cms-003:0": {
+        "class": "tracked",
+        "task": "cms-004"
+      },
+      "cms-003:1": {
+        "class": "filed",
+        "task": "cms-010"
+      },
+      "cms-003:2": {
+        "class": "tracked",
+        "task": "cms-006"
+      },
+      "cms-003:3": {
+        "class": "named"
+      },
+      "cms-003:4": {
+        "class": "filed",
+        "task": "doc-007"
+      },
+      "cms-004:0": {
+        "class": "tracked",
+        "task": "cms-005"
+      },
+      "cms-004:1": {
+        "class": "tracked",
+        "task": "cms-006"
+      },
+      "cms-004:2": {
+        "class": "tracked",
+        "task": "cms-006"
+      },
+      "cms-004:3": {
+        "class": "named"
+      },
+      "cms-005:0": {
+        "class": "filed",
+        "task": "inf-008"
+      },
+      "cms-005:1": {
+        "class": "historical"
+      },
+      "cms-005:2": {
+        "class": "historical"
+      },
+      "cms-005:3": {
+        "class": "named"
+      },
+      "cms-005:4": {
+        "class": "historical"
+      },
+      "cms-006:0": {
+        "class": "named"
+      },
+      "cms-006:1": {
+        "class": "named"
+      },
+      "cms-006:2": {
+        "class": "named"
+      },
+      "cms-006:3": {
+        "class": "filed",
+        "task": "cms-011"
+      },
+      "cms-007:0": {
+        "class": "tracked",
+        "task": "sf-061"
+      },
+      "cms-007:1": {
+        "class": "named"
+      },
+      "srch-001:0": {
+        "class": "historical"
+      },
+      "srch-001:1": {
+        "class": "filed",
+        "task": "inf-008"
+      },
+      "srch-001:2": {
+        "class": "historical"
+      },
+      "srch-002:0": {
+        "class": "named"
+      },
+      "srch-002:1": {
+        "class": "filed",
+        "task": "inf-008"
+      },
+      "srch-002:2": {
+        "class": "historical"
+      },
+      "srch-002:3": {
+        "class": "filed",
+        "task": "inf-009"
+      },
+      "srch-004:0": {
+        "class": "filed",
+        "task": "srch-007"
+      },
+      "srch-004:1": {
+        "class": "named"
+      },
+      "srch-004:2": {
+        "class": "historical"
+      },
+      "srch-004:3": {
+        "class": "historical"
+      },
+      "srch-004:4": {
+        "class": "named"
+      },
+      "srch-004:5": {
+        "class": "named"
+      },
+      "srch-004:6": {
+        "class": "named"
+      },
+      "inf-001:0": {
+        "class": "named"
+      },
+      "inf-001:1": {
+        "class": "historical"
+      },
+      "inf-002:0": {
+        "class": "named"
+      },
+      "inf-003:0": {
+        "class": "filed",
+        "task": "inf-010"
+      },
+      "doc-001:0": {
+        "class": "filed",
+        "task": "doc-007"
+      },
+      "doc-001:1": {
+        "class": "filed",
+        "task": "doc-007"
+      },
+      "doc-001:2": {
+        "class": "named"
+      },
+      "doc-001:3": {
+        "class": "filed",
+        "task": "anl-005"
+      },
+      "doc-002:0": {
+        "class": "historical"
+      },
+      "doc-002:1": {
+        "class": "filed",
+        "task": "tst-003"
+      },
+      "doc-003:0": {
+        "class": "tracked",
+        "task": "ec-005"
+      },
+      "doc-003:1": {
+        "class": "tracked",
+        "task": "ec-005"
+      },
+      "doc-005:0": {
+        "class": "filed",
+        "task": "doc-006"
+      },
+      "doc-005:1": {
+        "class": "named"
       }
     }
   }
