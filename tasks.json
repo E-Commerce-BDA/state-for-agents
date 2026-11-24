@@ -3,9 +3,9 @@
   "updatedAt": "2026-11-24",
   "summary": {
     "total": 180,
-    "done": 134,
+    "done": 135,
     "in_progress": 0,
-    "backlog": 46,
+    "backlog": 45,
     "byRepo": {
       "storefront-ui": {
         "total": 74,
@@ -33,9 +33,9 @@
       },
       "auth-svc": {
         "total": 6,
-        "done": 3,
+        "done": 4,
         "in_progress": 0,
-        "backlog": 3
+        "backlog": 2
       },
       "catalog-svc": {
         "total": 15,
@@ -299,7 +299,7 @@
       "sf-071",
       "inf-008",
       "au-006",
-      "au-005"
+      "ntf-001"
     ],
     "completionGate": [
       "Every P0 task is done and verified.",
@@ -570,6 +570,7 @@
       "3b8ecd6"
     ],
     "auth-svc": [
+      "5323e28",
       "a408ea6",
       "c9565a7"
     ],
@@ -589,6 +590,7 @@
       "8c5ff62"
     ],
     "Documentation": [
+      "f851c57",
       "0854d57",
       "5874907",
       "5d19e0e",
@@ -2813,28 +2815,30 @@
         {
           "id": "au-005",
           "title": "auth-svc: internal email lookup for notify-svc",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-24",
+          "finished": "2026-11-24",
           "phase": "P4",
           "priority": "P0",
           "kind": "feature",
           "transport": "http",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/au-005-internal-email-lookup.md",
           "key_decisions": [
-            "Expose GET /internal/users/:id/email behind x-service-key. Reason: notify needs the address without putting PII on Kafka. Rejected: include email in user.registered or order.created.",
-            "Return only the email and a stable user id; never return password or token fields. Reason: least privilege for an internal endpoint. Rejected: reuse the admin profile endpoint, which exposes more data."
+            "Expose GET /internal/users/:id/email behind x-service-key, served on both the generic and service-prefixed paths. Reason: the address is needed only by sibling services, not the public API. Rejected: adding email to user.registered, which would put PII on Kafka.",
+            "Project the row to {userId, email} inside UsersService. Reason: findUserById selects password_hash and other fields, and least privilege must not depend on the controller. Rejected: reusing the admin profile endpoint.",
+            "Make INTERNAL_SERVICE_KEY mandatory at boot with no development fallback. Reason: a guarded internal route with a default key is no guard. Rejected: copying cart's dev fallback."
           ],
           "acceptance": [
-            "Service-key guard rejects missing or invalid keys.",
-            "Unknown user returns 404 with the shared error envelope.",
-            "Tests cover success, 401, and 404.",
-            "No Kafka involvement."
+            "Service-key guard rejects missing and invalid keys; unknown user returns 404 in the shared envelope.",
+            "tsc clean; 35 unit tests pass across 11 files; lint and build clean."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "E2E suites need the test Postgres and were not run here.",
+            "notify-svc can now resolve an address from a user id once it exists."
+          ]
         },
         {
           "id": "au-006",
