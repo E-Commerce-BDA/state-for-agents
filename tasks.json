@@ -3,9 +3,9 @@
   "updatedAt": "2026-11-24",
   "summary": {
     "total": 180,
-    "done": 135,
+    "done": 136,
     "in_progress": 0,
-    "backlog": 45,
+    "backlog": 44,
     "byRepo": {
       "storefront-ui": {
         "total": 74,
@@ -75,9 +75,9 @@
       },
       "notify-svc": {
         "total": 4,
-        "done": 0,
+        "done": 1,
         "in_progress": 0,
-        "backlog": 4
+        "backlog": 3
       },
       "search-svc": {
         "total": 7,
@@ -299,7 +299,7 @@
       "sf-071",
       "inf-008",
       "au-006",
-      "ntf-001"
+      "ntf-002"
     ],
     "completionGate": [
       "Every P0 task is done and verified.",
@@ -590,6 +590,7 @@
       "8c5ff62"
     ],
     "Documentation": [
+      "e8d34c2",
       "f851c57",
       "0854d57",
       "5874907",
@@ -604,6 +605,9 @@
     "analytics-svc": [
       "e92e8f5",
       "3f1d415"
+    ],
+    "notify-svc": [
+      "a20a6bd"
     ]
   },
   "unpushedVerifiedAt": "2026-11-02",
@@ -5506,7 +5510,7 @@
     },
     "notify-svc": {
       "motive": "Comms: order confirmation / abandoned-cart / welcome via SMTP v1 off request path (SQS send-email worker with retry).",
-      "localRoot": "(to create, notify-svc/)",
+      "localRoot": "notify-svc",
       "repo": "notify-svc",
       "port": 4080,
       "ownerDocs": [
@@ -5552,10 +5556,10 @@
         {
           "id": "ntf-001",
           "title": "notify-svc: scaffold, spec, and Postgres schema",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-25",
+          "finished": "2026-11-25",
           "phase": "P4",
           "priority": "P0",
           "kind": "feature",
@@ -5564,19 +5568,23 @@
             "ec-002",
             "ec-003"
           ],
-          "log": null,
+          "log": "TASKS/done/ntf-001-notify-scaffold.md",
           "key_decisions": [
-            "Own a Postgres notify schema for email_logs and processed_events. Reason: at-least-once sends need durable dedupe and audit. Rejected: Mongo, which adds no value for this shape.",
-            "Copy the auth.md service-spec shape. Reason: consistent service contracts. Rejected: ad-hoc README."
+            "Own a Postgres notify schema in the shared ecom database, not a new container or Mongo. Reason: email logs and processed_events are relational audit data and the other services already share this instance. Rejected: Mongo, which adds nothing for this shape.",
+            "Write the schema as a migration file and do not apply it here. Reason: the local Postgres is unavailable, and applying a database change from this session would be a guess. Rejected: silently skipping the migration without recording it.",
+            "Keep the first slice to schema and health, with no Kafka consumer or SQS worker. Reason: those are ntf-002 and ntf-003, and the scaffold must be verifiable without a broker. Rejected: wiring the consumer before the schema exists."
           ],
           "acceptance": [
-            "Nest 12 scaffold with health and readiness probes.",
-            "notify schema with email_logs and processed_events.",
-            "Documentation/services/notify.md exists.",
-            "Unit and e2e suites are green."
+            "Nest 12 scaffold on port 4080 with health and readiness probes.",
+            "notify schema declares email_logs and processed_events; Documentation/services/notify.md exists.",
+            "tsc clean; 7 unit tests and 2 e2e tests pass; lint and build clean."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "db/001-notify-schema.sql is written but has not been applied to any database.",
+            "ntf-002 adds the Kafka consumer; ntf-003 the SQS send-email worker.",
+            "class-transformer and class-validator were needed by ValidationPipe and are now direct deps."
+          ]
         },
         {
           "id": "ntf-002",

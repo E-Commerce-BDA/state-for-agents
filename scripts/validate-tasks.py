@@ -102,6 +102,19 @@ for tid in data["plan"]["nextUp"]:
     if by_id.get(tid, {}).get("status") != "todo":
         errors.append(f"nextUp {tid} is not todo")
 
+for line in status.splitlines():
+    cells = [c.strip() for c in line.split("|")[1:-1]] if line.startswith("| `") else []
+    if len(cells) < 5:
+        continue
+    repo = cells[0].strip("`")
+    if repo not in s.get("byRepo", {}) or not cells[1].isdigit():
+        continue
+    declared = tuple(int(x) for x in cells[1:5])
+    got = s["byRepo"][repo]
+    table_expected = (got["total"], got["done"], got["in_progress"], got["backlog"])
+    if declared != table_expected:
+        errors.append(f"STATUS table {repo}: {declared} vs summary {table_expected}")
+
 m = re.search(r"Counts: \*\*(\d+) total = (\d+) done \+ (\d+) in-progress \+ (\d+) backlog\*\*", status)
 if not m:
     errors.append("STATUS counts line missing")
