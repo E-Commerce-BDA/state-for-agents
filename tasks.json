@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-16",
+  "updatedAt": "2026-11-24",
   "summary": {
-    "total": 152,
-    "done": 127,
+    "total": 157,
+    "done": 131,
     "in_progress": 0,
-    "backlog": 25,
+    "backlog": 26,
     "byRepo": {
       "storefront-ui": {
         "total": 71,
@@ -38,14 +38,14 @@
         "backlog": 1
       },
       "catalog-svc": {
-        "total": 14,
-        "done": 14,
+        "total": 15,
+        "done": 15,
         "in_progress": 0,
         "backlog": 0
       },
       "cart-svc": {
-        "total": 10,
-        "done": 10,
+        "total": 11,
+        "done": 11,
         "in_progress": 0,
         "backlog": 0
       },
@@ -80,20 +80,20 @@
         "backlog": 4
       },
       "search-svc": {
-        "total": 4,
-        "done": 4,
+        "total": 5,
+        "done": 5,
         "in_progress": 0,
         "backlog": 0
       },
       "ecom-infra": {
-        "total": 7,
+        "total": 8,
         "done": 3,
         "in_progress": 0,
-        "backlog": 4
+        "backlog": 5
       },
       "Documentation": {
-        "total": 4,
-        "done": 3,
+        "total": 5,
+        "done": 4,
         "in_progress": 0,
         "backlog": 1
       }
@@ -128,9 +128,11 @@
           "cms-004",
           "srch-001",
           "srch-004",
-          "doc-001"
+          "doc-001",
+          "doc-005",
+          "srch-005"
         ],
-        "count": 14
+        "count": 16
       },
       {
         "id": "P1",
@@ -194,9 +196,11 @@
           "cms-006",
           "cms-007",
           "srch-002",
-          "srch-003"
+          "srch-003",
+          "ca-011",
+          "cat-014"
         ],
-        "count": 11
+        "count": 13
       },
       {
         "id": "P4",
@@ -242,9 +246,10 @@
           "inf-005",
           "sf-053a",
           "tst-001",
-          "tst-002"
+          "tst-002",
+          "inf-006"
         ],
-        "count": 7
+        "count": 8
       },
       {
         "id": "P6",
@@ -261,9 +266,9 @@
       }
     ],
     "nextUp": [
-      "sf-051",
-      "cat-011",
-      "ord-012"
+      "au-005",
+      "anl-003",
+      "sf-056"
     ],
     "completionGate": [
       "Every P0 task is done and verified.",
@@ -504,84 +509,59 @@
   },
   "unpushed": {
     "storefront-ui": [
-      "71f04a5",
-      "5de7d95",
-      "268b5d9",
-      "8eb25d7",
-      "73f7fed",
-      "43c698b",
-      "554d97c",
-      "04942d4",
-      "144c75d",
-      "3f53323",
-      "13b1b07",
-      "22dfd8c",
-      "059d999",
-      "cfb2c94",
-      "ad89900",
-      "c395d03",
-      "60dd174",
-      "8b53286",
-      "eae687c",
-      "339257d",
-      "6a02b34",
-      "edc8bcf",
-      "ce15601",
-      "e879214"
+      "40bf585",
+      "624d456",
+      "69dcb19",
+      "69cec60"
     ],
     "ecom-contracts": [
-      "8b4020a",
-      "08e930c",
-      "7fdfdc2",
-      "a9eaacb"
+      "aabf398",
+      "1ac29c5"
     ],
     "ecom-messaging": [
-      "ee88bfe",
+      "12b4f28",
+      "af9c979",
+      "2d1ff61",
+      "c09a487",
+      "c76acbe",
       "9deff71",
-      "c76acbe"
+      "ee88bfe"
     ],
     "catalog-svc": [
-      "9cd6948",
-      "0dcb9c9",
-      "3916f9c",
-      "6cc6182",
-      "b1db46b"
+      "48efba7",
+      "81c80e1",
+      "e33aa48"
     ],
     "cart-svc": [
-      "cb305e7",
-      "f707431"
+      "438372a",
+      "1867f2a",
+      "3b8ecd6"
     ],
-    "auth-svc": [],
+    "auth-svc": [
+      "a408ea6",
+      "c9565a7"
+    ],
     "order-svc": [
-      "880af5d",
-      "728e130",
-      "f7ad466",
-      "5fd303b",
-      "05d5402"
+      "11ba701",
+      "7f32534"
     ],
     "cms-svc": [
-      "fc2d646",
-      "fd02481",
-      "6a0bd69"
+      "ca5267f",
+      "4831c9b"
     ],
     "search-svc": [
-      "84dea4a"
+      "7af63fe",
+      "f777c8f",
+      "8c5ff62"
     ],
     "Documentation": [
-      "4d3149e",
-      "1033405",
-      "bf02632",
-      "b584a72"
+      "2c9894c",
+      "83b0aaf",
+      "5a7ee77",
+      "bec4e04",
+      "9f1e59d"
     ],
-    "ecom-infra": [
-      "108913f",
-      "e47f5bb",
-      "77d18b5",
-      "53cb4b6",
-      "6e8de13",
-      "f17166e",
-      "175644b"
-    ]
+    "ecom-infra": []
   },
   "unpushedVerifiedAt": "2026-11-02",
   "unpushedNote": "Recomputed with git rev-parse @{u} and git rev-list --count @{u}..HEAD in every local repo on 2026-11-02, after the CMS-home wave (ec-006, cat-013, cms-008, sf-060/062/063/064). Ahead counts: ecom-contracts 4, catalog-svc 5, cms-svc 3, Documentation 4, storefront 24, state-for-agents 8 + this commit. ecom-messaging and ecom-infra have no remote at all, so their lists are only the commits this wave series produced and their full history cannot leave this machine. state-for-agents cannot list itself. Nothing was pushed, tagged, released or published.",
@@ -3265,6 +3245,38 @@
             "Unit and e2e tests cover the codec, the walk, and the facets response."
           ],
           "follow_ups": []
+        },
+        {
+          "id": "cat-014",
+          "title": "catalog-svc: bound the event retry ladder and reconcile the lockfile",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-24",
+          "finished": "2026-11-24",
+          "phase": "P3",
+          "priority": "P0",
+          "kind": "bug",
+          "transport": "kafka-consumer",
+          "dependsOn": [
+            "cat-009",
+            "cat-010",
+            "srch-004"
+          ],
+          "log": "TASKS/done/cat-014-catalog-bounded-retry-ladder.md",
+          "key_decisions": [
+            "Same retryBudgetMs 20_000 and narrow /nest entries as cart. Reason: the same unbounded-ladder exposure on order.created, product.imported and order.status.updated. Rejected: a per-service budget value.",
+            "Keep translateError: dlqReason ahead of the budget so a closed reservation still dead-letters on attempt 1 with no sleeps. Reason: terminal errors must never walk the ladder. Rejected: dropping the translator when adding the budget.",
+            "Keep the contracts 1.9.0 -> 1.15.0 lockfile reconciliation produced by pnpm install. Reason: package.json already declared 1.15.0 and the lockfile was stale. Rejected: reverting the lockfile to an inconsistent state."
+          ],
+          "acceptance": [
+            "tsc clean; 167 unit tests pass; build clean; lint exit 0 with two pre-existing warnings in an untouched file.",
+            "Regression cases assert the truncated ladder and first-attempt terminal dead letter."
+          ],
+          "verified": true,
+          "follow_ups": [
+            "E2E needs the live stack and was not run here.",
+            "STATUS 7 still listed the catalog cursor as carried debt even though cat-015 closed it on 2026-11-17; this reconciliation corrects that line."
+          ]
         }
       ],
       "note": "14/14 done; verified 165 unit tests plus new e2e cases for the keyset walk and facets. Verified: 165 unit (25 files) + 118 e2e (12 files passed, 2 skipped) green, plus 3 live Kafka cases behind RUN_KAFKA_E2E. Producers are on catalog.outbox/relay (cat-007), and both consumers share one @ecom/messaging strategy on one group: order.created commits the reservation (cat-009) and product.imported upserts product, category, brand, variants and images in one transaction (cat-008), writing onHand = max(0, imported - openReserved) plus one stock_movements row with reason 'import' and no outbox re-emit. Stock reserve/release is idempotent and persisted (cat-006); release on cancelled/failed/refunded is cat-010: the same group consumes order.status.updated, finds the reservation by order_id (order-svc names the planned order id while reserving) and releases a held hold in the same transaction as the processed_events claim. A committed hold is a logged anomaly, not a dead letter - its stock was sold, so a post-commit restock is cat-012. order.created tolerates a hold that a cancellation already released, because the two topics have no cross-topic ordering. Import needs db/008 (widens products_source_check to accept 'import') - there is no cat-008 table to look for. No SQS tasks. Fixture seed is dev/test-only: db/seed.mjs refuses without CATALOG_ALLOW_FIXTURE_SEED and bootstrap fails if the flag is on in production (cat-011).",
@@ -3680,6 +3692,37 @@
             "No retry or circuit breaker around the catalog call; the 1.5 s abort only caps the wait",
             "CATALOG_UNAVAILABLE has no metric (observability debt)",
             "catalog.fixture.ts must not grow into a second catalog"
+          ]
+        },
+        {
+          "id": "ca-011",
+          "title": "cart-svc: bound the order.created retry ladder to the broker session",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-24",
+          "finished": "2026-11-24",
+          "phase": "P3",
+          "priority": "P0",
+          "kind": "bug",
+          "transport": "kafka-consumer",
+          "dependsOn": [
+            "ca-009",
+            "srch-004"
+          ],
+          "log": "TASKS/done/ca-011-cart-bounded-retry-ladder.md",
+          "key_decisions": [
+            "retryBudgetMs 20_000 truncates the default 31s ladder to 1/2/4/8s (15s of sleeps, five attempts) inside the 45s session. Reason: a member evicted mid-sleep gets UNKNOWN_MEMBER_ID on the DLQ write and the commit, then replays forever. Rejected: raising the session timeout.",
+            "Move imports to /nest/consumer and /nest/outbox on repin. Reason: 0.5.0's /nest barrel re-exports the SQS task module whose optional @aws-sdk/client-sqs peer cart does not have; a plain repin would fail at boot. Rejected: keeping /nest imports and adding the peer.",
+            "A shared handler factory serves the Nest provider and the regression test. Reason: the test then exercises the real wiring. Rejected: duplicating the options inside the spec."
+          ],
+          "acceptance": [
+            "pnpm-lock.yaml resolves @ecom/messaging 0.5.0; tsc clean; 120 unit tests pass; build and lint clean.",
+            "Regression case asserts four sleeps totalling 15s, five handler attempts, one DLQ write, then commit."
+          ],
+          "verified": true,
+          "follow_ups": [
+            "E2E suites need the live Postgres/Kafka stack and were not run here.",
+            "The accumulated order.created.dlq backlog still needs the replay task inf-006."
           ]
         }
       ],
@@ -5636,6 +5679,32 @@
             "taskQueues": [],
             "doesNotUseKafka": "No Kafka producer. No SQS tasks."
           }
+        },
+        {
+          "id": "srch-005",
+          "title": "search-svc: fix the four dlq type errors left by messaging 0.5.0",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-24",
+          "finished": "2026-11-24",
+          "phase": "P0",
+          "priority": "P1",
+          "kind": "bug",
+          "transport": "kafka-consumer",
+          "dependsOn": [
+            "srch-004"
+          ],
+          "log": "TASKS/done/srch-005-test-helper-dlq-options.md",
+          "key_decisions": [
+            "Narrow the test helper overrides to Partial<Omit<KafkaEventHandlerOptions,'dlq'>> rather than casting or making dlq optional. Reason: the shared contract keeps dlq required for every service. Rejected: as any; loosening the package.",
+            "Spread overrides first so the suite's DLQ publisher cannot be replaced. Reason: the send assertions inspect its mock producer. Rejected: spread last, which also triggered TS2783."
+          ],
+          "acceptance": [
+            "npx tsc --noEmit reports zero errors.",
+            "pnpm test passes 142 tests across 20 files."
+          ],
+          "verified": true,
+          "follow_ups": []
         }
       ],
       "messaging": {
@@ -6005,6 +6074,33 @@
           ],
           "verified": false,
           "follow_ups": []
+        },
+        {
+          "id": "inf-006",
+          "title": "infra: replay the accumulated order.created dead letters",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P5",
+          "priority": "P1",
+          "kind": "chore",
+          "transport": "kafka",
+          "dependsOn": [
+            "ca-011",
+            "cat-014"
+          ],
+          "log": null,
+          "key_decisions": [
+            "Replay only after the bounded ladder is deployed to every consumer. Reason: the old 31s ladder would recreate the backlog. Rejected: replaying first and fixing later; deleting the DLQ topic.",
+            "Reconcile duplicate and commit counters against the drain. Reason: the dead letters are at-least-once and many were already applied before the wedge. Rejected: assuming a clean replay."
+          ],
+          "acceptance": [
+            "order.created.dlq drains to zero with duplicate/commit counts reconciled.",
+            "No new dead letters appear from the same offsets after the replay."
+          ],
+          "verified": false,
+          "follow_ups": []
         }
       ],
       "messaging": {
@@ -6202,6 +6298,35 @@
           ],
           "verified": false,
           "follow_ups": []
+        },
+        {
+          "id": "doc-005",
+          "title": "docs + tooling: polyrepo comment cleanup, skill correction, and ADR refinement",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-24",
+          "finished": "2026-11-24",
+          "phase": "P0",
+          "priority": "P2",
+          "kind": "docs",
+          "transport": "docs",
+          "dependsOn": [],
+          "log": "TASKS/done/doc-005-polyrepo-comment-cleanup.md",
+          "key_decisions": [
+            "Delete a comment that restates the signature/control flow even when it says why; keep one whose reason is invisible in code. Reason: the why is the only copy of a decision. Rejected: keyword- and length-based purges, which cut 81 comments that had to be restored.",
+            "One short categorized ADR file plus one-line // ADR-*: pointers instead of long prose at the site. Reason: decisions stay findable without bloating source. Rejected: deleting decision prose outright.",
+            "One subagent per repo with disjoint file ownership, each submitting a decision table before applying. Reason: apply scripts delete by line number, so two agents on one repo corrupt each other's ranges. Rejected: two agents per repo."
+          ],
+          "acceptance": [
+            "All 10 repos reviewed with per-block decision CSVs; 610 comment lines removed in pass 2, every diff deletion-only.",
+            "AGENTS.md 3.4, ADR-comments, SKILL.md, classification.md and apply-decisions.py all state the two-question test.",
+            "Per-block decision CSVs persisted under state-for-agents/comment-audit-pass2/."
+          ],
+          "verified": true,
+          "follow_ups": [
+            "Implement the ADR-comments-ratchet counter and CI gate; the ADR is written but no implementation exists.",
+            "Live-stack verification of service-backed e2e remains blocked by the unavailable stack."
+          ]
         }
       ],
       "messaging": {
