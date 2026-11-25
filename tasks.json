@@ -3,9 +3,9 @@
   "updatedAt": "2026-11-24",
   "summary": {
     "total": 180,
-    "done": 140,
+    "done": 141,
     "in_progress": 0,
-    "backlog": 40,
+    "backlog": 39,
     "byRepo": {
       "storefront-ui": {
         "total": 74,
@@ -69,9 +69,9 @@
       },
       "import-svc": {
         "total": 3,
-        "done": 1,
+        "done": 2,
         "in_progress": 0,
-        "backlog": 2
+        "backlog": 1
       },
       "notify-svc": {
         "total": 4,
@@ -299,7 +299,7 @@
       "sf-071",
       "inf-008",
       "au-006",
-      "imp-002"
+      "imp-003"
     ],
     "completionGate": [
       "Every P0 task is done and verified.",
@@ -591,6 +591,7 @@
       "8c5ff62"
     ],
     "Documentation": [
+      "3be3da9",
       "76946aa",
       "ed610cc",
       "17b6f6b",
@@ -618,6 +619,7 @@
       "a20a6bd"
     ],
     "import-svc": [
+      "1e533e4",
       "c81a743"
     ]
   },
@@ -5393,10 +5395,10 @@
         {
           "id": "imp-002",
           "title": "import-svc: upload API and SQS import-process-row producer",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-25",
+          "finished": "2026-11-25",
           "phase": "P4",
           "priority": "P0",
           "kind": "feature",
@@ -5405,19 +5407,22 @@
             "imp-001",
             "inf-003"
           ],
-          "log": null,
+          "log": "TASKS/done/imp-002-upload-and-row-producer.md",
           "key_decisions": [
-            "Enqueue one SQS message per row with importRowId and idempotencyKey. Reason: isolate bad rows and retry independently. Rejected: one message per file, where one bad row fails the batch.",
-            "Keep the upload API synchronous only for file validation and job creation. Reason: large files must not block the request. Rejected: process the whole file in the request."
+            "Enqueue one SQS message per row keyed by import-row:<jobId>:<rowNumber>. Reason: isolate bad rows and let redelivery update one row. Rejected: one message per file, where a bad row fails the batch.",
+            "Keep the request synchronous only for parsing and persistence. Reason: a large file must not block on row work. Rejected: processing rows inline.",
+            "Fail a row for missing sku/name/price or a duplicate SKU instead of rejecting the file. Reason: one bad row must not lose the rest. Rejected: all-or-nothing upload."
           ],
           "acceptance": [
-            "CSV/JSON upload creates a job and rows.",
-            "One import-process-row message per row.",
-            "No Kafka involvement in row work.",
-            "Tests cover valid, duplicate, and malformed rows."
+            "CSV/JSON upload creates a job and rows; one import-process-row message per valid row; no Kafka involvement.",
+            "tsc clean; 21 unit tests and 2 e2e tests pass; lint and build clean."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "The migration is still unapplied; the upload path needs import_jobs and import_rows at runtime.",
+            "imp-003 adds the SQS worker and product.imported publisher.",
+            "Live LocalStack verification of the producer remains outstanding."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
