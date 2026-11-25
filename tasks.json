@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "updatedAt": "2026-11-24",
+  "updatedAt": "2026-11-26",
   "summary": {
     "total": 180,
-    "done": 165,
+    "done": 166,
     "in_progress": 0,
-    "backlog": 15,
+    "backlog": 14,
     "byRepo": {
       "storefront-ui": {
         "total": 74,
@@ -21,9 +21,9 @@
       },
       "ecom-contracts": {
         "total": 6,
-        "done": 4,
+        "done": 5,
         "in_progress": 0,
-        "backlog": 2
+        "backlog": 1
       },
       "ecom-messaging": {
         "total": 0,
@@ -540,6 +540,7 @@
   },
   "unpushed": {
     "storefront-ui": [
+      "ff45572",
       "7fb1691",
       "6ecd401",
       "5425433",
@@ -559,12 +560,14 @@
       "69cec60"
     ],
     "ecom-contracts": [
+      "8ec4ba1",
       "57bae92",
       "0a3f813",
       "aabf398",
       "1ac29c5"
     ],
     "ecom-messaging": [
+      "e01a57c",
       "12b4f28",
       "af9c979",
       "2d1ff61",
@@ -574,11 +577,13 @@
       "ee88bfe"
     ],
     "catalog-svc": [
+      "665128d",
       "48efba7",
       "81c80e1",
       "e33aa48"
     ],
     "cart-svc": [
+      "934c4e4",
       "1f93bf7",
       "546b38e",
       "5903ad8",
@@ -587,6 +592,7 @@
       "3b8ecd6"
     ],
     "auth-svc": [
+      "ebfa5c6",
       "a5d19fa",
       "b718e4a",
       "5323e28",
@@ -594,12 +600,14 @@
       "c9565a7"
     ],
     "order-svc": [
+      "4b049ee",
       "e2b8a65",
       "84bf09a",
       "11ba701",
       "7f32534"
     ],
     "cms-svc": [
+      "f0c5bc0",
       "07e2c22",
       "a1143e8",
       "ca4871c",
@@ -607,6 +615,7 @@
       "4831c9b"
     ],
     "search-svc": [
+      "3a1e98a",
       "042998f",
       "19e5f25",
       "b4c9d13",
@@ -640,6 +649,7 @@
       "9f1e59d"
     ],
     "ecom-infra": [
+      "17dfdb2",
       "2fd216e",
       "85a2485",
       "4686dca",
@@ -648,17 +658,20 @@
       "8ff4f01"
     ],
     "analytics-svc": [
+      "795c69f",
       "728b7cf",
       "e92e8f5",
       "3f1d415"
     ],
     "notify-svc": [
+      "b20d325",
       "808c5a2",
       "169cb8c",
       "0466281",
       "a20a6bd"
     ],
     "import-svc": [
+      "a97f91e",
       "1a1fdb3",
       "1e533e4",
       "c81a743"
@@ -2561,10 +2574,10 @@
         {
           "id": "ec-004",
           "title": "Contracts 2.0.0: require canonical fields and remove the legacy envelope",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-26",
+          "finished": "2026-11-26",
           "phase": "P5",
           "priority": "P1",
           "kind": "contract",
@@ -2589,7 +2602,7 @@
             "sf-053",
             "cms-003"
           ],
-          "log": null,
+          "log": "TASKS/done/ec-004-canonical-envelope-cutover.md",
           "key_decisions": [
             "Make type, version, and idempotencyKey required and delete topic and eventType. Reason: one canonical shape, no permanent dual-read ambiguity. Rejected: keep dual-read forever, which lets old producers silently bypass validation.",
             "Cut over only after every producer and consumer passes against the 2.0.0 tarball. Reason: the contract is the release train boundary. Rejected: publish first and fix consumers after CI breaks."
@@ -2600,8 +2613,11 @@
             "Dual-read helpers are deleted.",
             "Contract tests pass in every consumer repo."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "Backfill SQL/CLI not executed against live Postgres/Mongo; e2e suites needing a live stack were skipped.",
+            "ec-005 remains open: tags and GitHub Releases need explicit approval before publishing."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
