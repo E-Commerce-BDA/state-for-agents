@@ -3,9 +3,9 @@
   "updatedAt": "2026-11-24",
   "summary": {
     "total": 180,
-    "done": 143,
+    "done": 144,
     "in_progress": 0,
-    "backlog": 37,
+    "backlog": 36,
     "byRepo": {
       "storefront-ui": {
         "total": 74,
@@ -45,9 +45,9 @@
       },
       "cart-svc": {
         "total": 14,
-        "done": 11,
+        "done": 12,
         "in_progress": 0,
-        "backlog": 3
+        "backlog": 2
       },
       "order-svc": {
         "total": 14,
@@ -295,7 +295,7 @@
       }
     ],
     "nextUp": [
-      "ca-012",
+      "ca-013",
       "sf-071",
       "inf-008",
       "au-006",
@@ -566,6 +566,7 @@
       "e33aa48"
     ],
     "cart-svc": [
+      "5903ad8",
       "438372a",
       "1867f2a",
       "3b8ecd6"
@@ -591,6 +592,7 @@
       "8c5ff62"
     ],
     "Documentation": [
+      "2b44b82",
       "be52490",
       "3ff73cb",
       "3be3da9",
@@ -3933,10 +3935,10 @@
         {
           "id": "ca-012",
           "title": "cart-svc: expose consumer stats on an HTTP route",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-25",
+          "finished": "2026-11-25",
           "phase": "P5",
           "priority": "P1",
           "kind": "feature",
@@ -3944,17 +3946,21 @@
           "dependsOn": [
             "ca-011"
           ],
-          "log": null,
+          "log": "TASKS/done/ca-012-cart-consumer-stats.md",
           "key_decisions": [
-            "Serve the existing KafkaEventHandler counters on GET /cart/internal/consumer-stats. Reason: the group is otherwise observable only with kafka-consumer-groups.sh. Rejected: scraping a log line.",
-            "Guard the route with x-service-key like the other internal routes. Reason: counters are operational, not shopper data. Rejected: a public endpoint."
+            "Serve the shared counters plus lag, total lag, last commit and sample time, matching catalog and search. Reason: lag without a commit mark cannot distinguish behind from stopped. Rejected: counters only.",
+            "Inject the same ConsumerMetrics provider into the handler and the route. Reason: a second registry would drift from the actual commits. Rejected: reading a separate counter object.",
+            "Guard with x-service-key at /cart/internal/consumer-stats; no shopper data. Reason: counters are operational. Rejected: a public route."
           ],
           "acceptance": [
-            "The route returns the same lag/commit counters search and catalog expose.",
-            "An authorized request needs no broker credentials."
+            "The route returns the same lag/commit counters as search and catalog; an authorized request needs no broker credentials.",
+            "tsc clean; 122 unit tests pass; lint and build clean."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "E2E could not run here: Postgres is unavailable and the existing suites need it.",
+            "The lag sampler uses a separate admin connection; a broker it cannot reach yields a missing sample."
+          ]
         },
         {
           "id": "ca-013",
