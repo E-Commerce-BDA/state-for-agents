@@ -3,9 +3,9 @@
   "updatedAt": "2026-11-24",
   "summary": {
     "total": 180,
-    "done": 138,
+    "done": 139,
     "in_progress": 0,
-    "backlog": 42,
+    "backlog": 41,
     "byRepo": {
       "storefront-ui": {
         "total": 74,
@@ -75,9 +75,9 @@
       },
       "notify-svc": {
         "total": 4,
-        "done": 3,
+        "done": 4,
         "in_progress": 0,
-        "backlog": 1
+        "backlog": 0
       },
       "search-svc": {
         "total": 7,
@@ -299,7 +299,7 @@
       "sf-071",
       "inf-008",
       "au-006",
-      "ntf-004"
+      "anl-005"
     ],
     "completionGate": [
       "Every P0 task is done and verified.",
@@ -546,6 +546,7 @@
       "69cec60"
     ],
     "ecom-contracts": [
+      "57bae92",
       "0a3f813",
       "aabf398",
       "1ac29c5"
@@ -590,6 +591,7 @@
       "8c5ff62"
     ],
     "Documentation": [
+      "ed610cc",
       "17b6f6b",
       "afb54fc",
       "e8d34c2",
@@ -609,6 +611,7 @@
       "3f1d415"
     ],
     "notify-svc": [
+      "808c5a2",
       "169cb8c",
       "0466281",
       "a20a6bd"
@@ -5715,10 +5718,10 @@
         {
           "id": "ntf-004",
           "title": "notify-svc: templates, PII resolution, and tests",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-25",
+          "finished": "2026-11-25",
           "phase": "P4",
           "priority": "P0",
           "kind": "feature",
@@ -5728,19 +5731,22 @@
             "ntf-002",
             "ntf-003"
           ],
-          "log": null,
+          "log": "TASKS/done/ntf-004-templates-and-pii.md",
           "key_decisions": [
-            "Resolve email through the auth internal lookup; never put email in Kafka payloads. Reason: PII minimization. Rejected: embed email in order.created and cart.abandoned.",
-            "Fail loudly in tests when a template variable is missing; in production, send a generic fallback and log the template id. Reason: a broken template must not leak or silently send blanks. Rejected: silently substitute empty strings."
+            "Add status-update to emailTemplateSchema as contracts 1.17.0, a backwards-compatible MINOR, and repin notify only. Reason: the old value was an explicit workaround and the other services do not use this enum; their peer range still allows their pins. Rejected: keeping three templates and skipping the fourth.",
+            "Render templates from one module with declared variables: throw in tests, send a generic body in production and log only template id and missing key names. Reason: a broken template must not leak values into logs or silently send blanks. Rejected: substituting empty strings.",
+            "Guard POST /admin/test-email with x-service-key and accept no address. Reason: notify has no user store, and the worker must remain the only resolver through au-005. Rejected: a JWT admin route."
           ],
           "acceptance": [
-            "Four templates: welcome, order confirmation, abandoned cart, status update.",
-            "Missing variables fail tests and are logged in production.",
-            "Email lookup uses x-service-key and handles 404.",
-            "No PII in Kafka payloads or logs."
+            "Four templates render; missing variables fail tests and are logged in production; lookup uses x-service-key and handles 404; no PII in payloads or logs.",
+            "tsc clean; 33 unit tests and 2 e2e tests pass; lint and build clean."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "The migration is still unapplied and now needs both idempotency_key and provider_message_id.",
+            "Live SMTP/LocalStack verification remains outstanding.",
+            "A richer status notice needs a status field in SendEmailJob, another contracts change."
+          ]
         }
       ],
       "messaging": {
