@@ -3,15 +3,15 @@
   "updatedAt": "2026-11-24",
   "summary": {
     "total": 180,
-    "done": 147,
+    "done": 165,
     "in_progress": 0,
-    "backlog": 33,
+    "backlog": 15,
     "byRepo": {
       "storefront-ui": {
         "total": 74,
-        "done": 65,
+        "done": 73,
         "in_progress": 0,
-        "backlog": 9
+        "backlog": 1
       },
       "admin-app": {
         "total": 1,
@@ -33,9 +33,9 @@
       },
       "auth-svc": {
         "total": 6,
-        "done": 5,
+        "done": 6,
         "in_progress": 0,
-        "backlog": 1
+        "backlog": 0
       },
       "catalog-svc": {
         "total": 15,
@@ -51,21 +51,21 @@
       },
       "order-svc": {
         "total": 14,
-        "done": 12,
+        "done": 14,
         "in_progress": 0,
-        "backlog": 2
+        "backlog": 0
       },
       "cms-svc": {
         "total": 11,
-        "done": 8,
+        "done": 11,
         "in_progress": 0,
-        "backlog": 3
+        "backlog": 0
       },
       "analytics-svc": {
         "total": 5,
-        "done": 4,
+        "done": 5,
         "in_progress": 0,
-        "backlog": 1
+        "backlog": 0
       },
       "import-svc": {
         "total": 3,
@@ -81,9 +81,9 @@
       },
       "search-svc": {
         "total": 7,
-        "done": 6,
+        "done": 7,
         "in_progress": 0,
-        "backlog": 1
+        "backlog": 0
       },
       "ecom-infra": {
         "total": 13,
@@ -93,9 +93,9 @@
       },
       "Documentation": {
         "total": 7,
-        "done": 5,
+        "done": 7,
         "in_progress": 0,
-        "backlog": 2
+        "backlog": 0
       }
     },
     "logDebt": [
@@ -295,11 +295,11 @@
       }
     ],
     "nextUp": [
-      "inf-008",
-      "anl-005",
       "ca-014",
-      "sf-056",
-      "au-007"
+      "inf-004",
+      "inf-005",
+      "inf-008",
+      "inf-009"
     ],
     "completionGate": [
       "Every P0 task is done and verified.",
@@ -540,6 +540,17 @@
   },
   "unpushed": {
     "storefront-ui": [
+      "7fb1691",
+      "6ecd401",
+      "5425433",
+      "4f1c187",
+      "9ec75e4",
+      "a41a96b",
+      "a61adfe",
+      "3b80316",
+      "6296fef",
+      "196d1ef",
+      "708d379",
       "ea84c32",
       "95dcb75",
       "40bf585",
@@ -568,6 +579,7 @@
       "e33aa48"
     ],
     "cart-svc": [
+      "1f93bf7",
       "546b38e",
       "5903ad8",
       "438372a",
@@ -575,20 +587,27 @@
       "3b8ecd6"
     ],
     "auth-svc": [
+      "a5d19fa",
       "b718e4a",
       "5323e28",
       "a408ea6",
       "c9565a7"
     ],
     "order-svc": [
+      "e2b8a65",
+      "84bf09a",
       "11ba701",
       "7f32534"
     ],
     "cms-svc": [
+      "07e2c22",
+      "a1143e8",
+      "ca4871c",
       "ca5267f",
       "4831c9b"
     ],
     "search-svc": [
+      "042998f",
       "19e5f25",
       "b4c9d13",
       "7af63fe",
@@ -596,6 +615,8 @@
       "8c5ff62"
     ],
     "Documentation": [
+      "ade90d2",
+      "5fa282f",
       "e6d1457",
       "bfce373",
       "e4dcca1",
@@ -618,8 +639,16 @@
       "bec4e04",
       "9f1e59d"
     ],
-    "ecom-infra": [],
+    "ecom-infra": [
+      "2fd216e",
+      "85a2485",
+      "4686dca",
+      "8b3746b",
+      "9b09a72",
+      "8ff4f01"
+    ],
     "analytics-svc": [
+      "728b7cf",
       "e92e8f5",
       "3f1d415"
     ],
@@ -1754,13 +1783,13 @@
           "follow_ups": []
         },
         {
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-26",
+          "finished": "2026-11-26",
           "phase": "P2",
-          "log": null,
-          "verified": false,
+          "log": "TASKS/done/sf-056-finished-wishlist-surfaces-with-account-list.md",
+          "verified": true,
           "id": "sf-056",
           "title": "storefront: wishlist surfaces (nav count, PDP toggle, account list, guest prompt)",
           "priority": "P1",
@@ -1779,13 +1808,13 @@
           "follow_ups": []
         },
         {
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-26",
+          "finished": "2026-11-26",
           "phase": "P2",
-          "log": null,
-          "verified": false,
+          "log": "TASKS/done/sf-057-carried-the-cart-coupon-into-the.md",
+          "verified": true,
           "id": "sf-057",
           "title": "storefront: coupons on cart and checkout",
           "priority": "P1",
@@ -1804,13 +1833,13 @@
           "follow_ups": []
         },
         {
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-26",
+          "finished": "2026-11-26",
           "phase": "P2",
-          "log": null,
-          "verified": false,
+          "log": "TASKS/done/sf-058-added-stock-caps-batch-select-and.md",
+          "verified": true,
           "id": "sf-058",
           "title": "storefront: cart/checkout depth (saved addresses, shipping method, per-line stock caps, batch-select, CheckoutSteps)",
           "priority": "P1",
@@ -1829,17 +1858,17 @@
             "A4.4/A5.1/A5.2: saved-address picking, shipping method selection, and the step chrome render on checkout."
           ],
           "follow_ups": [
-            "Backend dependency: order-svc 409 payload needs item ids for per-line stock attribution"
+            "Shipping method is UI state only; order-svc has no shippingMethod field."
           ]
         },
         {
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-26",
+          "finished": "2026-11-26",
           "phase": "P2",
-          "log": null,
-          "verified": false,
+          "log": "TASKS/done/sf-059-added-account-depth:-profile-addresses-password.md",
+          "verified": true,
           "id": "sf-059",
           "title": "storefront: account depth (profile edit, address book, order detail, password change, reviews)",
           "priority": "P1",
@@ -1857,7 +1886,9 @@
             "A6.6: password change flows via auth-svc.",
             "A3.10: review writing is available from delivered orders."
           ],
-          "follow_ups": []
+          "follow_ups": [
+            "Review submission forwards to a catalog-svc review-write endpoint that does not exist yet."
+          ]
         },
         {
           "status": "done",
@@ -1886,13 +1917,13 @@
           "design_match": "yes"
         },
         {
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-26",
+          "finished": "2026-11-26",
           "phase": "P2",
-          "log": null,
-          "verified": false,
+          "log": "TASKS/done/sf-061-let-catalog-webhooks-invalidate-pdp-and.md",
+          "verified": true,
           "id": "sf-061",
           "title": "storefront: catalog cache invalidation hook",
           "priority": "P2",
@@ -1909,7 +1940,7 @@
             "A product update from the admin invalidates its PDP and listing caches within one propagation, not one revalidate window."
           ],
           "follow_ups": [
-            "Requires the catalog-svc caller (producer exists; the webhook call does not)"
+            "The catalog-svc webhook caller is still outside this repo."
           ]
         },
         {
@@ -2027,13 +2058,13 @@
           "logDebt": true
         },
         {
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-26",
+          "finished": "2026-11-26",
           "phase": "P2",
-          "log": null,
-          "verified": false,
+          "log": "TASKS/done/sf-066-wired-palette-trending-and-curated-cards.md",
+          "verified": true,
           "id": "sf-066",
           "title": "storefront: search palette trending/curated regions — needs search-svc trending endpoint",
           "priority": "P2",
@@ -2050,7 +2081,7 @@
             "SearchMount passes search-svc-backed trending/curated results when the endpoint exists; until then the palette fails closed with no invented data."
           ],
           "follow_ups": [
-            "Requires a search-svc trending endpoint (or a curated source contract) before wiring the props."
+            "Live endpoint verification needs search-svc running."
           ]
         },
         {
@@ -2212,10 +2243,10 @@
         {
           "id": "sf-072",
           "title": "storefront: sign-out affordance in the shell",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-26",
+          "finished": "2026-11-26",
           "phase": "P2",
           "priority": "P2",
           "kind": "feature",
@@ -2223,7 +2254,7 @@
           "dependsOn": [
             "sf-049"
           ],
-          "log": null,
+          "log": "TASKS/done/sf-072-added-a-post-form-sign-out-to-the.md",
           "key_decisions": [
             "Post a form to the existing POST /api/auth/logout from the account menu. Reason: the endpoint exists but no UI reaches it. Rejected: a client-side token clear, which leaves the HttpOnly cookies.",
             "Keep the menu link semantics as a form, not a GET. Reason: the endpoint is POST-only by design. Rejected: an anchor to /api/auth/logout."
@@ -2232,16 +2263,16 @@
             "Signing out clears sf_at/sf_rt and redirects to the public shell.",
             "The account menu has a visible sign-out control."
           ],
-          "verified": false,
+          "verified": true,
           "follow_ups": []
         },
         {
           "id": "sf-073",
           "title": "storefront: metrics for stale/fallback paths and revalidation webhook",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-26",
+          "finished": "2026-11-26",
           "phase": "P5",
           "priority": "P1",
           "kind": "chore",
@@ -2249,7 +2280,7 @@
           "dependsOn": [
             "sf-050"
           ],
-          "log": null,
+          "log": "TASKS/done/sf-073-count-cms-fallback-and-rejected-revalidations.md",
           "key_decisions": [
             "Count stale/fallback reads and 401s on POST /api/revalidate. Reason: both paths are currently logged but unscraped. Rejected: adding more console logging.",
             "Expose the counters on the existing metrics surface. Reason: a log line is not a metric. Rejected: a second, separate endpoint."
@@ -2258,7 +2289,7 @@
             "A forced CMS outage increments the fallback counter.",
             "A wrong revalidate secret increments the 401 counter."
           ],
-          "verified": false,
+          "verified": true,
           "follow_ups": []
         }
       ],
@@ -2905,10 +2936,10 @@
         {
           "id": "au-007",
           "title": "auth-svc: forgot/reset endpoints and wire the storefront form",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-26",
+          "finished": "2026-11-26",
           "phase": "P4",
           "priority": "P2",
           "kind": "feature",
@@ -2916,7 +2947,7 @@
           "dependsOn": [
             "au-005"
           ],
-          "log": null,
+          "log": "TASKS/done/au-007-added-forgot-reset-endpoints-and-wired.md",
           "key_decisions": [
             "Implement the forgot/reset flow behind the existing error envelope. Reason: ForgotForm is a stub because no endpoint exists. Rejected: leaving a dead form in the UI.",
             "Never put the raw email in an emitted event. Reason: the user.registered payload already excludes it. Rejected: reusing the registration payload shape."
@@ -2925,8 +2956,10 @@
             "A reset request issues a one-time token and the form reaches it end to end.",
             "No event payload carries an email address."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "No email delivery path yet; link is not delivered. Migration e2e needs Postgres."
+          ]
         }
       ],
       "messaging": {
@@ -4477,10 +4510,10 @@
         {
           "id": "ord-013",
           "title": "Add item ids to 409 stock errors for per-line attribution",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-26",
+          "finished": "2026-11-26",
           "phase": "P2",
           "priority": "P1",
           "kind": "feature",
@@ -4488,7 +4521,7 @@
           "dependsOn": [
             "sf-051"
           ],
-          "log": null,
+          "log": "TASKS/done/ord-013-named-stock-shortfall-lines-in-the-409.md",
           "key_decisions": [
             "Include the conflicting item ids in the stock-shortfall payload. Reason: the checkout banner is generic because the response cannot name lines. Rejected: parsing the error message in the UI.",
             "Keep the 409 status and existing error envelope. Reason: clients already branch on them. Rejected: a new status code."
@@ -4497,16 +4530,16 @@
             "A stock failure names each affected line.",
             "The storefront highlights those lines in checkout."
           ],
-          "verified": false,
+          "verified": true,
           "follow_ups": []
         },
         {
           "id": "ord-014",
           "title": "Sweep stale pending payments and stuck refunds",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-26",
+          "finished": "2026-11-26",
           "phase": "P3",
           "priority": "P1",
           "kind": "chore",
@@ -4514,7 +4547,7 @@
           "dependsOn": [
             "ord-011"
           ],
-          "log": null,
+          "log": "TASKS/done/ord-014-added-a-leader-locked-sweep-for-stale.md",
           "key_decisions": [
             "Reclaim a pending order whose capture succeeded but TX2 never landed. Reason: recovery currently depends on the customer retrying. Rejected: waiting indefinitely for user action.",
             "Resolve a refund stuck between startRefund and markSucceeded through the provider. Reason: it otherwise answers 409 forever. Rejected: an operator marking it failed by hand."
@@ -4523,8 +4556,10 @@
             "A backdated pending capture is resumed or compensated without double charge.",
             "A stuck refund reaches a terminal state after one sweep."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "Real SQL claim/settlement paths and outbox publication need Postgres/Kafka."
+          ]
         }
       ],
       "note": "12/12 done, no backlog. Verified: 75 unit (5 files) + 82 e2e passed (3 skipped across 8 suites) + 0/0 lint on 69 files + clean build. Checkout is idempotent per user (Redis lock, 24h replay cache and the orders row's partial unique index as the authority), pending-first, and captures payment through a saga whose compensation is the refund ledger. Stock is reserved before TX1 and released by reservation id; the hold also names the planned order id, so catalog can release it from order.status.updated (cat-010). order.created and order.status.updated are published by the outbox relay (ord-011). No Kafka consumer and no SQS tasks. The cart convert bridge is gone (ord-012: server side removed by ca-009, caller now deleted) and conversion comes from cart-svc's own order.created consumer.",
@@ -4896,10 +4931,10 @@
         {
           "id": "cms-009",
           "title": "Broaden SQS task-worker integration and LocalStack gating",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-26",
+          "finished": "2026-11-26",
           "phase": "P3",
           "priority": "P2",
           "kind": "feature",
@@ -4907,7 +4942,7 @@
           "dependsOn": [
             "cms-006"
           ],
-          "log": null,
+          "log": "TASKS/done/cms-009-made-the-sqs-worker-opt-in-and.md",
           "key_decisions": [
             "Add an integration test with LocalStack started explicitly. Reason: cms is the only task adopter and has one gated e2e. Rejected: a compose profile that silently starts it everywhere.",
             "Keep SQS_TASKS_ENABLED explicit in development and test. Reason: a default-on worker would surprise local runs. Rejected: enabling it by default."
@@ -4916,16 +4951,18 @@
             "The worker integration passes against LocalStack when invoked.",
             "Development without LocalStack still boots with tasks disabled."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "LocalStack e2e needs a live stack."
+          ]
         },
         {
           "id": "cms-010",
           "title": "Define a signed-URL path for private media",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-26",
+          "finished": "2026-11-26",
           "phase": "P3",
           "priority": "P2",
           "kind": "feature",
@@ -4933,7 +4970,7 @@
           "dependsOn": [
             "cms-003"
           ],
-          "log": null,
+          "log": "TASKS/done/cms-010-added-expiring-signed-urls-for-private.md",
           "key_decisions": [
             "Choose and implement a time-limited URL mechanism. Reason: a private asset cannot be shown on a public page without an admin token. Rejected: widening the public route.",
             "Keep containment and visibility checks on the issuing path. Reason: a signed URL must not bypass the one path resolver. Rejected: signing any path by key alone."
@@ -4942,16 +4979,18 @@
             "A private asset is viewable through an unguessable expiring URL.",
             "An expired or altered URL is rejected."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "Mongo e2e needs a live stack."
+          ]
         },
         {
           "id": "cms-011",
           "title": "Garbage-collect renditions when a media row is removed",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-26",
+          "finished": "2026-11-26",
           "phase": "P3",
           "priority": "P2",
           "kind": "chore",
@@ -4959,7 +4998,7 @@
           "dependsOn": [
             "cms-006"
           ],
-          "log": null,
+          "log": "TASKS/done/cms-011-collected-rendition-files-when-a-media.md",
           "key_decisions": [
             "Delete the variant objects in the same operation that removes the media row. Reason: renditions are orphaned today. Rejected: a nightly sweep with no ownership signal.",
             "Make the deletion idempotent so a retry cannot fail on missing files. Reason: the worker is at-least-once. Rejected: treating a missing file as an error."
@@ -4968,8 +5007,10 @@
             "Removing a media row leaves no variant objects behind.",
             "Repeating the removal succeeds."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "Mongo e2e needs a live stack."
+          ]
         }
       ],
       "note": "7/7 done, no backlog. Verified: 149 unit (22 files) + 87 e2e passed (4 skipped) + 0/0 lint on 100 files + clean build; the media-resize e2e runs green against real LocalStack when AWS_ENDPOINT_URL is set and skips with a printed reason otherwise. Media has one containment-checked path builder (null byte, single decode, mediaKeySchema, path.relative, then realpath re-check), visibility public/private, a public file route that 404s private and orphan files, an admin-only ObjectId file route, and public max-age=60 must-revalidate caching. cms.updated/blog.updated are written to cms_outbox inside the same Mongo transaction as the write (cms-005); media renditions are SQS tasks with an idempotency key (cms-006) and there is no producer or consumer on the direct Kafka bus left; the three storefront-read mutations POST their exact tag to /api/revalidate with the shared secret (cms-007). Named debt: upload size/MIME checks still run post-buffer (cms-004) and there is no variant garbage collection.",
@@ -5258,10 +5299,10 @@
         {
           "id": "anl-005",
           "title": "Decide and align PII in the cart.abandoned payload",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-26",
+          "finished": "2026-11-26",
           "phase": "P4",
           "priority": "P1",
           "kind": "chore",
@@ -5270,7 +5311,7 @@
             "anl-004",
             "au-005"
           ],
-          "log": null,
+          "log": "TASKS/done/anl-005-cartabandoned-docs-and-payload-now-agree.md",
           "key_decisions": [
             "Decide whether the payload carries an email and document the reason. Reason: 1.Architecture.md still shows an email field while the contract and PII rule exclude it. Rejected: keeping two conflicting descriptions.",
             "If notify needs an address, route through au-005's internal lookup rather than the event. Reason: events must stay PII-minimal. Rejected: adding the email back to the payload."
@@ -5279,8 +5320,10 @@
             "The spec, schema and shipped payloads agree.",
             "No emitted cart.abandoned event contains an email."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "§7.2 example still lists unrelated stale fields for a docs pass."
+          ]
         }
       ],
       "messaging": {
@@ -6197,16 +6240,16 @@
         {
           "id": "srch-006",
           "title": "search-svc: expose a trending/curated source for the search palette",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-26",
+          "finished": "2026-11-26",
           "phase": "P2",
           "priority": "P2",
           "kind": "feature",
           "transport": "http",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/srch-006-added-a-guarded-trending-endpoint-for.md",
           "key_decisions": [
             "Add an internal read endpoint that returns a bounded trending list. Reason: sf-066 cannot wire its regions without a source. Rejected: hardcoding the list in the storefront.",
             "Keep it a read from existing catalog data, not a new write model. Reason: no new state is needed. Rejected: a persisted ranking table for v1."
@@ -6215,8 +6258,10 @@
             "The endpoint returns a bounded list and the palette renders it.",
             "sf-066 no longer depends on an unspecified source."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "Live endpoint verification needs search-svc running."
+          ]
         },
         {
           "id": "srch-007",
@@ -6298,7 +6343,7 @@
     },
     "ecom-infra": {
       "motive": "Deploy unit: compose/Nginx/VERSIONS.env pinning (one image per repo, rollback=revert one line) + SQS TF + health/x-request-id/alarms.",
-      "localRoot": "(to create, ecom-infra/)",
+      "localRoot": "ecom-infra",
       "repo": "ecom-infra",
       "port": null,
       "ownerDocs": [
@@ -6996,10 +7041,10 @@
         {
           "id": "doc-006",
           "title": "Implement the comment ratchet from ADR-comments-ratchet",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-26",
+          "finished": "2026-11-26",
           "phase": "P5",
           "priority": "P1",
           "kind": "chore",
@@ -7007,7 +7052,7 @@
           "dependsOn": [
             "doc-005"
           ],
-          "log": null,
+          "log": "TASKS/done/doc-006-added-a-per-repo-comment-counter-and.md",
           "key_decisions": [
             "Record a per-repo comment baseline and fail CI only when the count rises. Reason: the ADR is written but no counter or gate exists. Rejected: a lint rule banning all comments now.",
             "Exclude generated files and the sanctioned reason-required constructs from the count. Reason: they are not removable by choice. Rejected: counting every line indiscriminately."
@@ -7016,22 +7061,24 @@
             "Adding one unapproved comment fails the gate in that repo.",
             "Removing comments never fails the gate."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "Refresh the baseline after the wave's new comments are reviewed."
+          ]
         },
         {
           "id": "doc-007",
           "title": "Rewrite stale payload examples and field docs",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-26",
+          "finished": "2026-11-26",
           "phase": "P0",
           "priority": "P1",
           "kind": "docs",
           "transport": "docs",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/doc-007-rewrote-stale-payload-examples-and-field.md",
           "key_decisions": [
             "Bring 1.Architecture.md 7.1-7.5 and the other named stale sections in line with the current contracts. Reason: examples predate 1.4.0 and actively mislead. Rejected: leaving them as historical footnotes.",
             "Fix the media collection's snake_case field names in 3.Database-Schema.md to match the Mongoose model. Reason: the schema doc is wrong, not merely old. Rejected: changing the model to match the doc."
@@ -7040,7 +7087,7 @@
             "Every payload example validates against the current event schemas.",
             "The documented media fields equal the persisted fields."
           ],
-          "verified": false,
+          "verified": true,
           "follow_ups": []
         }
       ],
