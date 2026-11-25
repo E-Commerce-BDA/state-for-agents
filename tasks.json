@@ -3,9 +3,9 @@
   "updatedAt": "2026-11-24",
   "summary": {
     "total": 180,
-    "done": 146,
+    "done": 147,
     "in_progress": 0,
-    "backlog": 34,
+    "backlog": 33,
     "byRepo": {
       "storefront-ui": {
         "total": 74,
@@ -33,9 +33,9 @@
       },
       "auth-svc": {
         "total": 6,
-        "done": 4,
+        "done": 5,
         "in_progress": 0,
-        "backlog": 2
+        "backlog": 1
       },
       "catalog-svc": {
         "total": 15,
@@ -296,10 +296,10 @@
     ],
     "nextUp": [
       "inf-008",
-      "au-006",
       "anl-005",
       "ca-014",
-      "sf-056"
+      "sf-056",
+      "au-007"
     ],
     "completionGate": [
       "Every P0 task is done and verified.",
@@ -540,6 +540,7 @@
   },
   "unpushed": {
     "storefront-ui": [
+      "ea84c32",
       "95dcb75",
       "40bf585",
       "624d456",
@@ -574,6 +575,7 @@
       "3b8ecd6"
     ],
     "auth-svc": [
+      "b718e4a",
       "5323e28",
       "a408ea6",
       "c9565a7"
@@ -594,6 +596,7 @@
       "8c5ff62"
     ],
     "Documentation": [
+      "e6d1457",
       "bfce373",
       "e4dcca1",
       "2b44b82",
@@ -2872,10 +2875,10 @@
         {
           "id": "au-006",
           "title": "auth-svc: emit domain error codes for token reuse and disabled accounts",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-25",
+          "finished": "2026-11-25",
           "phase": "P4",
           "priority": "P1",
           "kind": "feature",
@@ -2883,17 +2886,21 @@
           "dependsOn": [
             "au-004"
           ],
-          "log": null,
+          "log": "TASKS/done/au-006-domain-error-codes.md",
           "key_decisions": [
-            "Return stable codes alongside the status instead of encoding meaning in message text. Reason: the storefront currently matches prose to map TOKEN_REUSED/ACCOUNT_DISABLED. Rejected: making the UI parse messages.",
-            "Keep the existing status codes stable. Reason: response shape is a contract. Rejected: renumbering statuses."
+            "Add codes to the four 401 throws with unchanged status and message. Reason: the shared filter already passes payload.code through, so no envelope change is needed. Rejected: renumbering statuses or changing copy - a distinct disabled reply at login is an enumeration oracle.",
+            "Read error.code in the storefront and validate with isAuthErrorCode, with no message fallback. Reason: the task says the UI must not parse prose. Rejected: keeping message matching temporarily for deploy skew.",
+            "Keep the code strings local as protocol constants with a comment on the duplication. Reason: two literals do not justify a contracts version bump."
           ],
           "acceptance": [
-            "Both conditions carry distinct machine-readable codes in the error body.",
-            "The storefront maps on the codes and no longer reads message text."
+            "TOKEN_REUSED and ACCOUNT_DISABLED arrive as distinct machine-readable codes; the storefront no longer reads message text.",
+            "auth tsc clean and 35 unit tests; storefront lint, tsc, 1290 tests and webpack build green."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "E2E as a whole still needs the absent Postgres; the theft case now asserts the code.",
+            "A richer shared error enum in @ecom/contracts is a separate versioned change."
+          ]
         },
         {
           "id": "au-007",
