@@ -3,9 +3,9 @@
   "updatedAt": "2026-11-24",
   "summary": {
     "total": 180,
-    "done": 139,
+    "done": 140,
     "in_progress": 0,
-    "backlog": 41,
+    "backlog": 40,
     "byRepo": {
       "storefront-ui": {
         "total": 74,
@@ -69,9 +69,9 @@
       },
       "import-svc": {
         "total": 3,
-        "done": 0,
+        "done": 1,
         "in_progress": 0,
-        "backlog": 3
+        "backlog": 2
       },
       "notify-svc": {
         "total": 4,
@@ -299,7 +299,7 @@
       "sf-071",
       "inf-008",
       "au-006",
-      "anl-005"
+      "imp-002"
     ],
     "completionGate": [
       "Every P0 task is done and verified.",
@@ -591,6 +591,7 @@
       "8c5ff62"
     ],
     "Documentation": [
+      "76946aa",
       "ed610cc",
       "17b6f6b",
       "afb54fc",
@@ -615,6 +616,9 @@
       "169cb8c",
       "0466281",
       "a20a6bd"
+    ],
+    "import-svc": [
+      "c81a743"
     ]
   },
   "unpushedVerifiedAt": "2026-11-02",
@@ -5315,7 +5319,7 @@
     },
     "import-svc": {
       "motive": "Bulk ingest: CSV/JSON v1 (Shopify/BigCommerce/Odoo later) row validation → product.imported via SQS process-row worker.",
-      "localRoot": "(to create, import-svc/)",
+      "localRoot": "import-svc",
       "repo": "import-svc",
       "port": 4070,
       "ownerDocs": [
@@ -5359,10 +5363,10 @@
         {
           "id": "imp-001",
           "title": "import-svc: scaffold, spec, and Postgres schema",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-25",
+          "finished": "2026-11-25",
           "phase": "P4",
           "priority": "P0",
           "kind": "feature",
@@ -5370,19 +5374,21 @@
           "dependsOn": [
             "ec-003"
           ],
-          "log": null,
+          "log": "TASKS/done/imp-001-import-scaffold.md",
           "key_decisions": [
-            "Own Postgres import_jobs and import_rows with status and error JSON. Reason: row-level retries and reports need relational state. Rejected: keep the CSV in memory, which cannot resume.",
-            "Copy the auth.md service-spec shape. Reason: consistent service contracts. Rejected: ad-hoc README."
+            "Own Postgres import_jobs and import_rows in the shared ecom database. Reason: batch reports and per-row retries need relational state and resume. Rejected: keeping the CSV in memory.",
+            "Key import_rows uniquely by (job_id, row_number). Reason: a redelivered row task must update one row, not append another. Rejected: a generated row id with no logical key.",
+            "Write the migration as a file and do not apply it here. Reason: local Postgres is unavailable and applying a schema change without it would be a guess. Rejected: skipping the migration artifact."
           ],
           "acceptance": [
-            "Nest 12 scaffold with health and readiness probes.",
-            "import schema with import_jobs and import_rows.",
-            "Documentation/services/import.md exists.",
-            "Unit and e2e suites are green."
+            "Nest 12 scaffold on port 4070 with health probes; import_jobs and import_rows declared.",
+            "Documentation/services/import.md exists; tsc clean; 7 unit + 2 e2e tests pass; lint and build clean."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "db/001-import-schema.sql is written but not applied to any database.",
+            "imp-002 adds the upload API and SQS row producer; imp-003 adds the worker and product.imported publisher."
+          ]
         },
         {
           "id": "imp-002",
