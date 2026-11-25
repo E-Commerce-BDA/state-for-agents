@@ -3,9 +3,9 @@
   "updatedAt": "2026-11-24",
   "summary": {
     "total": 180,
-    "done": 141,
+    "done": 142,
     "in_progress": 0,
-    "backlog": 39,
+    "backlog": 38,
     "byRepo": {
       "storefront-ui": {
         "total": 74,
@@ -69,9 +69,9 @@
       },
       "import-svc": {
         "total": 3,
-        "done": 2,
+        "done": 3,
         "in_progress": 0,
-        "backlog": 1
+        "backlog": 0
       },
       "notify-svc": {
         "total": 4,
@@ -299,7 +299,7 @@
       "sf-071",
       "inf-008",
       "au-006",
-      "imp-003"
+      "doc-004"
     ],
     "completionGate": [
       "Every P0 task is done and verified.",
@@ -591,6 +591,7 @@
       "8c5ff62"
     ],
     "Documentation": [
+      "3ff73cb",
       "3be3da9",
       "76946aa",
       "ed610cc",
@@ -619,6 +620,7 @@
       "a20a6bd"
     ],
     "import-svc": [
+      "1a1fdb3",
       "1e533e4",
       "c81a743"
     ]
@@ -5441,10 +5443,10 @@
         {
           "id": "imp-003",
           "title": "import-svc: SQS worker and product.imported outbox producer",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-25",
+          "finished": "2026-11-25",
           "phase": "P4",
           "priority": "P0",
           "kind": "feature",
@@ -5454,19 +5456,22 @@
             "ec-002",
             "ec-003"
           ],
-          "log": null,
+          "log": "TASKS/done/imp-003-row-worker-and-outbox.md",
           "key_decisions": [
-            "The worker validates a row, writes product.imported to an outbox, and the relay publishes it to Kafka; import-svc has no Kafka consumer. Reason: import owns the event; catalog and search consume it. Rejected: catalog reads the import database, which violates ownership.",
-            "Mark the row completed in the same transaction as the outbox write. Reason: row status and event must not diverge. Rejected: update the row after publishing."
+            "Write product.imported to import.outbox in the same Postgres transaction that marks import_rows processed. Reason: row status and event must not diverge. Rejected: updating the row after publishing.",
+            "Mint a UUID for a row with no valid id and store it as product_id. Reason: the upload only requires sku/name/price, but the contract needs a productId and the Kafka key. Rejected: rejecting such rows.",
+            "Acknowledge a row that cannot satisfy the contract; throw on transient DB errors. Reason: retry cannot fix a bad payload, but a database blip can be retried. Rejected: dead-lettering deterministic validation failures."
           ],
           "acceptance": [
-            "Worker consumes import-process-row with long poll and batch 10.",
-            "Successful rows write product.imported to the outbox and publish it.",
-            "Failed rows retry and then go to import-process-row-dlq.",
-            "Duplicate rows are idempotent."
+            "Worker consumes import-process-row (long poll, batch 10); successful rows write outbox events; failures redrive to the DLQ; duplicates are idempotent.",
+            "tsc clean; 31 unit tests and 2 e2e tests pass; lint and build clean."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "db/001-import-schema.sql and db/002-import-outbox.sql are written but not applied.",
+            "Live LocalStack/Kafka verification of the worker and relay remains outstanding.",
+            "A row lock makes redelivery a no-op; verify against a real concurrent worker when the stack is up."
+          ],
           "messaging": {
             "publishes": [
               {
