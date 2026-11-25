@@ -3,9 +3,9 @@
   "updatedAt": "2026-11-24",
   "summary": {
     "total": 180,
-    "done": 145,
+    "done": 146,
     "in_progress": 0,
-    "backlog": 35,
+    "backlog": 34,
     "byRepo": {
       "storefront-ui": {
         "total": 74,
@@ -45,9 +45,9 @@
       },
       "cart-svc": {
         "total": 14,
-        "done": 12,
+        "done": 13,
         "in_progress": 0,
-        "backlog": 2
+        "backlog": 1
       },
       "order-svc": {
         "total": 14,
@@ -295,11 +295,11 @@
       }
     ],
     "nextUp": [
-      "ca-013",
       "inf-008",
       "au-006",
       "anl-005",
-      "ca-014"
+      "ca-014",
+      "sf-056"
     ],
     "completionGate": [
       "Every P0 task is done and verified.",
@@ -567,6 +567,7 @@
       "e33aa48"
     ],
     "cart-svc": [
+      "546b38e",
       "5903ad8",
       "438372a",
       "1867f2a",
@@ -593,6 +594,7 @@
       "8c5ff62"
     ],
     "Documentation": [
+      "bfce373",
       "e4dcca1",
       "2b44b82",
       "be52490",
@@ -3970,10 +3972,10 @@
         {
           "id": "ca-013",
           "title": "cart-svc: emit a CATALOG_UNAVAILABLE metric",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-25",
+          "finished": "2026-11-25",
           "phase": "P5",
           "priority": "P1",
           "kind": "chore",
@@ -3981,17 +3983,21 @@
           "dependsOn": [
             "ca-010"
           ],
-          "log": null,
+          "log": "TASKS/done/ca-013-catalog-unavailable-metric.md",
           "key_decisions": [
-            "Count every 503 from HttpCatalogClient instead of logging only. Reason: a catalog outage currently has no signal. Rejected: inferring it from access logs.",
-            "Export the counter where the other service metrics are read. Reason: an unexported counter is still invisible. Rejected: a counter local to the client instance."
+            "Increment once in HttpCatalogClient.fail(), the single choke point for timeout, 5xx, non-JSON and shape-invalid responses. Reason: every 503 from the client is one failed add. Rejected: counting in the service layer or inferring from access logs.",
+            "Expose a separate guarded catalog-metrics route instead of extending consumer-stats. Reason: an HTTP dependency counter and consumer counters are different concerns, and the existing snapshot shape stays stable. Rejected: an additive field in consumer-stats.",
+            "Do not count a well-formed response with no row, which is a 422 business answer. Reason: it is not an outage."
           ],
           "acceptance": [
-            "A forced catalog timeout increments the counter by exactly one per failed add.",
-            "The counter is reachable from the service's metrics surface."
+            "A forced catalog timeout increments the counter by exactly one per failed add; the counter is reachable from a guarded metrics route.",
+            "tsc clean; 125 unit tests pass; lint and build clean."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "E2E could not run here: Postgres is unavailable.",
+            "The storefront stale/fallback counter remains untracked as separate debt."
+          ]
         },
         {
           "id": "ca-014",
