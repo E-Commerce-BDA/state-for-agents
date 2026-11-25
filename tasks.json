@@ -3,9 +3,9 @@
   "updatedAt": "2026-11-24",
   "summary": {
     "total": 180,
-    "done": 136,
+    "done": 137,
     "in_progress": 0,
-    "backlog": 44,
+    "backlog": 43,
     "byRepo": {
       "storefront-ui": {
         "total": 74,
@@ -75,9 +75,9 @@
       },
       "notify-svc": {
         "total": 4,
-        "done": 1,
+        "done": 2,
         "in_progress": 0,
-        "backlog": 3
+        "backlog": 2
       },
       "search-svc": {
         "total": 7,
@@ -299,7 +299,7 @@
       "sf-071",
       "inf-008",
       "au-006",
-      "ntf-002"
+      "ntf-003"
     ],
     "completionGate": [
       "Every P0 task is done and verified.",
@@ -590,6 +590,7 @@
       "8c5ff62"
     ],
     "Documentation": [
+      "afb54fc",
       "e8d34c2",
       "f851c57",
       "0854d57",
@@ -607,6 +608,7 @@
       "3f1d415"
     ],
     "notify-svc": [
+      "0466281",
       "a20a6bd"
     ]
   },
@@ -5589,10 +5591,10 @@
         {
           "id": "ntf-002",
           "title": "notify-svc: consume four Kafka events and enqueue email jobs",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-25",
+          "finished": "2026-11-25",
           "phase": "P4",
           "priority": "P0",
           "kind": "feature",
@@ -5602,19 +5604,22 @@
             "au-005",
             "ec-002"
           ],
-          "log": null,
+          "log": "TASKS/done/ntf-002-four-event-consumer.md",
           "key_decisions": [
-            "Consume order.created, cart.abandoned, user.registered, and order.status.updated with group notify-svc; map each to an SQS notify-send-email job. Reason: email work is a task with its own retry/DLQ. Rejected: send SMTP inside the Kafka handler, which blocks the consumer.",
-            "Persist processed_events in the same transaction as the job enqueue marker. Reason: at-least-once redelivery must not send duplicate email. Rejected: dedupe only in memory."
+            "Claim processed_events and insert email_logs in one Postgres transaction, then enqueue the SQS job after commit with event:<event id> as the idempotency key. Reason: SQS cannot join a Postgres transaction, and at-least-once delivery must not send twice. Rejected: in-memory dedupe; putting SQS inside the transaction.",
+            "Keep the SQS module producer-only until ntf-003. Reason: an enabled poller with no handler is a declaration-time boot error. Rejected: wiring a placeholder worker.",
+            "Reuse order-confirmation for order.status.updated because the contract defines three templates. Reason: a fourth template is a contracts change, and the idempotency key keeps status notices distinct. Rejected: sending no status email; inventing a template name the schema rejects."
           ],
           "acceptance": [
-            "One consumer group: notify-svc.",
-            "Each event maps to exactly one idempotent email job.",
-            "Unknown types are ignored; invalid payloads go to the topic DLQ.",
-            "notify-svc publishes no Kafka events."
+            "One group notify-svc; four events map to exactly one idempotent job each; invalid payloads go to the topic DLQ; no Kafka events published.",
+            "tsc clean; 18 unit tests and 2 e2e tests pass; lint and build clean."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "The migration gained idempotency_key, a unique index and nullable to_address/aggregate changes; still not applied to any database.",
+            "ntf-003 adds the send-email worker that resolves addresses through au-005.",
+            "A dedicated status template belongs in a contracts change."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [
