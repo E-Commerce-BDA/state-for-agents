@@ -3,15 +3,15 @@
   "updatedAt": "2026-11-24",
   "summary": {
     "total": 180,
-    "done": 144,
+    "done": 145,
     "in_progress": 0,
-    "backlog": 36,
+    "backlog": 35,
     "byRepo": {
       "storefront-ui": {
         "total": 74,
-        "done": 64,
+        "done": 65,
         "in_progress": 0,
-        "backlog": 10
+        "backlog": 9
       },
       "admin-app": {
         "total": 1,
@@ -296,10 +296,10 @@
     ],
     "nextUp": [
       "ca-013",
-      "sf-071",
       "inf-008",
       "au-006",
-      "anl-005"
+      "anl-005",
+      "ca-014"
     ],
     "completionGate": [
       "Every P0 task is done and verified.",
@@ -540,6 +540,7 @@
   },
   "unpushed": {
     "storefront-ui": [
+      "95dcb75",
       "40bf585",
       "624d456",
       "69dcb19",
@@ -592,6 +593,7 @@
       "8c5ff62"
     ],
     "Documentation": [
+      "e4dcca1",
       "2b44b82",
       "be52490",
       "3ff73cb",
@@ -2178,26 +2180,29 @@
         {
           "id": "sf-071",
           "title": "storefront: restore lint with an ESLint flat config",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-25",
+          "finished": "2026-11-25",
           "phase": "P5",
           "priority": "P1",
           "kind": "chore",
           "transport": "docs",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/sf-071-storefront-lint.md",
           "key_decisions": [
-            "Add a flat config for Next 16 and wire pnpm lint to it. Reason: next lint was removed, so the command is dead. Rejected: deleting the script and pretending lint is gone.",
-            "Keep the existing style-contract assertions as tests, not lint rules. Reason: those are contract tests, not style preferences. Rejected: folding them into ESLint."
+            "Use an ESLint 9 flat config with eslint-config-next 16 and typescript-eslint. Reason: Next 16 removed next lint, and 2.Tech-Stack.md already names ESLint as the tool. Rejected: deleting the script or adopting oxlint, which would leave two toolchains.",
+            "Make dead code a hard error and the four new React Compiler rules advisory. Reason: restoring the gate must not become an unrelated component refactor. Rejected: warning-only, which would not be a gate.",
+            "Remove the 29 unused imports, setters, parameter and dead proxy helper the first run found. Reason: lint should report a clean tree, not a suppressed one. Rejected: prefixing everything with underscores."
           ],
           "acceptance": [
-            "pnpm lint exits 0 on the current tree.",
-            "A deliberate unused import fails lint."
+            "pnpm lint exits 0 on the current tree; a deliberate unused import fails lint.",
+            "tsc clean; 1290 tests pass; next build --webpack generates all pages."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "The 40 React Compiler warnings are advisory; addressing them is a separate refactor."
+          ]
         },
         {
           "id": "sf-072",
