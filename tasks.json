@@ -3,9 +3,9 @@
   "updatedAt": "2026-11-24",
   "summary": {
     "total": 180,
-    "done": 142,
+    "done": 143,
     "in_progress": 0,
-    "backlog": 38,
+    "backlog": 37,
     "byRepo": {
       "storefront-ui": {
         "total": 74,
@@ -93,9 +93,9 @@
       },
       "Documentation": {
         "total": 7,
-        "done": 4,
+        "done": 5,
         "in_progress": 0,
-        "backlog": 3
+        "backlog": 2
       }
     },
     "logDebt": [
@@ -299,7 +299,7 @@
       "sf-071",
       "inf-008",
       "au-006",
-      "doc-004"
+      "anl-005"
     ],
     "completionGate": [
       "Every P0 task is done and verified.",
@@ -591,6 +591,7 @@
       "8c5ff62"
     ],
     "Documentation": [
+      "be52490",
       "3ff73cb",
       "3be3da9",
       "76946aa",
@@ -6911,10 +6912,10 @@
         {
           "id": "doc-004",
           "title": "docs: service specs for notify, analytics, and import plus event ownership",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-25",
+          "finished": "2026-11-25",
           "phase": "P4",
           "priority": "P1",
           "kind": "docs",
@@ -6924,19 +6925,20 @@
             "anl-001",
             "imp-001"
           ],
-          "log": null,
+          "log": "TASKS/done/doc-004-service-specs-and-ownership.md",
           "key_decisions": [
-            "Each spec states publishes, consumes, task queues, and non-Kafka boundaries explicitly. Reason: transport ownership is currently implicit and often wrong. Rejected: central-only docs.",
-            "Update auth/cart/catalog/order/cms/search specs in the same pass. Reason: consumers and producers changed. Rejected: only add the three new specs."
+            "Derive each service's transport table from STATUS section 5, the canonical messaging catalog. Reason: ownership stated in scattered prose drifts from the code. Rejected: writing nine independent summaries.",
+            "Add a must-not boundary to every spec, not just the positive publishes/consumes rows. Reason: the common error is claiming a consumer or producer that does not exist. Rejected: listing only what a service does.",
+            "Leave the event ownership matrix in 1.Architecture.md section 6.3 unchanged because it already matched the live code. Rejected: rewriting correct docs for appearance of activity."
           ],
           "acceptance": [
-            "Documentation/services/notify.md, analytics.md, and import.md exist.",
-            "Existing service specs match the messaging catalog.",
-            "Every spec has a transport table.",
-            "No spec claims a consumer or producer it does not own."
+            "All nine service specs have transport tables matching the messaging catalog; no spec claims an unowned producer or consumer.",
+            "Documentation commit be52490."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "The per-repo specs still describe historical task IDs in places; those are records, not current-state claims."
+          ]
         },
         {
           "id": "doc-005",
