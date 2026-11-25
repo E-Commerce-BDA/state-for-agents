@@ -3,9 +3,9 @@
   "updatedAt": "2026-11-24",
   "summary": {
     "total": 180,
-    "done": 137,
+    "done": 138,
     "in_progress": 0,
-    "backlog": 43,
+    "backlog": 42,
     "byRepo": {
       "storefront-ui": {
         "total": 74,
@@ -75,9 +75,9 @@
       },
       "notify-svc": {
         "total": 4,
-        "done": 2,
+        "done": 3,
         "in_progress": 0,
-        "backlog": 2
+        "backlog": 1
       },
       "search-svc": {
         "total": 7,
@@ -299,7 +299,7 @@
       "sf-071",
       "inf-008",
       "au-006",
-      "ntf-003"
+      "ntf-004"
     ],
     "completionGate": [
       "Every P0 task is done and verified.",
@@ -590,6 +590,7 @@
       "8c5ff62"
     ],
     "Documentation": [
+      "17b6f6b",
       "afb54fc",
       "e8d34c2",
       "f851c57",
@@ -608,6 +609,7 @@
       "3f1d415"
     ],
     "notify-svc": [
+      "169cb8c",
       "0466281",
       "a20a6bd"
     ]
@@ -5667,10 +5669,10 @@
         {
           "id": "ntf-003",
           "title": "notify-svc: SQS send-email worker with SMTP and DLQ",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-25",
+          "finished": "2026-11-25",
           "phase": "P4",
           "priority": "P0",
           "kind": "feature",
@@ -5679,19 +5681,22 @@
             "ntf-001",
             "inf-003"
           ],
-          "log": null,
+          "log": "TASKS/done/ntf-003-send-email-worker.md",
           "key_decisions": [
-            "Long-poll 20s, batch 10, maxReceiveCount 5, DLQ; SMTP via Mailpit locally. Reason: tasks must not run on Kafka and must not stall. Rejected: Kafka consumer for email.",
-            "Record every attempt in email_logs with a provider message id. Reason: support and retry need an audit trail. Rejected: log-only."
+            "Put SMTP behind a Mailer port and use nodemailer only in the implementation. Reason: the worker must be testable without a mail server. Rejected: calling nodemailer directly from the handler.",
+            "Acknowledge a guest job with no userId and record the reason instead of throwing. Reason: there is no address to resolve, so five SQS retries would change nothing. Rejected: dead-lettering unfixable jobs.",
+            "Keep the poller opt-in with SQS_TASKS_ENABLED while the producer stays available. Reason: a local run without LocalStack must not start a poller. Rejected: default-on polling."
           ],
           "acceptance": [
-            "Worker consumes notify-send-email and sends via SMTP.",
-            "Failures retry and then go to notify-send-email-dlq.",
-            "Duplicate jobs do not send twice.",
-            "Tests cover success, retry, and DLQ."
+            "Worker consumes notify-send-email and sends via SMTP; failures redrive to the DLQ; duplicates do not send twice.",
+            "tsc clean; 24 unit tests and 2 e2e tests pass; lint and build clean."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "The migration still has not been applied: it now needs idempotency_key and provider_message_id columns.",
+            "ntf-004 adds templates and PII-aware tests.",
+            "Live SMTP/LocalStack verification is still outstanding."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
