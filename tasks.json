@@ -2,14 +2,14 @@
   "version": 2,
   "updatedAt": "2026-11-26",
   "summary": {
-    "total": 193,
-    "done": 192,
+    "total": 194,
+    "done": 193,
     "in_progress": 0,
     "backlog": 1,
     "byRepo": {
       "storefront-ui": {
-        "total": 83,
-        "done": 83,
+        "total": 84,
+        "done": 84,
         "in_progress": 0,
         "backlog": 0
       },
@@ -147,9 +147,10 @@
           "sf-079",
           "sf-080",
           "sf-081",
-          "sf-082"
+          "sf-082",
+          "sf-083"
         ],
-        "count": 27
+        "count": 28
       },
       {
         "id": "P1",
@@ -2512,6 +2513,42 @@
           "follow_ups": [
             "Tune residual mobile hero/about/blog spacing if desired.",
             "Remove backup and rebuild copies after user is satisfied."
+          ],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "Standalone HTML prototype; no service transport."
+          }
+        },
+        {
+          "id": "sf-083",
+          "title": "Improve standalone storefront mobile filters and marquee/carousel behavior",
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-27",
+          "finished": "2026-11-27",
+          "phase": "P0",
+          "priority": "P1",
+          "kind": "feature",
+          "transport": "storefront",
+          "dependsOn": [],
+          "log": "TASKS/done/sf-083-mobile-filters-and-rails.md",
+          "key_decisions": [
+            "Add a mobile-only filter button that opens the existing product filters as a drawer; keep the desktop sidebar. Reason: mobile shoppers need filters without a full-width rail occupying the first screen. Rejected: deleting filters on desktop.",
+            "Convert the homepage brand strip into a configurable infinite marquee using THEME_CONFIG and the documented motion/speed/direction/pauseOnHover vocabulary. Reason: the current wrapped static grid is inconsistent with the design system. Rejected: hardcoding animation values.",
+            "Add one reusable draggable, infinite-looping, paginated rail for horizontal sections. Reason: native scroll-snap alone cannot drag, loop or paginate on mobile. Rejected: a different implementation per section."
+          ],
+          "acceptance": [
+            "On <768px the products page shows a Filters button and no always-visible top filter stack; opening it shows the same controls as desktop.",
+            "The homepage brand strip runs as a smooth infinite marquee and is configurable without code changes outside THEME_CONFIG.",
+            "All targeted horizontal sections are draggable on touch/mouse, loop infinitely and expose correct pagination.",
+            "Reduced motion is honored; preserved chrome and product cards/PDP remain unchanged; theme tokens are used for all paint."
+          ],
+          "verified": true,
+          "follow_ups": [
+            "Remove storefront.before-mobile.html after user approval.",
+            "Port to the Next app with contract/resolver/style trios if desired."
           ],
           "messaging": {
             "publishes": [],
