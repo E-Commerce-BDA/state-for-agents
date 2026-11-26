@@ -3,9 +3,9 @@
   "updatedAt": "2026-11-26",
   "summary": {
     "total": 180,
-    "done": 167,
+    "done": 169,
     "in_progress": 0,
-    "backlog": 13,
+    "backlog": 11,
     "byRepo": {
       "storefront-ui": {
         "total": 74,
@@ -15,9 +15,9 @@
       },
       "admin-app": {
         "total": 1,
-        "done": 0,
+        "done": 1,
         "in_progress": 0,
-        "backlog": 1
+        "backlog": 0
       },
       "ecom-contracts": {
         "total": 6,
@@ -87,9 +87,9 @@
       },
       "ecom-infra": {
         "total": 13,
-        "done": 3,
+        "done": 4,
         "in_progress": 0,
-        "backlog": 10
+        "backlog": 9
       },
       "Documentation": {
         "total": 7,
@@ -295,11 +295,17 @@
       }
     ],
     "nextUp": [
+      "tst-001",
+      "tst-002",
+      "tst-003",
+      "inf-006",
+      "sf-053a",
       "ca-014",
       "inf-004",
       "inf-005",
       "inf-008",
-      "inf-009"
+      "inf-009",
+      "inf-010"
     ],
     "completionGate": [
       "Every P0 task is done and verified.",
@@ -2241,10 +2247,10 @@
         {
           "id": "adm-001",
           "title": "admin-app: scope decision and scaffold (deferred)",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "coordinator",
+          "started": "2026-11-26",
+          "finished": "2026-11-26",
           "phase": "P6",
           "priority": "P2",
           "kind": "feature",
@@ -2252,7 +2258,7 @@
           "dependsOn": [
             "sf-053"
           ],
-          "log": null,
+          "log": "TASKS/done/adm-001-admin-scope-deferred.md",
           "key_decisions": [
             "Backend acceptance is API/curl, so scaffold admin only when merchant UI is required. Reason: avoid building a second frontend before the APIs stabilize. Rejected: build admin now and rework it after every backend change.",
             "If in scope, start with products, orders, CMS sections, and theme settings. Reason: those are the merchant-critical screens. Rejected: build analytics dashboards first."
@@ -2263,8 +2269,12 @@
             "No direct Kafka or SQS client in the admin app.",
             "If deferred: STATUS and tasks.json say so explicitly."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "Deferred by user decision while integration and live-stack tasks finish.",
+            "Reopen when merchant UI is required; scope starts at products, orders, CMS sections and theme settings, HTTP seams only."
+          ],
+          "scope_decision": "deferred"
         }
       ],
       "messaging": {
@@ -6588,16 +6598,16 @@
         {
           "id": "inf-007",
           "title": "Give ecom-messaging a git remote",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "coordinator",
+          "started": "2026-11-26",
+          "finished": "2026-11-26",
           "phase": "P5",
           "priority": "P0",
           "kind": "chore",
           "transport": "git",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/inf-007-messaging-remote.md",
           "key_decisions": [
             "Add the remote and push the local-only commits after approval. Reason: the package's commits cannot leave this machine. Rejected: copying the tarball alone, which loses history.",
             "Verify the committed tarball and package version match the remote tag before release. Reason: a stale tarball is how the peer drift happened. Rejected: trusting the local build."
@@ -6606,7 +6616,7 @@
             "git rev-parse @{u} resolves in ecom-messaging.",
             "The remote contains every local commit once push is approved."
           ],
-          "verified": false,
+          "verified": true,
           "follow_ups": []
         },
         {
