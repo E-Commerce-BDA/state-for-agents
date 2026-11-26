@@ -2,16 +2,16 @@
   "version": 2,
   "updatedAt": "2026-11-26",
   "summary": {
-    "total": 188,
+    "total": 192,
     "done": 187,
     "in_progress": 0,
-    "backlog": 1,
+    "backlog": 5,
     "byRepo": {
       "storefront-ui": {
-        "total": 78,
+        "total": 82,
         "done": 78,
         "in_progress": 0,
-        "backlog": 0
+        "backlog": 4
       },
       "admin-app": {
         "total": 2,
@@ -142,9 +142,13 @@
           "sf-074",
           "sf-075",
           "sf-076",
-          "cat-016"
+          "cat-016",
+          "sf-078",
+          "sf-079",
+          "sf-080",
+          "sf-081"
         ],
-        "count": 22
+        "count": 26
       },
       {
         "id": "P1",
@@ -303,6 +307,10 @@
       }
     ],
     "nextUp": [
+      "sf-078",
+      "sf-079",
+      "sf-080",
+      "sf-081",
       "inf-010"
     ],
     "completionGate": [
@@ -2340,6 +2348,133 @@
             "consumes": [],
             "taskQueues": [],
             "doesNotUseKafka": "Storefront/admin UI and config metadata only."
+          }
+        },
+        {
+          "id": "sf-078",
+          "title": "Define canonical design tokens and remove conflicting CSS faces",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P1",
+          "kind": "feature",
+          "transport": "storefront",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "One :root token set for surfaces, navy, scrim, radius-sm/md, z-index, type scale, one error red and one success green. Reason: undefined vars and competing values are the main cause of inconsistent paint. Rejected: adding more per-component fallbacks.",
+            "Delete the duplicate .sf-pill base rule and merge the needed vars into the single Pill block. Reason: the later block silently overrode admin pillRadius. Rejected: raising specificity."
+          ],
+          "acceptance": [
+            "No undefined var is referenced; a style-contract test fails on duplicate base blocks or unknown vars.",
+            "Admin pillRadius and all paint tokens take effect.",
+            "Disabled/pending faces use solid tokens, not opacity.",
+            "All four storefront gates green."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "UI-only task; no service transport."
+          }
+        },
+        {
+          "id": "sf-079",
+          "title": "Unify the page shell, headings and chrome rendering",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P1",
+          "kind": "feature",
+          "transport": "storefront",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Apply the page gutter once, move navbar/footer outside .sf-shop, drop the footer max-width and auth phantom padding. Reason: bars were inset ~100px vs page content ~50px. Rejected: reducing each component's padding independently.",
+            "Make all routes read one resolved CMS nav/announcement/footer. Reason: three routes served stale cached chrome with a different wordmark. Rejected: per-page overrides."
+          ],
+          "acceptance": [
+            "Navbar, footer and page content align at desktop and mobile.",
+            "No route shows a different wordmark, nav set or announcement copy.",
+            "One PageHeader/title primitive and one Breadcrumbs implementation; all four gates green."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "UI-only task; no service transport."
+          }
+        },
+        {
+          "id": "sf-080",
+          "title": "One shared state vocabulary and a compact degraded face",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P1",
+          "kind": "feature",
+          "transport": "storefront",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Add LoadingState, ErrorState and DegradedState dumb artifacts with full trios and use them in every island and route boundary. Reason: eight hand-rolled faces made identical failures look different. Rejected: another generic toast.",
+            "Wire the typed reducers that sf-074 left unused. Reason: tested states never rendered and duplicate useState could disagree. Rejected: deleting the reducers."
+          ],
+          "acceptance": [
+            "Every loading/error/empty/outage state uses the shared primitives with primary actions.",
+            "Root/(shop)/(auth) loading, error and not-found boundaries exist.",
+            "Search, overlay, address-book, checkout, navbar, PDP and wishlist-pending reducers are single sources of truth.",
+            "All four gates green."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "UI-only task; no service transport."
+          }
+        },
+        {
+          "id": "sf-081",
+          "title": "Make product, cart and account surfaces consistent",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P1",
+          "kind": "feature",
+          "transport": "storefront",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Forward theme/columns/tones to every product surface and map search results to ProductCard. Reason: the same product rendered with different grids and letter tiles. Rejected: per-surface defaults.",
+            "Collapse the filter rail, unify cart rows, order rows and account wishlist pricing, and replace the compare grid with a comparison table. Reason: listing buried products below the fold and duplicate components drifted. Rejected: a taller scroll-only rail."
+          ],
+          "acceptance": [
+            "Wishlist, recently-viewed and search use the same card face as home/listing.",
+            "The filter rail takes less than half the first viewport and can collapse.",
+            "One cart row and one order row implementation; account wishlist uses effectivePrice.",
+            "Compare shows side-by-side attributes; all four gates green."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "UI-only task; no service transport."
           }
         }
       ],
