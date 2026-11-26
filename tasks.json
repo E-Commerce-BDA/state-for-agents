@@ -3,9 +3,9 @@
   "updatedAt": "2026-11-26",
   "summary": {
     "total": 180,
-    "done": 166,
+    "done": 167,
     "in_progress": 0,
-    "backlog": 14,
+    "backlog": 13,
     "byRepo": {
       "storefront-ui": {
         "total": 74,
@@ -21,9 +21,9 @@
       },
       "ecom-contracts": {
         "total": 6,
-        "done": 5,
+        "done": 6,
         "in_progress": 0,
-        "backlog": 1
+        "backlog": 0
       },
       "ecom-messaging": {
         "total": 0,
@@ -539,145 +539,22 @@
     ]
   },
   "unpushed": {
-    "storefront-ui": [
-      "ff45572",
-      "7fb1691",
-      "6ecd401",
-      "5425433",
-      "4f1c187",
-      "9ec75e4",
-      "a41a96b",
-      "a61adfe",
-      "3b80316",
-      "6296fef",
-      "196d1ef",
-      "708d379",
-      "ea84c32",
-      "95dcb75",
-      "40bf585",
-      "624d456",
-      "69dcb19",
-      "69cec60"
-    ],
-    "ecom-contracts": [
-      "8ec4ba1",
-      "57bae92",
-      "0a3f813",
-      "aabf398",
-      "1ac29c5"
-    ],
-    "ecom-messaging": [
-      "e01a57c",
-      "12b4f28",
-      "af9c979",
-      "2d1ff61",
-      "c09a487",
-      "c76acbe",
-      "9deff71",
-      "ee88bfe"
-    ],
-    "catalog-svc": [
-      "665128d",
-      "48efba7",
-      "81c80e1",
-      "e33aa48"
-    ],
-    "cart-svc": [
-      "934c4e4",
-      "1f93bf7",
-      "546b38e",
-      "5903ad8",
-      "438372a",
-      "1867f2a",
-      "3b8ecd6"
-    ],
-    "auth-svc": [
-      "ebfa5c6",
-      "a5d19fa",
-      "b718e4a",
-      "5323e28",
-      "a408ea6",
-      "c9565a7"
-    ],
-    "order-svc": [
-      "4b049ee",
-      "e2b8a65",
-      "84bf09a",
-      "11ba701",
-      "7f32534"
-    ],
-    "cms-svc": [
-      "f0c5bc0",
-      "07e2c22",
-      "a1143e8",
-      "ca4871c",
-      "ca5267f",
-      "4831c9b"
-    ],
-    "search-svc": [
-      "3a1e98a",
-      "042998f",
-      "19e5f25",
-      "b4c9d13",
-      "7af63fe",
-      "f777c8f",
-      "8c5ff62"
-    ],
-    "Documentation": [
-      "ade90d2",
-      "5fa282f",
-      "e6d1457",
-      "bfce373",
-      "e4dcca1",
-      "2b44b82",
-      "be52490",
-      "3ff73cb",
-      "3be3da9",
-      "76946aa",
-      "ed610cc",
-      "17b6f6b",
-      "afb54fc",
-      "e8d34c2",
-      "f851c57",
-      "0854d57",
-      "5874907",
-      "5d19e0e",
-      "2c9894c",
-      "83b0aaf",
-      "5a7ee77",
-      "bec4e04",
-      "9f1e59d"
-    ],
-    "ecom-infra": [
-      "17dfdb2",
-      "2fd216e",
-      "85a2485",
-      "4686dca",
-      "8b3746b",
-      "9b09a72",
-      "8ff4f01"
-    ],
-    "analytics-svc": [
-      "795c69f",
-      "728b7cf",
-      "e92e8f5",
-      "3f1d415"
-    ],
-    "notify-svc": [
-      "b20d325",
-      "808c5a2",
-      "169cb8c",
-      "0466281",
-      "a20a6bd"
-    ],
-    "import-svc": [
-      "a97f91e",
-      "1a1fdb3",
-      "1e533e4",
-      "c81a743"
-    ]
+    "storefront-ui": [],
+    "ecom-contracts": [],
+    "ecom-messaging": [],
+    "catalog-svc": [],
+    "cart-svc": [],
+    "auth-svc": [],
+    "order-svc": [],
+    "cms-svc": [],
+    "search-svc": [],
+    "Documentation": [],
+    "ecom-infra": [],
+    "analytics-svc": [],
+    "notify-svc": [],
+    "import-svc": []
   },
-  "unpushedVerifiedAt": "2026-11-02",
+  "unpushedVerifiedAt": "2026-11-26",
   "unpushedNote": "Recomputed with git rev-parse @{u} and git rev-list --count @{u}..HEAD in every local repo on 2026-11-02, after the CMS-home wave (ec-006, cat-013, cms-008, sf-060/062/063/064). Ahead counts: ecom-contracts 4, catalog-svc 5, cms-svc 3, Documentation 4, storefront 24, state-for-agents 8 + this commit. ecom-messaging and ecom-infra have no remote at all, so their lists are only the commits this wave series produced and their full history cannot leave this machine. state-for-agents cannot list itself. Nothing was pushed, tagged, released or published.",
   "workflow": "Claim: create TASKS/in-progress/<id>-<slug>.md, set the entry status to in-progress, owner, and started. Build against the chained skills (router order). Close: move the log to TASKS/done/, fill verification and follow_ups, flip status to done and finished, update STATUS.md and summary in the same commit. Todo entries carry log:null until claimed; in-progress and done entries must have an existing log file. Commits: one commit per file (larger edits split per edit); stage with diff eyes-on; subject + reason body; local-only until the human says push. Unpushed lists only verified local commits; the carrier commit joins on the next update. Validation: id == filename, status == folder, log exists for in-progress/done, STATUS counts == summary. Before any tracker commit, run scripts/validate-tasks.py and require exit 0. followUpAudit must classify every original follow-up; counts are derived from entries, never hand-set.",
   "rules": "Claim: set claimedBy={agent,since,task} + stages.<stage> to in-progress (24h lease; other instances must not steal without comment). Finish: flip stage to done + update SERVICES.md + STATUS.md in same commit. Stage vocab locked: todo|in-progress|done (maps to todo/in-progress/done cells). Path truth: localRoots below are where agents edit TODAY; future split repos named in 'repo'. Never invent paths — resolve via SKILL-EXPLORE. motive is immutable (ADR change only); inProgress/next are mutable. Transport truth: Kafka is domain events only, SQS is task jobs only; each repo messaging block and the top-level messaging catalog are authoritative.",
@@ -2628,10 +2505,10 @@
         {
           "id": "ec-005",
           "title": "Contracts release train: tag and publish 1.3.0, 1.4.0, 1.5.0, and 2.0.0, then repin consumers",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "coordinator",
+          "started": "2026-11-26",
+          "finished": "2026-11-26",
           "phase": "P5",
           "priority": "P1",
           "kind": "release",
@@ -2643,7 +2520,7 @@
             "ec-004",
             "sf-053"
           ],
-          "log": null,
+          "log": "TASKS/done/ec-005-release-train.md",
           "key_decisions": [
             "Tag only after local tarballs pass every consumer suite. Reason: exact pins are the polyrepo contract. Rejected: tag then fix consumers, which breaks CI and rollbacks.",
             "Keep the package private until the human explicitly approves a GitHub Release. Reason: the repo rule forbids push/tag/release without approval. Rejected: publish automatically from CI.",
@@ -2655,8 +2532,11 @@
             "Tags and GitHub Releases are created only after explicit approval.",
             "CHANGELOG and VERSIONING describe both releases."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "CI tarball paths: single-repo checkout cannot resolve sibling file: pins; accepted as documented follow-up.",
+            "13 live-stack tasks remain open; publishing did not verify runtime paths."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
