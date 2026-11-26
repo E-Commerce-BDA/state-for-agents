@@ -2,22 +2,22 @@
   "version": 2,
   "updatedAt": "2026-11-26",
   "summary": {
-    "total": 180,
+    "total": 188,
     "done": 179,
     "in_progress": 0,
-    "backlog": 1,
+    "backlog": 9,
     "byRepo": {
       "storefront-ui": {
-        "total": 74,
+        "total": 78,
         "done": 74,
         "in_progress": 0,
-        "backlog": 0
+        "backlog": 4
       },
       "admin-app": {
-        "total": 1,
+        "total": 2,
         "done": 1,
         "in_progress": 0,
-        "backlog": 0
+        "backlog": 1
       },
       "ecom-contracts": {
         "total": 6,
@@ -38,10 +38,10 @@
         "backlog": 0
       },
       "catalog-svc": {
-        "total": 15,
+        "total": 16,
         "done": 15,
         "in_progress": 0,
-        "backlog": 0
+        "backlog": 1
       },
       "cart-svc": {
         "total": 14,
@@ -56,10 +56,10 @@
         "backlog": 0
       },
       "cms-svc": {
-        "total": 11,
+        "total": 12,
         "done": 11,
         "in_progress": 0,
-        "backlog": 0
+        "backlog": 1
       },
       "analytics-svc": {
         "total": 5,
@@ -86,10 +86,10 @@
         "backlog": 0
       },
       "ecom-infra": {
-        "total": 13,
+        "total": 14,
         "done": 12,
         "in_progress": 0,
-        "backlog": 1
+        "backlog": 2
       },
       "Documentation": {
         "total": 7,
@@ -138,9 +138,13 @@
           "doc-005",
           "srch-005",
           "doc-007",
-          "srch-007"
+          "srch-007",
+          "sf-074",
+          "sf-075",
+          "sf-076",
+          "cat-016"
         ],
-        "count": 18
+        "count": 22
       },
       {
         "id": "P1",
@@ -276,9 +280,12 @@
           "inf-008",
           "inf-009",
           "inf-010",
-          "tst-003"
+          "tst-003",
+          "cms-012",
+          "sf-077",
+          "inf-011"
         ],
-        "count": 18
+        "count": 21
       },
       {
         "id": "P6",
@@ -289,13 +296,18 @@
           "Scaffold only if merchant UI is required for acceptance."
         ],
         "tasks": [
-          "adm-001"
+          "adm-001",
+          "adm-002"
         ],
-        "count": 1
+        "count": 2
       }
     ],
     "nextUp": [
-      "inf-010"
+      "sf-074",
+      "sf-075",
+      "sf-076",
+      "cat-016",
+      "cms-012"
     ],
     "completionGate": [
       "Every P0 task is done and verified.",
@@ -2180,6 +2192,133 @@
           ],
           "verified": true,
           "follow_ups": []
+        },
+        {
+          "id": "sf-074",
+          "title": "Make every storefront island's state machine explicit and total",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "storefront",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Replace implicit booleans in cart, wishlist, compare, checkout, search, listing, orders, address book, navbar, overlay and PDP islands with typed reducers in lib/<domain>/machine.ts. Reason: partial transitions caused the verified cold-checkout bounce, lost optimistic writes and silent failures. Rejected: another library dependency (XState) — pure reducers fit the repo's pure-lib rule.",
+            "Roll back per-operation deltas instead of whole-state snapshots. Reason: overlapping writes must not erase earlier successes. Rejected: serialising all writes globally."
+          ],
+          "acceptance": [
+            "No client island has an unreachable state with no UI.",
+            "Per-operation rollback is covered by unit tests for concurrent success/failure.",
+            "Route/product changes reset island-local state; timers and aborts are cleaned up.",
+            "Shell props (badge, badgeCap, destination, current link) are consumed; auth pages use the intended layout."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "Storefront/admin UI and config metadata only."
+          }
+        },
+        {
+          "id": "sf-075",
+          "title": "Carry honest error states from backend to every screen",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "storefront",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Extend the failure envelope with code, message, details and retryAfter and keep it through both BFF transports. Reason: outages were rendered as empty carts, 404s and 'nothing published'. Rejected: more generic toasts.",
+            "Keep login error genericization for anti-enumeration. Reason: security constraint. Rejected: returning backend login messages verbatim."
+          ],
+          "acceptance": [
+            "CMS outage is distinguishable from 404 and from an empty page.",
+            "Cart/wishlist/address/read failures show retry, not 'empty'.",
+            "429 shows rate-limit copy with Retry-After where provided.",
+            "Auth domain codes are no longer rewritten by status outside register/login."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "Storefront/admin UI and config metadata only."
+          }
+        },
+        {
+          "id": "sf-076",
+          "title": "Validate every storefront seam with the contract schemas",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P1",
+          "kind": "chore",
+          "transport": "storefront",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Parse theme/nav/page-settings with the @ecom/contracts zod response schemas instead of as casts. Reason: a malformed admin value silently became builtins with no signal. Rejected: widening the casts.",
+            "Give every bff() call a schema or an explicit 'body ignored' marker. Reason: a wrong-shaped 200 must not be treated as success. Rejected: trusting backend types at runtime."
+          ],
+          "acceptance": [
+            "No unvalidated as-cast remains at a seam boundary.",
+            "/api/orders?limit is clamped to 1-100.",
+            "proxy.ts dead import removed.",
+            "All four gates green."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "Storefront/admin UI and config metadata only."
+          }
+        },
+        {
+          "id": "sf-077",
+          "title": "Add admin BFF seam and one resolved config read",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P5",
+          "priority": "P1",
+          "kind": "feature",
+          "transport": "storefront",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Add role-guarded /api/admin/** routes that forward to cms-svc/catalog-svc using the existing HttpOnly access token. Reason: the admin app must never hold service tokens or duplicate auth handling. Rejected: direct browser-to-service calls.",
+            "Expose one versioned GET /api/config/storefront returning theme, nav, footer, badges and version. Reason: three independent reads with different caches let admin edits land unevenly. Rejected: three separate reads in the admin client."
+          ],
+          "acceptance": [
+            "Admin routes reject non-admin sessions with 403.",
+            "The single config read is schema-validated and carries a version.",
+            "Preview token is forwarded only for preview requests."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "Storefront/admin UI and config metadata only."
+          }
         }
       ],
       "messaging": {
@@ -2268,6 +2407,38 @@
             "Reopen when merchant UI is required; scope starts at products, orders, CMS sections and theme settings, HTTP seams only."
           ],
           "scope_decision": "deferred"
+        },
+        {
+          "id": "adm-002",
+          "title": "Scaffold the admin app with core configuration screens",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P6",
+          "priority": "P2",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Create a new Next 16 + React 19 + TypeScript strict + Tailwind v4 repo with its own AGENTS.md and dumb-component rules. Reason: a second frontend must follow the same constitution. Rejected: extending the storefront with admin routes.",
+            "Ship theme, navigation, footer, sections, page settings, pages/blogs, badges, product-card settings and orders screens in v1; defer review moderation and theme preview/A-B until their endpoints exist. Rejected: building deferred screens against missing APIs."
+          ],
+          "acceptance": [
+            "Sign-in and admin-role guard work through the storefront BFF only.",
+            "No direct Kafka or SQS client or credentials.",
+            "Every screen uses the versioned config contract and shows save/retry/error states.",
+            "Lint, typecheck, tests and build green."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "Storefront/admin UI and config metadata only."
+          }
         }
       ],
       "messaging": {
@@ -3430,6 +3601,37 @@
             "E2E needs the live stack and was not run here.",
             "STATUS 7 still listed the catalog cursor as carried debt even though cat-015 closed it on 2026-11-17; this reconciliation corrects that line."
           ]
+        },
+        {
+          "id": "cat-016",
+          "title": "Implement the catalog review-write endpoint",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P1",
+          "kind": "feature",
+          "transport": "catalog",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Add POST /api/v1/catalog/products/:id/reviews with moderation state and admin read/list endpoints. Reason: the storefront review UI currently posts to a route that does not exist and always fails. Rejected: hiding the UI until later.",
+            "Keep reviews out of Kafka; they are a moderation record. Reason: no review topic exists. Rejected: adding a new event topic for this wave."
+          ],
+          "acceptance": [
+            "The storefront review submission returns a created/pending-moderation result.",
+            "Admin can list and moderate reviews.",
+            "Migration, unit and e2e tests pass against live Postgres."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "Storefront/admin UI and config metadata only."
+          }
         }
       ],
       "note": "14/14 done; verified 165 unit tests plus new e2e cases for the keyset walk and facets. Verified: 165 unit (25 files) + 118 e2e (12 files passed, 2 skipped) green, plus 3 live Kafka cases behind RUN_KAFKA_E2E. Producers are on catalog.outbox/relay (cat-007), and both consumers share one @ecom/messaging strategy on one group: order.created commits the reservation (cat-009) and product.imported upserts product, category, brand, variants and images in one transaction (cat-008), writing onHand = max(0, imported - openReserved) plus one stock_movements row with reason 'import' and no outbox re-emit. Stock reserve/release is idempotent and persisted (cat-006); release on cancelled/failed/refunded is cat-010: the same group consumes order.status.updated, finds the reservation by order_id (order-svc names the planned order id while reserving) and releases a held hold in the same transaction as the processed_events claim. A committed hold is a logged anomaly, not a dead letter - its stock was sold, so a post-commit restock is cat-012. order.created tolerates a hold that a cancellation already released, because the two topics have no cross-topic ordering. Import needs db/008 (widens products_source_check to accept 'import') - there is no cat-008 table to look for. No SQS tasks. Fixture seed is dev/test-only: db/seed.mjs refuses without CATALOG_ALLOW_FIXTURE_SEED and bootstrap fails if the flag is on in production (cat-011).",
@@ -4910,6 +5112,37 @@
           "follow_ups": [
             "Mongo e2e needs a live stack."
           ]
+        },
+        {
+          "id": "cms-012",
+          "title": "Distinguish CMS state and add a preview seam",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P5",
+          "priority": "P1",
+          "kind": "feature",
+          "transport": "cms",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Return state missing|empty|published and configured booleans on public settings/sections reads. Reason: 'never configured', 'cleared' and 'outage' all produced the same 200 empty body. Rejected: new status codes that break 1.x readers.",
+            "Add a preview token path that admits inactive sections and draft documents. Reason: admins must see edits before publishing. Rejected: forcing publish to preview."
+          ],
+          "acceptance": [
+            "Public responses carry the new state fields without changing existing fields.",
+            "Preview can read inactive/draft content with a valid token and cannot without one.",
+            "Existing consumers still pass."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "Storefront/admin UI and config metadata only."
+          }
         }
       ],
       "note": "7/7 done, no backlog. Verified: 149 unit (22 files) + 87 e2e passed (4 skipped) + 0/0 lint on 100 files + clean build; the media-resize e2e runs green against real LocalStack when AWS_ENDPOINT_URL is set and skips with a printed reason otherwise. Media has one containment-checked path builder (null byte, single decode, mediaKeySchema, path.relative, then realpath re-check), visibility public/private, a public file route that 404s private and orphan files, an admin-only ObjectId file route, and public max-age=60 must-revalidate caching. cms.updated/blog.updated are written to cms_outbox inside the same Mongo transaction as the write (cms-005); media renditions are SQS tasks with an idempotency key (cms-006) and there is no producer or consumer on the direct Kafka bus left; the three storefront-read mutations POST their exact tag to /api/revalidate with the shared secret (cms-007). Named debt: upload size/MIME checks still run post-buffer (cms-004) and there is no variant garbage collection.",
@@ -6716,6 +6949,38 @@
             "Cart mutation p99 1.6s against the 100ms target.",
             "Pre-existing search-focus assertion; no approved screenshot baseline; Lighthouse binary absent."
           ]
+        },
+        {
+          "id": "inf-011",
+          "title": "Write the deployment runbook (no deployment)",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P5",
+          "priority": "P2",
+          "kind": "chore",
+          "transport": "infra",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Document the cheapest credible real host: one small EC2/Lightsail instance with Docker Compose and the Nginx edge, secrets in SSM Parameter Store, TLS, smoke checks and rollback. Reason: deployment is a learning exercise and must not be executed here. Rejected: ECS Fargate for v1 cost.",
+            "Pin the real admin image tag in VERSIONS.env and add the admin edge prefix. Reason: adm-002 creates the 16th repo. Rejected: leaving the unscaffolded placeholder."
+          ],
+          "acceptance": [
+            "Cost comparison and sizing are documented with a verification caveat.",
+            "VERSIONS.env has no unscaffolded placeholder.",
+            "Runbook contains provision, deploy, smoke, rollback and secret-handling steps.",
+            "Nothing was provisioned or deployed."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "Storefront/admin UI and config metadata only."
+          }
         }
       ],
       "messaging": {
