@@ -3,9 +3,9 @@
   "updatedAt": "2026-11-26",
   "summary": {
     "total": 180,
-    "done": 178,
+    "done": 179,
     "in_progress": 0,
-    "backlog": 2,
+    "backlog": 1,
     "byRepo": {
       "storefront-ui": {
         "total": 74,
@@ -87,9 +87,9 @@
       },
       "ecom-infra": {
         "total": 13,
-        "done": 11,
+        "done": 12,
         "in_progress": 0,
-        "backlog": 2
+        "backlog": 1
       },
       "Documentation": {
         "total": 7,
@@ -295,7 +295,6 @@
       }
     ],
     "nextUp": [
-      "tst-003",
       "inf-010"
     ],
     "completionGate": [
@@ -6693,16 +6692,16 @@
         {
           "id": "tst-003",
           "title": "Implement the specified k6 and Playwright suites",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-26",
+          "finished": "2026-11-26",
           "phase": "P5",
           "priority": "P2",
           "kind": "feature",
           "transport": "tests",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/tst-003-load-browser-suites.md",
           "key_decisions": [
             "Add the load and browser suites the testing spec already describes. Reason: they are specified but not implemented. Rejected: leaving the spec as aspirational.",
             "Gate them on the live stack rather than CI by default. Reason: they need running services. Rejected: making every CI run boot the whole stack."
@@ -6711,8 +6710,12 @@
             "Both suites run against the local stack and report results.",
             "The testing spec's claimed coverage matches reality."
           ],
-          "verified": false,
-          "follow_ups": []
+          "verified": true,
+          "follow_ups": [
+            "No checkout rate limiter: checkout-ratelimit sees zero 429s.",
+            "Cart mutation p99 1.6s against the 100ms target.",
+            "Pre-existing search-focus assertion; no approved screenshot baseline; Lighthouse binary absent."
+          ]
         }
       ],
       "messaging": {
