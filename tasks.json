@@ -3,15 +3,15 @@
   "updatedAt": "2026-11-26",
   "summary": {
     "total": 193,
-    "done": 191,
+    "done": 192,
     "in_progress": 0,
-    "backlog": 2,
+    "backlog": 1,
     "byRepo": {
       "storefront-ui": {
         "total": 83,
-        "done": 82,
+        "done": 83,
         "in_progress": 0,
-        "backlog": 1
+        "backlog": 0
       },
       "admin-app": {
         "total": 2,
@@ -308,7 +308,6 @@
       }
     ],
     "nextUp": [
-      "sf-082",
       "inf-010"
     ],
     "completionGate": [
@@ -2488,16 +2487,16 @@
         {
           "id": "sf-082",
           "title": "Recreate the Next storefront UI in the standalone HTML prototype",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-27",
+          "finished": "2026-11-27",
           "phase": "P0",
           "priority": "P1",
           "kind": "feature",
           "transport": "storefront",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/sf-082-standalone-html-rebuild.md",
           "key_decisions": [
             "Work on a copy (storefront.rebuild.html) and replace storefront.html only after user approval. Reason: the prototype contains designs the user prefers and a failed rebuild must not destroy them. Rejected: editing the source file in place.",
             "Preserve the navbar, megamenu, search overlay borders/effects, footer, /products + PDP/cards and their dependencies byte-for-byte. Reason: those designs are better in the HTML. Rejected: reimplementing them from the Next app, which has no megamenu.",
@@ -2509,8 +2508,11 @@
             "No console errors; focus, reduced motion and contrast honored.",
             "storefront.html is replaced only after user approval."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "Tune residual mobile hero/about/blog spacing if desired.",
+            "Remove backup and rebuild copies after user is satisfied."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
