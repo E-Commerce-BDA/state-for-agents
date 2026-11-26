@@ -574,10 +574,7 @@
     "analytics-svc": [],
     "notify-svc": [],
     "import-svc": [],
-    "admin-app": [
-      "731e2dc",
-      "17aec51"
-    ]
+    "admin-app": []
   },
   "unpushedVerifiedAt": "2026-11-26",
   "unpushedNote": "Recomputed with git rev-parse @{u} and git rev-list --count @{u}..HEAD in every local repo on 2026-11-02, after the CMS-home wave (ec-006, cat-013, cms-008, sf-060/062/063/064). Ahead counts: ecom-contracts 4, catalog-svc 5, cms-svc 3, Documentation 4, storefront 24, state-for-agents 8 + this commit. ecom-messaging and ecom-infra have no remote at all, so their lists are only the commits this wave series produced and their full history cannot leave this machine. state-for-agents cannot list itself. Nothing was pushed, tagged, released or published.",
@@ -6952,7 +6949,11 @@
             "A second apply does not recreate the queues."
           ],
           "verified": false,
-          "follow_ups": []
+          "follow_ups": [
+            "apply-ready: S3 backend configured, IAMFullAccess and SQSFullAccess attached to e-com-terraform, plan reports 15 resources to add.",
+            "Do NOT apply or deploy: user is doing AWS work as a guided learning exercise and will approve the apply later.",
+            "Acceptance still needs terraform apply, then two consecutive empty plans to prove no queue recreation."
+          ]
         },
         {
           "id": "tst-003",
