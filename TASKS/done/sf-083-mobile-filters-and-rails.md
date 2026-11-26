@@ -54,3 +54,15 @@
 
 - Remove the backups once the user is satisfied.
 - If ported to the Next app, add the mandated contract/resolver/style trios.
+
+
+## Post-close alignment fix (2026-11-27)
+
+The mobile filter button was moved into the sort-controls flex row so it sits on
+the same line as the Sort by label and select, with matching 37.6px height on a
+375px viewport. Its icon was changed from sliders-horizontal to Lucide's
+funnel-shaped ilter. The drawer transition was removed after the browser
+harness left the transition stuck at its start frame, which kept the panel
+off-screen; open/close is now immediate and reliable. All 23 preserve hashes
+still pass and 
+ode --check is clean.
