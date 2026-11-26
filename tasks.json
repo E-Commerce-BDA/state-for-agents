@@ -3,9 +3,9 @@
   "updatedAt": "2026-11-26",
   "summary": {
     "total": 180,
-    "done": 176,
+    "done": 178,
     "in_progress": 0,
-    "backlog": 4,
+    "backlog": 2,
     "byRepo": {
       "storefront-ui": {
         "total": 74,
@@ -87,9 +87,9 @@
       },
       "ecom-infra": {
         "total": 13,
-        "done": 9,
+        "done": 11,
         "in_progress": 0,
-        "backlog": 4
+        "backlog": 2
       },
       "Documentation": {
         "total": 7,
@@ -296,8 +296,6 @@
     ],
     "nextUp": [
       "tst-003",
-      "inf-006",
-      "inf-004",
       "inf-010"
     ],
     "completionGate": [
@@ -6437,10 +6435,10 @@
         {
           "id": "inf-004",
           "title": "ecom-infra: Nginx, VERSIONS.env, per-repo CI, and smoke",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-26",
+          "finished": "2026-11-26",
           "phase": "P5",
           "priority": "P1",
           "kind": "infra",
@@ -6450,7 +6448,7 @@
             "inf-002",
             "inf-003"
           ],
-          "log": null,
+          "log": "TASKS/done/inf-004-edge-live-verified.md",
           "key_decisions": [
             "Pin one image per repo in VERSIONS.env and route /api/<service> through Nginx. Reason: independent deploys and one-line rollback. Rejected: floating tags or a monolith compose.",
             "Run lint -> test -> build -> image push per repo. Reason: polyrepo ownership. Rejected: one shared pipeline that rebuilds everything."
@@ -6461,7 +6459,7 @@
             "CI exists per repo and blocks on tests.",
             "Smoke script checks /health and /health/ready."
           ],
-          "verified": false,
+          "verified": true,
           "follow_ups": []
         },
         {
@@ -6570,10 +6568,10 @@
         {
           "id": "inf-006",
           "title": "infra: replay the accumulated order.created dead letters",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-26",
+          "finished": "2026-11-26",
           "phase": "P5",
           "priority": "P1",
           "kind": "chore",
@@ -6582,7 +6580,7 @@
             "ca-011",
             "cat-014"
           ],
-          "log": null,
+          "log": "TASKS/done/inf-006-dlq-drain-verified.md",
           "key_decisions": [
             "Replay only after the bounded ladder is deployed to every consumer. Reason: the old 31s ladder would recreate the backlog. Rejected: replaying first and fixing later; deleting the DLQ topic.",
             "Reconcile duplicate and commit counters against the drain. Reason: the dead letters are at-least-once and many were already applied before the wedge. Rejected: assuming a clean replay."
@@ -6591,7 +6589,7 @@
             "order.created.dlq drains to zero with duplicate/commit counts reconciled.",
             "No new dead letters appear from the same offsets after the replay."
           ],
-          "verified": false,
+          "verified": true,
           "follow_ups": []
         },
         {
