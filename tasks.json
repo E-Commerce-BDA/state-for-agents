@@ -3,9 +3,9 @@
   "updatedAt": "2026-11-26",
   "summary": {
     "total": 180,
-    "done": 169,
+    "done": 170,
     "in_progress": 0,
-    "backlog": 11,
+    "backlog": 10,
     "byRepo": {
       "storefront-ui": {
         "total": 74,
@@ -45,9 +45,9 @@
       },
       "cart-svc": {
         "total": 14,
-        "done": 13,
+        "done": 14,
         "in_progress": 0,
-        "backlog": 1
+        "backlog": 0
       },
       "order-svc": {
         "total": 14,
@@ -300,7 +300,6 @@
       "tst-003",
       "inf-006",
       "sf-053a",
-      "ca-014",
       "inf-004",
       "inf-005",
       "inf-008",
@@ -3948,16 +3947,16 @@
         {
           "id": "ca-014",
           "title": "cart-svc: enforce append-only audit with a least-privilege role",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-10-31",
+          "finished": "2026-11-26",
           "phase": "P2",
           "priority": "P1",
           "kind": "feature",
           "transport": "database",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/ca-014-audit-role-verified.md",
           "key_decisions": [
             "Grant the application role INSERT/SELECT only on the audit table. Reason: a mutable audit trail defeats the point. Rejected: relying on code discipline.",
             "Run the e2e suite under the restricted role. Reason: otherwise the grant is untested. Rejected: granting UPDATE in test only."
@@ -3966,7 +3965,7 @@
             "An UPDATE or DELETE on the audit table is rejected by Postgres.",
             "All existing e2e flows pass under the restricted role."
           ],
-          "verified": false,
+          "verified": true,
           "follow_ups": []
         }
       ],
