@@ -3,15 +3,15 @@
   "updatedAt": "2026-11-26",
   "summary": {
     "total": 218,
-    "done": 214,
+    "done": 217,
     "in_progress": 0,
-    "backlog": 4,
+    "backlog": 1,
     "byRepo": {
       "storefront-ui": {
         "total": 98,
-        "done": 97,
+        "done": 98,
         "in_progress": 0,
-        "backlog": 1
+        "backlog": 0
       },
       "admin-app": {
         "total": 5,
@@ -87,15 +87,15 @@
       },
       "ecom-infra": {
         "total": 15,
-        "done": 13,
+        "done": 14,
         "in_progress": 0,
-        "backlog": 2
+        "backlog": 1
       },
       "Documentation": {
         "total": 10,
-        "done": 9,
+        "done": 10,
         "in_progress": 0,
-        "backlog": 1
+        "backlog": 0
       }
     },
     "logDebt": [
@@ -332,7 +332,9 @@
         "count": 5
       }
     ],
-    "nextUp": [],
+    "nextUp": [
+      "inf-010"
+    ],
     "completionGate": [
       "Every P0 task is done and verified.",
       "No request handler publishes to Kafka directly; every producer uses an outbox.",
@@ -572,6 +574,8 @@
   },
   "unpushed": {
     "storefront-ui": [
+      "d87d3da",
+      "bf32f07",
       "c5b9f93",
       "99da49d",
       "c81b3dd",
@@ -614,11 +618,13 @@
     ],
     "search-svc": [],
     "Documentation": [
+      "c8706c2",
       "71105f2",
       "f08e72a",
       "5e48670"
     ],
     "ecom-infra": [
+      "26e8f64",
       "49d411c",
       "2567b88",
       "29830d7",
@@ -3017,24 +3023,27 @@
         {
           "id": "sf-097",
           "title": "Final a11y and UX sweep",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-27",
+          "finished": "2026-11-27",
           "phase": "P0",
           "priority": "P1",
           "kind": "test",
           "transport": "http",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/sf-097-a11y-ux-sweep.md",
           "key_decisions": [
             "Check focus, keyboard, reduced motion, empty/loading/error/degraded faces, hover borders, radii and contrast. Reason: polish must be systematic. Rejected: per-page spot checks."
           ],
           "acceptance": [
             "No axe violations; all state faces consistent; gates green."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "No runtime axe/screen-reader run; static and jsdom checks only.",
+            "Remaining compare/signin diffs are CMS content and seeded-state differences."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
@@ -7918,16 +7927,16 @@
         {
           "id": "tst-004",
           "title": "Add visual parity harness",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-27",
+          "finished": "2026-11-27",
           "phase": "P5",
           "priority": "P1",
           "kind": "test",
           "transport": "http",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/tst-004-visual-parity-harness.md",
           "key_decisions": [
             "Capture storefront.html baselines at desktop/mobile and compare rebuilt Next routes. Reason: pixel parity is the acceptance criterion. Rejected: manual eyeballing only.",
             "Report diffs per route and block on unresolved drift."
@@ -7935,8 +7944,11 @@
           "acceptance": [
             "Harness runs locally with no live services required; diff report produced."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "No approved reference baseline; DIFF is a report, not a gate.",
+            "Six routes need live services and two need an access cookie."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
@@ -8283,24 +8295,26 @@
         {
           "id": "doc-010",
           "title": "Finalize rebuild documentation and index",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-27",
+          "finished": "2026-11-27",
           "phase": "P5",
           "priority": "P1",
           "kind": "doc",
           "transport": "http",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/doc-010-final-rebuild-docs.md",
           "key_decisions": [
             "Record final component reuse/gap outcomes and ADR amendments. Reason: docs must match shipped code. Rejected: stale planning docs."
           ],
           "acceptance": [
             "All artifacts indexed; no broken paths; diff clean."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "Owner docs form-controls.md, navigation.md, feedback.md and product grid-mode remain deferred and are named as such."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
