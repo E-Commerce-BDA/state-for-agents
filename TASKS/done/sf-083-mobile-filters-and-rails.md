@@ -66,3 +66,18 @@ harness left the transition stuck at its start frame, which kept the panel
 off-screen; open/close is now immediate and reliable. All 23 preserve hashes
 still pass and 
 ode --check is clean.
+
+
+## Drawer-shell fix (2026-11-27)
+
+The inline filter panel was replaced with a real `.sf-drawer.sf-drawer--left`
+mount, matching the cart and hamburger drawers: full viewport height, 320px
+width at 375px, header with Filters title/Reset/icon close, and the shared
+`.sf-scrim`. Reparenting is responsive: on <1024px the filter aside moves into
+the drawer, on desktop it stays in its sticky sidebar; a resize listener
+re-renders across the breakpoint. The mobile button is now icon-only
+(Lucide `filter`, `aria-label="Filters"`) so Sort by fits on one line.
+Verified: button 38px and vertically centered with the sort select, drawer
+x=0/w=320/h=812 with role=dialog, filter category click changes the H1 to
+Clothing, close returns focus, desktop sidebar intact, window.__errors null.
+All 23 preserve hashes still pass and node --check is clean.
