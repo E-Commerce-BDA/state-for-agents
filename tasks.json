@@ -3,9 +3,9 @@
   "updatedAt": "2026-11-26",
   "summary": {
     "total": 218,
-    "done": 203,
+    "done": 205,
     "in_progress": 0,
-    "backlog": 15,
+    "backlog": 13,
     "byRepo": {
       "storefront-ui": {
         "total": 98,
@@ -15,9 +15,9 @@
       },
       "admin-app": {
         "total": 5,
-        "done": 3,
+        "done": 4,
         "in_progress": 0,
-        "backlog": 2
+        "backlog": 1
       },
       "ecom-contracts": {
         "total": 7,
@@ -57,9 +57,9 @@
       },
       "cms-svc": {
         "total": 14,
-        "done": 13,
+        "done": 14,
         "in_progress": 0,
-        "backlog": 1
+        "backlog": 0
       },
       "analytics-svc": {
         "total": 5,
@@ -604,6 +604,7 @@
     "auth-svc": [],
     "order-svc": [],
     "cms-svc": [
+      "e1bcf02",
       "309389b",
       "9e77dc3"
     ],
@@ -623,6 +624,7 @@
     "notify-svc": [],
     "import-svc": [],
     "admin-app": [
+      "e37f830",
       "cda1f53"
     ]
   },
@@ -3179,16 +3181,16 @@
         {
           "id": "adm-004",
           "title": "Build mega-menu editor",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-27",
+          "finished": "2026-11-27",
           "phase": "P6",
           "priority": "P0",
           "kind": "feature",
           "transport": "http",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/adm-004-mega-menu-editor.md",
           "key_decisions": [
             "Add group/column/promo editing through the storefront BFF. Reason: admin must own mega-menu content. Rejected: direct CMS writes from browser.",
             "Drag order and internal-link picker follow admin patterns."
@@ -3196,8 +3198,10 @@
           "acceptance": [
             "Editor saves/loads groups; contract tests and admin gates green."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "No live cross-repo E2E; mocked BFF and pure schema tests only."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
@@ -6013,16 +6017,16 @@
         {
           "id": "cms-014",
           "title": "Support mega-menu navigation content",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-27",
+          "finished": "2026-11-27",
           "phase": "P5",
           "priority": "P0",
           "kind": "feature",
           "transport": "http",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/cms-014-mega-menu-navigation.md",
           "key_decisions": [
             "Validate and persist navigation groups/columns from 2.2.0 schema. Reason: mega-menu must be CMS-backed. Rejected: hardcoding menu content.",
             "Keep existing nav readers valid; new fields optional."
@@ -6030,8 +6034,11 @@
           "acceptance": [
             "Admin navigation PUT/GET round-trips groups; internal href validation; e2e green."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "Storefront resolveNav pass-through was assigned to sf-089 follow-up.",
+            "Two opt-in suites (LocalStack SQS, live Kafka) stayed skipped."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
