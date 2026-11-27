@@ -3,27 +3,27 @@
   "updatedAt": "2026-11-26",
   "summary": {
     "total": 199,
-    "done": 193,
+    "done": 198,
     "in_progress": 0,
-    "backlog": 6,
+    "backlog": 1,
     "byRepo": {
       "storefront-ui": {
         "total": 85,
-        "done": 84,
+        "done": 85,
         "in_progress": 0,
-        "backlog": 1
+        "backlog": 0
       },
       "admin-app": {
         "total": 3,
-        "done": 2,
+        "done": 3,
         "in_progress": 0,
-        "backlog": 1
+        "backlog": 0
       },
       "ecom-contracts": {
         "total": 7,
-        "done": 6,
+        "done": 7,
         "in_progress": 0,
-        "backlog": 1
+        "backlog": 0
       },
       "ecom-messaging": {
         "total": 0,
@@ -57,9 +57,9 @@
       },
       "cms-svc": {
         "total": 13,
-        "done": 12,
+        "done": 13,
         "in_progress": 0,
-        "backlog": 1
+        "backlog": 0
       },
       "analytics-svc": {
         "total": 5,
@@ -93,9 +93,9 @@
       },
       "Documentation": {
         "total": 8,
-        "done": 7,
+        "done": 8,
         "in_progress": 0,
-        "backlog": 1
+        "backlog": 0
       }
     },
     "logDebt": [
@@ -314,11 +314,7 @@
       }
     ],
     "nextUp": [
-      "ec-007",
-      "cms-013",
-      "sf-084",
-      "adm-003",
-      "doc-008"
+      "inf-010"
     ],
     "completionGate": [
       "Every P0 task is done and verified.",
@@ -559,6 +555,8 @@
   },
   "unpushed": {
     "storefront-ui": [
+      "18c2486",
+      "d871032",
       "d1ad18f",
       "0be6c24",
       "8063385",
@@ -569,6 +567,7 @@
       "e44e197"
     ],
     "ecom-contracts": [
+      "4cb5ad0",
       "107e6fc"
     ],
     "ecom-messaging": [],
@@ -579,13 +578,16 @@
     "auth-svc": [],
     "order-svc": [],
     "cms-svc": [
+      "309389b",
       "9e77dc3"
     ],
     "search-svc": [],
     "Documentation": [
+      "f08e72a",
       "5e48670"
     ],
     "ecom-infra": [
+      "49d411c",
       "2567b88",
       "29830d7",
       "55b5aeb"
@@ -593,7 +595,9 @@
     "analytics-svc": [],
     "notify-svc": [],
     "import-svc": [],
-    "admin-app": []
+    "admin-app": [
+      "cda1f53"
+    ]
   },
   "unpushedVerifiedAt": "2026-11-26",
   "unpushedNote": "Recomputed with git rev-parse @{u} and git rev-list --count @{u}..HEAD in every local repo on 2026-11-02, after the CMS-home wave (ec-006, cat-013, cms-008, sf-060/062/063/064). Ahead counts: ecom-contracts 4, catalog-svc 5, cms-svc 3, Documentation 4, storefront 24, state-for-agents 8 + this commit. ecom-messaging and ecom-infra have no remote at all, so their lists are only the commits this wave series produced and their full history cannot leave this machine. state-for-agents cannot list itself. Nothing was pushed, tagged, released or published.",
@@ -2569,16 +2573,16 @@
         {
           "id": "sf-084",
           "title": "Build the layered theme token resolver and emitter",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-27",
+          "finished": "2026-11-27",
           "phase": "P0",
           "priority": "P0",
           "kind": "feature",
           "transport": "http",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/sf-084-layered-theme-tokens.md",
           "key_decisions": [
             "Resolve product/slide props -> component theme -> section settings -> global palette -> builtin, with reset deleting keys. Reason: deterministic inheritance and one default source. Rejected: scattered null fallbacks.",
             "Emit --sf-* semantic tokens and keep --color-* aliases for one release. Reason: migration without breaking existing components. Rejected: instant removal."
@@ -2589,8 +2593,11 @@
             "Focus, disabled, status foreground/on-colors are locked to AA floors.",
             "Resolver-unit, style-contract and four gates green."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "No live CMS document carrying the palette was available; contract-validated fixtures were used.",
+            "--minicart-duration/-motion are emitted but have no CSS consumer yet."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
@@ -2724,16 +2731,16 @@
         {
           "id": "adm-003",
           "title": "Separate admin tokens and wire the real theme contract",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-27",
+          "finished": "2026-11-27",
           "phase": "P6",
           "priority": "P0",
           "kind": "feature",
           "transport": "http",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/adm-003-admin-theme-separation.md",
           "key_decisions": [
             "Rename admin chrome vars to --adm-* and stop merchant config from re-skinning the admin tool. Reason: admin actions must stay ink-based, not storefront ocean. Rejected: reusing --sf-* in both apps.",
             "Theme editor writes nested contract groups and a string configVersion through the guarded BFF. Reason: current flat form and version mismatch block every save. Rejected: keeping legacy flat keys."
@@ -2744,8 +2751,11 @@
             "BFF PUT targets /api/v1/cms/admin/settings/global and accepts string configVersion.",
             "Contract tests, lint, typecheck, tests and build green."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "Component-group prefill uses explicit resolved-var mapping; unmapped groups start blank.",
+            "No live cross-repo E2E was run."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
@@ -3061,16 +3071,16 @@
         {
           "id": "ec-007",
           "title": "Add storefront palette and resolved-config contracts",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-27",
+          "finished": "2026-11-27",
           "phase": "P5",
           "priority": "P0",
           "kind": "contract",
           "transport": "contracts",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/ec-007-theme-palette-contracts.md",
           "key_decisions": [
             "Add a layered, admin-editable palette and a versioned resolved storefront config. Reason: admin currently writes a flat theme the strict contract rejects. Rejected: raw CSS vars from admin.",
             "Keep all fields optional with empty-string sentinel so 2.1.0 readers keep working. Rejected: a breaking rename of existing groups."
@@ -3081,8 +3091,10 @@
             "Navigation schema carries CMS-backed mega-menu groups/columns.",
             "Contract tests, changelog, VERSIONING and packed tarball green."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "Downstream repins completed in cms-svc, storefront, admin-app and ecom-infra."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
@@ -5496,16 +5508,16 @@
         {
           "id": "cms-013",
           "title": "Expose validated palette settings and preview seam",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-27",
+          "finished": "2026-11-27",
           "phase": "P5",
           "priority": "P0",
           "kind": "feature",
           "transport": "http",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/cms-013-nested-theme-settings.md",
           "key_decisions": [
             "Validate the new nested palette with themeSettingsSchema and keep admin PUT on the admin-guarded path. Reason: the public write path does not exist and flat keys are rejected. Rejected: accepting arbitrary payloads.",
             "Emit revalidation and preview metadata in public settings reads. Reason: admin edits must appear promptly and preview before publish. Rejected: cache-only propagation."
@@ -5516,8 +5528,10 @@
             "Preview token path admits draft/inactive content only with a valid token.",
             "Unit and e2e against live Mongo green."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "Two opt-in e2e suites (LocalStack SQS, live Kafka) remain skipped; unrelated."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
@@ -7652,16 +7666,16 @@
         {
           "id": "doc-008",
           "title": "Document token layers and state-machine UI rules",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-27",
+          "finished": "2026-11-27",
           "phase": "P5",
           "priority": "P1",
           "kind": "doc",
           "transport": "http",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/doc-008-token-architecture-docs.md",
           "key_decisions": [
             "Record the layered token architecture, AA locks, admin/storefront token separation and the no-useState rule for rebuilt islands. Reason: docs-first for new patterns. Rejected: relying on conversation memory."
           ],
@@ -7669,7 +7683,7 @@
             "ADR and design-system update indexed same commit as the code that implements them.",
             "Component library doc lists new artifacts and reuse/gap map."
           ],
-          "verified": false,
+          "verified": true,
           "follow_ups": [],
           "messaging": {
             "publishes": [],
