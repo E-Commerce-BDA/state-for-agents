@@ -3,21 +3,21 @@
   "updatedAt": "2026-11-26",
   "summary": {
     "total": 218,
-    "done": 212,
+    "done": 214,
     "in_progress": 0,
-    "backlog": 6,
+    "backlog": 4,
     "byRepo": {
       "storefront-ui": {
         "total": 98,
-        "done": 96,
+        "done": 97,
         "in_progress": 0,
-        "backlog": 2
+        "backlog": 1
       },
       "admin-app": {
         "total": 5,
-        "done": 4,
+        "done": 5,
         "in_progress": 0,
-        "backlog": 1
+        "backlog": 0
       },
       "ecom-contracts": {
         "total": 7,
@@ -572,6 +572,8 @@
   },
   "unpushed": {
     "storefront-ui": [
+      "c5b9f93",
+      "99da49d",
       "c81b3dd",
       "0b1b48b",
       "833f2df",
@@ -626,6 +628,7 @@
     "notify-svc": [],
     "import-svc": [],
     "admin-app": [
+      "3f8622a",
       "e37f830",
       "cda1f53"
     ]
@@ -2982,16 +2985,16 @@
         {
           "id": "sf-096",
           "title": "Add storefront preview and fresh config route",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-27",
+          "finished": "2026-11-27",
           "phase": "P5",
           "priority": "P0",
           "kind": "feature",
           "transport": "http",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/sf-096-preview-route.md",
           "key_decisions": [
             "Honor preview token and 2.2.0 config envelope with short-lived cache. Reason: admin preview must render merchant theme. Rejected: admin chrome vars.",
             "Never emit raw CSS; all paint via --sf-*."
@@ -2999,8 +3002,11 @@
           "acceptance": [
             "Preview route validated; config envelope matches admin; gates green."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "Navigation draft patches are accepted but do not repaint nav chrome in this pass.",
+            "No live admin-iframe browser run; contract/unit coverage only."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
@@ -3228,16 +3234,16 @@
         {
           "id": "adm-005",
           "title": "Add WYSIWYG preview and propagation",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-27",
+          "finished": "2026-11-27",
           "phase": "P6",
           "priority": "P0",
           "kind": "feature",
           "transport": "http",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/adm-005-wysiwyg-preview.md",
           "key_decisions": [
             "Render storefront preview in an iframe with preview token; show save/revert and validation feedback. Reason: theme changes must be visible before publish. Rejected: admin-side token substitution.",
             "Admin chrome remains --adm-* only."
@@ -3245,8 +3251,10 @@
           "acceptance": [
             "Admin save -> preview -> published storefront verified; gates green."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "No live cross-repo E2E; storefront consumer is contract-tested only."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
