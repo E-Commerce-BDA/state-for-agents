@@ -3,15 +3,15 @@
   "updatedAt": "2026-11-26",
   "summary": {
     "total": 218,
-    "done": 198,
+    "done": 203,
     "in_progress": 0,
-    "backlog": 20,
+    "backlog": 15,
     "byRepo": {
       "storefront-ui": {
         "total": 98,
-        "done": 85,
+        "done": 89,
         "in_progress": 0,
-        "backlog": 13
+        "backlog": 9
       },
       "admin-app": {
         "total": 5,
@@ -93,9 +93,9 @@
       },
       "Documentation": {
         "total": 10,
-        "done": 8,
+        "done": 9,
         "in_progress": 0,
-        "backlog": 2
+        "backlog": 1
       }
     },
     "logDebt": [
@@ -333,11 +333,10 @@
       }
     ],
     "nextUp": [
-      "sf-085",
-      "sf-086",
-      "sf-087",
-      "sf-088",
-      "doc-009"
+      "sf-089",
+      "sf-090",
+      "cms-014",
+      "adm-004"
     ],
     "completionGate": [
       "Every P0 task is done and verified.",
@@ -578,6 +577,10 @@
   },
   "unpushed": {
     "storefront-ui": [
+      "aa8eb53",
+      "24dbedc",
+      "e0a0d95",
+      "0288229",
       "18c2486",
       "d871032",
       "d1ad18f",
@@ -606,6 +609,7 @@
     ],
     "search-svc": [],
     "Documentation": [
+      "71105f2",
       "f08e72a",
       "5e48670"
     ],
@@ -2631,16 +2635,16 @@
         {
           "id": "sf-085",
           "title": "Port prototype state machines into pure reducers",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-27",
+          "finished": "2026-11-27",
           "phase": "P0",
           "priority": "P0",
           "kind": "feature",
           "transport": "http",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/sf-085-pure-machine-layer.md",
           "key_decisions": [
             "Use pure machines + useReducer; no new useState. Reason: prototype has 13 explicit machines and the constitution bans scattered state. Rejected: generic machine factory or XState.",
             "Port states/events, not the prototype's generic dispatch factory. Rejected: copying prototype implementation."
@@ -2650,8 +2654,10 @@
             "Resolver-unit tests cover all transitions.",
             "No new useState in rebuilt islands."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "No generic machine factory; no XState."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
@@ -2662,16 +2668,16 @@
         {
           "id": "sf-086",
           "title": "Migrate useState-heavy islands to machines",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-27",
+          "finished": "2026-11-27",
           "phase": "P0",
           "priority": "P0",
           "kind": "feature",
           "transport": "http",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/sf-086-use-state-migration.md",
           "key_decisions": [
             "Refactor existing islands to the new machines with controlled dumb components. Reason: duplicate state sources caused undefined states. Rejected: adding more local flags.",
             "useRef/useEffect only for timers, abort and side effects. Rejected: storing side-effect state in useState."
@@ -2679,8 +2685,10 @@
           "acceptance": [
             "All listed useState-heavy islands use machines; all four gates green; no behavior regressions."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "Browser visual parity deferred to later waves."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
@@ -2691,16 +2699,16 @@
         {
           "id": "sf-087",
           "title": "Add foundational UI and commerce artifacts",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-27",
+          "finished": "2026-11-27",
           "phase": "P0",
           "priority": "P0",
           "kind": "feature",
           "transport": "http",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/sf-087-foundational-artifacts.md",
           "key_decisions": [
             "Add SegmentedToggle, Dropdown/Menu, FilterDrawer, ShopToolbar and GridModeToggle with five artifacts and trio tests. Reason: prototype pieces have no Next equivalents. Rejected: reusing wrong primitives or skipping docs.",
             "All new components are controlled and dumb; state stays in route islands."
@@ -2708,8 +2716,10 @@
           "acceptance": [
             "Each artifact has model, CSS, component, doc, barrel and three test tiers; gates green."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "New primitives not yet wired into product pages; Wave 2/3 integrates them."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
@@ -2720,16 +2730,16 @@
         {
           "id": "sf-088",
           "title": "Add composed UI artifacts for shell and commerce",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-27",
+          "finished": "2026-11-27",
           "phase": "P0",
           "priority": "P0",
           "kind": "feature",
           "transport": "http",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/sf-088-composed-artifacts.md",
           "key_decisions": [
             "Add PaginatedRail, MegaMenu, OrderSummaryCard and Timeline. Reason: prototype visual language must be reusable, not pasted. Rejected: per-page markup copies.",
             "MegaMenu consumes the 2.2.0 navigation groups; PaginatedRail is draggable and reduced-motion safe."
@@ -2737,8 +2747,10 @@
           "acceptance": [
             "Each artifact has five artifacts and trio tests; gates green."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "MegaMenu not yet integrated into NavbarMount; PaginatedRail uses index wrap rather than cloned DOM."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
@@ -8212,23 +8224,23 @@
         {
           "id": "doc-009",
           "title": "Document Wave 1 component and machine artifacts",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-27",
+          "finished": "2026-11-27",
           "phase": "P5",
           "priority": "P1",
           "kind": "doc",
           "transport": "http",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/doc-009-wave1-component-docs.md",
           "key_decisions": [
             "Docs-first for new patterns. Reason: AGENTS.md requires same-commit indexing. Rejected: relying on code comments only."
           ],
           "acceptance": [
             "components/README.md and 0.Project-Overview.md §14 index every new artifact; ADR updated if needed."
           ],
-          "verified": false,
+          "verified": true,
           "follow_ups": [],
           "messaging": {
             "publishes": [],
