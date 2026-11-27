@@ -2,22 +2,22 @@
   "version": 2,
   "updatedAt": "2026-11-26",
   "summary": {
-    "total": 199,
+    "total": 218,
     "done": 198,
     "in_progress": 0,
-    "backlog": 1,
+    "backlog": 20,
     "byRepo": {
       "storefront-ui": {
-        "total": 85,
+        "total": 98,
         "done": 85,
         "in_progress": 0,
-        "backlog": 0
+        "backlog": 13
       },
       "admin-app": {
-        "total": 3,
+        "total": 5,
         "done": 3,
         "in_progress": 0,
-        "backlog": 0
+        "backlog": 2
       },
       "ecom-contracts": {
         "total": 7,
@@ -56,10 +56,10 @@
         "backlog": 0
       },
       "cms-svc": {
-        "total": 13,
+        "total": 14,
         "done": 13,
         "in_progress": 0,
-        "backlog": 0
+        "backlog": 1
       },
       "analytics-svc": {
         "total": 5,
@@ -86,16 +86,16 @@
         "backlog": 0
       },
       "ecom-infra": {
-        "total": 14,
+        "total": 15,
         "done": 13,
         "in_progress": 0,
-        "backlog": 1
+        "backlog": 2
       },
       "Documentation": {
-        "total": 8,
+        "total": 10,
         "done": 8,
         "in_progress": 0,
-        "backlog": 0
+        "backlog": 2
       }
     },
     "logDebt": [
@@ -149,9 +149,21 @@
           "sf-081",
           "sf-082",
           "sf-083",
-          "sf-084"
+          "sf-084",
+          "sf-085",
+          "sf-086",
+          "sf-087",
+          "sf-088",
+          "sf-089",
+          "sf-090",
+          "sf-091",
+          "sf-092",
+          "sf-093",
+          "sf-094",
+          "sf-095",
+          "sf-097"
         ],
-        "count": 29
+        "count": 41
       },
       {
         "id": "P1",
@@ -293,9 +305,14 @@
           "inf-011",
           "ec-007",
           "cms-013",
-          "doc-008"
+          "doc-008",
+          "doc-009",
+          "cms-014",
+          "sf-096",
+          "tst-004",
+          "doc-010"
         ],
-        "count": 24
+        "count": 29
       },
       {
         "id": "P6",
@@ -308,13 +325,19 @@
         "tasks": [
           "adm-001",
           "adm-002",
-          "adm-003"
+          "adm-003",
+          "adm-004",
+          "adm-005"
         ],
-        "count": 3
+        "count": 5
       }
     ],
     "nextUp": [
-      "inf-010"
+      "sf-085",
+      "sf-086",
+      "sf-087",
+      "sf-088",
+      "doc-009"
     ],
     "completionGate": [
       "Every P0 task is done and verified.",
@@ -2604,6 +2627,384 @@
             "taskQueues": [],
             "doesNotUseKafka": "Metadata and UI foundation; no service transport."
           }
+        },
+        {
+          "id": "sf-085",
+          "title": "Port prototype state machines into pure reducers",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Use pure machines + useReducer; no new useState. Reason: prototype has 13 explicit machines and the constitution bans scattered state. Rejected: generic machine factory or XState.",
+            "Port states/events, not the prototype's generic dispatch factory. Rejected: copying prototype implementation."
+          ],
+          "acceptance": [
+            "Machines for filter drawer, grid mode, cart view, auth forms, quick view/overlay, hero carousel, search overlay, PDP tabs, account tabs exist in lib.",
+            "Resolver-unit tests cover all transitions.",
+            "No new useState in rebuilt islands."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "UI/config metadata only; no service transport."
+          }
+        },
+        {
+          "id": "sf-086",
+          "title": "Migrate useState-heavy islands to machines",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Refactor existing islands to the new machines with controlled dumb components. Reason: duplicate state sources caused undefined states. Rejected: adding more local flags.",
+            "useRef/useEffect only for timers, abort and side effects. Rejected: storing side-effect state in useState."
+          ],
+          "acceptance": [
+            "All listed useState-heavy islands use machines; all four gates green; no behavior regressions."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "UI/config metadata only; no service transport."
+          }
+        },
+        {
+          "id": "sf-087",
+          "title": "Add foundational UI and commerce artifacts",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Add SegmentedToggle, Dropdown/Menu, FilterDrawer, ShopToolbar and GridModeToggle with five artifacts and trio tests. Reason: prototype pieces have no Next equivalents. Rejected: reusing wrong primitives or skipping docs.",
+            "All new components are controlled and dumb; state stays in route islands."
+          ],
+          "acceptance": [
+            "Each artifact has model, CSS, component, doc, barrel and three test tiers; gates green."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "UI/config metadata only; no service transport."
+          }
+        },
+        {
+          "id": "sf-088",
+          "title": "Add composed UI artifacts for shell and commerce",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Add PaginatedRail, MegaMenu, OrderSummaryCard and Timeline. Reason: prototype visual language must be reusable, not pasted. Rejected: per-page markup copies.",
+            "MegaMenu consumes the 2.2.0 navigation groups; PaginatedRail is draggable and reduced-motion safe."
+          ],
+          "acceptance": [
+            "Each artifact has five artifacts and trio tests; gates green."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "UI/config metadata only; no service transport."
+          }
+        },
+        {
+          "id": "sf-089",
+          "title": "Build header shell and CMS-backed mega-menu",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Reuse Navbar/AccountMenu/NavLinks and add MegaMenu from CMS navigation groups. Reason: all routes must share one chrome. Rejected: per-page nav overrides.",
+            "Request-fresh config remains; announcement active index and badge/current state from navbar machine."
+          ],
+          "acceptance": [
+            "Navbar/announcement/mega-menu/account dropdown match prototype at desktop/mobile; all routes identical; gates green."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "UI/config metadata only; no service transport."
+          }
+        },
+        {
+          "id": "sf-090",
+          "title": "Build overlays, drawers, footer and toasts",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Reuse search overlays, mobile drawer, mini-cart drawer, compare tray, toasts and footer; replace hand-rolled state faces with shared components. Reason: one visual language. Rejected: duplicating overlay implementations.",
+            "Use .sf-* CSS and data-* state; hover-border and drawer motion match prototype."
+          ],
+          "acceptance": [
+            "All shell surfaces match prototype; focus/reduced-motion/contract tests green."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "UI/config metadata only; no service transport."
+          }
+        },
+        {
+          "id": "sf-091",
+          "title": "Rebuild home page to prototype parity",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P1",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Compose existing sections through CMS view models: hero, marquee, categories, rails, testimonials, journal teaser. Reason: don't copy prototype HTML. Rejected: page-local markup duplicates.",
+            "All section knobs read from contracts and tokens."
+          ],
+          "acceptance": [
+            "Home matches storefront.html at 1536x900 and 375x812; gates green."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "UI/config metadata only; no service transport."
+          }
+        },
+        {
+          "id": "sf-092",
+          "title": "Rebuild products listing and PDP",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P1",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Compose ShopToolbar, FilterDrawer, ProductGrid, GridModeToggle and PDP components. Reason: product surfaces must be consistent. Rejected: separate filter implementations.",
+            "URL sort/cat/sale round-trip preserved; grid mode is mobile-only."
+          ],
+          "acceptance": [
+            "Products/PDP match prototype; gates green."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "UI/config metadata only; no service transport."
+          }
+        },
+        {
+          "id": "sf-093",
+          "title": "Rebuild cart, checkout and confirmation",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P1",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Compose CartTable/CartLineItem, OrderSummaryCard, CheckoutSteps, PaymentPill, Timeline and shared state faces. Reason: money pages need explicit states. Rejected: inline hand-rolled faces.",
+            "Keep BFF seams and error details."
+          ],
+          "acceptance": [
+            "Cart/checkout/confirmation match prototype; gates green."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "UI/config metadata only; no service transport."
+          }
+        },
+        {
+          "id": "sf-094",
+          "title": "Rebuild account, orders, wishlist and compare",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P1",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Share OrderRow and state faces; wire account/orders/compare machines. Reason: these surfaces duplicated logic. Rejected: page-local order rows.",
+            "Compare uses differences-only model; wishlist uses shared product grid."
+          ],
+          "acceptance": [
+            "All four surfaces match prototype; gates green."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "UI/config metadata only; no service transport."
+          }
+        },
+        {
+          "id": "sf-095",
+          "title": "Rebuild auth, blog and legal pages",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P1",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Reuse auth components, BlogCard and PageBlocks; wire auth form machines and ?next=. Reason: chromeless auth and prose pages need parity. Rejected: prototype copy-paste.",
+            "CMS outage faces use DegradedState; 404 boundaries styled."
+          ],
+          "acceptance": [
+            "Auth/blog/legal match prototype; gates green."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "UI/config metadata only; no service transport."
+          }
+        },
+        {
+          "id": "sf-096",
+          "title": "Add storefront preview and fresh config route",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P5",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Honor preview token and 2.2.0 config envelope with short-lived cache. Reason: admin preview must render merchant theme. Rejected: admin chrome vars.",
+            "Never emit raw CSS; all paint via --sf-*."
+          ],
+          "acceptance": [
+            "Preview route validated; config envelope matches admin; gates green."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "UI/config metadata only; no service transport."
+          }
+        },
+        {
+          "id": "sf-097",
+          "title": "Final a11y and UX sweep",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P1",
+          "kind": "test",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Check focus, keyboard, reduced motion, empty/loading/error/degraded faces, hover borders, radii and contrast. Reason: polish must be systematic. Rejected: per-page spot checks."
+          ],
+          "acceptance": [
+            "No axe violations; all state faces consistent; gates green."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "UI/config metadata only; no service transport."
+          }
         }
       ],
       "messaging": {
@@ -2761,6 +3162,64 @@
             "consumes": [],
             "taskQueues": [],
             "doesNotUseKafka": "Metadata and UI foundation; no service transport."
+          }
+        },
+        {
+          "id": "adm-004",
+          "title": "Build mega-menu editor",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P6",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Add group/column/promo editing through the storefront BFF. Reason: admin must own mega-menu content. Rejected: direct CMS writes from browser.",
+            "Drag order and internal-link picker follow admin patterns."
+          ],
+          "acceptance": [
+            "Editor saves/loads groups; contract tests and admin gates green."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "UI/config metadata only; no service transport."
+          }
+        },
+        {
+          "id": "adm-005",
+          "title": "Add WYSIWYG preview and propagation",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P6",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Render storefront preview in an iframe with preview token; show save/revert and validation feedback. Reason: theme changes must be visible before publish. Rejected: admin-side token substitution.",
+            "Admin chrome remains --adm-* only."
+          ],
+          "acceptance": [
+            "Admin save -> preview -> published storefront verified; gates green."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "UI/config metadata only; no service transport."
           }
         }
       ],
@@ -5538,6 +5997,35 @@
             "taskQueues": [],
             "doesNotUseKafka": "Metadata and UI foundation; no service transport."
           }
+        },
+        {
+          "id": "cms-014",
+          "title": "Support mega-menu navigation content",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P5",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Validate and persist navigation groups/columns from 2.2.0 schema. Reason: mega-menu must be CMS-backed. Rejected: hardcoding menu content.",
+            "Keep existing nav readers valid; new fields optional."
+          ],
+          "acceptance": [
+            "Admin navigation PUT/GET round-trips groups; internal href validation; e2e green."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "UI/config metadata only; no service transport."
+          }
         }
       ],
       "note": "7/7 done, no backlog. Verified: 149 unit (22 files) + 87 e2e passed (4 skipped) + 0/0 lint on 100 files + clean build; the media-resize e2e runs green against real LocalStack when AWS_ENDPOINT_URL is set and skips with a printed reason otherwise. Media has one containment-checked path builder (null byte, single decode, mediaKeySchema, path.relative, then realpath re-check), visibility public/private, a public file route that 404s private and orphan files, an admin-only ObjectId file route, and public max-age=60 must-revalidate caching. cms.updated/blog.updated are written to cms_outbox inside the same Mongo transaction as the write (cms-005); media renditions are SQS tasks with an idempotency key (cms-006) and there is no producer or consumer on the direct Kafka bus left; the three storefront-read mutations POST their exact tag to /api/revalidate with the shared secret (cms-007). Named debt: upload size/MIME checks still run post-buffer (cms-004) and there is no variant garbage collection.",
@@ -7383,6 +7871,35 @@
             "taskQueues": [],
             "doesNotUseKafka": "Storefront/admin UI and config metadata only."
           }
+        },
+        {
+          "id": "tst-004",
+          "title": "Add visual parity harness",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P5",
+          "priority": "P1",
+          "kind": "test",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Capture storefront.html baselines at desktop/mobile and compare rebuilt Next routes. Reason: pixel parity is the acceptance criterion. Rejected: manual eyeballing only.",
+            "Report diffs per route and block on unresolved drift."
+          ],
+          "acceptance": [
+            "Harness runs locally with no live services required; diff report produced."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "UI/config metadata only; no service transport."
+          }
         }
       ],
       "messaging": {
@@ -7690,6 +8207,62 @@
             "consumes": [],
             "taskQueues": [],
             "doesNotUseKafka": "Metadata and UI foundation; no service transport."
+          }
+        },
+        {
+          "id": "doc-009",
+          "title": "Document Wave 1 component and machine artifacts",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P5",
+          "priority": "P1",
+          "kind": "doc",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Docs-first for new patterns. Reason: AGENTS.md requires same-commit indexing. Rejected: relying on code comments only."
+          ],
+          "acceptance": [
+            "components/README.md and 0.Project-Overview.md §14 index every new artifact; ADR updated if needed."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "UI/config metadata only; no service transport."
+          }
+        },
+        {
+          "id": "doc-010",
+          "title": "Finalize rebuild documentation and index",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P5",
+          "priority": "P1",
+          "kind": "doc",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Record final component reuse/gap outcomes and ADR amendments. Reason: docs must match shipped code. Rejected: stale planning docs."
+          ],
+          "acceptance": [
+            "All artifacts indexed; no broken paths; diff clean."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "UI/config metadata only; no service transport."
           }
         }
       ],
