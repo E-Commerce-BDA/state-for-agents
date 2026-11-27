@@ -3,15 +3,15 @@
   "updatedAt": "2026-11-26",
   "summary": {
     "total": 218,
-    "done": 207,
+    "done": 212,
     "in_progress": 0,
-    "backlog": 11,
+    "backlog": 6,
     "byRepo": {
       "storefront-ui": {
         "total": 98,
-        "done": 91,
+        "done": 96,
         "in_progress": 0,
-        "backlog": 7
+        "backlog": 2
       },
       "admin-app": {
         "total": 5,
@@ -572,6 +572,11 @@
   },
   "unpushed": {
     "storefront-ui": [
+      "c81b3dd",
+      "0b1b48b",
+      "833f2df",
+      "b60bb3d",
+      "4ec38c6",
       "957b64e",
       "2d69d92",
       "aa8eb53",
@@ -2822,16 +2827,16 @@
         {
           "id": "sf-091",
           "title": "Rebuild home page to prototype parity",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-27",
+          "finished": "2026-11-27",
           "phase": "P0",
           "priority": "P1",
           "kind": "feature",
           "transport": "http",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/sf-091-home-page-parity.md",
           "key_decisions": [
             "Compose existing sections through CMS view models: hero, marquee, categories, rails, testimonials, journal teaser. Reason: don't copy prototype HTML. Rejected: page-local markup duplicates.",
             "All section knobs read from contracts and tokens."
@@ -2839,8 +2844,10 @@
           "acceptance": [
             "Home matches storefront.html at 1536x900 and 375x812; gates green."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "Full visual parity requires live CMS/catalog; structural/style tests cover it."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
@@ -2851,16 +2858,16 @@
         {
           "id": "sf-092",
           "title": "Rebuild products listing and PDP",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-27",
+          "finished": "2026-11-27",
           "phase": "P0",
           "priority": "P1",
           "kind": "feature",
           "transport": "http",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/sf-092-products-pdp-parity.md",
           "key_decisions": [
             "Compose ShopToolbar, FilterDrawer, ProductGrid, GridModeToggle and PDP components. Reason: product surfaces must be consistent. Rejected: separate filter implementations.",
             "URL sort/cat/sale round-trip preserved; grid mode is mobile-only."
@@ -2868,8 +2875,10 @@
           "acceptance": [
             "Products/PDP match prototype; gates green."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "Full visual parity requires live catalog/CMS."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
@@ -2880,16 +2889,16 @@
         {
           "id": "sf-093",
           "title": "Rebuild cart, checkout and confirmation",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-27",
+          "finished": "2026-11-27",
           "phase": "P0",
           "priority": "P1",
           "kind": "feature",
           "transport": "http",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/sf-093-cart-checkout-parity.md",
           "key_decisions": [
             "Compose CartTable/CartLineItem, OrderSummaryCard, CheckoutSteps, PaymentPill, Timeline and shared state faces. Reason: money pages need explicit states. Rejected: inline hand-rolled faces.",
             "Keep BFF seams and error details."
@@ -2897,8 +2906,10 @@
           "acceptance": [
             "Cart/checkout/confirmation match prototype; gates green."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "Full visual parity requires live auth/cart/order services."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
@@ -2909,16 +2920,16 @@
         {
           "id": "sf-094",
           "title": "Rebuild account, orders, wishlist and compare",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-27",
+          "finished": "2026-11-27",
           "phase": "P0",
           "priority": "P1",
           "kind": "feature",
           "transport": "http",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/sf-094-account-compare-parity.md",
           "key_decisions": [
             "Share OrderRow and state faces; wire account/orders/compare machines. Reason: these surfaces duplicated logic. Rejected: page-local order rows.",
             "Compare uses differences-only model; wishlist uses shared product grid."
@@ -2926,8 +2937,10 @@
           "acceptance": [
             "All four surfaces match prototype; gates green."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "Full visual parity requires live account/order/catalog services."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
@@ -2938,16 +2951,16 @@
         {
           "id": "sf-095",
           "title": "Rebuild auth, blog and legal pages",
-          "status": "todo",
-          "owner": null,
-          "started": null,
-          "finished": null,
+          "status": "done",
+          "owner": "agent",
+          "started": "2026-11-27",
+          "finished": "2026-11-27",
           "phase": "P0",
           "priority": "P1",
           "kind": "feature",
           "transport": "http",
           "dependsOn": [],
-          "log": null,
+          "log": "TASKS/done/sf-095-auth-blog-legal-parity.md",
           "key_decisions": [
             "Reuse auth components, BlogCard and PageBlocks; wire auth form machines and ?next=. Reason: chromeless auth and prose pages need parity. Rejected: prototype copy-paste.",
             "CMS outage faces use DegradedState; 404 boundaries styled."
@@ -2955,8 +2968,10 @@
           "acceptance": [
             "Auth/blog/legal match prototype; gates green."
           ],
-          "verified": false,
-          "follow_ups": [],
+          "verified": true,
+          "follow_ups": [
+            "Full visual parity requires live CMS/auth; styled 404 and auth screens were browser-verified."
+          ],
           "messaging": {
             "publishes": [],
             "consumes": [],
