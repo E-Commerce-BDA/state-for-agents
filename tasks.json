@@ -2,28 +2,28 @@
   "version": 2,
   "updatedAt": "2026-11-26",
   "summary": {
-    "total": 194,
+    "total": 199,
     "done": 193,
     "in_progress": 0,
-    "backlog": 1,
+    "backlog": 6,
     "byRepo": {
       "storefront-ui": {
-        "total": 84,
+        "total": 85,
         "done": 84,
         "in_progress": 0,
-        "backlog": 0
+        "backlog": 1
       },
       "admin-app": {
-        "total": 2,
+        "total": 3,
         "done": 2,
         "in_progress": 0,
-        "backlog": 0
+        "backlog": 1
       },
       "ecom-contracts": {
-        "total": 6,
+        "total": 7,
         "done": 6,
         "in_progress": 0,
-        "backlog": 0
+        "backlog": 1
       },
       "ecom-messaging": {
         "total": 0,
@@ -56,10 +56,10 @@
         "backlog": 0
       },
       "cms-svc": {
-        "total": 12,
+        "total": 13,
         "done": 12,
         "in_progress": 0,
-        "backlog": 0
+        "backlog": 1
       },
       "analytics-svc": {
         "total": 5,
@@ -92,10 +92,10 @@
         "backlog": 1
       },
       "Documentation": {
-        "total": 7,
+        "total": 8,
         "done": 7,
         "in_progress": 0,
-        "backlog": 0
+        "backlog": 1
       }
     },
     "logDebt": [
@@ -148,9 +148,10 @@
           "sf-080",
           "sf-081",
           "sf-082",
-          "sf-083"
+          "sf-083",
+          "sf-084"
         ],
-        "count": 28
+        "count": 29
       },
       {
         "id": "P1",
@@ -289,9 +290,12 @@
           "tst-003",
           "cms-012",
           "sf-077",
-          "inf-011"
+          "inf-011",
+          "ec-007",
+          "cms-013",
+          "doc-008"
         ],
-        "count": 21
+        "count": 24
       },
       {
         "id": "P6",
@@ -303,13 +307,18 @@
         ],
         "tasks": [
           "adm-001",
-          "adm-002"
+          "adm-002",
+          "adm-003"
         ],
-        "count": 2
+        "count": 3
       }
     ],
     "nextUp": [
-      "inf-010"
+      "ec-007",
+      "cms-013",
+      "sf-084",
+      "adm-003",
+      "doc-008"
     ],
     "completionGate": [
       "Every P0 task is done and verified.",
@@ -2556,6 +2565,38 @@
             "taskQueues": [],
             "doesNotUseKafka": "Standalone HTML prototype; no service transport."
           }
+        },
+        {
+          "id": "sf-084",
+          "title": "Build the layered theme token resolver and emitter",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P0",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Resolve product/slide props -> component theme -> section settings -> global palette -> builtin, with reset deleting keys. Reason: deterministic inheritance and one default source. Rejected: scattered null fallbacks.",
+            "Emit --sf-* semantic tokens and keep --color-* aliases for one release. Reason: migration without breaking existing components. Rejected: instant removal."
+          ],
+          "acceptance": [
+            "New palette fields validate from cms response and resolve with clamps.",
+            "themeToCssVars emits only effective values with CSS fallback mirrors.",
+            "Focus, disabled, status foreground/on-colors are locked to AA floors.",
+            "Resolver-unit, style-contract and four gates green."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "Metadata and UI foundation; no service transport."
+          }
         }
       ],
       "messaging": {
@@ -2678,6 +2719,38 @@
             "consumes": [],
             "taskQueues": [],
             "doesNotUseKafka": "Storefront/admin UI and config metadata only."
+          }
+        },
+        {
+          "id": "adm-003",
+          "title": "Separate admin tokens and wire the real theme contract",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P6",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Rename admin chrome vars to --adm-* and stop merchant config from re-skinning the admin tool. Reason: admin actions must stay ink-based, not storefront ocean. Rejected: reusing --sf-* in both apps.",
+            "Theme editor writes nested contract groups and a string configVersion through the guarded BFF. Reason: current flat form and version mismatch block every save. Rejected: keeping legacy flat keys."
+          ],
+          "acceptance": [
+            "Admin chrome uses static --adm-* tokens; no merchant override of admin chrome.",
+            "Theme screen edits palette pairs and component groups with validation feedback.",
+            "BFF PUT targets /api/v1/cms/admin/settings/global and accepts string configVersion.",
+            "Contract tests, lint, typecheck, tests and build green."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "Metadata and UI foundation; no service transport."
           }
         }
       ],
@@ -2984,6 +3057,38 @@
             "Packed tarball repined into cms-svc + storefront."
           ],
           "follow_ups": []
+        },
+        {
+          "id": "ec-007",
+          "title": "Add storefront palette and resolved-config contracts",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P5",
+          "priority": "P0",
+          "kind": "contract",
+          "transport": "contracts",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Add a layered, admin-editable palette and a versioned resolved storefront config. Reason: admin currently writes a flat theme the strict contract rejects. Rejected: raw CSS vars from admin.",
+            "Keep all fields optional with empty-string sentinel so 2.1.0 readers keep working. Rejected: a breaking rename of existing groups."
+          ],
+          "acceptance": [
+            "themePaletteSchema and component groups validate; resolvedThemeSchema/themeVarsSchema exported.",
+            "storefrontConfigResponseSchema uses string configVersion + numeric revision and accepts preview metadata.",
+            "Navigation schema carries CMS-backed mega-menu groups/columns.",
+            "Contract tests, changelog, VERSIONING and packed tarball green."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "Metadata and UI foundation; no service transport."
+          }
         }
       ],
       "messaging": {
@@ -5387,6 +5492,38 @@
             "taskQueues": [],
             "doesNotUseKafka": "Storefront/admin UI and config metadata only."
           }
+        },
+        {
+          "id": "cms-013",
+          "title": "Expose validated palette settings and preview seam",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P5",
+          "priority": "P0",
+          "kind": "feature",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Validate the new nested palette with themeSettingsSchema and keep admin PUT on the admin-guarded path. Reason: the public write path does not exist and flat keys are rejected. Rejected: accepting arbitrary payloads.",
+            "Emit revalidation and preview metadata in public settings reads. Reason: admin edits must appear promptly and preview before publish. Rejected: cache-only propagation."
+          ],
+          "acceptance": [
+            "Admin PUT persists nested palette; public GET validates and returns configured/version.",
+            "Writes call revalidateTag and publish cms.updated outbox event.",
+            "Preview token path admits draft/inactive content only with a valid token.",
+            "Unit and e2e against live Mongo green."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "Metadata and UI foundation; no service transport."
+          }
         }
       ],
       "note": "7/7 done, no backlog. Verified: 149 unit (22 files) + 87 e2e passed (4 skipped) + 0/0 lint on 100 files + clean build; the media-resize e2e runs green against real LocalStack when AWS_ENDPOINT_URL is set and skips with a printed reason otherwise. Media has one containment-checked path builder (null byte, single decode, mediaKeySchema, path.relative, then realpath re-check), visibility public/private, a public file route that 404s private and orphan files, an admin-only ObjectId file route, and public max-age=60 must-revalidate caching. cms.updated/blog.updated are written to cms_outbox inside the same Mongo transaction as the write (cms-005); media renditions are SQS tasks with an idempotency key (cms-006) and there is no producer or consumer on the direct Kafka bus left; the three storefront-read mutations POST their exact tag to /api/revalidate with the shared secret (cms-007). Named debt: upload size/MIME checks still run post-buffer (cms-004) and there is no variant garbage collection.",
@@ -7511,6 +7648,35 @@
           ],
           "verified": true,
           "follow_ups": []
+        },
+        {
+          "id": "doc-008",
+          "title": "Document token layers and state-machine UI rules",
+          "status": "todo",
+          "owner": null,
+          "started": null,
+          "finished": null,
+          "phase": "P5",
+          "priority": "P1",
+          "kind": "doc",
+          "transport": "http",
+          "dependsOn": [],
+          "log": null,
+          "key_decisions": [
+            "Record the layered token architecture, AA locks, admin/storefront token separation and the no-useState rule for rebuilt islands. Reason: docs-first for new patterns. Rejected: relying on conversation memory."
+          ],
+          "acceptance": [
+            "ADR and design-system update indexed same commit as the code that implements them.",
+            "Component library doc lists new artifacts and reuse/gap map."
+          ],
+          "verified": false,
+          "follow_ups": [],
+          "messaging": {
+            "publishes": [],
+            "consumes": [],
+            "taskQueues": [],
+            "doesNotUseKafka": "Metadata and UI foundation; no service transport."
+          }
         }
       ],
       "messaging": {
