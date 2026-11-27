@@ -81,3 +81,22 @@ Verified: button 38px and vertically centered with the sort select, drawer
 x=0/w=320/h=812 with role=dialog, filter category click changes the H1 to
 Clothing, close returns focus, desktop sidebar intact, window.__errors null.
 All 23 preserve hashes still pass and node --check is clean.
+
+
+## Professional UI pass (2026-11-27)
+
+The mobile sort row was reordered to `Sort by -> select -> funnel`, with the
+funnel button last and all controls vertically centered. The filter drawer
+header now contains only the Filters title and close icon; Reset moved to a
+sticky bottom action bar as Clear all beside a primary Show N products button.
+The cart drawer transition (0.24s cubic-bezier) was restored with a
+requestAnimationFrame open, and a high-specificity open rule keeps the panel
+on screen. A mobile-only 2/1 column switch was added with two icon buttons,
+backed by pure machines (`nxMachines.filterDrawer`, `.gridMode`, `.sort`) and
+reusable builders (`nxUI.iconButton`, `nxUI.filterFooter`). Default is 2
+columns; desktop keeps its theme grid. All paint uses design tokens.
+
+Browser verified at 375x812: sort order and alignment correct, grid 2 columns
+(154px x2) switching to 1 (328px), drawer x=0 with 0.24s transition, header
+Filters only, footer Clear all + Show 9 products, no console errors. At 1536px
+the funnel and column switch are hidden and the desktop sidebar is intact.
